@@ -15,7 +15,7 @@ Project features to come:
 * **Social Architecture:** User-led alpha pipelines and rankings.
 * **Progress Dashboards:** UI that tracks personal growth, not just price charts.
 
-![screenShot](<Crypto-Explorer/Screenshot 2026-02-23 205736.png>)
+![screenShot](<Screenshot 2026-02-23 205736.png>)
 
 **🤝 The Collab**
 This is a **bootstrap-to-moon partnership**. High autonomy and a chance to co-own a project. 
