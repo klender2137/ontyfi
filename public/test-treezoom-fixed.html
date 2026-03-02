@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TreeScreen Zoom Fix Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Load tree data -->
+    <script src="cryptoTree.js"></script>
+    <!-- Load TreeScreen component -->
+    <script src="TreeScreen.js"></script>
+    
+    <script>
+        console.log('🧪 Testing TreeScreen Zoom Fixes');
+        
+        // Mock bookmarks API
+        const mockBookmarksApi = {
+            isBookmarked: (id) => false,
+            toggleBookmark: (node) => console.log('Toggle bookmark:', node.name)
+        };
+        
+        // Mock article opener
+        const mockOpenArticle = (node) => {
+            console.log('Open article:', node.name);
+        };
+        
+        // Test zoom functionality
+        const testZoomFunctionality = () => {
+            console.log('🔍 Testing zoom functionality...');
+            
+            setTimeout(() => {
+                const treeContainer = document.querySelector('.tree-space');
+                if (treeContainer) {
+                    console.log('✅ Tree container found');
+                    
+                    // Test wheel event
+                    const wheelEvent = new WheelEvent('wheel', {
+                        deltaY: -100,
+                        clientX: 400,
+                        clientY: 300,
+                        bubbles: true
+                    });
+                    
+                    treeContainer.parentElement.dispatchEvent(wheelEvent);
+                    
+                    setTimeout(() => {
+                        const transform = treeContainer.style.transform;
+                        console.log('Transform after zoom:', transform);
+                        
+                        if (transform.includes('scale') && !transform.includes('scale(1)')) {\n                            console.log('✅ Zoom functionality working');\n                        } else {\n                            console.log('❌ Zoom not working properly');\n                        }\n                    }, 100);\n                } else {\n                    console.log('❌ Tree container not found');\n                }\n            }, 2000);\n        };\n        \n        // Test UI isolation\n        const testUIIsolation = () => {\n            console.log('🎯 Testing UI isolation...');\n            \n            setTimeout(() => {\n                const searchBar = document.querySelector('.search-bar');\n                const zoomControls = document.querySelector('[style*=\"position: absolute\"][style*=\"bottom: 20px\"]');\n                \n                if (searchBar && zoomControls) {\n                    const searchTransform = window.getComputedStyle(searchBar).transform;\n                    const zoomTransform = window.getComputedStyle(zoomControls).transform;\n                    \n                    if (searchTransform === 'none' && zoomTransform === 'none') {\n                        console.log('✅ UI elements properly isolated from zoom/pan');\n                    } else {\n                        console.log('❌ UI elements affected by transforms');\n                        console.log('Search transform:', searchTransform);\n                        console.log('Zoom controls transform:', zoomTransform);\n                    }\n                } else {\n                    console.log('❌ UI elements not found');\n                }\n            }, 3000);\n        };\n        \n        // Test initial positioning\n        const testInitialPositioning = () => {\n            console.log('📍 Testing initial positioning...');\n            \n            setTimeout(() => {\n                const tiles = document.querySelectorAll('.tree-section-tile');\n                if (tiles.length > 0) {\n                    console.log(`✅ Found ${tiles.length} tree tiles`);\n                    \n                    // Check if tiles are visible in viewport\n                    const viewport = {\n                        width: window.innerWidth,\n                        height: window.innerHeight\n                    };\n                    \n                    let visibleTiles = 0;\n                    tiles.forEach(tile => {\n                        const rect = tile.getBoundingClientRect();\n                        if (rect.left >= 0 && rect.top >= 60 && \n                            rect.right <= viewport.width && \n                            rect.bottom <= viewport.height) {\n                            visibleTiles++;\n                        }\n                    });\n                    \n                    if (visibleTiles > 0) {\n                        console.log(`✅ ${visibleTiles} tiles visible in viewport - no black screen`);\n                    } else {\n                        console.log('❌ No tiles visible - black screen issue persists');\n                    }\n                } else {\n                    console.log('❌ No tree tiles found');\n                }\n            }, 4000);\n        };\n        \n        // Render the component\n        try {\n            if (!window.cryptoTree) {\n                throw new Error('cryptoTree data not loaded');\n            }\n            \n            if (!window.TreeScreen) {\n                throw new Error('TreeScreen component not loaded');\n            }\n            \n            const element = React.createElement(window.TreeScreen, {\n                tree: window.cryptoTree,\n                onOpenArticle: mockOpenArticle,\n                bookmarksApi: mockBookmarksApi\n            });\n            \n            ReactDOM.render(element, document.getElementById('root'));\n            console.log('✅ TreeScreen component rendered successfully');\n            \n            // Run tests\n            testZoomFunctionality();\n            testUIIsolation();\n            testInitialPositioning();\n            \n        } catch (error) {\n            console.error('❌ Error rendering TreeScreen:', error);\n            \n            document.getElementById('root').innerHTML = `\n                <div style=\"padding: 2rem; text-align: center; color: #ef4444;\">\n                    <h2>❌ RENDER ERROR</h2>\n                    <p>Failed to render TreeScreen component</p>\n                    <pre>${error.message}</pre>\n                </div>\n            `;\n        }\n        \n        // Instructions for manual testing\n        setTimeout(() => {\n            const instructions = document.createElement('div');\n            instructions.innerHTML = `\n                <div style=\"\n                    position: fixed;\n                    top: 10px;\n                    left: 10px;\n                    background: rgba(15, 23, 42, 0.95);\n                    border: 1px solid #3b82f6;\n                    border-radius: 8px;\n                    padding: 1rem;\n                    color: #f7f9ff;\n                    font-size: 0.9rem;\n                    max-width: 300px;\n                    z-index: 9999;\n                \">\n                    <h3 style=\"margin: 0 0 0.5rem 0; color: #3b82f6;\">🧪 Manual Test Instructions</h3>\n                    <ul style=\"margin: 0; padding-left: 1.2rem; line-height: 1.4;\">\n                        <li>Use two-finger scroll to zoom in/out</li>\n                        <li>Verify zoom centers on cursor position</li>\n                        <li>Check that search bar stays fixed</li>\n                        <li>Confirm zoom controls don't move</li>\n                        <li>Drag to pan around the tree</li>\n                        <li>Verify tiles are visible on load</li>\n                    </ul>\n                    <button onclick=\"this.parentElement.remove()\" style=\"\n                        margin-top: 0.5rem;\n                        padding: 0.25rem 0.5rem;\n                        background: #3b82f6;\n                        border: none;\n                        border-radius: 4px;\n                        color: white;\n                        cursor: pointer;\n                    \">Close</button>\n                </div>\n            `;\n            document.body.appendChild(instructions);\n        }, 5000);\n    </script>\n</body>\n</html>

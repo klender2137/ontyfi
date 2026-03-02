@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test MyHustle Final</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+</head>
+<body>
+    <div id="root">
+        <div style="padding: 2rem; text-align: center; color: #94a3b8;">
+            <h3>Testing MyHustle Component...</h3>
+            <div id="status">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        function updateStatus(message) {
+            console.log(message);
+            statusDiv.innerHTML += '<br>' + message;
+        }
+        
+        // Load MyHustle component
+        const script = document.createElement('script');
+        script.src = 'MyHustle.js';
+        script.onload = function() {
+            updateStatus('✅ MyHustle.js loaded');
+            
+            setTimeout(() => {
+                updateStatus('Checking component availability...');
+                updateStatus('window.MyHustleScreen: ' + typeof window.MyHustleScreen);
+                updateStatus('window.React: ' + typeof window.React);
+                
+                if (window.MyHustleScreen && window.React && window.ReactDOM) {
+                    updateStatus('✅ All components available, rendering...');
+                    
+                    const TestApp = () => {
+                        return React.createElement('div', { style: { padding: '2rem' } }, [
+                            React.createElement('h2', { key: 'title' }, 'MyHustle Component Test'),
+                            React.createElement(window.MyHustleScreen, {
+                                key: 'component',
+                                onGoHome: () => updateStatus('✅ onGoHome callback works'),
+                                onGoToTree: () => updateStatus('✅ onGoToTree callback works')
+                            })
+                        ]);
+                    };
+                    
+                    const root = ReactDOM.createRoot(document.getElementById('root'));
+                    root.render(React.createElement(TestApp));
+                    
+                    updateStatus('🎉 SUCCESS: MyHustle component rendered!');
+                } else {
+                    updateStatus('❌ Components not available');
+                }
+            }, 500);
+        };
+        
+        script.onerror = function() {
+            updateStatus('❌ Failed to load MyHustle.js');
+        };
+        
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>

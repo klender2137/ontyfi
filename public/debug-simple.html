@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CryptoExplorer Debug</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: #0f172a;
+            color: #f7f9ff;
+            font-family: system-ui;
+            margin: 0;
+            padding: 2rem;
+        }
+        .debug-section {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .error { color: #ef4444; }
+        .success { color: #10b981; }
+        .warning { color: #fbbf24; }
+    </style>
+</head>
+<body>
+    <h1>CryptoExplorer Debug</h1>
+    
+    <div class="debug-section">
+        <h3>Script Loading Status</h3>
+        <div id="script-status">Checking...</div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Tree Data Status</h3>
+        <div id="tree-status">Checking...</div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>React Status</h3>
+        <div id="react-status">Checking...</div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Console Errors</h3>
+        <div id="console-errors">None captured yet</div>
+    </div>
+
+    <!-- Load dependencies in order -->
+    <script src="cryptoTree.js"></script>
+    <script src="user.account.js"></script>
+    <script src="account.settings.js"></script>
+    <script src="contribute.save.js"></script>
+    <script src="admin.utils.js"></script>
+    <script src="NotesModule.js"></script>
+    <script src="MyHustle.js"></script>
+    <script src="LevelUp.js"></script>
+    <script src="tree.openspace.js"></script>
+    
+    <!-- React via CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script>
+        // Capture console errors
+        const originalError = console.error;
+        const errors = [];
+        console.error = function(...args) {
+            errors.push(args.join(' '));
+            originalError.apply(console, args);
+            updateErrorDisplay();
+        };
+
+        function updateErrorDisplay() {
+            const errorDiv = document.getElementById('console-errors');
+            if (errors.length === 0) {
+                errorDiv.innerHTML = '<span class="success">No errors detected</span>';
+            } else {
+                errorDiv.innerHTML = errors.map(err => `<div class="error">${err}</div>`).join('');
+            }
+        }
+
+        function checkScripts() {
+            const scriptStatus = document.getElementById('script-status');
+            const checks = [
+                { name: 'cryptoHustleTree', obj: window.cryptoHustleTree },
+                { name: 'UserAccount', obj: window.UserAccount },
+                { name: 'AccountSettings', obj: window.AccountSettings },
+                { name: 'ContributeSave', obj: window.ContributeSave },
+                { name: 'AdminUtils', obj: window.AdminUtils },
+                { name: 'NoteModule', obj: window.NoteModule },
+                { name: 'MyHustleScreen', obj: window.MyHustleScreen },
+                { name: 'LevelUpScreen', obj: window.LevelUpScreen },
+                { name: 'TreeOpenSpace', obj: window.TreeOpenSpace }
+            ];
+            
+            let html = '';
+            checks.forEach(check => {
+                const status = check.obj ? 'success' : 'error';
+                const symbol = check.obj ? '✓' : '✗';
+                html += `<div class="${status}">${symbol} ${check.name}</div>`;
+            });
+            
+            scriptStatus.innerHTML = html;
+        }
+
+        function checkTreeData() {
+            const treeStatus = document.getElementById('tree-status');
+            if (window.cryptoHustleTree) {
+                if (window.cryptoHustleTree.fields && Array.isArray(window.cryptoHustleTree.fields)) {
+                    treeStatus.innerHTML = `<span class="success">✓ Tree data loaded with ${window.cryptoHustleTree.fields.length} fields</span>`;
+                } else {
+                    treeStatus.innerHTML = '<span class="error">✗ Tree data structure invalid</span>';
+                }
+            } else {
+                treeStatus.innerHTML = '<span class="error">✗ Tree data not found</span>';
+            }
+        }
+
+        function checkReact() {
+            const reactStatus = document.getElementById('react-status');
+            const checks = [
+                { name: 'React', obj: window.React },
+                { name: 'ReactDOM', obj: window.ReactDOM },
+                { name: 'Babel', obj: window.Babel }
+            ];
+            
+            let html = '';
+            checks.forEach(check => {
+                const status = check.obj ? 'success' : 'error';
+                const symbol = check.obj ? '✓' : '✗';
+                html += `<div class="${status}">${symbol} ${check.name}</div>`;
+            });
+            
+            reactStatus.innerHTML = html;
+        }
+
+        // Run checks after a short delay to allow scripts to load
+        setTimeout(() => {
+            checkScripts();
+            checkTreeData();
+            checkReact();
+            updateErrorDisplay();
+        }, 1000);
+
+        // Run checks again after 3 seconds
+        setTimeout(() => {
+            checkScripts();
+            checkTreeData();
+            checkReact();
+            updateErrorDisplay();
+        }, 3000);
+    </script>
+</body>
+</html>

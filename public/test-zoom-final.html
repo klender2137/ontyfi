@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Drift Fix - Final Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="cryptoTree.js"></script>
+    <script src="TreeScreen.js"></script>
+    
+    <script>
+        console.log('🎯 Final Zoom Drift Fix Test');
+        
+        const mockBookmarksApi = {
+            isBookmarked: () => false,
+            toggleBookmark: () => {}
+        };
+        
+        const mockOpenArticle = () => {};
+        
+        // Test the specific drift scenario
+        const testExpandAndZoom = () => {
+            setTimeout(() => {
+                console.log('🔍 Testing expand + zoom scenario...');
+                
+                // Find a tile to expand
+                const tiles = document.querySelectorAll('.tree-section-tile');
+                if (tiles.length === 0) {
+                    console.log('❌ No tiles found');
+                    return;
+                }
+                
+                // Get a tile with children (has + indicator)
+                const expandableTile = Array.from(tiles).find(tile => 
+                    tile.querySelector('.tree-expand-indicator')?.textContent === '+'
+                );
+                
+                if (!expandableTile) {
+                    console.log('❌ No expandable tiles found');
+                    return;
+                }
+                
+                // Record initial position
+                const initialRect = expandableTile.getBoundingClientRect();
+                const initialCenter = {
+                    x: initialRect.left + initialRect.width / 2,
+                    y: initialRect.top + initialRect.height / 2
+                };\n                \n                console.log('📍 Initial tile position:', initialCenter);\n                \n                // Expand the tile\n                expandableTile.click();\n                \n                setTimeout(() => {\n                    // Check if camera stayed stable after expansion\n                    const afterExpandRect = expandableTile.getBoundingClientRect();\n                    const afterExpandCenter = {\n                        x: afterExpandRect.left + afterExpandRect.width / 2,\n                        y: afterExpandRect.top + afterExpandRect.height / 2\n                    };\n                    \n                    const expandDrift = {\n                        x: Math.abs(afterExpandCenter.x - initialCenter.x),\n                        y: Math.abs(afterExpandCenter.y - initialCenter.y)\n                    };\n                    \n                    console.log('📍 After expand position:', afterExpandCenter);\n                    console.log('📏 Expand drift:', expandDrift);\n                    \n                    if (expandDrift.x < 10 && expandDrift.y < 10) {\n                        console.log('✅ No camera jump on expand');\n                        \n                        // Now test zoom stability\n                        const container = document.querySelector('.tree-space')?.parentElement;\n                        if (container) {\n                            const zoomEvent = new WheelEvent('wheel', {\n                                deltaY: 300, // Zoom out\n                                clientX: afterExpandCenter.x,\n                                clientY: afterExpandCenter.y,\n                                bubbles: true\n                            });\n                            \n                            container.dispatchEvent(zoomEvent);\n                            \n                            setTimeout(() => {\n                                const afterZoomRect = expandableTile.getBoundingClientRect();\n                                const afterZoomCenter = {\n                                    x: afterZoomRect.left + afterZoomRect.width / 2,\n                                    y: afterZoomRect.top + afterZoomRect.height / 2\n                                };\n                                \n                                const zoomDrift = {\n                                    x: Math.abs(afterZoomCenter.x - afterExpandCenter.x),\n                                    y: Math.abs(afterZoomCenter.y - afterExpandCenter.y)\n                                };\n                                \n                                console.log('📍 After zoom position:', afterZoomCenter);\n                                console.log('📏 Zoom drift:', zoomDrift);\n                                \n                                if (zoomDrift.x < 50 && zoomDrift.y < 50) {\n                                    console.log('✅ ZOOM DRIFT FIX SUCCESSFUL!');\n                                    showSuccess('Zoom drift fixed! Camera stays stable during expand + zoom.');\n                                } else {\n                                    console.log('❌ Zoom drift still present');\n                                    showError(`Zoom drift: ${Math.round(zoomDrift.x)}px, ${Math.round(zoomDrift.y)}px`);\n                                }\n                            }, 100);\n                        }\n                    } else {\n                        console.log('❌ Camera jumped on expand');\n                        showError(`Camera jumped ${Math.round(expandDrift.x)}px, ${Math.round(expandDrift.y)}px on expand`);\n                    }\n                }, 500);\n                \n            }, 3000);\n        };\n        \n        const showSuccess = (message) => {\n            const div = document.createElement('div');\n            div.innerHTML = `\n                <div style=\"\n                    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);\n                    background: #10b981; color: white; padding: 1.5rem 2rem;\n                    border-radius: 12px; z-index: 10000; font-weight: 600;\n                    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);\n                \">\n                    ✅ ${message}\n                </div>\n            `;\n            document.body.appendChild(div);\n            setTimeout(() => div.remove(), 4000);\n        };\n        \n        const showError = (message) => {\n            const div = document.createElement('div');\n            div.innerHTML = `\n                <div style=\"\n                    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);\n                    background: #ef4444; color: white; padding: 1.5rem 2rem;\n                    border-radius: 12px; z-index: 10000; font-weight: 600;\n                    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.3);\n                \">\n                    ❌ ${message}\n                </div>\n            `;\n            document.body.appendChild(div);\n            setTimeout(() => div.remove(), 4000);\n        };\n        \n        // Render component\n        try {\n            const element = React.createElement(window.TreeScreen, {\n                tree: window.cryptoTree,\n                onOpenArticle: mockOpenArticle,\n                bookmarksApi: mockBookmarksApi\n            });\n            \n            ReactDOM.render(element, document.getElementById('root'));\n            console.log('✅ TreeScreen rendered');\n            \n            testExpandAndZoom();\n            \n        } catch (error) {\n            console.error('❌ Render error:', error);\n            showError('Failed to render: ' + error.message);\n        }\n        \n        // Add test instructions\n        setTimeout(() => {\n            const instructions = document.createElement('div');\n            instructions.innerHTML = `\n                <div style=\"\n                    position: fixed; top: 20px; left: 20px;\n                    background: rgba(15, 23, 42, 0.95); border: 1px solid #3b82f6;\n                    border-radius: 8px; padding: 1rem; color: #f7f9ff;\n                    max-width: 350px; z-index: 9999;\n                \">\n                    <h3 style=\"margin: 0 0 0.5rem 0; color: #3b82f6;\">🎯 Zoom Drift Test</h3>\n                    <p style=\"margin: 0 0 0.5rem 0; font-size: 0.9rem; line-height: 1.4;\">\n                        The test will automatically expand a node and then zoom out to verify the camera doesn't drift.\n                    </p>\n                    <p style=\"margin: 0 0 1rem 0; font-size: 0.9rem; line-height: 1.4;\">\n                        <strong>Manual test:</strong> Expand nodes, then zoom in/out with mouse wheel. The tiles should stay under your cursor.\n                    </p>\n                    <button onclick=\"this.parentElement.remove()\" style=\"\n                        padding: 0.25rem 0.5rem; background: #3b82f6;\n                        border: none; border-radius: 4px; color: white; cursor: pointer;\n                    \">Close</button>\n                </div>\n            `;\n            document.body.appendChild(instructions);\n        }, 1000);\n    </script>\n</body>\n</html>

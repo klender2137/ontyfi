@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tree Data Test</title>
+</head>
+<body>
+    <h1>Tree Data Test</h1>
+    <div id="output"></div>
+    
+    <script src="cryptoTree.js"></script>
+    <script>
+        console.log('Testing tree data...');
+        console.log('window.cryptoHustleTree:', window.cryptoHustleTree);
+        
+        const output = document.getElementById('output');
+        if (window.cryptoHustleTree && window.cryptoHustleTree.fields) {
+            output.innerHTML = `
+                <p>✅ Tree data loaded successfully!</p>
+                <p>Fields count: ${window.cryptoHustleTree.fields.length}</p>
+                <p>First field: ${window.cryptoHustleTree.fields[0]?.name}</p>
+            `;
+        } else {
+            output.innerHTML = `<p>❌ Tree data not loaded</p>`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Component Test - CryptoExplorer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <!-- React via CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root">
+        <div style="padding: 2rem; text-align: center; color: #94a3b8;">
+            <h3>Testing Components...</h3>
+        </div>
+    </div>
+
+    <!-- Load all components -->
+    <script src="cryptoTree.js"></script>
+    <script src="user.account.js"></script>
+    <script src="MyHustle.js"></script>
+    <script src="LevelUp.js"></script>
+    
+    <script type="text/babel">
+        function ComponentTest() {
+            const [currentTest, setCurrentTest] = React.useState('loading');
+            const [results, setResults] = React.useState({});
+            
+            React.useEffect(() => {
+                const runTests = async () => {
+                    const testResults = {};
+                    
+                    // Test 1: React availability
+                    testResults.react = typeof React !== 'undefined' && typeof ReactDOM !== 'undefined';
+                    
+                    // Test 2: CryptoTree data
+                    testResults.cryptoTree = typeof window.cryptoHustleTree !== 'undefined' && 
+                                           window.cryptoHustleTree.fields && 
+                                           window.cryptoHustleTree.fields.length > 0;
+                    
+                    // Test 3: UserAccount
+                    testResults.userAccount = typeof window.UserAccount !== 'undefined' &&
+                                            typeof window.UserAccount.getUserData === 'function';
+                    
+                    // Test 4: MyHustleScreen
+                    testResults.myHustle = typeof window.MyHustleScreen !== 'undefined' &&
+                                         typeof window.MyHustleScreen === 'function';
+                    
+                    // Test 5: LevelUpScreen
+                    testResults.levelUp = typeof window.LevelUpScreen !== 'undefined' &&
+                                        typeof window.LevelUpScreen === 'function';
+                    
+                    setResults(testResults);
+                    setCurrentTest('complete');
+                };
+                
+                setTimeout(runTests, 1000);
+            }, []);
+            
+            const getStatusIcon = (status) => status ? '✅' : '❌';
+            const getStatusText = (status) => status ? 'PASS' : 'FAIL';
+            
+            if (currentTest === 'loading') {
+                return (
+                    <div style={{ padding: '2rem', textAlign: 'center' }}>
+                        <h2>Running Component Tests...</h2>
+                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🧪</div>
+                        <p>Please wait while we test all components...</p>
+                    </div>
+                );
+            }
+            
+            const allPassed = Object.values(results).every(result => result === true);
+            
+            return (
+                <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+                    <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                        Component Test Results {allPassed ? '🎉' : '⚠️'}
+                    </h2>
+                    
+                    <div style={{ 
+                        background: allPassed ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                        border: `1px solid ${allPassed ? '#10b981' : '#ef4444'}`,
+                        borderRadius: '12px',
+                        padding: '1.5rem',
+                        marginBottom: '2rem'
+                    }}>
+                        <h3 style={{ marginBottom: '1rem' }}>
+                            Overall Status: {allPassed ? 'ALL TESTS PASSED' : 'SOME TESTS FAILED'}
+                        </h3>
+                    </div>
+                    
+                    <div style={{ display: 'grid', gap: '1rem' }}>
+                        <div className="card">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span>React Framework</span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    {getStatusIcon(results.react)}
+                                    <strong>{getStatusText(results.react)}</strong>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div className="card">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span>Crypto Tree Data</span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    {getStatusIcon(results.cryptoTree)}
+                                    <strong>{getStatusText(results.cryptoTree)}</strong>
+                                </span>
+                            </div>
+                            {results.cryptoTree && (
+                                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '0.5rem' }}>
+                                    {window.cryptoHustleTree?.fields?.length || 0} fields loaded
+                                </div>
+                            )}
+                        </div>
+                        
+                        <div className="card">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span>User Account System</span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    {getStatusIcon(results.userAccount)}
+                                    <strong>{getStatusText(results.userAccount)}</strong>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div className="card">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span>My Hustle Component</span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    {getStatusIcon(results.myHustle)}
+                                    <strong>{getStatusText(results.myHustle)}</strong>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div className="card">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span>Level Up Component</span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    {getStatusIcon(results.levelUp)}
+                                    <strong>{getStatusText(results.levelUp)}</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+                        <button 
+                            className="primary-button" 
+                            onClick={() => window.location.href = 'index.html'}
+                            style={{ marginRight: '1rem' }}
+                        >
+                            Go to Main App
+                        </button>
+                        <button 
+                            className="secondary-button" 
+                            onClick={() => window.location.reload()}
+                        >
+                            Rerun Tests
+                        </button>
+                    </div>
+                    
+                    <div style={{ marginTop: '2rem', fontSize: '0.8rem', color: '#6b7280' }}>
+                        <h4>Debug Information:</h4>
+                        <pre style={{ 
+                            background: 'rgba(15, 23, 42, 0.9)', 
+                            padding: '1rem', 
+                            borderRadius: '8px',
+                            overflow: 'auto',
+                            fontSize: '0.7rem'
+                        }}>
+                            {JSON.stringify({
+                                windowObjects: {
+                                    React: typeof React,
+                                    ReactDOM: typeof ReactDOM,
+                                    cryptoHustleTree: typeof window.cryptoHustleTree,
+                                    UserAccount: typeof window.UserAccount,
+                                    MyHustleScreen: typeof window.MyHustleScreen,
+                                    LevelUpScreen: typeof window.LevelUpScreen
+                                },
+                                treeFields: window.cryptoHustleTree?.fields?.length || 0,
+                                timestamp: new Date().toISOString()
+                            }, null, 2)}
+                        </pre>
+                    </div>
+                </div>
+            );
+        }
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<ComponentTest />);
+    </script>
+</body>
+</html>

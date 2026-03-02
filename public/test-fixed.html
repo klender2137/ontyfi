@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoExplorer - Fixed Structure Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <!-- Load corrected tree structure -->
+    <script src="cryptoTree_corrected.js"></script>
+    
+    <!-- Load components -->
+    <script src="TreeScreen.js"></script>
+    <script src="main.js"></script>
+    
+    <script>
+        // Test the search-to-TreeMap linking
+        console.log('Testing corrected structure...');
+        
+        // Verify tree structure
+        if (window.cryptoHustleTree) {
+            console.log('✓ Tree loaded:', window.cryptoHustleTree.fields.length, 'fields');
+            
+            // Test flattening
+            const flattened = window.flattenTree(window.cryptoHustleTree.fields);
+            console.log('✓ Flattened nodes:', flattened.length);
+            
+            // Test search functionality
+            const testSearches = [
+                'ETH/stETH',
+                'arbitrage',
+                'DeFi / Liquidity Provisioning / Concentrated Liquidity',
+                'staking'
+            ];
+            
+            testSearches.forEach(query => {
+                const results = flattened.filter(n => {
+                    const pathString = n.path ? n.path.map(p => p.name).join(' / ') : '';
+                    return n.name.toLowerCase().includes(query.toLowerCase()) ||
+                           n.description?.toLowerCase().includes(query.toLowerCase()) ||
+                           pathString.toLowerCase().includes(query.toLowerCase()) ||
+                           (n.tags || []).some(t => t.toLowerCase().includes(query.toLowerCase()));
+                });
+                console.log(`Search "${query}":`, results.length, 'results');
+                results.forEach(r => console.log('  -', r.name, '|', r.path?.map(p => p.name).join(' / ')));
+            });
+            
+            // Test content availability
+            const contentNodes = flattened.filter(n => n.content);
+            console.log('✓ Nodes with content:', contentNodes.length);
+            contentNodes.forEach(n => console.log('  -', n.name, '| Content length:', n.content.length));
+            
+        } else {
+            console.error('✗ Tree not loaded');
+        }
+        
+        // Test TreeScreen expandToNode function
+        setTimeout(() => {
+            if (window.TreeScreen && window.TreeScreen.expandToNode) {
+                console.log('✓ TreeScreen expandToNode available');
+            } else {
+                console.log('✗ TreeScreen expandToNode not available');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

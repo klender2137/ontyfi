@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CryptoExplorer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="components/SearchBar.css" />
+    <!-- React via CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Web3 Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.8.1/dist/ethers.min.js"></script>
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script src="https://unpkg.com/siwe@2.1.4/dist/siwe.js"></script>
+    <!-- Firebase CDN v8 (global firebase object) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <div style="padding: 2rem; text-align: center; color: #94a3b8;">
+        <h3>Loading CryptoExplorer...</h3>
+        <p>Please wait while we initialize the application.</p>
+      </div>
+    </div>
+
+    <!-- Load dependencies in order with error handling -->
+    <script src="descriptions-loader.js" onerror="console.error('Failed to load descriptions-loader.js')"></script>
+    <script src="tree-loader-centralized.js" onerror="console.error('Failed to load tree-loader-centralized.js')"></script>
+    <script src="tree-modules/tree-utils.js" onerror="console.error('Failed to load tree-utils.js')"></script>
+    <script src="tree-modules/tree-hooks.js" onerror="console.error('Failed to load tree-hooks.js')"></script>
+    <script src="tree-modules/tree-components.js" onerror="console.error('Failed to load tree-components.js')"></script>
+    <script src="tree-modules/tree-layout.js" onerror="console.error('Failed to load tree-layout.js')"></script>
+    <script src="tree-modules/tree-smart-layout.js" onerror="console.error('Failed to load tree-smart-layout.js')"></script>
+    <script src="tree-modules/tree-navigation.js" onerror="console.error('Failed to load tree-navigation.js')"></script>
+    <script src="user.account.js" onerror="console.error('Failed to load user.account.js')" onload="console.log('user.account.js loaded')"></script>
+    <script src="tree.openspace.js" onerror="console.error('Failed to load tree.openspace.js')"></script>
+    <script src="components/SearchBar.js" onerror="console.error('Failed to load SearchBar.js')" onload="console.log('SearchBar.js loaded')"></script>
+    <script src="TreeScreen.js" onerror="console.error('Failed to load TreeScreen.js')" onload="console.log('TreeScreen.js loaded')"></script>
+    <script src="account.settings.js" onerror="console.error('Failed to load account.settings.js')"></script>
+    <script src="contribute.save.js" onerror="console.error('Failed to load contribute.save.js')"></script>
+    <script src="cryptoUtils.js" onerror="console.error('Failed to load cryptoUtils.js')"></script>
+    <!-- New Simple Auth System -->
+    <script src="AuthPipeline0.5.js" onerror="console.error('Failed to load AuthPipeline0.5.js')" onload="console.log('AuthPipeline0.5.js loaded')"></script>
+    <script src="SimpleAuthScreen.js" onerror="console.error('Failed to load SimpleAuthScreen.js')" onload="console.log('SimpleAuthScreen.js loaded')"></script>
+    <!-- Test SIWE library loading -->
+    <script>
+      console.log('Testing SIWE library availability...');
+      console.log('window.SiweMessage:', typeof window.SiweMessage);
+      console.log('window.SIWE:', typeof window.SIWE);
+      console.log('window.siwe:', typeof window.siwe);
+      
+      if (typeof window.SiweMessage !== 'undefined') {
+        console.log('✅ SIWE library loaded successfully');
+        try {
+          const testMessage = new window.SiweMessage({
+            domain: 'test.com',
+            address: '0x1234567890123456789012345678901234567890',
+            statement: 'Test message',
+            uri: 'https://test.com',
+            version: '1',
+            chainId: '1',
+            nonce: 'test'
+          });
+          console.log('✅ SIWE Message creation test passed');
+        } catch (e) {
+          console.error('❌ SIWE Message creation test failed:', e);
+        }
+      } else {
+        console.error('❌ SIWE library not found');
+      }
+      
+      // Test wallet availability
+      console.log('=== WALLET DETECTION ===');
+      console.log('window.ethereum:', !!window.ethereum);
+      console.log('window.ethereum?.isMetaMask:', !!window.ethereum?.isMetaMask);
+      console.log('window.ethereum?.isTrust:', !!window.ethereum?.isTrust);
+      console.log('window.trustwallet:', !!window.trustwallet);
+      console.log('window.trustwallet?.isTrust:', !!window.trustwallet?.isTrust);
+      console.log('window.trustWallet:', !!window.trustWallet);
+      console.log('window.trustWallet?.isTrust:', !!window.trustWallet?.isTrust);
+      console.log('window.trust:', !!window.trust);
+      console.log('window.trust?.isTrust:', !!window.trust?.isTrust);
+      console.log('window.solana:', !!window.solana);
+      console.log('window.solana?.isPhantom:', !!window.solana?.isPhantom);
+      
+      // Log Trust Wallet provider details
+      if (window.trustwallet) {
+        console.log('window.trustwallet details:', {
+          isTrust: window.trustwallet.isTrust,
+          request: !!window.trustwallet.request,
+          enable: !!window.trustwallet.enable,
+          send: !!window.trustwallet.send,
+          constructor: window.trustwallet.constructor?.name
+        });
+      }
+      
+      if (window.ethereum && window.ethereum.providers) {
+        console.log('Available providers:', window.ethereum.providers.map(p => ({
+          isMetaMask: !!p.isMetaMask,
+          isTrust: !!p.isTrust,
+          name: p.constructor?.name || 'Unknown'
+        })));
+      }
+    </script>
+    <script src="NotesModule.js" onerror="console.error('Failed to load NotesModule.js')"></script>
+    <script type="text/babel" src="LevelUp.js" onerror="console.error('Failed to load LevelUp.js')" onload="console.log('LevelUp.js loaded')"></script>
+    <script type="text/babel" src="MyHustle.js" onerror="console.error('Failed to load MyHustle.js')" onload="console.log('MyHustle.js loaded at:', Date.now())"></script>
+    <script src="FavoritesScreen.js" onerror="console.error('Failed to load FavoritesScreen.js')" onload="console.log('FavoritesScreen.js loaded')"></script>
+    <script src="ExploreScreen.js" onerror="console.error('Failed to load ExploreScreen.js')" onload="console.log('ExploreScreen.js loaded')"></script>
+    <script src="tree-test.js" onerror="console.error('Failed to load tree-test.js')"></script>
+    <script src="tree-verification.js" onerror="console.error('Failed to load tree-verification.js')" onload="console.log('tree-verification.js loaded')"></script>
+    <!-- User Activity Tracker -->
+    <script src="UserActivityTracker.js" onerror="console.error('Failed to load UserActivityTracker.js')" onload="console.log('UserActivityTracker.js loaded')"></script>
+    <!-- Auto Unfold Mechanics -->
+    <script src="auto-unfold.js" onerror="console.error('Failed to load auto-unfold.js')" onload="console.log('auto-unfold.js loaded')"></script>
+    <!-- Firebase initialization -->
+    <script>
+      console.log('Starting Firebase initialization...');
+      const firebaseConfig = {
+        apiKey: "AIzaSyBl4n35lHVR9EHS_fi7slR28xIJeMoFM4k",
+        authDomain: "crypto-explorer-2137.firebaseapp.com",
+        projectId: "crypto-explorer-2137",
+        storageBucket: "crypto-explorer-2137.firebasestorage.app",
+        messagingSenderId: "970851515463",
+        appId: "1:970851515463:web:3b3d9c44b4367a373cc562"
+      };
+      firebase.initializeApp(firebaseConfig);
+      console.log('Firebase initialized globally');
+      console.log('Firebase object:', typeof firebase, firebase);
+    </script>
+    <!-- Main app must load last - remove defer to avoid timing issues -->
+    <script type="text/babel" src="main.js" onload="console.log('main.js loaded')"></script>
+  </body>
+</html>
+

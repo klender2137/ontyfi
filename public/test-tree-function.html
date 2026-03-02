@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TreeScreen Function Test</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+</head>
+<body>
+  <h1>TreeScreen Function Test</h1>
+  <div id="results"></div>
+
+  <script src="TreeScreen.js"></script>
+  <script>
+    const results = document.getElementById('results');
+    
+    function addResult(message, isSuccess) {
+      const div = document.createElement('div');
+      div.style.padding = '10px';
+      div.style.margin = '5px';
+      div.style.backgroundColor = isSuccess ? '#10b981' : '#ef4444';
+      div.style.color = 'white';
+      div.textContent = message;
+      results.appendChild(div);
+    }
+
+    // Wait for script to load
+    setTimeout(() => {
+      console.log('=== TREESCREEN FUNCTION TEST ===');
+      
+      // Test 1: TreeScreen component exists
+      if (typeof window.TreeScreen === 'function') {
+        addResult('✅ TreeScreen component available', true);
+        console.log('✅ TreeScreen component available');
+      } else {
+        addResult('❌ TreeScreen component missing', false);
+        console.log('❌ TreeScreen component missing');
+      }
+      
+      // Test 2: expandToNode function exists
+      if (typeof window.TreeScreenExpandToNode === 'function') {
+        addResult('✅ TreeScreen expandToNode function available', true);
+        console.log('✅ TreeScreen expandToNode function available');
+      } else {
+        addResult('❌ TreeScreen expandToNode function missing', false);
+        console.log('❌ TreeScreen expandToNode function missing');
+      }
+      
+      console.log('=== TEST COMPLETE ===');
+    }, 100);
+  </script>
+</body>
+</html>

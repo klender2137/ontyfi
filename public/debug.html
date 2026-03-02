@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Tree Navigation</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #0f172a; color: white; }
+        .debug-info { background: #1e293b; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        button { padding: 10px 20px; margin: 5px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #2563eb; }
+    </style>
+</head>
+<body>
+    <h1>Debug Tree Navigation</h1>
+    
+    <div class="debug-info">
+        <h3>Tree Data Status:</h3>
+        <div id="tree-status">Loading...</div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>Navigation Test:</h3>
+        <button onclick="testTreeNavigation()">Go to Tree Screen</button>
+        <button onclick="testHomeNavigation()">Go to Home Screen</button>
+        <div id="nav-status"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>Current URL:</h3>
+        <div id="current-url"></div>
+    </div>
+    
+    <script src="cryptoTree.js"></script>
+    <script>
+        // Check tree data
+        function checkTreeData() {
+            const status = document.getElementById('tree-status');
+            if (window.cryptoHustleTree && window.cryptoHustleTree.fields) {
+                status.innerHTML = `✅ Tree data loaded: ${window.cryptoHustleTree.fields.length} fields`;
+                window.cryptoHustleTree.fields.forEach((field, i) => {
+                    status.innerHTML += `<br>Field ${i+1}: ${field.name}`;
+                });
+            } else {
+                status.innerHTML = '❌ Tree data not loaded';
+            }
+        }
+        
+        // Test navigation
+        function testTreeNavigation() {
+            window.location.hash = '#tree';
+            document.getElementById('nav-status').innerHTML = 'Navigated to #tree';
+            updateURL();
+        }
+        
+        function testHomeNavigation() {
+            window.location.hash = '#home';
+            document.getElementById('nav-status').innerHTML = 'Navigated to #home';
+            updateURL();
+        }
+        
+        function updateURL() {
+            document.getElementById('current-url').innerHTML = window.location.href;
+        }
+        
+        // Initialize
+        checkTreeData();
+        updateURL();
+        
+        // Listen for hash changes
+        window.addEventListener('hashchange', () => {
+            updateURL();
+            document.getElementById('nav-status').innerHTML += '<br>Hash changed to: ' + window.location.hash;
+        });
+    </script>
+</body>
+</html>

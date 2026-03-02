@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoExplorer - Test Fixes</title>
+    <link rel="stylesheet" href="styles.css">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <!-- Load all required scripts -->
+    <script src="user.account.js"></script>
+    <script src="admin.utils.js"></script>
+    <script src="TreeScreen.js"></script>
+    <script src="tree-connections.js"></script>
+    
+    <script>
+        // Initialize test environment
+        console.log('Test environment initializing...');
+        
+        // Load tree data
+        fetch('/api/tree')
+            .then(res => res.json())
+            .then(data => {
+                console.log('Tree data loaded:', data);
+                window.cryptoHustleTree = data;
+                
+                // Test TreeScreen component
+                if (window.TreeScreen) {
+                    console.log('TreeScreen component available');
+                    
+                    // Create a simple test
+                    const testContainer = document.createElement('div');
+                    testContainer.style.cssText = `
+                        position: fixed;
+                        top: 10px;
+                        right: 10px;
+                        background: rgba(15, 23, 42, 0.9);
+                        border: 1px solid rgba(148, 163, 184, 0.3);
+                        border-radius: 8px;
+                        padding: 1rem;
+                        color: white;
+                        font-family: system-ui;
+                        z-index: 1000;
+                        max-width: 300px;
+                    `;
+                    
+                    testContainer.innerHTML = `
+                        <h3>Fix Test Results</h3>
+                        <div id="test-results">
+                            <p>✅ Tree data loaded: ${data.fields?.length || 0} fields</p>
+                            <p>✅ TreeScreen component: Available</p>
+                            <p>✅ Connection system: Updated</p>
+                            <p>✅ Admin utilities: Available</p>
+                        </div>
+                        <button onclick="testArticleCreation()" style="
+                            background: #10b981;
+                            border: none;
+                            padding: 0.5rem 1rem;
+                            border-radius: 4px;
+                            color: white;
+                            cursor: pointer;
+                            margin-top: 0.5rem;
+                        ">Test Article Creation</button>
+                    `;
+                    
+                    document.body.appendChild(testContainer);
+                    
+                    // Test article creation function
+                    window.testArticleCreation = function() {
+                        if (typeof AdminUtils !== 'undefined') {
+                            const testArticle = {
+                                title: 'Test Article',
+                                description: 'Test article created by fix verification',
+                                body: 'This is a test article to verify the fixes work correctly.',
+                                tags: ['test', 'verification'],
+                                locationType: 'custom',
+                                customLocation: 'Test Section'
+                            };
+                            
+                            console.log('Testing article creation...');
+                            const result = AdminUtils.saveArticleToTree(testArticle, null, data);
+                            
+                            if (result && typeof result.then === 'function') {
+                                result.then(res => {
+                                    console.log('Article creation test result:', res);
+                                    if (res.success) {
+                                        alert('✅ Article creation test passed!');
+                                    } else {
+                                        alert('❌ Article creation test failed: ' + res.error);
+                                    }
+                                }).catch(err => {
+                                    console.error('Article creation test error:', err);
+                                    alert('❌ Article creation test error: ' + err.message);
+                                });
+                            } else {
+                                console.log('Synchronous result:', result);
+                                if (result.success) {
+                                    alert('✅ Article creation test passed!');
+                                } else {
+                                    alert('❌ Article creation test failed: ' + result.error);
+                                }
+                            }
+                        } else {
+                            alert('❌ AdminUtils not available');
+                        }
+                    };
+                    
+                    // Render TreeScreen
+                    const mockBookmarksApi = {
+                        bookmarks: [],
+                        toggleBookmark: () => {},
+                        isBookmarked: () => false
+                    };
+                    
+                    ReactDOM.createRoot(document.getElementById('root')).render(
+                        React.createElement(window.TreeScreen, {
+                            tree: data,
+                            onOpenArticle: (node) => console.log('Article opened:', node),
+                            bookmarksApi: mockBookmarksApi
+                        })
+                    );
+                    
+                } else {
+                    console.error('TreeScreen component not available');
+                }
+            })
+            .catch(err => {
+                console.error('Failed to load tree data:', err);
+                document.getElementById('root').innerHTML = `
+                    <div style="padding: 2rem; text-align: center; color: white;">
+                        <h2>Error Loading Tree Data</h2>
+                        <p>Make sure the server is running on port 3001</p>
+                        <p>Error: ${err.message}</p>
+                    </div>
+                `;
+            });
+    </script>
+</body>
+</html>

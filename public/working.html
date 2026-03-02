@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CryptoExplorer - Working</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      // Minimal tree data
+      const treeData = {
+        fields: [
+          {
+            id: "defi",
+            name: "DeFi & Yield",
+            description: "Decentralized finance strategies",
+            tags: ["defi", "yield"],
+            categories: [
+              {
+                id: "liquidity",
+                name: "Liquidity Provisioning",
+                description: "Providing capital to AMMs",
+                tags: ["amm", "liquidity"]
+              }
+            ]
+          }
+        ]
+      };
+
+      function App() {
+        const [screen, setScreen] = useState('home');
+
+        return (
+          <div className="app-root">
+            <div className="screen">
+              <h1>CryptoExplorer</h1>
+              <p>Application loaded successfully!</p>
+              
+              <div className="home-highlights">
+                <div className="card">
+                  <div className="card-title">Status</div>
+                  <div className="card-main">✓ Working</div>
+                </div>
+                
+                <div className="card">
+                  <div className="card-title">Tree Data</div>
+                  <div className="card-main">{treeData.fields.length} fields</div>
+                </div>
+              </div>
+
+              <button 
+                className="primary-button" 
+                onClick={() => setScreen(screen === 'home' ? 'tree' : 'home')}
+                style={{ marginTop: '2rem' }}
+              >
+                {screen === 'home' ? 'View Tree' : 'Back Home'}
+              </button>
+
+              {screen === 'tree' && (
+                <div style={{ marginTop: '2rem' }}>
+                  <h2>Tree View</h2>
+                  {treeData.fields.map(field => (
+                    <div key={field.id} className="tree-section-tile" style={{ margin: '1rem 0' }}>
+                      <div className="tree-section-title">{field.name}</div>
+                      <div className="tree-section-meta">{field.description}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
+</html>

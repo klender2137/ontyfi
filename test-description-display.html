@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TreeScreen Description Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <style>
+        .tree-section-description {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+            line-height: 1.2;
+        }
+        .tree-section-tile {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem;
+            max-width: 400px;
+        }
+        .tree-section-title {
+            font-weight: 600;
+            color: #f7f9ff;
+            margin-bottom: 0.5rem;
+        }
+        .tag-pill {
+            background: rgba(56, 189, 248, 0.2);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            color: #60a5fa;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            margin-right: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script>
+        const { useState, useEffect } = React;
+        
+        function DescriptionTest() {
+            const [treeData, setTreeData] = useState(null);
+            const [loading, setLoading] = useState(true);
+            
+            useEffect(() => {
+                fetch('/api/tree')
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('Tree data received:', data);
+                        setTreeData(data);
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        console.error('Failed to load tree:', err);
+                        setLoading(false);
+                    });
+            }, []);
+            
+            if (loading) {
+                return React.createElement('div', null, 'Loading tree data...');
+            }
+            
+            if (!treeData || !treeData.fields || treeData.fields.length === 0) {
+                return React.createElement('div', null, 'No tree data available');
+            }
+            
+            // Test first field
+            const testField = treeData.fields[0];
+            console.log('Test field:', testField);
+            
+            return React.createElement('div', null, [
+                React.createElement('h2', { key: 'title' }, 'Description Display Test'),
+                React.createElement('div', { key: 'test' }, [
+                    React.createElement('h3', { key: 'field-title' }, `Field: ${testField.name}`),
+                    React.createElement('div', { key: 'tile', className: 'tree-section-tile' }, [
+                        React.createElement('div', { key: 'title', className: 'tree-section-title' }, testField.name),
+                        React.createElement('div', { key: 'desc', className: 'tree-section-description' }, 
+                            testField.description || 'NO DESCRIPTION FOUND'
+                        ),
+                        React.createElement('div', { key: 'tags' }, 
+                            (testField.tags || []).map(tag => 
+                                React.createElement('span', { key: tag, className: 'tag-pill' }, tag)
+                            )
+                        )
+                    ]),
+                    React.createElement('pre', { key: 'debug', style: { background: '#1e293b', padding: '1rem', borderRadius: '8px', overflow: 'auto' } }, 
+                        JSON.stringify(testField, null, 2)
+                    )
+                ])
+            ]);
+        }
+        
+        ReactDOM.render(React.createElement(DescriptionTest), document.getElementById('root'));
+    </script>
+</body>
+</html>

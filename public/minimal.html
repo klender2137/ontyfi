@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CryptoExplorer Minimal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="root">
+        <div style="padding: 2rem; text-align: center; color: #94a3b8;">
+            <h3>Loading CryptoExplorer Minimal...</h3>
+            <p>Please wait while we initialize the application.</p>
+        </div>
+    </div>
+
+    <!-- Load tree data first -->
+    <script src="cryptoTree.js"></script>
+    
+    <!-- React via CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function MinimalApp() {
+            const [tree, setTree] = useState(null);
+            const [screen, setScreen] = useState('home');
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+
+            useEffect(() => {
+                console.log('MinimalApp: Checking for tree data...');
+                
+                const checkTreeData = () => {
+                    if (window.cryptoHustleTree) {
+                        console.log('MinimalApp: Tree data found:', window.cryptoHustleTree);
+                        setTree(window.cryptoHustleTree);
+                        setLoading(false);
+                    } else {
+                        console.log('MinimalApp: Tree data not found, retrying...');
+                    }
+                };
+
+                // Check immediately
+                checkTreeData();
+                
+                // Check again after a delay
+                const timeout = setTimeout(() => {
+                    checkTreeData();
+                    if (!window.cryptoHustleTree) {
+                        setError('Tree data failed to load');
+                        setLoading(false);
+                    }
+                }, 2000);
+
+                return () => clearTimeout(timeout);
+            }, []);
+
+            if (loading) {
+                return (
+                    <div className="screen">
+                        <div style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
+                            <h3>Loading...</h3>
+                            <p>Initializing CryptoExplorer...</p>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (error) {
+                return (
+                    <div className="screen">
+                        <div style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+                            <h3>Error</h3>
+                            <p>{error}</p>
+                            <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#94a3b8' }}>
+                                <div>window.cryptoHustleTree: {typeof window.cryptoHustleTree}</div>
+                                <div>Available globals: {Object.keys(window).filter(k => k.includes('crypto')).join(', ')}</div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (screen === 'home') {
+                return (
+                    <div className="screen">
+                        <h2>CryptoExplorer Home</h2>
+                        <p>Welcome to CryptoExplorer!</p>
+                        
+                        <div className="home-highlights">
+                            <div className="card" onClick={() => setScreen('tree')} style={{ cursor: 'pointer' }}>
+                                <div className="card-title">TreeMap</div>
+                                <div className="card-main">🌳 Explore</div>
+                                <p style={{ marginTop: '0.35rem', fontSize: '0.85rem', color: '#9ca3af' }}>
+                                    Click to view the interactive crypto knowledge tree
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (screen === 'tree') {
+                return (
+                    <div className="screen">
+                        <button 
+                            onClick={() => setScreen('home')}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                background: '#374151',
+                                border: '1px solid #6b7280',
+                                borderRadius: '8px',
+                                color: 'white',
+                                cursor: 'pointer',
+                                marginBottom: '1rem'
+                            }}
+                        >
+                            ← Back to Home
+                        </button>
+                        
+                        <h2>TreeMap</h2>
+                        <p>Tree loaded with {tree?.fields?.length || 0} fields</p>
+                        
+                        {tree?.fields && tree.fields.length > 0 ? (
+                            <div style={{ 
+                                display: 'grid', 
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+                                gap: '1rem',
+                                marginTop: '2rem'
+                            }}>
+                                {tree.fields.map(field => (
+                                    <div 
+                                        key={field.id}
+                                        style={{
+                                            padding: '1.5rem',
+                                            background: 'rgba(30, 41, 59, 0.8)',
+                                            border: '1px solid rgba(148, 163, 184, 0.3)',
+                                            borderRadius: '12px',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <div style={{ 
+                                            fontSize: '1.1rem', 
+                                            fontWeight: '600', 
+                                            marginBottom: '0.5rem',
+                                            color: '#f7f9ff'
+                                        }}>
+                                            {field.name}
+                                        </div>
+                                        <div style={{ 
+                                            fontSize: '0.9rem', 
+                                            color: '#94a3b8', 
+                                            marginBottom: '1rem'
+                                        }}>
+                                            {field.description}
+                                        </div>
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                            {(field.tags || []).slice(0, 3).map(tag => (
+                                                <span 
+                                                    key={tag} 
+                                                    style={{
+                                                        background: 'rgba(148, 163, 184, 0.2)',
+                                                        padding: '0.25rem 0.5rem',
+                                                        borderRadius: '4px',
+                                                        fontSize: '0.75rem',
+                                                        color: '#e2e8f0'
+                                                    }}
+                                                >
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+                                <p>No tree fields available</p>
+                            </div>
+                        )}
+                    </div>
+                );
+            }
+
+            return (
+                <div className="screen">
+                    <div style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+                        <h3>Unknown Screen</h3>
+                        <p>Screen: {screen}</p>
+                    </div>
+                </div>
+            );
+        }
+
+        console.log('Starting minimal app render...');
+        ReactDOM.createRoot(document.getElementById('root')).render(<MinimalApp />);
+    </script>
+</body>
+</html>

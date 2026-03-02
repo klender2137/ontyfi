@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Display Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-case {
+            background: #2a2a2a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+        }
+        .path-display {
+            color: #10b981;
+            font-weight: bold;
+            font-family: monospace;
+        }
+        .expected {
+            color: #f59e0b;
+        }
+        .actual {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Full Tile Path Test</h1>
+    <p>Testing the new full hierarchical path display functionality:</p>
+    
+    <div id="test-results"></div>
+
+    <script>
+        // Mock tree data structure
+        const mockTree = {
+            fields: [
+                {
+                    id: "defi",
+                    name: "DeFi & Yield",
+                    categories: [
+                        {
+                            id: "liquidity",
+                            name: "Liquidity Provisioning",
+                            categories: [
+                                {
+                                    id: "full-range",
+                                    name: "Full Range Liquidity",
+                                    nodes: [
+                                        {
+                                            id: "stable-pair",
+                                            name: "Stable Pair Strategies",
+                                            description: "Stable pair liquidity strategies"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Mock functions from main.js
+        function flatten(nodes, path = []) {
+            return nodes.reduce((acc, n) => {
+                const currentPath = [...path, {id: n.id, name: n.name}];
+                const children = [
+                    ...(n.categories || []),
+                    ...(n.subcategories || []),
+                    ...(n.nodes || []),
+                    ...(n.subnodes || []),
+                    ...(n.leafnodes || [])
+                ];
+                return [...acc, { ...n, path: currentPath, children }, ...flatten(children, currentPath)];
+            }, []);
+        }
+
+        function flattenTree(fields) {
+            return flatten(fields);
+        }
+
+        function buildFullTilePath(node, flatNodes) {
+            if (!node || !flatNodes) return '';
+            
+            const foundNode = flatNodes.find(n => n.id === node.id);
+            if (!foundNode || !foundNode.path) return node.name;
+            
+            const pathNames = foundNode.path.map(pathItem => 
+                typeof pathItem === 'string' ? pathItem : (pathItem.name || pathItem)
+            );
+            
+            const fullPath = [...pathNames, node.name];
+            
+            return fullPath.join(' / ');
+        }
+
+        // Run tests
+        function runTests() {
+            const flatNodes = flattenTree(mockTree.fields);
+            const resultsDiv = document.getElementById('test-results');
+            
+            console.log('Flat nodes:', flatNodes);
+            
+            // Test cases
+            const testCases = [
+                {
+                    name: "Deep nested node (Stable Pair Strategies)",
+                    node: flatNodes.find(n => n.id === "stable-pair"),
+                    expected: "DeFi & Yield / Liquidity Provisioning / Full Range Liquidity / Stable Pair Strategies"
+                },
+                {
+                    name: "Mid-level node (Full Range Liquidity)",
+                    node: flatNodes.find(n => n.id === "full-range"),
+                    expected: "DeFi & Yield / Liquidity Provisioning / Full Range Liquidity"
+                },
+                {
+                    name: "Top-level node (Liquidity Provisioning)",
+                    node: flatNodes.find(n => n.id === "liquidity"),
+                    expected: "DeFi & Yield / Liquidity Provisioning"
+                }
+            ];
+
+            let allPassed = true;
+
+            testCases.forEach((testCase, index) => {
+                const actualPath = buildFullTilePath(testCase.node, flatNodes);
+                const passed = actualPath === testCase.expected;
+                
+                if (!passed) allPassed = false;
+
+                const testDiv = document.createElement('div');
+                testDiv.className = 'test-case';
+                testDiv.style.borderLeftColor = passed ? '#10b981' : '#ef4444';
+                
+                testDiv.innerHTML = `
+                    <h3>Test ${index + 1}: ${testCase.name}</h3>
+                    <div class="expected">Expected: <span class="path-display">${testCase.expected}</span></div>
+                    <div class="actual">Actual: <span class="path-display">${actualPath}</span></div>
+                    <div style="color: ${passed ? '#10b981' : '#ef4444'}; font-weight: bold;">
+                        ${passed ? '✅ PASS' : '❌ FAIL'}
+                    </div>
+                `;
+                
+                resultsDiv.appendChild(testDiv);
+            });
+
+            // Summary
+            const summaryDiv = document.createElement('div');
+            summaryDiv.style.marginTop = '20px';
+            summaryDiv.style.padding = '15px';
+            summaryDiv.style.background = allPassed ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+            summaryDiv.style.borderRadius = '8px';
+            summaryDiv.innerHTML = `
+                <h2 style="color: ${allPassed ? '#10b981' : '#ef4444'}">
+                    ${allPassed ? '🎉 All Tests Passed!' : '❌ Some Tests Failed'}
+                </h2>
+                <p>The full tile path functionality is ${allPassed ? 'working correctly' : 'needs fixes'}.</p>
+            `;
+            resultsDiv.appendChild(summaryDiv);
+        }
+
+        // Run tests when page loads
+        runTests();
+    </script>
+</body>
+</html>
