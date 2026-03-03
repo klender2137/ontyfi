@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default: Deny everything. Safety first!
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Basic Authenticated Access
+    // You can replace 'users' with your specific collection name
+    match /users/{userId} {
+      // Users can only read/write their own profile
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Global Data (e.g., Crypto Prices/Market info)
+    match /marketData/{docId} {
+      // Anyone logged in can read, but only your Admin/Functions can write
+      allow read: if request.auth != null;
+      allow write: if false; 
+    }
+  }
+}

@@ -132,14 +132,27 @@ function SafeLevelUpScreen(props) {
   );
 }
 
-// Register to window with error handling
-try {
-  if (typeof window !== 'undefined' && window.React) {
+// Atomic registration with safety checks
+(function registerLevelUpScreen() {
+  try {
+    // Guard against React not being available
+    if (typeof React === 'undefined') {
+      console.warn('React not available during LevelUpScreen registration');
+      return;
+    }
+    // Guard against overwriting existing registration
+    if (window.LevelUpScreen && typeof window.LevelUpScreen === 'function') {
+      console.log('LevelUpScreen already registered, skipping');
+      return;
+    }
     window.LevelUpScreen = SafeLevelUpScreen;
-    console.log('LevelUpScreen registered successfully');
-  } else {
-    console.error('React not available for LevelUpScreen');
+    console.log('✅ LevelUpScreen registered successfully');
+    try {
+      window.dispatchEvent(new Event('LevelUpScreenReady'));
+    } catch (e) {
+      console.warn('Failed to dispatch LevelUpScreenReady:', e);
+    }
+  } catch (error) {
+    console.error('Failed to register LevelUpScreen:', error);
   }
-} catch (error) {
-  console.error('Failed to register LevelUpScreen:', error);
-}
+})();

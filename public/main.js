@@ -22,11 +22,11 @@ function initializeApp() {
   
   function checkComponents() {
     const componentsLoaded = {
-      MyHustleScreen: typeof window.MyHustleScreen !== 'undefined',
-      LevelUpScreen: typeof window.LevelUpScreen !== 'undefined',
-      TreeScreen: typeof window.TreeScreen !== 'undefined',
-      UserAccount: typeof window.UserAccount !== 'undefined',
-      cryptoHustleTree: typeof window.cryptoHustleTree !== 'undefined'
+      MyHustleScreen: typeof window.MyHustleScreen === 'function',
+      LevelUpScreen: typeof window.LevelUpScreen === 'function',
+      TreeScreen: typeof window.TreeScreen === 'function',
+      UserAccount: typeof window.UserAccount === 'function',
+      cryptoHustleTree: typeof window.cryptoHustleTree === 'undefined'
     };
     
     console.log(`Component availability (attempt ${retryCount + 1}):`, componentsLoaded);
@@ -548,8 +548,6 @@ function FallbackMyHustleScreen({ onGoHome, onGoToTree }) {
     const handleComponentReady = () => {
       console.log('MyHustleScreen ready event received');
       setComponentFound(true);
-      // Auto-reload when component is ready
-      setTimeout(() => window.location.reload(), 100);
     };
     
     window.addEventListener('MyHustleScreenReady', handleComponentReady);
@@ -560,7 +558,6 @@ function FallbackMyHustleScreen({ onGoHome, onGoToTree }) {
         console.log('MyHustleScreen found via periodic check');
         setComponentFound(true);
         clearInterval(checkInterval);
-        setTimeout(() => window.location.reload(), 100);
       }
     }, 1000);
     
@@ -577,7 +574,8 @@ function FallbackMyHustleScreen({ onGoHome, onGoToTree }) {
     // Check if component is now available
     setTimeout(() => {
       if (window.MyHustleScreen && typeof window.MyHustleScreen === 'function' && window.MyHustleScreen !== FallbackMyHustleScreen) {
-        window.location.reload();
+        setComponentFound(true);
+        setIsRetrying(false);
       } else {
         setIsRetrying(false);
       }
@@ -642,7 +640,7 @@ function FallbackLevelUpScreen({ onGoHome, onGoToTree }) {
     
     setTimeout(() => {
       if (window.LevelUpScreen && typeof window.LevelUpScreen === 'function') {
-        window.location.reload();
+        setIsRetrying(false);
       } else {
         setIsRetrying(false);
       }
@@ -691,7 +689,7 @@ function getMyHustleScreen() {
   return FallbackMyHustleScreen;
 }
 
-const LevelUpScreen = (() => {
+function getLevelUpScreen() {
   try {
     if (window.LevelUpScreen && typeof window.LevelUpScreen === 'function') {
       console.log('Using loaded LevelUpScreen');
@@ -702,7 +700,7 @@ const LevelUpScreen = (() => {
   }
   console.log('Using fallback LevelUpScreen');
   return FallbackLevelUpScreen;
-})();
+}
 
 // Tree Screen - Use external TreeScreen component
 // TreeScreen is loaded from TreeScreen.js file
@@ -2735,7 +2733,7 @@ function AppRoot() {
         React.createElement(getMyHustleScreen(), { onGoHome: goHome, onGoToTree: goToTree })
       )}
       {screen === 'level-up' && !showAccount && (
-        <LevelUpScreen onGoHome={goHome} onGoToTree={goToTree} />
+        React.createElement(getLevelUpScreen(), { onGoHome: goHome, onGoToTree: goToTree })
       )}
       {screen === 'article' && !showAccount && (
         <ArticleScreen
@@ -2836,6 +2834,73 @@ function AppRoot() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<AppRoot />);
+class AppErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.group('🚨 APP ERROR BOUNDARY');
+    console.error('Error:', error);
+    console.error('Component Stack:', errorInfo?.componentStack);
+    console.groupEnd();
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="app-root" style={{ minHeight: '100vh' }}>
+          <div className="screen" style={{ padding: '2rem', textAlign: 'center' }}>
+            <h2>App Error</h2>
+            <p style={{ color: '#94a3b8', marginBottom: '1rem' }}>
+              A screen crashed during navigation. This is now contained so the app won’t fully reload.
+            </p>
+            <div style={{
+              textAlign: 'left',
+              maxWidth: '900px',
+              margin: '0 auto 1.5rem auto',
+              padding: '1rem',
+              borderRadius: '12px',
+              border: '1px solid rgba(148, 163, 184, 0.3)',
+              background: 'rgba(15, 23, 42, 0.8)',
+              color: '#e2e8f0',
+              overflow: 'auto'
+            }}>
+              <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>Error message</div>
+              <div style={{ color: '#fca5a5', whiteSpace: 'pre-wrap' }}>
+                {(this.state.error && (this.state.error.stack || this.state.error.message)) || 'Unknown error'}
+              </div>
+            </div>
+            <button className="primary-button" onClick={() => window.location.reload()}>
+              Reload
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+try {
+  window.addEventListener('error', (e) => {
+    console.error('🌋 window.onerror:', e?.message || e, e?.error);
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    console.error('🌋 unhandledrejection:', e?.reason || e);
+  });
+} catch {}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <AppErrorBoundary>
+    <AppRoot />
+  </AppErrorBoundary>
+);
 
 } // End startApp
