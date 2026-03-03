@@ -2,6 +2,39 @@ import admin from 'firebase-admin';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
+function log(stage, details = '') {
+  const ts = new Date().toISOString();
+  const msg = details ? ` ${details}` : '';
+  console.log(`[MEV Scraper][${ts}][${stage}]${msg}`);
+}
+
+function logError(stage, err) {
+  const ts = new Date().toISOString();
+  const parts = [];
+  if (err?.message) parts.push(err.message);
+  if (err?.code) parts.push(`code=${err.code}`);
+  if (err?.response?.status) parts.push(`status=${err.response.status}`);
+  if (err?.response?.data) {
+    try {
+      const body = typeof err.response.data === 'string'
+        ? err.response.data.slice(0, 500)
+        : JSON.stringify(err.response.data).slice(0, 500);
+      parts.push(`body=${body}`);
+    } catch {
+      parts.push('body=[unserializable]');
+    }
+  }
+  console.error(`[MEV Scraper][${ts}][${stage}]`, parts.join(' | ') || err);
+}
+
+function nowMs() {
+  return Date.now();
+}
+
+function msSince(start) {
+  return Date.now() - start;
+}
+
 function getServiceAccountFromEnv() {
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
   if (!raw) {
@@ -18,16 +51,24 @@ function getServiceAccountFromEnv() {
 }
 
 function initFirestore() {
+  const start = nowMs();
   const serviceAccount = getServiceAccountFromEnv();
+
+  log('firebase.credentials', `project_id=${serviceAccount?.project_id || 'unknown'} client_email=${serviceAccount?.client_email || 'unknown'}`);
 
   if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
       projectId: serviceAccount.project_id
     });
+    log('firebase.init', 'initialized firebase-admin app');
+  } else {
+    log('firebase.init', 'firebase-admin app already initialized');
   }
 
-  return admin.firestore();
+  const db = admin.firestore();
+  log('firestore.init', `ready in ${msSince(start)}ms`);
+  return db;
 }
 
 function normalizeTxHash(value) {
@@ -41,6 +82,9 @@ async function fetchJson(url, config = {}) {
   const res = await axios.get(url, {
     timeout: 30000,
     validateStatus: s => s >= 200 && s < 300,
+    headers: {
+      'user-agent': 'CryptoExplorer-MEV-Scraper/1.0 (+https://github.com/)'
+    },
     ...config
   });
   return res.data;
@@ -50,8 +94,10 @@ async function tryUrls(urls, fetcher) {
   let lastErr = null;
   for (const url of urls) {
     try {
+      log('http.try', url);
       return await fetcher(url);
     } catch (e) {
+      logError('http.fail', e);
       lastErr = e;
     }
   }
@@ -70,6 +116,7 @@ function coerceToArray(x) {
 }
 
 async function scrapeFlashbots() {
+  const start = nowMs();
   const urls = [
     'https://blocks.flashbots.net/v1/blocks?limit=50',
     'https://blocks.flashbots.net/v1/blocks'
@@ -77,6 +124,8 @@ async function scrapeFlashbots() {
 
   const data = await tryUrls(urls, url => fetchJson(url));
   const blocks = coerceToArray(data);
+
+  log('flashbots.blocks', `received=${blocks.length} in ${msSince(start)}ms`);
 
   const out = [];
   for (const b of blocks) {
@@ -103,6 +152,7 @@ async function scrapeFlashbots() {
 }
 
 async function scrapeJito() {
+  const start = nowMs();
   const urls = [
     'https://mainnet.block-engine.jito.wtf/api/v1/bundles',
     'https://block-engine.jito.wtf/api/v1/bundles',
@@ -111,6 +161,8 @@ async function scrapeJito() {
 
   const data = await tryUrls(urls, url => fetchJson(url, { params: { limit: 50 } }));
   const bundles = coerceToArray(data);
+
+  log('jito.bundles', `received=${bundles.length} in ${msSince(start)}ms`);
 
   const out = [];
   for (const b of bundles) {
@@ -135,6 +187,7 @@ async function scrapeJito() {
 }
 
 async function scrapeEigenPhi() {
+  const start = nowMs();
   const apiUrls = [
     'https://eigenphi.io/api/v1/mev/transactions',
     'https://eigenphi.io/api/v2/mev/transactions'
@@ -143,6 +196,8 @@ async function scrapeEigenPhi() {
   try {
     const data = await tryUrls(apiUrls, url => fetchJson(url, { params: { limit: 50 } }));
     const items = coerceToArray(data);
+
+    log('eigenphi.api', `received=${items.length} in ${msSince(start)}ms`);
 
     const out = [];
     for (const it of items) {
@@ -160,6 +215,7 @@ async function scrapeEigenPhi() {
 
     return out;
   } catch (apiErr) {
+    logError('eigenphi.api_failed', apiErr);
     const htmlUrls = [
       'https://eigenphi.io/mev',
       'https://eigenphi.io/'
@@ -181,6 +237,8 @@ async function scrapeEigenPhi() {
       if (match) candidates.add(match[0]);
     });
 
+    log('eigenphi.html', `candidates=${candidates.size} in ${msSince(start)}ms`);
+
     for (const txHash of candidates) {
       out.push({
         transaction_hash: txHash,
@@ -192,6 +250,30 @@ async function scrapeEigenPhi() {
 
     return out;
   }
+}
+
+async function firestorePing(db) {
+  const start = nowMs();
+  const ref = db.collection('_mev_debug').doc('ping');
+  await ref.set(
+    {
+      ok: true,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    },
+    { merge: true }
+  );
+  log('firestore.ping', `wrote _mev_debug/ping in ${msSince(start)}ms`);
+}
+
+async function writeRunSummary(db, runId, payload) {
+  const ref = db.collection('mev_runs').doc(runId);
+  await ref.set(
+    {
+      ...payload,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    },
+    { merge: true }
+  );
 }
 
 async function saveToFirestore(db, items) {
@@ -226,13 +308,28 @@ async function saveToFirestore(db, items) {
     }
 
     await batch.commit();
+    log('firestore.batch_commit', `chunk=${Math.floor(i / BATCH_SIZE) + 1} size=${chunk.length}`);
   }
 
   return { written, skipped, total: items.length };
 }
 
 async function main() {
+  const runStart = nowMs();
+  const runId = `run_${new Date().toISOString().replace(/[:.]/g, '-')}`;
+  log('run.start', `id=${runId}`);
+
   const db = initFirestore();
+
+  await writeRunSummary(db, runId, {
+    status: 'started',
+    startedAt: new Date(),
+    env: {
+      node: process.version
+    }
+  });
+
+  await firestorePing(db);
 
   const results = {
     flashbots: { ok: false, count: 0, error: null },
@@ -243,30 +340,39 @@ async function main() {
   const all = [];
 
   try {
+    log('flashbots.start');
     const items = await scrapeFlashbots();
     results.flashbots.ok = true;
     results.flashbots.count = items.length;
     all.push(...items);
+    log('flashbots.done', `items=${items.length}`);
   } catch (e) {
     results.flashbots.error = e?.message || String(e);
+    logError('flashbots.error', e);
   }
 
   try {
+    log('jito.start');
     const items = await scrapeJito();
     results.jito.ok = true;
     results.jito.count = items.length;
     all.push(...items);
+    log('jito.done', `items=${items.length}`);
   } catch (e) {
     results.jito.error = e?.message || String(e);
+    logError('jito.error', e);
   }
 
   try {
+    log('eigenphi.start');
     const items = await scrapeEigenPhi();
     results.eigenphi.ok = true;
     results.eigenphi.count = items.length;
     all.push(...items);
+    log('eigenphi.done', `items=${items.length}`);
   } catch (e) {
     results.eigenphi.error = e?.message || String(e);
+    logError('eigenphi.error', e);
   }
 
   const deduped = new Map();
@@ -277,16 +383,36 @@ async function main() {
 
   const uniqueItems = [...deduped.values()];
 
+  log('run.parse_summary', `parsed=${all.length} unique=${uniqueItems.length}`);
   console.log('[MEV Scraper] Source results:', results);
-  console.log(`[MEV Scraper] Parsed ${all.length} items, ${uniqueItems.length} unique by transaction_hash`);
+
+  await writeRunSummary(db, runId, {
+    status: 'scraped',
+    durationMs: msSince(runStart),
+    results,
+    parsedCount: all.length,
+    uniqueCount: uniqueItems.length
+  });
 
   if (uniqueItems.length === 0) {
-    console.warn('[MEV Scraper] No items found; exiting without Firestore writes');
+    log('run.no_items', 'exiting without Firestore writes');
+    await writeRunSummary(db, runId, {
+      status: 'completed_no_items',
+      completedAt: new Date(),
+      durationMs: msSince(runStart)
+    });
     return;
   }
 
   const save = await saveToFirestore(db, uniqueItems);
   console.log('[MEV Scraper] Firestore write summary:', save);
+  await writeRunSummary(db, runId, {
+    status: 'completed',
+    completedAt: new Date(),
+    durationMs: msSince(runStart),
+    firestore: save
+  });
+  log('run.done', `durationMs=${msSince(runStart)}`);
 }
 
 main().catch(err => {
