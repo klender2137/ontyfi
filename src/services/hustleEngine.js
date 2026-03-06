@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
-import { getFirestore, collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { app } from '../firebaseConfig'; // assuming firebaseConfig exports app
-
-const db = getFirestore(app);
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { db } from './firebase';
 
 // Alpha score calculation with 20% daily decay
 function calculateAlphaScore(timestamp) {

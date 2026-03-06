@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.VITE_FIREBASE_API_KEY || import.meta.env?.VITE_FIREBASE_API_KEY,
@@ -14,7 +15,8 @@ console.log('--- FIREBASE CONFIG LOADED ---', firebaseConfig.projectId);
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 console.log(`[Firebase Debug] SDK Initialized for Project: ${firebaseConfig.projectId}`);
 
-export { db };
+export { app, auth, db };
