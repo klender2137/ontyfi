@@ -16,10 +16,12 @@ import treeRoutes from './routes/tree.routes.js';
 import hustleRoutes from './routes/hustle.routes.js';
 import authSimpleRoutes from './routes/auth-simple.routes.js';
 import activityAnalyticsRoutes from './routes/activity-analytics.routes.js';
+import embedRoutes from './routes/embed.routes.js';
 app.use('/api/tree', treeRoutes);
 app.use('/api/hustle', hustleRoutes);
 app.use('/api/auth-simple', authSimpleRoutes);
 app.use('/api/analytics', activityAnalyticsRoutes);
+app.use('/api/embed', embedRoutes);
 
 // Serve static frontend
 const publicDir = path.join(__dirname, 'public');

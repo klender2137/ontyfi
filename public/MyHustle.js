@@ -2,6 +2,8 @@ function MyHustleScreen({ onGoHome = () => {}, onGoToTree = () => {} }) {
   const [airdropItems, setAirdropItems] = React.useState([]);
   const [mevItems, setMevItems] = React.useState([]);
   const [mevHealth, setMevHealth] = React.useState(null);
+  const [eigenphiEmbedHtml, setEigenphiEmbedHtml] = React.useState('');
+  const [eigenphiEmbedError, setEigenphiEmbedError] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
 
@@ -65,6 +67,22 @@ function MyHustleScreen({ onGoHome = () => {}, onGoToTree = () => {} }) {
     console.log('🔥 [MYHUSTLE] Initializing MyHustle screen...');
     setLoading(true);
     setError(null);
+
+    // Load EigenPhi embed HTML (sanitized server-side)
+    (async () => {
+      try {
+        const res = await fetch('/api/embed/eigenphi', { cache: 'no-store' });
+        if (!res.ok) {
+          throw new Error(`Embed fetch failed: ${res.status}`);
+        }
+        const html = await res.text();
+        setEigenphiEmbedHtml(html || '');
+        setEigenphiEmbedError(null);
+      } catch (e) {
+        console.error('🔥 [MYHUSTLE] EigenPhi embed fetch error:', e);
+        setEigenphiEmbedError(e?.message || 'Failed to load EigenPhi embed');
+      }
+    })();
 
     let initialized = false;
     const initSubscriptions = () => {
@@ -263,6 +281,70 @@ function MyHustleScreen({ onGoHome = () => {}, onGoToTree = () => {} }) {
           <div style={{ color: '#94a3b8' }}>{error}</div>
         </div>
       )}
+
+      <div className="card" style={{ marginBottom: '1rem' }}>
+        <div style={{ fontWeight: 800, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+          <div>EigenPhi Sandwich (24h)</div>
+          <button className="secondary-button" onClick={() => openUrl('https://eigenphi.io/mev/ethereum/sandwich')} style={{ whiteSpace: 'nowrap' }}>
+            Open EigenPhi
+          </button>
+        </div>
+        <div style={{ color: '#94a3b8', fontSize: '0.9rem', marginTop: '0.35rem' }}>
+          Embedded table (sanitized) via <code>/api/embed/eigenphi</code>
+        </div>
+
+        <div style={{ marginTop: '0.75rem' }}>
+          {eigenphiEmbedError && (
+            <div style={{ color: '#ef4444', fontWeight: 700 }}>{eigenphiEmbedError}</div>
+          )}
+
+          {!eigenphiEmbedError && !eigenphiEmbedHtml && (
+            <div style={{ color: '#94a3b8' }}>Loading EigenPhi table…</div>
+          )}
+
+          {!eigenphiEmbedError && eigenphiEmbedHtml && (
+            <div className="eigenphi-embed-scope">
+              <style>{`
+                .eigenphi-embed-scope {
+                  overflow: auto;
+                  border: 1px solid rgba(148, 163, 184, 0.2);
+                  border-radius: 12px;
+                  background: rgba(2, 6, 23, 0.25);
+                }
+                .eigenphi-embed-scope table {
+                  width: 100%;
+                  border-collapse: collapse;
+                  font-size: 0.85rem;
+                }
+                .eigenphi-embed-scope th,
+                .eigenphi-embed-scope td {
+                  padding: 0.6rem 0.75rem;
+                  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+                  color: #e2e8f0;
+                  text-align: left;
+                  white-space: nowrap;
+                }
+                .eigenphi-embed-scope th {
+                  position: sticky;
+                  top: 0;
+                  background: rgba(15, 23, 42, 0.9);
+                  z-index: 1;
+                  font-weight: 800;
+                  color: #cbd5e1;
+                }
+                .eigenphi-embed-scope a {
+                  color: #60a5fa;
+                  text-decoration: none;
+                }
+                .eigenphi-embed-scope a:hover {
+                  text-decoration: underline;
+                }
+              `}</style>
+              <div dangerouslySetInnerHTML={{ __html: eigenphiEmbedHtml }} />
+            </div>
+          )}
+        </div>
+      </div>
 
       <div className="card" style={{ marginBottom: '1rem' }}>
         <div style={{ fontWeight: 800 }}>Airdrop Feed</div>

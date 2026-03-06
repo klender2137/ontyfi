@@ -1,6 +1,7 @@
 import admin from 'firebase-admin';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import { readFileSync } from 'fs';
 
 function log(stage, details = '') {
   const ts = new Date().toISOString();
@@ -41,7 +42,22 @@ function getServiceAccountFromEnv() {
     throw new Error('Missing FIREBASE_SERVICE_ACCOUNT_JSON env var');
   }
 
-  const parsed = JSON.parse(raw);
+  let parsed;
+  try {
+    // Support local runs where env var is a path to the JSON file
+    const looksLikePath = /\.json\s*$/i.test(raw) && !raw.trim().startsWith('{');
+    if (looksLikePath) {
+      const jsonText = readFileSync(raw.trim(), 'utf8');
+      parsed = JSON.parse(jsonText);
+    } else {
+      parsed = JSON.parse(raw);
+    }
+  } catch (e) {
+    const hint = raw.trim().startsWith('{')
+      ? 'Env var looks like JSON but could not be parsed.'
+      : 'If you are running locally, set FIREBASE_SERVICE_ACCOUNT_JSON to the JSON *contents* or to a valid path ending in .json.';
+    throw new Error(`Failed to parse FIREBASE_SERVICE_ACCOUNT_JSON. ${hint} Original error: ${e?.message || String(e)}`);
+  }
 
   if (parsed.private_key && typeof parsed.private_key === 'string') {
     parsed.private_key = parsed.private_key.replace(/\\n/g, '\n');
@@ -71,11 +87,29 @@ function initFirestore() {
   return db;
 }
 
-function normalizeTxHash(value) {
+function normalizeTxId(value) {
   if (!value || typeof value !== 'string') return null;
   const v = value.trim();
   if (!v) return null;
-  return v.startsWith('0x') ? v : `0x${v}`;
+
+  // EVM tx hashes are 32-byte hex prefixed with 0x
+  if (/^0x[a-fA-F0-9]{64}$/.test(v)) return v;
+  if (/^[a-fA-F0-9]{64}$/.test(v)) return `0x${v}`;
+
+  // Non-EVM identifiers (e.g. Solana signatures) should not be rewritten.
+  return v;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function logResponsePreview(data) {
+  try {
+    console.log(JSON.stringify(data).slice(0, 100));
+  } catch {
+    console.log(String(data).slice(0, 100));
+  }
 }
 
 async function fetchJson(url, config = {}) {
@@ -87,6 +121,20 @@ async function fetchJson(url, config = {}) {
     },
     ...config
   });
+  logResponsePreview(res.data);
+  return res.data;
+}
+
+async function fetchHtml(url, config = {}) {
+  const res = await axios.get(url, {
+    timeout: 30000,
+    validateStatus: s => s >= 200 && s < 300,
+    headers: {
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+    },
+    ...config
+  });
+  logResponsePreview(res.data);
   return res.data;
 }
 
@@ -115,74 +163,368 @@ function coerceToArray(x) {
   return [];
 }
 
+function toNumber(x) {
+  if (typeof x === 'number' && Number.isFinite(x)) return x;
+  if (typeof x === 'string') {
+    const v = Number(x.replace(/[$,\s]/g, ''));
+    return Number.isFinite(v) ? v : null;
+  }
+  return null;
+}
+
+function weiToEth(wei) {
+  try {
+    if (wei === null || wei === undefined) return null;
+    const s = typeof wei === 'string' ? wei : String(wei);
+    if (!/^\d+$/.test(s)) return null;
+    const w = BigInt(s);
+    const eth = Number(w) / 1e18;
+    return Number.isFinite(eth) ? eth : null;
+  } catch {
+    return null;
+  }
+}
+
+function safeDocId(id) {
+  const s = (id || '').toString().trim();
+  if (!s) return null;
+  // Firestore doc id restrictions are lax, but avoid accidental slashes.
+  return s.replace(/\//g, '_');
+}
+
 async function scrapeFlashbots() {
   const start = nowMs();
-  const urls = [
-    'https://blocks.flashbots.net/v1/blocks?limit=50',
-    'https://blocks.flashbots.net/v1/blocks'
-  ];
+  const url = 'https://relay-analytics.ultrasound.money/v1/data/bidtraces/proposer_payload_delivered';
 
-  const data = await tryUrls(urls, url => fetchJson(url));
-  const blocks = coerceToArray(data);
+  const data = await fetchJson(url, {
+    params: { limit: 50 },
+    headers: {
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+    }
+  });
 
-  log('flashbots.blocks', `received=${blocks.length} in ${msSince(start)}ms`);
+  const rows = coerceToArray(data);
+  log('flashbots.blocks', `received=${rows.length} in ${msSince(start)}ms`);
 
   const out = [];
-  for (const b of blocks) {
-    const blockNumber = b?.block_number ?? b?.blockNumber ?? b?.number;
-    const builder = b?.builder_pubkey ?? b?.builderPubkey ?? b?.builder;
-    const ts = b?.timestamp ? new Date(b.timestamp * 1000) : new Date();
-
-    const txs = coerceToArray(b?.transactions || b?.txs || b?.included_transactions);
-    for (const t of txs) {
-      const txHash = normalizeTxHash(t?.tx_hash || t?.txHash || t?.hash || t?.transaction_hash || t?.transactionHash);
-      if (!txHash) continue;
-      out.push({
-        transaction_hash: txHash,
-        source: 'flashbots',
-        block_number: blockNumber ?? null,
-        builder: builder ?? null,
-        timestamp: ts,
-        raw: t
-      });
+  for (const r of rows) {
+    let valueWei = null;
+    try {
+      if (r?.value !== null && r?.value !== undefined) {
+        const s = typeof r.value === 'string' ? r.value : String(r.value);
+        if (/^\d+$/.test(s)) valueWei = BigInt(s);
+      }
+    } catch {
+      valueWei = null;
     }
+    if (typeof valueWei !== 'bigint' || valueWei <= 100000000000000000n) continue;
+    const valueEth = weiToEth(r?.value);
+    const blockHash = normalizeTxId(r?.block_hash || r?.blockHash);
+    if (!blockHash) continue;
+
+    out.push({
+      transaction_hash: blockHash,
+      id_type: 'block_hash',
+      source_platform: 'Flashbots/UltraSound',
+      source: 'flashbots_ultrasound',
+      type: 'Lucrative',
+      category: 'Lucrative',
+      network: 'Ethereum',
+      title: `Flashbots/UltraSound Lucrative Block • ${String(r?.block_number ?? r?.blockNumber ?? '').toString()}`,
+      profit_usd: null,
+      value_eth: valueEth,
+      block_number: r?.block_number ?? r?.blockNumber ?? null,
+      builder_pubkey: r?.builder_pubkey ?? null,
+      proposer_pubkey: r?.proposer_pubkey ?? null,
+      timestamp: r?.timestamp ? new Date(r.timestamp) : new Date(),
+      explorer_url: r?.block_number ? `https://etherscan.io/block/${r.block_number}` : null,
+      raw: r
+    });
   }
 
   return out;
 }
 
-async function scrapeJito() {
+async function scrapeEigenPhiSandwich24h() {
   const start = nowMs();
-  const urls = [
-    'https://mainnet.block-engine.jito.wtf/api/v1/bundles',
-    'https://block-engine.jito.wtf/api/v1/bundles',
-    'https://explorer.jito.wtf/api/v1/bundles'
-  ];
+  const url = 'https://eigenphi.io/api/v1/mev/ethereum/sandwich?duration=24h';
 
-  const data = await tryUrls(urls, url => fetchJson(url, { params: { limit: 50 } }));
-  const bundles = coerceToArray(data);
+  const data = await fetchJson(url, {
+    headers: {
+      'referer': 'https://eigenphi.io/',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+    }
+  });
 
-  log('jito.bundles', `received=${bundles.length} in ${msSince(start)}ms`);
+  const rows = coerceToArray(data?.data?.list) 
+    .concat(coerceToArray(data?.data?.rows));
 
   const out = [];
-  for (const b of bundles) {
-    const tsRaw = b?.timestamp ?? b?.time ?? b?.created_at ?? b?.createdAt;
-    const ts = tsRaw ? new Date(tsRaw) : new Date();
+  for (const r of rows) {
+    const tx = normalizeTxId(r?.tx_hash || r?.transaction_hash || r?.hash || r?.txid);
+    if (!tx) continue;
+    const profit = toNumber(r?.profit_usd || r?.profit || r?.usd_profit);
+    const tokens = r?.tokens || r?.token || r?.token_symbols || null;
 
-    const txs = coerceToArray(b?.transactions || b?.txs || b?.bundle_transactions);
-    for (const t of txs) {
-      const txHash = normalizeTxHash(t?.transaction_hash || t?.transactionHash || t?.hash || t?.tx_hash || t?.txHash);
-      if (!txHash) continue;
-      out.push({
-        transaction_hash: txHash,
-        source: 'jito',
-        bundle_id: b?.bundle_id ?? b?.bundleId ?? b?.id ?? null,
-        timestamp: ts,
-        raw: t
-      });
+    out.push({
+      tx_hash: tx,
+      profit_usd: profit,
+      tokens,
+      timestamp: new Date(),
+      raw: r
+    });
+  }
+
+  log('eigenphi.sandwich24h', `rows=${out.length} in ${msSince(start)}ms`);
+  return out;
+}
+
+function extractZeroMevItems(payload) {
+  const visited = new Set();
+
+  function walk(node) {
+    if (!node || (typeof node !== 'object' && !Array.isArray(node))) return null;
+    if (visited.has(node)) return null;
+    visited.add(node);
+
+    if (Array.isArray(node)) {
+      // sometimes mev is nested arrays
+      const flattened = node.flat ? node.flat(Infinity) : node.reduce((acc, x) => acc.concat(x), []);
+      const objs = flattened.filter((x) => x && typeof x === 'object' && !Array.isArray(x));
+      return objs.length ? objs : null;
+    }
+
+    if (Array.isArray(node.mev)) return walk(node.mev);
+    if (node.data && Array.isArray(node.data.mev)) return walk(node.data.mev);
+
+    for (const v of Object.values(node)) {
+      const found = walk(v);
+      if (found) return found;
+    }
+    return null;
+  }
+
+  return walk(payload) || [];
+}
+
+async function fetchZeroMevLatestBlock() {
+  const start = nowMs();
+  const url = 'https://api.zeromev.org/v1/block/latest';
+  log('zeromev.try', url);
+
+  const data = await fetchJson(url, {
+    headers: {
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+    }
+  });
+
+  const mev = extractZeroMevItems(data);
+  const blockNumber = data?.block_number ?? data?.blockNumber ?? data?.data?.block_number ?? null;
+
+  log('zeromev.latest', `block=${blockNumber ?? 'unknown'} mev_items=${mev.length} in ${msSince(start)}ms`);
+  return { blockNumber, mev };
+}
+
+async function fetchUltraSoundBuilderStats() {
+  const url = 'https://payload.ultrasound.money/api/v1/builder_stats';
+  log('ultrasound.try', url);
+  const data = await fetchJson(url, {
+    headers: {
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+    }
+  });
+  return data;
+}
+
+async function saveMarketHealth(db, health) {
+  const ref = db.collection('mev_health').doc('latest');
+  await ref.set(
+    {
+      ...health,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    },
+    { merge: true }
+  );
+  const snap = await ref.get();
+  log('firestore.mev_health', `wrote+read mev_health/latest exists=${snap.exists}`);
+}
+
+function toHustlesV2Docs(items) {
+  // Convert different sources into hustles_v2 documents.
+  // hustles_v2 is what your frontend listens to.
+  return items.map((it) => {
+    const docId = safeDocId(it.docId || it.tx_hash || it.transaction_hash);
+    if (!docId) return null;
+
+    const profit = typeof it.profit_usd === 'number' ? it.profit_usd : null;
+    const lucrative = typeof profit === 'number' && profit > 10;
+
+    const title = it.title || (it.source_platform
+      ? `${it.source_platform} MEV Alpha`
+      : 'MEV Alpha');
+
+    return {
+      docId,
+      data: {
+        hustle_id: docId,
+        title,
+        description: it.description || null,
+        source: it.source || it.source_platform || 'MEV',
+        source_platform: it.source_platform || it.source || 'MEV',
+        link: it.link || it.explorer_url || null,
+        explorer_url: it.explorer_url || null,
+        tier: it.tier || (lucrative ? 'Gold' : 'Silver'),
+        network: it.network || 'Ethereum',
+        type: it.type || (lucrative ? 'Lucrative' : 'MEV'),
+        category: it.category || (lucrative ? 'Lucrative' : null),
+        profit_usd: profit,
+        risk_score: it.risk_score || null,
+        timestamp: it.timestamp || new Date(),
+        date_added: admin.firestore.FieldValue.serverTimestamp(),
+        tx_hash: it.tx_hash || it.transaction_hash || null,
+        transaction_hash: it.tx_hash || it.transaction_hash || null,
+        block_number: it.block_number ?? null,
+        raw: it.raw || null
+      }
+    };
+  }).filter(Boolean);
+}
+
+async function saveToHustlesV2(db, docs) {
+  const col = db.collection('hustles_v2');
+  const BATCH_SIZE = 400;
+  let written = 0;
+
+  for (let i = 0; i < docs.length; i += BATCH_SIZE) {
+    const chunk = docs.slice(i, i + BATCH_SIZE);
+    const batch = db.batch();
+    for (const d of chunk) {
+      batch.set(col.doc(d.docId), d.data, { merge: true });
+      written++;
+    }
+    await batch.commit();
+    log('firestore.hustles_v2_commit', `chunk=${Math.floor(i / BATCH_SIZE) + 1} size=${chunk.length}`);
+  }
+
+  return { written, total: docs.length };
+}
+
+async function scrapeJito() {
+  const start = nowMs();
+  const baseUrl = 'https://mainnet.block-engine.jito.wtf/api/v1/bundles';
+
+  try {
+    log('jito.jsonrpc', `POST ${baseUrl}`);
+
+    const headers = {
+      'content-type': 'application/json',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+    };
+
+    const postOnce = async (body) => {
+      const resp = await axios.post(
+        baseUrl,
+        body,
+        { timeout: 30000, validateStatus: s => s >= 200 && s < 300, headers }
+      );
+      logResponsePreview(resp.data);
+      return resp;
+    };
+
+    const postWithRetry = async (body) => {
+      try {
+        return await postOnce(body);
+      } catch (e) {
+        const status = e?.response?.status;
+        if (status === 429) {
+          await sleep(2000);
+          try {
+            return await postOnce(body);
+          } catch (e2) {
+            logError('jito.rate_limited', e2);
+            return null;
+          }
+        }
+        throw e;
+      }
+    };
+
+    const tipAccountsResp = await postWithRetry({ jsonrpc: '2.0', id: 1, method: 'getTipAccounts', params: [] });
+    const tipFloorResp = await postWithRetry({ jsonrpc: '2.0', id: 2, method: 'getTipFloor', params: [] });
+
+    if (!tipAccountsResp || !tipFloorResp) {
+      return [];
+    }
+
+    const tipFloor = tipFloorResp?.data?.result ?? null;
+    log('jito.tip_floor', `value=${typeof tipFloor === 'string' || typeof tipFloor === 'number' ? String(tipFloor) : 'unknown'} in ${msSince(start)}ms`);
+
+    return [{
+      docId: `jito-tipfloor-${new Date().toISOString().slice(0, 16)}`,
+      transaction_hash: `jito-tipfloor-${new Date().toISOString()}`,
+      source_platform: 'Jito',
+      network: 'Solana',
+      type: 'Lucrative Opportunity',
+      category: 'Lucrative Opportunity',
+      title: 'Jito Tip Floor',
+      description: `Tip floor indicator: ${typeof tipFloor === 'string' || typeof tipFloor === 'number' ? String(tipFloor) : 'unknown'}`,
+      timestamp: new Date(),
+      raw: {
+        tipFloor: tipFloorResp?.data,
+        tipAccounts: tipAccountsResp?.data
+      }
+    }];
+  } catch (e) {
+    logError('jito.unreachable', e);
+    return [];
+  }
+}
+
+async function scrapeMevBoostRelays() {
+  const start = nowMs();
+  const relays = [
+    'https://relay.flashbots.net',
+    'https://boost-relay.ultrasound.money',
+    'https://agnostic-relay.net'
+  ];
+
+  const out = [];
+
+  for (const base of relays) {
+    const url = `${base}/relay/v1/data/bidtraces/proposer_payload_delivered`;
+    try {
+      log('mevboost.start', base);
+      const data = await fetchJson(url, { params: { limit: 50 } });
+      const rows = coerceToArray(data);
+      log('mevboost.rows', `${base} received=${rows.length} in ${msSince(start)}ms`);
+
+      for (const r of rows) {
+        const blockHash = normalizeTxId(r?.block_hash || r?.blockHash);
+        if (!blockHash) continue;
+
+        // Relay data is payload/block-level; it does not include tx hashes.
+        // We store with transaction_hash=block_hash but annotate id_type.
+        out.push({
+          transaction_hash: blockHash,
+          id_type: 'block_hash',
+          source: 'mevboost_relay',
+          relay: base,
+          slot: r?.slot ?? null,
+          block_number: r?.block_number ?? r?.blockNumber ?? null,
+          builder_pubkey: r?.builder_pubkey ?? null,
+          proposer_pubkey: r?.proposer_pubkey ?? null,
+          value: r?.value ?? null,
+          num_tx: r?.num_tx ?? null,
+          timestamp: r?.timestamp ? new Date(r.timestamp) : new Date(),
+          raw: r
+        });
+      }
+    } catch (e) {
+      logError('mevboost.error', e);
     }
   }
 
+  log('mevboost.done', `items=${out.length} in ${msSince(start)}ms`);
   return out;
 }
 
@@ -194,14 +536,18 @@ async function scrapeEigenPhi() {
   ];
 
   try {
-    const data = await tryUrls(apiUrls, url => fetchJson(url, { params: { limit: 50 } }));
+    const data = await tryUrls(apiUrls, url => fetchJson(url, { params: { limit: 50, page_size: 50 } }));
     const items = coerceToArray(data);
 
     log('eigenphi.api', `received=${items.length} in ${msSince(start)}ms`);
 
+    if (items.length === 0) {
+      throw new Error('EigenPhi API returned 0 items');
+    }
+
     const out = [];
     for (const it of items) {
-      const txHash = normalizeTxHash(it?.transaction_hash || it?.transactionHash || it?.hash || it?.tx_hash || it?.txHash);
+      const txHash = normalizeTxId(it?.transaction_hash || it?.transactionHash || it?.hash || it?.tx_hash || it?.txHash);
       if (!txHash) continue;
       const tsRaw = it?.timestamp ?? it?.time ?? it?.created_at ?? it?.createdAt;
       out.push({
@@ -221,10 +567,7 @@ async function scrapeEigenPhi() {
       'https://eigenphi.io/'
     ];
 
-    const html = await tryUrls(htmlUrls, async url => {
-      const res = await axios.get(url, { timeout: 30000, validateStatus: s => s >= 200 && s < 300 });
-      return res.data;
-    });
+    const html = await tryUrls(htmlUrls, async url => fetchHtml(url));
 
     const $ = cheerio.load(html);
     const out = [];
@@ -262,7 +605,13 @@ async function firestorePing(db) {
     },
     { merge: true }
   );
-  log('firestore.ping', `wrote _mev_debug/ping in ${msSince(start)}ms`);
+
+  // Read-after-write verification (helps diagnose “writes succeed but I don't see them”)
+  const snap = await ref.get();
+  log(
+    'firestore.ping',
+    `wrote+read _mev_debug/ping exists=${snap.exists} in ${msSince(start)}ms`
+  );
 }
 
 async function writeRunSummary(db, runId, payload) {
@@ -274,6 +623,20 @@ async function writeRunSummary(db, runId, payload) {
     },
     { merge: true }
   );
+
+  // Deterministic marker doc for easy visibility in console
+  await db.collection('mev_runs').doc('latest').set(
+    {
+      runId,
+      status: payload?.status || 'unknown',
+      clientUpdatedAt: new Date()
+    },
+    { merge: true }
+  );
+
+  // Read-after-write verification
+  const snap = await ref.get();
+  log('firestore.run_summary', `wrote+read mev_runs/${runId} exists=${snap.exists}`);
 }
 
 async function saveToFirestore(db, items) {
@@ -334,7 +697,9 @@ async function main() {
   const results = {
     flashbots: { ok: false, count: 0, error: null },
     jito: { ok: false, count: 0, error: null },
-    eigenphi: { ok: false, count: 0, error: null }
+    eigenphiSandwich24h: { ok: false, count: 0, error: null },
+    zeromev: { ok: false, count: 0, error: null },
+    ultrasound: { ok: false, count: 0, error: null }
   };
 
   const all = [];
@@ -363,22 +728,99 @@ async function main() {
     logError('jito.error', e);
   }
 
+  // EigenPhi Sandwich 24h
   try {
-    log('eigenphi.start');
-    const items = await scrapeEigenPhi();
-    results.eigenphi.ok = true;
-    results.eigenphi.count = items.length;
-    all.push(...items);
-    log('eigenphi.done', `items=${items.length}`);
+    log('eigenphiSandwich24h.start');
+    const rows = await scrapeEigenPhiSandwich24h();
+    results.eigenphiSandwich24h.ok = true;
+    results.eigenphiSandwich24h.count = rows.length;
+    for (const r of rows) {
+      all.push({
+        tx_hash: r.tx_hash,
+        profit_usd: r.profit_usd,
+        tokens: r.tokens,
+        timestamp: r.timestamp,
+        source_platform: 'EigenPhi',
+        type: 'Sandwich',
+        network: 'Ethereum',
+        title: `EigenPhi Sandwich • ${r.tx_hash.slice(0, 10)}…`,
+        explorer_url: `https://etherscan.io/tx/${r.tx_hash}`
+      });
+    }
+    log('eigenphiSandwich24h.done', `rows=${rows.length}`);
   } catch (e) {
-    results.eigenphi.error = e?.message || String(e);
-    logError('eigenphi.error', e);
+    results.eigenphiSandwich24h.error = e?.message || String(e);
+    logError('eigenphiSandwich24h.error', e);
+  }
+
+  // ZeroMEV latest block (sandwich/arbitrage only)
+  try {
+    log('zeromev.start');
+    const { blockNumber, mev } = await fetchZeroMevLatestBlock();
+    const filtered = mev.filter((m) => {
+      const cls = (m?.classification || m?.mev_type || m?.type || '').toString().toLowerCase();
+      return cls.includes('sandwich') || cls.includes('arbitrage');
+    });
+
+    results.zeromev.ok = true;
+    results.zeromev.count = filtered.length;
+
+    for (const it of filtered) {
+      const tx = normalizeTxId(it?.tx_hash || it?.transaction_hash || it?.hash);
+      if (!tx) continue;
+      const profit = toNumber(it?.profit_usd || it?.profit || it?.usd_profit);
+      const cls = (it?.classification || it?.mev_type || it?.type || 'MEV').toString();
+
+      all.push({
+        tx_hash: tx,
+        profit_usd: profit,
+        timestamp: new Date(),
+        source_platform: 'ZeroMEV',
+        type: cls,
+        network: 'Ethereum',
+        title: `ZeroMEV ${cls} • ${tx.slice(0, 10)}…`,
+        explorer_url: `https://etherscan.io/tx/${tx}`,
+        block_number: blockNumber ?? null,
+        raw: it
+      });
+    }
+
+    log('zeromev.done', `items=${filtered.length}`);
+  } catch (e) {
+    results.zeromev.error = e?.message || String(e);
+    logError('zeromev.error', e);
+  }
+
+  // Ultra Sound Money builder metrics -> mev_health/latest
+  try {
+    log('ultrasound.start');
+    const stats = await fetchUltraSoundBuilderStats();
+
+    const tipsApr = toNumber(stats?.tips_apr ?? stats?.tipsApr ?? stats?.tips?.apr);
+    const mevRewardDaily = toNumber(stats?.mev_reward_daily ?? stats?.mevRewardDaily ?? stats?.mev?.reward_daily);
+
+    await saveMarketHealth(db, {
+      status: typeof tipsApr === 'number' && tipsApr > 0.20 ? 'Elevated' : 'Open Market',
+      tips_apr: tipsApr,
+      mev_reward_daily: mevRewardDaily,
+      source: 'ultrasound_builder_stats',
+      timestamp: new Date(),
+      raw: stats
+    });
+
+    results.ultrasound.ok = true;
+    results.ultrasound.count = 1;
+    log('ultrasound.done', `tips_apr=${tipsApr} mev_reward_daily=${mevRewardDaily}`);
+  } catch (e) {
+    results.ultrasound.error = e?.message || String(e);
+    logError('ultrasound.error', e);
   }
 
   const deduped = new Map();
   for (const it of all) {
-    if (!it?.transaction_hash) continue;
-    if (!deduped.has(it.transaction_hash)) deduped.set(it.transaction_hash, it);
+    const key = it?.tx_hash || it?.transaction_hash;
+    if (!key) continue;
+    if (!deduped.has(key)) deduped.set(key, it);
   }
 
   const uniqueItems = [...deduped.values()];
@@ -404,8 +846,19 @@ async function main() {
     return;
   }
 
-  const save = await saveToFirestore(db, uniqueItems);
+  // Save raw/relayed items to mev_transactions (debugging / analytics)
+  const save = await saveToFirestore(db, uniqueItems.map((x) => ({
+    transaction_hash: x.tx_hash || x.transaction_hash,
+    source: x.source_platform || x.source,
+    timestamp: x.timestamp,
+    raw: x
+  })));
   console.log('[MEV Scraper] Firestore write summary:', save);
+
+  // Save user-facing feed items to hustles_v2 (frontend listens here)
+  const hustleDocs = toHustlesV2Docs(uniqueItems);
+  const hustleSave = await saveToHustlesV2(db, hustleDocs);
+  console.log('[MEV Scraper] hustles_v2 write summary:', hustleSave);
   await writeRunSummary(db, runId, {
     status: 'completed',
     completedAt: new Date(),
