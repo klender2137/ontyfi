@@ -7,7 +7,7 @@ const UserAccount = (function() {
   const defaultUser = {
     username: 'crypto.explorer',
     pfp: null, // base64 or URL
-    role: 'user', // 'user' or 'admin'
+    role: 'user',
     preferences: {
       defaultScreen: 'home',
       language: 'en',
@@ -171,7 +171,7 @@ const UserAccount = (function() {
   // Update user role (admin only)
   function updateUserRole(newRole) {
     const user = loadUser();
-    user.role = newRole; // 'user' or 'admin'
+    user.role = newRole; // 'user' | 'member' | 'admin'
     saveUser(user);
     return user.role;
   }
@@ -180,6 +180,42 @@ const UserAccount = (function() {
   function isAdmin() {
     const user = loadUser();
     return user.role === 'admin';
+  }
+
+  function getRole() {
+    const user = loadUser();
+    return user.role || 'user';
+  }
+
+  function mergeFromFirebaseProfile(profile) {
+    if (!profile || typeof profile !== 'object') {
+      return loadUser();
+    }
+
+    const user = loadUser();
+
+    if (profile.username && typeof profile.username === 'string') {
+      user.username = profile.username;
+    }
+
+    if (profile.display_name && typeof profile.display_name === 'string' && !user.username) {
+      user.username = profile.display_name;
+    }
+
+    if (profile.role && typeof profile.role === 'string') {
+      user.role = profile.role;
+    }
+
+    if (profile.activities && typeof profile.activities === 'object') {
+      user.activities = { ...user.activities, ...profile.activities };
+    }
+
+    if (profile.preferences && typeof profile.preferences === 'object') {
+      user.preferences = { ...user.preferences, ...profile.preferences };
+    }
+
+    saveUser(user);
+    return user;
   }
 
   // Get all user data
@@ -235,8 +271,10 @@ const UserAccount = (function() {
     updatePFP,
     updateUserRole,
     isAdmin,
+    getRole,
     getUserData,
     getActivitiesSummary,
+    mergeFromFirebaseProfile,
     updateKeywords,
     saveTreeState,
     loadTreeState

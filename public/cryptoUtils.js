@@ -8,6 +8,55 @@ class CryptoUtils {
     this.hashAlgorithm = 'SHA-256';
   }
 
+  async generateKeyFromString(secret, salt = 'crypto-explorer-salt') {
+    try {
+      const input = `${String(secret || '')}:${String(salt || '')}`;
+      const bytes = new TextEncoder().encode(input);
+      const hash = await crypto.subtle.digest(this.hashAlgorithm, bytes);
+      const key = await crypto.subtle.importKey(
+        'raw',
+        hash,
+        this.algorithm,
+        false,
+        ['encrypt', 'decrypt']
+      );
+      return key;
+    } catch (error) {
+      console.error('Error generating key from string:', error);
+      throw error;
+    }
+  }
+
+  async compressString(str) {
+    const s = String(str ?? '');
+    if (typeof CompressionStream === 'undefined') return { alg: 'none', data: s };
+    try {
+      const cs = new CompressionStream('gzip');
+      const writer = cs.writable.getWriter();
+      await writer.write(new TextEncoder().encode(s));
+      await writer.close();
+      const compressed = await new Response(cs.readable).arrayBuffer();
+      return { alg: 'gzip', data: this.bytesToBase64(new Uint8Array(compressed)) };
+    } catch {
+      return { alg: 'none', data: s };
+    }
+  }
+
+  async decompressString(payload) {
+    const p = payload || {};
+    if (p.alg !== 'gzip') return String(p.data ?? '');
+    if (typeof DecompressionStream === 'undefined') {
+      throw new Error('DecompressionStream not available in this browser');
+    }
+    const bytes = this.base64ToBytes(String(p.data || ''));
+    const ds = new DecompressionStream('gzip');
+    const writer = ds.writable.getWriter();
+    await writer.write(bytes);
+    await writer.close();
+    const decompressed = await new Response(ds.readable).arrayBuffer();
+    return new TextDecoder().decode(decompressed);
+  }
+
   // Generate a deterministic encryption key from a wallet signature
   async generateKeyFromSignature(signature, salt = 'crypto-explorer-salt') {
     try {

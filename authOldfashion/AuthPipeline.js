@@ -179,7 +179,14 @@ class AuthPipeline {
     } else {
       // EVM SIWE message
       if (typeof window.SiweMessage === 'undefined') {
-        throw new Error('SIWE library not loaded. Please refresh the page.');
+        try {
+          const mod = await import('https://esm.sh/siwe@2.1.4');
+          if (mod?.SiweMessage) {
+            window.SiweMessage = mod.SiweMessage;
+          }
+        } catch (e) {
+          throw new Error('SIWE library not found. Wallet SIWE auth cannot start because the SIWE browser module failed to load.');
+        }
       }
       
       const siweMessage = new window.SiweMessage({

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth System Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0f172a;
+            color: #f7f9ff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .status-box {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 2px solid;
+        }
+        .status-loading { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+        .status-success { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .status-error { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+        pre { background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; }
+        button { padding: 0.75rem 1.5rem; background: #3b82f6; border: none; border-radius: 8px; color: white; font-size: 0.875rem; font-weight: 600; cursor: pointer; margin: 0.5rem; }
+    </style>
+</head>
+<body>
+    <h1>🔐 Authentication System Test</h1>
+    
+    <div id="firebase-status" class="status-box status-loading">
+        <h3>⏳ Loading Firebase...</h3>
+        <p>Please wait while we initialize Firebase.</p>
+    </div>
+
+    <div id="auth-status" class="status-box status-loading">
+        <h3>⏳ Checking Authentication...</h3>
+        <p>Please wait while we check your authentication status.</p>
+    </div>
+
+    <div id="component-status" class="status-box status-loading">
+        <h3>⏳ Loading Components...</h3>
+        <p>Please wait while we load the authentication components.</p>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <h3>Console Output:</h3>
+        <pre id="console-output"></pre>
+    </div>
+
+    <div id="auth-ui" style="margin-top: 2rem;"></div>
+
+    <!-- Firebase CDN v8 (global firebase object) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <!-- Firebase initialization -->
+    <!-- React via CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Auth Components -->
+    <script src="AuthPipeline0.5.js"></script>
+    <script type="text/babel" src="SimpleAuthScreen.js"></script>
+
+    <script>
+        // Capture console logs
+        const logs = [];
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            logs.push({ type: 'log', message: args.join(' ') });
+            originalLog.apply(console, args);
+            updateConsoleOutput();
+        };
+
+        console.error = function(...args) {
+            logs.push({ type: 'error', message: args.join(' ') });
+            originalError.apply(console, args);
+            updateConsoleOutput();
+        };
+
+        console.warn = function(...args) {
+            logs.push({ type: 'warn', message: args.join(' ') });
+            originalWarn.apply(console, args);
+            updateConsoleOutput();
+        };
+
+        function updateConsoleOutput() {
+            const output = document.getElementById('console-output');
+            output.textContent = logs.slice(-20).map(log => 
+                `[${log.type.toUpperCase()}] ${log.message}`
+            ).join('\n');
+        }
+
+        // Test Firebase initialization
+        function testFirebase() {
+            const firebaseStatus = document.getElementById('firebase-status');
+            
+            try {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyBl4n35lHVR9EHS_fi7slR28xIJeMoFM4k",
+                    authDomain: "crypto-explorer-2137.firebaseapp.com",
+                    projectId: "crypto-explorer-2137",
+                    storageBucket: "crypto-explorer-2137.firebasestorage.app",
+                    messagingSenderId: "970851515463",
+                    appId: "1:970851515463:web:3b3d9c44b4367a373cc562"
+                };
+
+                // Check if Firebase is already initialized
+                if (!firebase.apps || firebase.apps.length === 0) {
+                    firebase.initializeApp(firebaseConfig);
+                    console.log('✅ Firebase initialized successfully');
+                } else {
+                    console.log('✅ Firebase already initialized, using existing instance');
+                }
+                firebaseStatus.className = 'status-box status-success';
+                firebaseStatus.innerHTML = `
+                    <h3>✅ Firebase Initialized Successfully</h3>
+                    <p>Firebase is ready for authentication.</p>
+                `;
+                return true;
+            } catch (error) {
+                firebaseStatus.className = 'status-box status-error';
+                firebaseStatus.innerHTML = `
+                    <h3>❌ Firebase Initialization Failed</h3>
+                    <p>Error: ${error.message}</p>
+                `;
+                console.error('❌ Firebase initialization failed:', error);
+                return false;
+            }
+        }
+
+        // Test authentication components
+        function testComponents() {
+            const componentStatus = document.getElementById('component-status');
+
+            return new Promise((resolve) => {
+                const components = {
+                    'AuthPipeline0.5': typeof window.AuthPipeline0_5 !== 'undefined',
+                    'SimpleAuthScreen': typeof window.SimpleAuthScreen !== 'undefined',
+                    'React': typeof React !== 'undefined',
+                    'ReactDOM': typeof ReactDOM !== 'undefined'
+                };
+                
+                console.log('Component availability check:', components);
+                
+                const allLoaded = Object.values(components).every(loaded => loaded);
+                
+                if (allLoaded) {
+                    componentStatus.className = 'status-box status-success';
+                    componentStatus.innerHTML = '<h3>✅ All Components Loaded Successfully</h3><p>Authentication components are ready.</p>';
+                    console.log('✅ All components loaded successfully');
+                    resolve(true);
+                } else {
+                    const missing = Object.entries(components)
+                        .filter(([name, loaded]) => !loaded)
+                        .map(([name]) => name);
+                    
+                    componentStatus.className = 'status-box status-error';
+                    componentStatus.innerHTML = '<h3>❌ Some Components Failed to Load</h3><p>Missing: ' + missing.join(', ') + '</p>';
+                    console.error('❌ Missing components:', missing);
+                    resolve(false);
+                }
+            });
+        }
+
+        // Test authentication state
+        function testAuthState() {
+            const authStatus = document.getElementById('auth-status');
+            
+            try {
+                const auth = firebase.auth();
+                const user = auth.currentUser;
+                
+                authStatus.className = 'status-box status-success';
+                authStatus.innerHTML = '<h3>✅ Authentication System Ready</h3><p>Current user: ' + (user ? user.email : 'Not authenticated') + '</p>';
+                console.log('✅ Authentication system ready, user:', user ? user.email : 'anonymous');
+                return user;
+            } catch (error) {
+                authStatus.className = 'status-box status-error';
+                authStatus.innerHTML = '<h3>❌ Authentication System Error</h3><p>Error: ' + error.message + '</p>';
+                console.error('❌ Authentication system error:', error);
+                return null;
+            }
+        }
+
+        // Render auth UI if needed
+        function renderAuthUI() {
+            const authUI = document.getElementById('auth-ui');
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+            
+            if (!user && window.SimpleAuthScreen) {
+                const { createElement } = React;
+                const { createRoot } = ReactDOM;
+                
+                const root = createRoot(authUI);
+                root.render(createElement(window.SimpleAuthScreen, {
+                    onAuthSuccess: function(user) {
+                        console.log('🎉 Authentication successful!', user.email);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    }
+                }));
+            } else if (user) {
+                authUI.innerHTML = '<div style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;"><h3>🎉 You are authenticated!</h3><p>Email: ' + user.email + '</p><button onclick="signOut()">Sign Out</button></div>';
+            }
+        }
+
+        function signOut() {
+            firebase.auth().signOut().then(() => {
+                console.log('✅ Signed out successfully');
+                window.location.reload();
+            }).catch((error) => {
+                console.error('❌ Sign out error:', error);
+            });
+        }
+
+        // Run all tests
+        async function runTests() {
+            console.log('🧪 Starting authentication system tests...');
+            
+            // Give scripts a moment to load in slower environments
+            await new Promise((r) => setTimeout(r, 250));
+
+            const firebaseOk = testFirebase();
+            const componentsOk = await testComponents();
+            const user = testAuthState();
+
+            console.log('Test results:', { firebaseOk, componentsOk, user });
+
+            if (firebaseOk && componentsOk) {
+                renderAuthUI();
+            } else {
+                console.log('Some tests failed, but continuing anyway...');
+                if (componentsOk) {
+                    renderAuthUI();
+                }
+            }
+        }
+
+        // Start tests when page loads
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

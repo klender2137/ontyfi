@@ -2,6 +2,7 @@
 
 const AccountSettings = {
   eventHandlers: [],
+  _busy: false,
   
   // Initialize settings screen with user data
   init(container, userAccount, onClose) {
@@ -10,6 +11,122 @@ const AccountSettings = {
     this.onClose = onClose;
     this.cleanup();
     this.render();
+  },
+
+  _getFirebaseUser() {
+    try {
+      if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') return null;
+      const auth = firebase.auth();
+      return auth?.currentUser || null;
+    } catch {
+      return null;
+    }
+  },
+
+  async _saveProfileToFirebase() {
+    if (typeof firebase === 'undefined' || typeof firebase.firestore !== 'function') {
+      throw new Error('Firebase not available');
+    }
+
+    const u = this._getFirebaseUser();
+    if (!u?.uid) {
+      throw new Error('You must be signed in to save settings');
+    }
+
+    const local = this.userAccount.getUserData();
+    const profilePatch = {
+      uid: u.uid,
+      email: u.email || null,
+      display_name: local.username || u.displayName || (u.email ? u.email.split('@')[0] : 'user'),
+      username: local.username || u.displayName || (u.email ? u.email.split('@')[0] : 'user'),
+      pfp: local.pfp ?? null,
+      role: local.role || 'user',
+      preferences: {
+        defaultScreen: local.preferences?.defaultScreen || 'home',
+        language: local.preferences?.language || 'en',
+        preferredDomain: local.preferences?.preferredDomain || '',
+        investingCapital: Number(local.preferences?.investingCapital || 0),
+        yearsOfExperience: local.preferences?.yearsOfExperience || 'newcomer',
+        highlightKeywords: Array.isArray(local.preferences?.highlightKeywords) ? local.preferences.highlightKeywords : [],
+      },
+      activities: {
+        lastActiveDate: local.activities?.lastActiveDate || new Date().toISOString(),
+        streakDays: Number(local.activities?.streakDays || 0),
+        totalArticlesRead: Number(local.activities?.totalArticlesRead || 0),
+        lastArticleRead: local.activities?.lastArticleRead || null,
+        todaysFocus: local.activities?.todaysFocus || null,
+      },
+      personalInfo: {
+        joinDate: local.personalInfo?.joinDate || new Date().toISOString(),
+      },
+      last_active: new Date(),
+      updated_at: new Date(),
+    };
+
+    const db = firebase.firestore();
+    await db.collection('users').doc(u.uid).set(profilePatch, { merge: true });
+  },
+
+  async _handleLogout() {
+    if (this._busy) return;
+    this._busy = true;
+    try {
+      if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
+        throw new Error('Firebase not available');
+      }
+      await firebase.auth().signOut();
+      try {
+        window.localStorage.removeItem('cryptoExplorer.userId');
+        window.localStorage.removeItem('cryptoExplorer.guestSession');
+      } catch {}
+      this.cleanup();
+      this.onClose();
+      window.location.hash = '#home';
+      window.location.reload();
+    } finally {
+      this._busy = false;
+    }
+  },
+
+  async _handleDeleteAccount() {
+    if (this._busy) return;
+    const ok = window.confirm('Delete account? This will remove your profile document and your sign-in credentials. This cannot be undone.');
+    if (!ok) return;
+    this._busy = true;
+    try {
+      const u = this._getFirebaseUser();
+      if (!u?.uid) throw new Error('No authenticated user');
+
+      if (typeof firebase !== 'undefined' && typeof firebase.firestore === 'function') {
+        try {
+          await firebase.firestore().collection('users').doc(u.uid).delete();
+        } catch (e) {
+          console.warn('[AccountSettings] Failed to delete user doc:', e);
+        }
+      }
+
+      try {
+        await u.delete();
+      } catch (e) {
+        if (e?.code === 'auth/requires-recent-login') {
+          throw new Error('Please sign in again, then retry deleting your account (Firebase requires a recent login).');
+        }
+        throw e;
+      }
+
+      try {
+        window.localStorage.removeItem('cryptoExplorer.userId');
+        window.localStorage.removeItem('cryptoExplorer.guestSession');
+        window.localStorage.removeItem('cryptoExplorer.userAccount');
+      } catch {}
+
+      this.cleanup();
+      this.onClose();
+      window.location.hash = '#home';
+      window.location.reload();
+    } finally {
+      this._busy = false;
+    }
   },
 
   // Cleanup event handlers
@@ -147,9 +264,11 @@ const AccountSettings = {
         </div>
       </div>
 
-      <div style="margin-top: 2rem; display: flex; gap: 0.75rem;">
+      <div style="margin-top: 2rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
         <button class="primary-button" id="save-settings-btn">Save Settings</button>
         <button class="secondary-button" id="cancel-settings-btn">Cancel</button>
+        <button class="secondary-button" id="logout-btn">Log out</button>
+        <button class="secondary-button" id="delete-account-btn" style="border-color: #ef4444; color: #ef4444;">Delete Account</button>
       </div>
     `;
 
@@ -228,16 +347,29 @@ const AccountSettings = {
 
     // Save button
     const saveBtn = this.container.querySelector('#save-settings-btn');
-    const saveHandler = () => {
-      this.showSuccessMessage();
-      setTimeout(() => {
-        this.cleanup();
-        this.onClose();
-        window.location.hash = '#home';
-        window.location.reload();
-      }, 1500);
+    const saveHandler = async () => {
+      try {
+        await this._saveProfileToFirebase();
+        this.showSuccessMessage();
+        setTimeout(() => {
+          this.cleanup();
+          this.onClose();
+        }, 800);
+      } catch (e) {
+        alert(e?.message || 'Failed to save settings');
+      }
     };
     this.addEventHandler(saveBtn, 'click', saveHandler);
+
+    const logoutBtn = this.container.querySelector('#logout-btn');
+    if (logoutBtn) {
+      this.addEventHandler(logoutBtn, 'click', () => this._handleLogout());
+    }
+
+    const deleteBtn = this.container.querySelector('#delete-account-btn');
+    if (deleteBtn) {
+      this.addEventHandler(deleteBtn, 'click', () => this._handleDeleteAccount());
+    }
 
     // Cancel button
     const cancelBtn = this.container.querySelector('#cancel-settings-btn');

@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  deleteUser,
   fetchSignInMethodsForEmail,
   linkWithCredential,
   signInWithCustomToken,
@@ -10,7 +11,7 @@ import {
   signOut as firebaseSignOut,
   updateProfile,
 } from 'firebase/auth';
-import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayUnion, deleteDoc, doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { auth, db } from '../services/firebase';
 
@@ -33,6 +34,8 @@ function validatePassword(password) {
 async function ensureUserDoc({ user, authType, walletAddress = null }) {
   if (!user?.uid) return;
 
+  const identity = authType === 'email' ? 'password' : authType;
+
   const ref = doc(db, 'users', user.uid);
   const snap = await getDoc(ref);
 
@@ -41,10 +44,17 @@ async function ensureUserDoc({ user, authType, walletAddress = null }) {
 
     await setDoc(ref, {
       uid: user.uid,
-      auth_type: authType,
       email: user.email ?? null,
       wallet_address: walletAddress,
+      identities: identity ? [identity] : [],
+      metadata: {
+        created_at: serverTimestamp(),
+        last_login: serverTimestamp(),
+        last_active: serverTimestamp(),
+      },
       display_name: displayName,
+      // Backward compatible fields
+      auth_type: authType,
       created_at: serverTimestamp(),
       preferences: {
         mev_alerts: true,
@@ -67,6 +77,13 @@ async function ensureUserDoc({ user, authType, walletAddress = null }) {
     patch.display_name = user.displayName || user.email.split('@')[0];
   }
 
+  if (identity) {
+    patch.identities = arrayUnion(identity);
+  }
+
+  patch['metadata.last_login'] = serverTimestamp();
+  patch['metadata.last_active'] = serverTimestamp();
+
   if (Object.keys(patch).length > 0) {
     await updateDoc(ref, patch);
   }
@@ -77,6 +94,7 @@ export function AuthProvider({ children }) {
   const [isGuest, setIsGuest] = useState(false);
   const [initializing, setInitializing] = useState(true);
   const [error, setError] = useState(null);
+  const [pendingGoogleLink, setPendingGoogleLink] = useState(null);
 
   const wallet = useWallet();
 
@@ -157,7 +175,10 @@ export function AuthProvider({ children }) {
         const methods = await fetchSignInMethodsForEmail(auth, email);
 
         if (methods.includes('password')) {
-          throw new Error('This email is registered with password. Please sign in with email/password first, then link Google from settings.');
+          if (pendingCred) {
+            setPendingGoogleLink({ email, credential: pendingCred });
+          }
+          throw new Error('This email is registered with password. Sign in with email/password to link Google.');
         }
 
         // If it exists with some provider, we can't auto-sign-in unless we handle that provider.
@@ -176,10 +197,69 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const linkGoogleWithPassword = useCallback(async ({ email, password }) => {
+    setError(null);
+    if (!pendingGoogleLink?.credential || !pendingGoogleLink?.email) {
+      throw new Error('No pending Google credential to link');
+    }
+    if (pendingGoogleLink.email !== email) {
+      throw new Error('Email does not match pending Google sign-in attempt');
+    }
+    if (!validateEmail(email)) throw new Error('Invalid email');
+    if (!password) throw new Error('Password is required');
+
+    const signInCred = await signInWithEmailAndPassword(auth, email, password);
+    await linkWithCredential(signInCred.user, pendingGoogleLink.credential);
+    await ensureUserDoc({ user: signInCred.user, authType: 'google' });
+    setPendingGoogleLink(null);
+    setIsGuest(false);
+    return signInCred.user;
+  }, [pendingGoogleLink]);
+
+  const clearPendingGoogleLink = useCallback(() => {
+    setPendingGoogleLink(null);
+  }, []);
+
   const signOut = useCallback(async () => {
     setError(null);
     await firebaseSignOut(auth);
     setIsGuest(false);
+  }, []);
+
+  const deleteAccount = useCallback(async () => {
+    setError(null);
+
+    const current = auth.currentUser;
+    if (!current?.uid) {
+      throw new Error('No authenticated user');
+    }
+
+    const uid = current.uid;
+
+    try {
+      await deleteDoc(doc(db, 'users', uid));
+    } catch (e) {
+      // Continue - we still want to attempt auth deletion.
+      console.warn('[AuthContext] Failed to delete Firestore user doc:', e);
+    }
+
+    try {
+      // Client-side deletion can fail if login is stale; surface a clear message.
+      await deleteUser(current);
+    } catch (e) {
+      const code = e?.code;
+      if (code === 'auth/requires-recent-login') {
+        throw new Error('Please sign in again, then retry deleting your account (Firebase requires a recent login).');
+      }
+      throw e;
+    } finally {
+      try {
+        localStorage.removeItem('walletSignature');
+        localStorage.removeItem('cryptoExplorer.bookmarks');
+      } catch {
+        // ignore
+      }
+    }
   }, []);
 
   // Phantom/Solana sign-in using wallet-adapter compatible provider (Phantom)
@@ -250,15 +330,19 @@ export function AuthProvider({ children }) {
       isGuest,
       initializing,
       error,
+      pendingGoogleLinkEmail: pendingGoogleLink?.email ?? null,
       isAuthenticated: !!user,
       continueAsGuest,
       signUpWithEmail,
       signInWithEmail,
       signInWithGoogle,
+      linkGoogleWithPassword,
+      clearPendingGoogleLink,
       signInWithPhantom,
       signOut,
+      deleteAccount,
     };
-  }, [user, isGuest, initializing, error, continueAsGuest, signUpWithEmail, signInWithEmail, signInWithGoogle, signInWithPhantom, signOut]);
+  }, [user, isGuest, initializing, error, pendingGoogleLink, continueAsGuest, signUpWithEmail, signInWithEmail, signInWithGoogle, linkGoogleWithPassword, clearPendingGoogleLink, signInWithPhantom, signOut, deleteAccount]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -24,6 +24,7 @@ class UserActivityTracker {
     }
     
     // Initialize user identification
+    // Firebase scripts can load before firebase.initializeApp() runs, so we must wait.
     this.initializeUser();
     
     console.log('[UserActivityTracker] ✅ Activity tracker initialized');
@@ -54,6 +55,8 @@ class UserActivityTracker {
    */
   async initializeUser() {
     try {
+      await this.waitForFirebaseInit();
+
       if (this.firebase && this.firebase.auth) {
         const user = this.firebase.auth().currentUser;
         if (user) {
@@ -78,6 +81,40 @@ class UserActivityTracker {
       console.error('[UserActivityTracker] Failed to initialize user:', error);
       this.userId = this.generateGhostUserId();
       this.isGhostUser = true;
+    }
+  }
+
+  /**
+   * Wait until firebase.initializeApp() has created a default app.
+   * (Firebase CDN v8 throws "app/no-app" if auth() is called too early.)
+   */
+  async waitForFirebaseInit() {
+    try {
+      if (!this.firebase) return;
+
+      const isReady = () => {
+        try {
+          return Array.isArray(this.firebase.apps) && this.firebase.apps.length > 0;
+        } catch (e) {
+          return false;
+        }
+      };
+
+      if (isReady()) return;
+
+      await new Promise((resolve) => {
+        let attempts = 0;
+        const maxAttempts = 50; // ~5s
+        const t = setInterval(() => {
+          attempts += 1;
+          if (isReady() || attempts >= maxAttempts) {
+            clearInterval(t);
+            resolve();
+          }
+        }, 100);
+      });
+    } catch (e) {
+      // If anything goes wrong here, fall back to ghost user.
     }
   }
 

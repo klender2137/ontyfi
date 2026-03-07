@@ -16,12 +16,14 @@ import treeRoutes from './routes/tree.routes.js';
 import hustleRoutes from './routes/hustle.routes.js';
 import authSimpleRoutes from './routes/auth-simple.routes.js';
 import solanaAuthRoutes from './routes/solana-auth.routes.js';
+import ethereumAuthRoutes from './routes/ethereum-auth.routes.js';
 import activityAnalyticsRoutes from './routes/activity-analytics.routes.js';
 import embedRoutes from './routes/embed.routes.js';
 app.use('/api/tree', treeRoutes);
 app.use('/api/hustle', hustleRoutes);
 app.use('/api/auth-simple', authSimpleRoutes);
 app.use('/api/solana-auth', solanaAuthRoutes);
+app.use('/api/ethereum-auth', ethereumAuthRoutes);
 app.use('/api/analytics', activityAnalyticsRoutes);
 app.use('/api/embed', embedRoutes);
 

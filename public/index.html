@@ -10,10 +10,30 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>
+      // Wait for React to load before initializing auth
+      window.addEventListener('load', function() {
+        console.log('React loaded, checking availability...');
+        if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined') {
+          console.log('✅ React and ReactDOM available');
+        } else {
+          console.error('❌ React failed to load');
+        }
+      });
+    </script>
     <!-- Web3 Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/ethers@6.8.1/dist/ethers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
-    <script src="https://unpkg.com/siwe@2.1.4/dist/siwe.js"></script>
+    <script type="module">
+      try {
+        const mod = await import('https://esm.sh/siwe@2.1.4');
+        if (mod?.SiweMessage) {
+          window.SiweMessage = mod.SiweMessage;
+        }
+      } catch (e) {
+        console.warn('[SIWE] Failed to load SIWE module:', e);
+      }
+    </script>
     <!-- Firebase CDN v8 (global firebase object) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -44,34 +64,48 @@
     <script src="contribute.save.js" onerror="console.error('Failed to load contribute.save.js')"></script>
     <script src="cryptoUtils.js" onerror="console.error('Failed to load cryptoUtils.js')"></script>
     <!-- New Simple Auth System -->
-    <script src="AuthPipeline0.5.js" onerror="console.error('Failed to load AuthPipeline0.5.js')" onload="console.log('AuthPipeline0.5.js loaded')"></script>
-    <script src="SimpleAuthScreen.js" onerror="console.error('Failed to load SimpleAuthScreen.js')" onload="console.log('SimpleAuthScreen.js loaded')"></script>
+    <script src="/AuthPipeline0.5.js" onerror="console.error('Failed to load AuthPipeline0.5.js')" onload="console.log('AuthPipeline0.5.js loaded')"></script>
+    <script type="text/babel" src="/SimpleAuthScreen.js" onerror="console.error('Failed to load SimpleAuthScreen.js')" onload="console.log('SimpleAuthScreen.js loaded')"></script>
     <!-- Test SIWE library loading -->
     <script>
-      console.log('Testing SIWE library availability...');
-      console.log('window.SiweMessage:', typeof window.SiweMessage);
-      console.log('window.SIWE:', typeof window.SIWE);
-      console.log('window.siwe:', typeof window.siwe);
-      
-      if (typeof window.SiweMessage !== 'undefined') {
-        console.log('✅ SIWE library loaded successfully');
-        try {
-          const testMessage = new window.SiweMessage({
-            domain: 'test.com',
-            address: '0x1234567890123456789012345678901234567890',
-            statement: 'Test message',
-            uri: 'https://test.com',
-            version: '1',
-            chainId: '1',
-            nonce: 'test'
-          });
-          console.log('✅ SIWE Message creation test passed');
-        } catch (e) {
-          console.error('❌ SIWE Message creation test failed:', e);
+      (function testSiweWhenReady() {
+        const startedAt = Date.now();
+        const timeoutMs = 3000;
+        const intervalMs = 200;
+
+        function check() {
+          if (typeof window.SiweMessage !== 'undefined') {
+            console.log('Testing SIWE library availability...');
+            console.log('window.SiweMessage:', typeof window.SiweMessage);
+            console.log('✅ SIWE library loaded successfully');
+            try {
+              const testMessage = new window.SiweMessage({
+                domain: 'test.com',
+                address: '0x1234567890123456789012345678901234567890',
+                statement: 'Test message',
+                uri: 'https://test.com',
+                version: '1',
+                chainId: 1,
+                nonce: '12345678'
+              });
+              console.log('✅ SIWE Message creation test passed');
+            } catch (e) {
+              console.error('❌ SIWE Message creation test failed:', e);
+            }
+            return;
+          }
+
+          if (Date.now() - startedAt >= timeoutMs) {
+            console.warn('⚠️ SIWE library not found (wallet SIWE auth will be unavailable until it loads)');
+            console.log('Continuing without SIWE support...');
+            return;
+          }
+
+          setTimeout(check, intervalMs);
         }
-      } else {
-        console.error('❌ SIWE library not found');
-      }
+
+        check();
+      })();
       
       // Test wallet availability
       console.log('=== WALLET DETECTION ===');
@@ -107,6 +141,8 @@
       }
     </script>
     <script src="NotesModule.js" onerror="console.error('Failed to load NotesModule.js')"></script>
+    <!-- Gamification Engine -->
+    <script src="gamification.js" onerror="console.error('Failed to load gamification.js')" onload="console.log('gamification.js loaded')"></script>
     <script type="text/babel" src="LevelUp.js" onerror="console.error('Failed to load LevelUp.js')" onload="console.log('LevelUp.js loaded')"></script>
     <script type="text/babel" src="MyHustle.js" onerror="console.error('Failed to load MyHustle.js')" onload="console.log('MyHustle.js loaded at:', Date.now())"></script>
     <script src="FavoritesScreen.js" onerror="console.error('Failed to load FavoritesScreen.js')" onload="console.log('FavoritesScreen.js loaded')"></script>
@@ -119,17 +155,22 @@
     <script src="auto-unfold.js" onerror="console.error('Failed to load auto-unfold.js')" onload="console.log('auto-unfold.js loaded')"></script>
     <!-- Firebase initialization -->
     <script>
-      console.log('Starting Firebase initialization...');
-      const firebaseConfig = {
-        apiKey: "AIzaSyBl4n35lHVR9EHS_fi7slR28xIJeMoFM4k",
-        authDomain: "crypto-explorer-2137.firebaseapp.com",
-        projectId: "crypto-explorer-2137",
-        storageBucket: "crypto-explorer-2137.firebasestorage.app",
-        messagingSenderId: "970851515463",
-        appId: "1:970851515463:web:3b3d9c44b4367a373cc562"
-      };
-      firebase.initializeApp(firebaseConfig);
-      console.log('Firebase initialized globally');
+      // Check if Firebase is already initialized before initializing
+      if (!window.firebase || !firebase.apps || firebase.apps.length === 0) {
+        console.log('Starting Firebase initialization...');
+        const firebaseConfig = {
+          apiKey: "AIzaSyBl4n35lHVR9EHS_fi7slR28xIJeMoFM4k",
+          authDomain: "crypto-explorer-2137.firebaseapp.com",
+          projectId: "crypto-explorer-2137",
+          storageBucket: "crypto-explorer-2137.firebasestorage.app",
+          messagingSenderId: "970851515463",
+          appId: "1:970851515463:web:3b3d9c44b4367a373cc562"
+        };
+        firebase.initializeApp(firebaseConfig);
+        console.log('Firebase initialized globally');
+      } else {
+        console.log('Firebase already initialized, using existing instance');
+      }
       console.log('Firebase object:', typeof firebase, firebase);
     </script>
     <!-- Main app must load last - remove defer to avoid timing issues -->

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Final Authentication System Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0f172a;
+            color: #f7f9ff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .status-box {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 2px solid;
+        }
+        .status-loading { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+        .status-success { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .status-error { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+        .test-button {
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .test-button:hover { background: #2563eb; }
+        .test-button:disabled { background: #6b7280; cursor: not-allowed; }
+        pre { 
+            background: rgba(0, 0, 0, 0.3); 
+            padding: 1rem; 
+            border-radius: 4px; 
+            overflow-x: auto; 
+            font-size: 0.85rem; 
+            max-height: 200px;
+        }
+        .summary {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔐 Final Authentication System Test</h1>
+    
+    <div id="loading-status" class="status-box status-loading">
+        <h3>⏳ Loading Authentication System...</h3>
+        <p>Please wait while we initialize all components.</p>
+    </div>
+
+    <div id="test-results" style="margin-top: 2rem;"></div>
+
+    <div style="margin-top: 2rem;">
+        <h3>🧪 Manual Tests</h3>
+        <button class="test-button" onclick="testEmailAuth()">Test Email Auth</button>
+        <button class="test-button" onclick="testGoogleAuth()">Test Google Auth</button>
+        <button class="test-button" onclick="testGuestAuth()">Test Guest Auth</button>
+        <button class="test-button" onclick="testSignOut()">Test Sign Out</button>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <h3>📊 Console Output</h3>
+        <pre id="console-output"></pre>
+    </div>
+
+    <!-- Firebase CDN v8 (global firebase object) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <!-- React via CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Auth Components -->
+    <script src="AuthPipeline0.5.js"></script>
+    <script type="text/babel" src="SimpleAuthScreen.js"></script>
+
+    <script>
+        // Console capture
+        const logs = [];
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            logs.push({ type: 'log', message: args.join(' '), timestamp: new Date().toISOString() });
+            originalLog.apply(console, args);
+            updateConsoleOutput();
+        };
+
+        console.error = function(...args) {
+            logs.push({ type: 'error', message: args.join(' '), timestamp: new Date().toISOString() });
+            originalError.apply(console, args);
+            updateConsoleOutput();
+        };
+
+        console.warn = function(...args) {
+            logs.push({ type: 'warn', message: args.join(' '), timestamp: new Date().toISOString() });
+            originalWarn.apply(console, args);
+            updateConsoleOutput();
+        };
+
+        function updateConsoleOutput() {
+            const output = document.getElementById('console-output');
+            output.textContent = logs.slice(-30).map(log => 
+                `[${log.type.toUpperCase()}] ${log.timestamp} - ${log.message}`
+            ).join('\n');
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Initialize Firebase safely
+        function initializeFirebase() {
+            const loadingStatus = document.getElementById('loading-status');
+            
+            try {
+                if (!window.firebase || !firebase.apps || firebase.apps.length === 0) {
+                    console.log('Initializing Firebase...');
+                    const firebaseConfig = {
+                        apiKey: "AIzaSyBl4n35lHVR9EHS_fi7slR28xIJeMoFM4k",
+                        authDomain: "crypto-explorer-2137.firebaseapp.com",
+                        projectId: "crypto-explorer-2137",
+                        storageBucket: "crypto-explorer-2137.firebasestorage.app",
+                        messagingSenderId: "970851515463",
+                        appId: "1:970851515463:web:3b3d9c44b4367a373cc562"
+                    };
+                    firebase.initializeApp(firebaseConfig);
+                    console.log('✅ Firebase initialized successfully');
+                } else {
+                    console.log('✅ Firebase already initialized, using existing instance');
+                }
+                
+                loadingStatus.className = 'status-box status-success';
+                loadingStatus.innerHTML = '<h3>✅ Firebase Initialized Successfully</h3><p>Firebase is ready for authentication.</p>';
+                return true;
+            } catch (error) {
+                loadingStatus.className = 'status-box status-error';
+                loadingStatus.innerHTML = '<h3>❌ Firebase Initialization Failed</h3><p>Error: ' + error.message + '</p>';
+                console.error('❌ Firebase initialization failed:', error);
+                return false;
+            }
+        }
+
+        // Wait for components and run tests
+        function runCompleteTest() {
+            console.log('🧪 Starting complete authentication system test...');
+            
+            setTimeout(() => {
+                const components = {
+                    'Firebase': typeof firebase !== 'undefined',
+                    'AuthPipeline0.5': typeof window.AuthPipeline0_5 !== 'undefined',
+                    'SimpleAuthScreen': typeof window.SimpleAuthScreen !== 'undefined',
+                    'React': typeof React !== 'undefined',
+                    'ReactDOM': typeof ReactDOM !== 'undefined'
+                };
+                
+                console.log('Component availability:', components);
+                
+                const allLoaded = Object.values(components).every(loaded => loaded);
+                
+                const testResults = document.getElementById('test-results');
+                
+                if (allLoaded) {
+                    testResults.innerHTML = `
+                        <div class="summary">
+                            <h3>✅ All Components Loaded Successfully</h3>
+                            <p>Authentication system is ready for testing.</p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin-top: 1rem;">
+                                <div style="padding: 0.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 4px;">
+                                    <strong>🔥 Firebase:</strong> ${components.Firebase ? '✅' : '❌'}
+                                </div>
+                                <div style="padding: 0.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 4px;">
+                                    <strong>🚀 AuthPipeline0.5:</strong> ${components['AuthPipeline0.5'] ? '✅' : '❌'}
+                                </div>
+                                <div style="padding: 0.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 4px;">
+                                    <strong>⚛️ React:</strong> ${components.React ? '✅' : '❌'}
+                                </div>
+                                <div style="padding: 0.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 4px;">
+                                    <strong>🎨 SimpleAuthScreen:</strong> ${components.SimpleAuthScreen ? '✅' : '❌'}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    console.log('✅ Complete authentication system ready');
+                } else {
+                    const missing = Object.entries(components)
+                        .filter(([name, loaded]) => !loaded)
+                        .map(([name]) => name);
+                    
+                    testResults.innerHTML = `
+                        <div class="summary" style="background: rgba(239, 68, 68, 0.1);">
+                            <h3>❌ Some Components Failed to Load</h3>
+                            <p>Missing: ${missing.join(', ')}</p>
+                            <p>Please refresh the page and try again.</p>
+                        </div>
+                    `;
+                    console.error('❌ Missing components:', missing);
+                }
+            }, 3000); // Wait 3 seconds for all components
+        }
+
+        // Test functions
+        async function testEmailAuth() {
+            if (!window.AuthPipeline0_5) {
+                console.error('AuthPipeline0.5 not available');
+                return;
+            }
+            
+            try {
+                console.log('Testing Email Authentication...');
+                const result = await window.AuthPipeline0_5.signIn('test@example.com', 'wrongpassword');
+                console.log('Email auth test result:', result);
+            } catch (error) {
+                console.error('Email auth test error:', error);
+            }
+        }
+
+        async function testGoogleAuth() {
+            if (!window.AuthPipeline0_5) {
+                console.error('AuthPipeline0.5 not available');
+                return;
+            }
+            
+            try {
+                console.log('Testing Google Authentication...');
+                const result = await window.AuthPipeline0_5.signInWithGoogle();
+                console.log('Google auth test result:', result);
+            } catch (error) {
+                console.error('Google auth test error:', error);
+            }
+        }
+
+        async function testGuestAuth() {
+            if (!window.AuthPipeline0_5) {
+                console.error('AuthPipeline0.5 not available');
+                return;
+            }
+            
+            try {
+                console.log('Testing Guest Authentication...');
+                const result = await window.AuthPipeline0_5.signInAsGuest();
+                console.log('Guest auth test result:', result);
+            } catch (error) {
+                console.error('Guest auth test error:', error);
+            }
+        }
+
+        async function testSignOut() {
+            if (!window.AuthPipeline0_5) {
+                console.error('AuthPipeline0.5 not available');
+                return;
+            }
+            
+            try {
+                console.log('Testing Sign Out...');
+                await window.AuthPipeline0_5.signOut();
+                console.log('Sign out test completed');
+            } catch (error) {
+                console.error('Sign out test error:', error);
+            }
+        }
+
+        // Start the test
+        window.addEventListener('load', function() {
+            console.log('Page loaded, initializing...');
+            initializeFirebase();
+            runCompleteTest();
+        });
+    </script>
+</body>
+</html>

@@ -26,7 +26,7 @@ function initializeApp() {
       LevelUpScreen: typeof window.LevelUpScreen === 'function',
       TreeScreen: typeof window.TreeScreen === 'function',
       UserAccount: typeof window.UserAccount === 'function',
-      cryptoHustleTree: typeof window.cryptoHustleTree === 'undefined'
+      cryptoHustleTree: typeof window.cryptoHustleTree !== 'undefined'
     };
     
     console.log(`Component availability (attempt ${retryCount + 1}):`, componentsLoaded);
@@ -54,6 +54,108 @@ function startApp() {
   console.log('Starting main application...');
 
   const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+  async function syncRoleAndProfile(firebaseUser) {
+    if (!firebaseUser) return null;
+    try {
+      const token = await firebaseUser.getIdToken();
+      const res = await fetch('/api/auth-simple/role-sync', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(body?.error || 'Role sync failed');
+      }
+
+      await firebaseUser.getIdToken(true);
+
+      try {
+        if (typeof UserAccount !== 'undefined' && UserAccount?.mergeFromFirebaseProfile) {
+          UserAccount.mergeFromFirebaseProfile(body?.profile || null);
+        }
+      } catch {}
+
+      return body?.profile || null;
+    } catch (e) {
+      console.warn('[Main] role/profile sync failed:', e?.message || e);
+      return null;
+    }
+  }
+
+  function waitForGlobal(checkFn, { timeoutMs = 8000, intervalMs = 100 } = {}) {
+    return new Promise((resolve, reject) => {
+      const start = Date.now();
+      const tick = () => {
+        try {
+          const value = checkFn();
+          if (value) return resolve(value);
+        } catch {}
+
+        if (Date.now() - start >= timeoutMs) {
+          return reject(new Error('Timeout waiting for required global'));
+        }
+        setTimeout(tick, intervalMs);
+      };
+      tick();
+    });
+  }
+
+  if (typeof window !== 'undefined' && !window.CryptoExplorerLibsReady) {
+    const siweReady = waitForGlobal(() => window.SiweMessage, { timeoutMs: 12000 });
+    const solanaReady = waitForGlobal(() => window.solanaWeb3 || window.solana, { timeoutMs: 12000 });
+
+    window.CryptoExplorerLibsReady = {
+      siwe: siweReady,
+      solana: solanaReady,
+      all: Promise.allSettled([siweReady, solanaReady]).then((results) => {
+        const failures = results.filter((r) => r.status === 'rejected');
+        if (failures.length) {
+          throw failures[0].reason;
+        }
+        return true;
+      }),
+    };
+  }
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const existing = document.querySelector(`script[src="${src}"]`);
+      if (existing) {
+        if (existing.dataset.loaded === 'true') return resolve();
+        existing.addEventListener('load', () => resolve(), { once: true });
+        existing.addEventListener('error', () => reject(new Error(`Failed to load script: ${src}`)), { once: true });
+        return;
+      }
+
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = true;
+      s.addEventListener('load', () => {
+        s.dataset.loaded = 'true';
+        resolve();
+      }, { once: true });
+      s.addEventListener('error', () => reject(new Error(`Failed to load script: ${src}`)), { once: true });
+      document.head.appendChild(s);
+    });
+  }
+
+  function isGuestSessionActive() {
+    try {
+      return window.localStorage.getItem('cryptoExplorer.guestMode') === 'true';
+    } catch {
+      return false;
+    }
+  }
+
+  function setGuestSessionActive(active) {
+    try {
+      window.localStorage.setItem('cryptoExplorer.guestMode', active ? 'true' : 'false');
+    } catch {}
+  }
 
 // Utility: Flatten tree structure with complete path hierarchy
 const flatten = (nodes, path = []) => nodes.reduce((acc, n) => {
@@ -374,7 +476,7 @@ function NavExitButtons({ onGoHome, onGoToTree, currentScreen }) {
   );
 }
 
-function NavOverlay({ onClose, onNavigate, isAdmin }) {
+function NavOverlay({ onClose, onNavigate, isAdmin, currentScreen }) {
   const items = [
     { id: 'tree', label: 'Tree CryptoMap', pill: 'Map' },
     { id: 'my-hustle', label: 'My Hustle', pill: 'Tasks' },
@@ -384,6 +486,11 @@ function NavOverlay({ onClose, onNavigate, isAdmin }) {
     { id: 'explore', label: 'Explore', pill: 'Tags' },
     { id: 'contribute', label: 'Contribute', pill: 'Help' }
   ];
+
+  const treeStateItems = currentScreen === 'tree' ? [
+    { id: 'tree-state-save', label: 'Save Tree State', pill: 'State' },
+    { id: 'tree-state-load', label: 'Load Tree State', pill: 'State' },
+  ] : [];
 
   const adminItems = isAdmin ? [
     { id: 'admin-article', label: 'New Article', pill: 'Admin' },
@@ -396,6 +503,17 @@ function NavOverlay({ onClose, onNavigate, isAdmin }) {
       <div className="nav-panel" onClick={e => e.stopPropagation()}>
         <div className="nav-title">Navigate</div>
         <div className="nav-items">
+          {treeStateItems.length > 0 && (
+            <>
+              {treeStateItems.map(item => (
+                <div key={item.id} className="nav-item" onClick={() => { onNavigate(item.id); onClose(); }}>
+                  <span className="nav-item-label">{item.label}</span>
+                  <span className="nav-item-pill">{item.pill}</span>
+                </div>
+              ))}
+              <div className="nav-divider"></div>
+            </>
+          )}
           {items.map(item => (
             <div key={item.id} className="nav-item" onClick={() => { onNavigate(item.id); onClose(); }}>
               <span className="nav-item-label">{item.label}</span>
@@ -424,6 +542,13 @@ function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree
   const activities = userAccount.getActivitiesSummary();
   const bookmarks = bookmarksApi.bookmarks.slice(0, 3);
   const [isAdmin, setIsAdmin] = useState(userAccount.isAdmin());
+  const [adminModeEnabled, setAdminModeEnabled] = useState(() => {
+    try {
+      return window.localStorage.getItem('cryptoExplorer.adminMode') === 'true';
+    } catch {
+      return false;
+    }
+  });
 
   // Update streak on mount
   useEffect(() => {
@@ -446,44 +571,46 @@ function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree
 
   // Toggle admin mode
   const toggleAdmin = () => {
-    const newAdminState = !isAdmin;
-    if (typeof userAccount.updateUserRole === 'function') {
-      userAccount.updateUserRole(newAdminState ? 'admin' : 'user');
-    }
-    setIsAdmin(newAdminState);
+    if (!userAccount.isAdmin()) return;
+    const next = !adminModeEnabled;
+    try {
+      window.localStorage.setItem('cryptoExplorer.adminMode', next ? 'true' : 'false');
+    } catch {}
+    setAdminModeEnabled(next);
   };
 
   return (
     <div className="screen">
-      {/* Admin Toggle UI */}
-      <div style={{
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        background: 'rgba(15, 23, 42, 0.9)',
-        border: `1px solid ${isAdmin ? '#10b981' : 'rgba(148, 163, 184, 0.3)'}`,
-        borderRadius: '8px',
-        padding: '0.5rem',
-        zIndex: 100,
-        fontSize: '0.8rem'
-      }}>
-        <div style={{ color: '#94a3b8', marginBottom: '0.25rem' }}>Admin Mode</div>
-        <button
-          onClick={toggleAdmin}
-          style={{
-            padding: '0.25rem 0.75rem',
-            background: isAdmin ? '#10b981' : '#374151',
-            border: 'none',
-            borderRadius: '4px',
-            color: 'white',
-            cursor: 'pointer',
-            fontSize: '0.75rem',
-            fontWeight: '600'
-          }}
-        >
-          {isAdmin ? 'ON' : 'OFF'}
-        </button>
-      </div>
+      {userAccount.isAdmin() && (
+        <div style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          background: 'rgba(15, 23, 42, 0.9)',
+          border: `1px solid ${adminModeEnabled ? '#10b981' : 'rgba(148, 163, 184, 0.3)'}`,
+          borderRadius: '8px',
+          padding: '0.5rem',
+          zIndex: 100,
+          fontSize: '0.8rem'
+        }}>
+          <div style={{ color: '#94a3b8', marginBottom: '0.25rem' }}>Admin Mode</div>
+          <button
+            onClick={toggleAdmin}
+            style={{
+              padding: '0.25rem 0.75rem',
+              background: adminModeEnabled ? '#10b981' : '#374151',
+              border: 'none',
+              borderRadius: '4px',
+              color: 'white',
+              cursor: 'pointer',
+              fontSize: '0.75rem',
+              fontWeight: '600'
+            }}
+          >
+            {adminModeEnabled ? 'ON' : 'OFF'}
+          </button>
+        </div>
+      )}
 
       <UserCard userAccount={userAccount} onToggleAccount={onOpenAccount} isAccountOpen={false} />
 
@@ -2341,10 +2468,12 @@ function AccountScreen({ userAccount, onClose }) {
 // Main App Root
 function AppRoot() {
   const [tree, setTree] = useState(() => {
-    // Use window.cryptoHustleTree if available, otherwise empty
-    if (window.cryptoHustleTree && window.cryptoHustleTree.fields) {
+    // Try to load existing tree from window first
+    if (typeof window !== 'undefined' && window.cryptoHustleTree) {
+      console.log('Using existing window.cryptoHustleTree');
       return window.cryptoHustleTree;
     }
+    console.log('Initializing with empty tree');
     return { fields: [] };
   });
   const [screen, setScreen] = useState('home');
@@ -2352,20 +2481,257 @@ function AppRoot() {
   const [articleNode, setArticleNode] = useState(null);
   const [showAccount, setShowAccount] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
+  const [authResolved, setAuthResolved] = useState(false);
+  const [guestMode, setGuestMode] = useState(() => isGuestSessionActive());
+  const [authUiRetryCount, setAuthUiRetryCount] = useState(0);
+  const inAppTimerRef = useRef(null);
+
+  async function _getTreeStateKey() {
+    if (!window.CryptoUtils || typeof window.CryptoUtils.generateKeyFromString !== 'function') {
+      throw new Error('CryptoUtils not available');
+    }
+    const uid = window.localStorage.getItem('cryptoExplorer.userId');
+    if (!uid) {
+      throw new Error('You must be signed in to save tree state');
+    }
+    return await window.CryptoUtils.generateKeyFromString(uid, 'crypto-explorer-treemap');
+  }
+
+  async function saveTreeStateToFirebase() {
+    if (typeof firebase === 'undefined' || typeof firebase.firestore !== 'function') {
+      throw new Error('Firebase not available');
+    }
+    const uid = window.localStorage.getItem('cryptoExplorer.userId');
+    if (!uid) throw new Error('You must be signed in to save tree state');
+    if (!window.TreeScreenState || typeof window.TreeScreenState.getState !== 'function') {
+      throw new Error('Tree is not ready to export state');
+    }
+
+    const rawState = window.TreeScreenState.getState();
+    const json = JSON.stringify({ v: 1, t: Date.now(), state: rawState });
+    const compressed = await window.CryptoUtils.compressString(json);
+    const key = await _getTreeStateKey();
+    const encrypted = await window.CryptoUtils.encryptData(key, compressed);
+
+    await firebase.firestore().collection('users').doc(uid).set({
+      treemap_state_v1: {
+        enc: encrypted,
+        updated_at: new Date(),
+      }
+    }, { merge: true });
+
+    try {
+      if (typeof UserAccount !== 'undefined' && UserAccount?.saveTreeState) {
+        UserAccount.saveTreeState(rawState);
+      }
+    } catch {}
+
+    return true;
+  }
+
+  async function loadTreeStateFromFirebase() {
+    if (typeof firebase === 'undefined' || typeof firebase.firestore !== 'function') {
+      throw new Error('Firebase not available');
+    }
+    const uid = window.localStorage.getItem('cryptoExplorer.userId');
+    if (!uid) throw new Error('You must be signed in to load tree state');
+
+    const snap = await firebase.firestore().collection('users').doc(uid).get();
+    if (!snap.exists) throw new Error('No user profile found');
+
+    const data = snap.data() || {};
+    const blob = data.treemap_state_v1;
+    if (!blob?.enc) throw new Error('No saved Tree state found');
+
+    const key = await _getTreeStateKey();
+    const compressed = await window.CryptoUtils.decryptData(key, blob.enc);
+    const json = await window.CryptoUtils.decompressString(compressed);
+    const parsed = JSON.parse(json);
+    return parsed?.state || null;
+  }
+
+  async function applyLoadedTreeState(state) {
+    if (!state) throw new Error('No tree state to apply');
+    if (!window.TreeScreenState || typeof window.TreeScreenState.applyState !== 'function') {
+      throw new Error('Tree is not ready to apply state');
+    }
+    window.TreeScreenState.applyState(state);
+    try {
+      if (typeof UserAccount !== 'undefined' && UserAccount?.saveTreeState) {
+        UserAccount.saveTreeState(state);
+      }
+    } catch {}
+    return true;
+  }
+
+  useEffect(() => {
+    window.TreeStateSync = {
+      save: saveTreeStateToFirebase,
+      load: loadTreeStateFromFirebase,
+      apply: applyLoadedTreeState,
+    };
+    return () => {
+      if (window.TreeStateSync) window.TreeStateSync = null;
+    };
+  }, []);
+
+  // Initialize gamification engine once
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Gamification && typeof window.Gamification.init === 'function') {
+      try {
+        window.Gamification.init();
+      } catch (e) {
+        console.warn('[Main] Gamification init failed:', e);
+      }
+    }
+  }, []);
 
   // Firebase auth state listener
   useEffect(() => {
     console.log('[Main] Setting up Firebase auth listener...');
-    if (typeof firebase !== 'undefined' && firebase.auth) {
-      const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-        console.log('[Main] Firebase auth state changed:', user ? 'User logged in' : 'User logged out');
-        setAuthenticated(!!user);
-      });
-      return unsubscribe;
-    } else {
-      console.log('[Main] Firebase not available for auth listener');
+
+    let unsubscribe = null;
+    let cancelled = false;
+
+    const fallbackTimer = setTimeout(() => {
+      if (cancelled) return;
+      console.warn('[Main] Firebase auth did not resolve in time; continuing to auth UI');
+      setAuthResolved(true);
+    }, 4000); // Reduced timeout
+
+    const attach = () => {
+      if (cancelled) return;
+      try {
+        if (typeof firebase === 'undefined' || !firebase?.auth) {
+          return false;
+        }
+
+        // firebase.auth is a function in Firebase v8 CDN
+        const auth = typeof firebase.auth === 'function' ? firebase.auth() : null;
+        if (!auth?.onAuthStateChanged) {
+          return false;
+        }
+
+        // Check current user immediately to avoid waiting
+        const currentUser = auth.currentUser;
+        if (currentUser !== null) {
+          console.log('[Main] Firebase user already authenticated:', currentUser.email);
+          setAuthenticated(true);
+          setAuthResolved(true);
+          clearTimeout(fallbackTimer);
+        }
+
+        unsubscribe = auth.onAuthStateChanged((user) => {
+          if (cancelled) return;
+          console.log('[Main] Firebase auth state changed:', user ? 'User logged in' : 'User logged out');
+          setAuthenticated(!!user);
+          setAuthResolved(true);
+          clearTimeout(fallbackTimer);
+          
+          if (window.AuthPipeline0_5 && user) {
+            window.AuthPipeline0_5.currentUser = user;
+            window.AuthPipeline0_5._hasResolvedAuthState = true;
+            window.AuthPipeline0_5._initializing = false;
+          }
+
+          if (user?.uid) {
+            try {
+              window.localStorage.setItem('cryptoExplorer.userId', user.uid);
+            } catch {}
+
+            syncRoleAndProfile(user).then(() => {
+              try {
+                if (typeof UserAccount !== 'undefined' && UserAccount?.getRole && UserAccount.getRole() !== 'admin') {
+                  const originalLog = console.log;
+                  if (!console.__cryptoExplorerFiltered) {
+                    console.__cryptoExplorerFiltered = true;
+                    console.log = (...args) => {
+                      const first = args[0];
+                      const msg = typeof first === 'string' ? first : '';
+                      if (msg.includes('❌') || msg.includes('⚠️')) return originalLog(...args);
+                    };
+                  }
+                }
+              } catch {}
+            });
+          }
+        }, (error) => {
+          if (cancelled) return;
+          console.error('[Main] Firebase auth observer error:', error);
+          setAuthenticated(false);
+          setAuthResolved(true);
+          clearTimeout(fallbackTimer);
+        });
+
+        return true;
+      } catch (e) {
+        console.error('[Main] Failed to attach Firebase auth listener:', e);
+        return false;
+      }
+    };
+
+    // Check for guest mode first
+    if (window.AuthPipeline0_5 && window.AuthPipeline0_5.isGuestUser()) {
+      console.log('[Main] Guest user detected, setting authenticated state');
+      setAuthenticated(true);
+      setAuthResolved(true);
+      setGuestMode(true);
+      clearTimeout(fallbackTimer);
+      return () => {};
     }
+
+    if (!attach()) {
+      console.log('[Main] Firebase not available for auth listener yet; polling...');
+      const intv = setInterval(() => {
+        if (attach()) {
+          clearInterval(intv);
+        }
+      }, 200); // Slower polling
+
+      return () => {
+        cancelled = true;
+        clearInterval(intv);
+        clearTimeout(fallbackTimer);
+        try {
+          if (typeof unsubscribe === 'function') unsubscribe();
+        } catch {}
+      };
+    }
+
+    return () => {
+      cancelled = true;
+      clearTimeout(fallbackTimer);
+      try {
+        if (typeof unsubscribe === 'function') unsubscribe();
+      } catch {}
+    };
   }, []);
+
+  // If auth UI is missing after auth is resolved and not guest, attempt to reload scripts.
+  useEffect(() => {
+    if (!authResolved) return;
+    if (authenticated) return;
+    if (guestMode) return;
+
+    if (window.SimpleAuthScreen && window.AuthPipeline0_5) return;
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        console.error('[Main] Critical: Auth UI failed to load. Retrying...');
+        await loadScript('/AuthPipeline0.5.js');
+        await loadScript('/SimpleAuthScreen.js');
+        if (!cancelled) setAuthUiRetryCount((c) => c + 1);
+      } catch (e) {
+        console.error('[Main] Auth UI reload failed:', e);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [authResolved, authenticated, guestMode]);
 
   const bookmarksApi = useBookmarks();
   const userAccount = (() => {
@@ -2501,6 +2867,17 @@ function AppRoot() {
     else if (id === 'admin-article') setScreen('admin-article');
     else if (id === 'admin-suggestions') setScreen('admin-suggestions');
     else if (id === 'admin-users') setScreen('admin-users');
+    else if (id === 'tree-state-save') {
+      saveTreeStateToFirebase()
+        .then(() => alert('Tree state saved'))
+        .catch((e) => alert(e?.message || 'Failed to save tree state'));
+    }
+    else if (id === 'tree-state-load') {
+      loadTreeStateFromFirebase()
+        .then((state) => applyLoadedTreeState(state))
+        .then(() => alert('Tree state loaded'))
+        .catch((e) => alert(e?.message || 'Failed to load tree state'));
+    }
   }
 
   function goHome() {
@@ -2550,7 +2927,46 @@ function AppRoot() {
     if (typeof window !== 'undefined' && window.UserActivityTracker) {
       window.UserActivityTracker.trackScreenVisit(screen);
     }
+
+    if (typeof window !== 'undefined' && window.Gamification && typeof window.Gamification.trackScreenVisit === 'function') {
+      window.Gamification.trackScreenVisit(screen).catch(() => {});
+    }
   }, [screen]);
+
+  // Increment in-app time while app is visible and authenticated
+  useEffect(() => {
+    function stopTimer() {
+      if (inAppTimerRef.current) {
+        clearInterval(inAppTimerRef.current);
+        inAppTimerRef.current = null;
+      }
+    }
+
+    function startTimer() {
+      if (inAppTimerRef.current) return;
+      inAppTimerRef.current = setInterval(() => {
+        if (typeof document !== 'undefined' && document.hidden) return;
+        if (!authenticated) return;
+        if (typeof window !== 'undefined' && window.Gamification && typeof window.Gamification.incrementInAppTime === 'function') {
+          window.Gamification.incrementInAppTime(1000).catch(() => {});
+        }
+      }, 1000);
+    }
+
+    if (authenticated) startTimer();
+    else stopTimer();
+
+    const visHandler = () => {
+      if (document.hidden) stopTimer();
+      else if (authenticated) startTimer();
+    };
+
+    document.addEventListener('visibilitychange', visHandler);
+    return () => {
+      document.removeEventListener('visibilitychange', visHandler);
+      stopTimer();
+    };
+  }, [authenticated]);
 
   // Track article reading
   useEffect(() => {
@@ -2565,68 +2981,88 @@ function AppRoot() {
     };
   }, [articleNode]);
 
-  // Show SimpleAuthScreen if not authenticated
-  console.log('[Main] Auth state check:', { authenticated, SimpleAuthScreen: !!window.SimpleAuthScreen, AuthPipeline0_5: !!window.AuthPipeline0_5 });
+  // Auth gating: wait until Firebase has resolved auth state at least once.
+  // Do not allow guest fallback until user explicitly chooses it.
+  console.log('[Main] Auth state check:', {
+    authenticated,
+    authResolved,
+    guestMode,
+    SimpleAuthScreen: !!window.SimpleAuthScreen,
+    AuthPipeline0_5: !!window.AuthPipeline0_5,
+    authUiRetryCount,
+  });
+
   if (!authenticated) {
-    console.log('[Main] Showing auth screen...');
-    return (
-      <div className="app-root" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
-        {window.SimpleAuthScreen ? React.createElement(window.SimpleAuthScreen, {
-          onAuthSuccess: (user) => {
-            console.log('Auth success', user);
-            setAuthenticated(true);
-          }
-        }) : (
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            minHeight: '100vh',
-            padding: '2rem',
-            background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
-          }}>
-            <div style={{
-              background: 'rgba(15, 23, 42, 0.9)',
-              border: '1px solid rgba(148, 163, 184, 0.3)',
-              borderRadius: '16px',
-              padding: '2rem',
-              textAlign: 'center',
-              maxWidth: '400px',
-              width: '100%'
-            }}>
-              <h3 style={{ color: '#f7f9ff', marginBottom: '1rem' }}>Loading Authentication...</h3>
-              <p style={{ color: '#94a3b8', marginBottom: '1rem' }}>Please wait while we set up the auth system.</p>
-              
-              <div style={{ marginBottom: '1rem' }}>
-                <button 
+    if (!authResolved) {
+      return (
+        <div className="app-root" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '2rem' }}>
+            <div style={{ background: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(148, 163, 184, 0.3)', borderRadius: '16px', padding: '2rem', textAlign: 'center', maxWidth: '420px', width: '100%' }}>
+              <h3 style={{ color: '#f7f9ff', marginBottom: '1rem' }}>Initializing Authentication...</h3>
+              <p style={{ color: '#94a3b8', marginBottom: '1rem' }}>Waiting for Firebase to restore session from local storage.</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (guestMode) {
+      // Guest mode active: allow access to app without Firebase auth.
+      // This keeps the rest of the UI intact.
+      // (No early guest fallback before auth resolved.)
+    } else {
+      // Truly logged out and NOT a guest: force the real auth screen
+      if (window.SimpleAuthScreen) {
+        return (
+          <div className="app-root" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
+            {React.createElement(window.SimpleAuthScreen, {
+              onAuthSuccess: (user) => {
+                console.log('Auth success', user);
+                setAuthenticated(true);
+                setGuestMode(false);
+                setGuestSessionActive(false);
+              }
+            })}
+          </div>
+        );
+      }
+
+      return (
+        <div className="app-root" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '2rem' }}>
+            <div style={{ background: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(148, 163, 184, 0.3)', borderRadius: '16px', padding: '2rem', textAlign: 'center', maxWidth: '460px', width: '100%' }}>
+              <h3 style={{ color: '#f7f9ff', marginBottom: '1rem' }}>Loading Authentication UI...</h3>
+              <p style={{ color: '#94a3b8', marginBottom: '1rem' }}>
+                Critical: Auth UI failed to load. Retrying...
+              </p>
+
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1rem' }}>
+                <button
                   onClick={() => {
-                    console.log('Manual auth trigger');
-                    setAuthenticated(true);
+                    setGuestMode(true);
+                    setGuestSessionActive(true);
                   }}
-                  style={{
-                    padding: '0.75rem 1.5rem',
-                    background: '#3b82f6',
-                    border: 'none',
-                    borderRadius: '8px',
-                    color: 'white',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    marginRight: '0.5rem'
-                  }}
+                  style={{ padding: '0.75rem 1.5rem', background: '#3b82f6', border: 'none', borderRadius: '8px', color: 'white', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}
                 >
                   Continue as Guest
                 </button>
+
+                <button
+                  onClick={() => window.location.reload()}
+                  style={{ padding: '0.75rem 1.5rem', background: 'rgba(148, 163, 184, 0.15)', border: '1px solid rgba(148, 163, 184, 0.3)', borderRadius: '8px', color: '#f7f9ff', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}
+                >
+                  Reload
+                </button>
               </div>
-              
-              <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>
-                Debug: SimpleAuthScreen={!!window.SimpleAuthScreen}, AuthPipeline0_5={!!window.AuthPipeline0_5}
+
+              <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '1rem' }}>
+                Debug: SimpleAuthScreen={String(!!window.SimpleAuthScreen)}, AuthPipeline0_5={String(!!window.AuthPipeline0_5)}, retries={authUiRetryCount}
               </div>
             </div>
           </div>
-        )}
-      </div>
-    );
+        </div>
+      );
+    }
   }
 
   // Show loading screen if tree is not ready
@@ -2828,6 +3264,7 @@ function AppRoot() {
           onClose={() => setShowNav(false)}
           onNavigate={handleNavSelect}
           isAdmin={isAdmin}
+          currentScreen={screen}
         />
       )}
     </div>
@@ -2897,9 +3334,15 @@ try {
   });
 } catch {}
 
+// Backward compatible alias: older bootstraps expected a global `App`.
+// We render the actual root component defined in this file.
+function App() {
+  return <AppRoot />;
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <AppErrorBoundary>
-    <AppRoot />
+    <App />
   </AppErrorBoundary>
 );
 

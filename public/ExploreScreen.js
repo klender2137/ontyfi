@@ -466,6 +466,11 @@ if (typeof window !== 'undefined' && window.React) {
 
     const handleDoubleClick = useCallback(() => {
       if (!isExploded && !isDragging) {
+        try {
+          if (typeof window !== 'undefined' && window.Gamification && typeof window.Gamification.trackBubbleBounce === 'function') {
+            window.Gamification.trackBubbleBounce().catch(() => {});
+          }
+        } catch (e) {}
         onExplode(bubble.id);
       }
     }, [isExploded, isDragging, bubble.id, onExplode]);

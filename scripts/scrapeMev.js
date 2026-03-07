@@ -2,6 +2,7 @@ import admin from 'firebase-admin';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { readFileSync } from 'fs';
+import { chromium } from 'playwright';
 
 function log(stage, details = '') {
   const ts = new Date().toISOString();
@@ -192,6 +193,147 @@ function safeDocId(id) {
   return s.replace(/\//g, '_');
 }
 
+function cleanTokenSymbols(raw) {
+  if (!raw) return [];
+  const s = Array.isArray(raw) ? raw.join(' ') : String(raw);
+  const parts = s
+    .split(/[\s,|/]+/g)
+    .map((x) => x.replace(/[^a-zA-Z0-9]/g, '').trim())
+    .filter(Boolean);
+
+  const unique = [];
+  const seen = new Set();
+  for (const p of parts) {
+    const key = p.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(p);
+  }
+  return unique;
+}
+
+async function withBrowser(fn) {
+  const browser = await chromium.launch({
+    headless: true,
+    args: [
+      '--disable-blink-features=AutomationControlled'
+    ]
+  });
+
+  const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+    viewport: { width: 1440, height: 900 },
+    locale: 'en-US',
+    timezoneId: 'Europe/Berlin'
+  });
+
+  const page = await context.newPage();
+  await page.setExtraHTTPHeaders({
+    'accept-language': 'en-US,en;q=0.9'
+  });
+
+  try {
+    return await fn({ browser, context, page });
+  } finally {
+    await context.close().catch(() => {});
+    await browser.close().catch(() => {});
+  }
+}
+
+async function scrapeEigenPhiSandwich24hBrowser() {
+  const start = nowMs();
+  const url = 'https://eigenphi.io/mev/ethereum/sandwich';
+
+  try {
+    const rows = await withBrowser(async ({ page }) => {
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await page.waitForTimeout(1500);
+
+      const btn24h = page.getByRole('button', { name: /^24h$/i }).first();
+      if (await btn24h.count()) {
+        await Promise.all([
+          page.waitForLoadState('networkidle', { timeout: 60000 }).catch(() => {}),
+          btn24h.click({ timeout: 15000 }).catch(() => {})
+        ]);
+      } else {
+        const byText = page.locator('text=24H').first();
+        if (await byText.count()) {
+          await Promise.all([
+            page.waitForLoadState('networkidle', { timeout: 60000 }).catch(() => {}),
+            byText.click({ timeout: 15000 }).catch(() => {})
+          ]);
+        }
+      }
+
+      // Dynamic table (often Ant Design). Wait until it renders.
+      await page.waitForSelector('.ant-table, table, [role="table"]', { timeout: 60000 });
+      await page.waitForTimeout(1500);
+
+      const data = await page.evaluate(() => {
+        const clean = (s) => (s || '').toString().replace(/\s+/g, ' ').trim();
+
+        const extractTx = (node) => {
+          const a = node.querySelector('a[href*="0x"], a[href*="/tx/"]');
+          if (!a) return '';
+          const href = a.getAttribute('href') || '';
+          const m = href.match(/0x[a-fA-F0-9]{64}/);
+          if (m) return m[0];
+          const t = clean(a.textContent);
+          const m2 = t.match(/0x[a-fA-F0-9]{64}/);
+          return m2 ? m2[0] : '';
+        };
+
+        const root = document.querySelector('.ant-table') || document;
+        const table = root.querySelector('table') || document.querySelector('table');
+        if (!table) return [];
+
+        const trs = Array.from(table.querySelectorAll('tbody tr'));
+        const out = [];
+        for (const tr of trs) {
+          const tds = Array.from(tr.querySelectorAll('td'));
+          const rowText = clean(tr.textContent);
+          if (!rowText || rowText.length < 10) continue;
+
+          const time = clean(tds[0]?.textContent || '');
+          const tx_hash = extractTx(tr) || clean(tds[1]?.textContent || '');
+          const tokens = clean(tds[2]?.textContent || '');
+          const profit = clean(tds[3]?.textContent || '');
+          const cost = clean(tds[4]?.textContent || '');
+          const revenue = clean(tds[5]?.textContent || '');
+
+          out.push({ time, tx_hash, tokens, profit, cost, revenue });
+        }
+        return out;
+      });
+
+      return data;
+    });
+
+    const out = rows
+      .map((r) => {
+        const tx = normalizeTxId(r?.tx_hash);
+        if (!tx) return null;
+        return {
+          tx_hash: tx,
+          time: r?.time || null,
+          tokens: cleanTokenSymbols(r?.tokens),
+          profit: r?.profit || null,
+          cost: r?.cost || null,
+          revenue: r?.revenue || null,
+          timestamp: new Date(),
+          raw: r
+        };
+      })
+      .filter(Boolean);
+
+    log('eigenphi.sandwich24h_browser', `rows=${out.length} in ${msSince(start)}ms`);
+    return out;
+  } catch (e) {
+    logError('eigenphi.sandwich24h_browser_error', e);
+    return [];
+  }
+}
+
 async function scrapeFlashbots() {
   const start = nowMs();
   const url = 'https://relay-analytics.ultrasound.money/v1/data/bidtraces/proposer_payload_delivered';
@@ -363,23 +505,40 @@ function toHustlesV2Docs(items) {
       ? `${it.source_platform} MEV Alpha`
       : 'MEV Alpha');
 
+    const source = it.source || it.source_platform || 'MEV';
+    const external_link = it.external_link || it.link || it.explorer_url || null;
+    const tokens = cleanTokenSymbols(it.tokens);
+
+    const metrics = {
+      profit: it.profit || (typeof profit === 'number' ? `$${profit}` : null),
+      cost: it.cost || null,
+      revenue: it.revenue || null,
+      tokens
+    };
+
+    const content = it.content || it.description || null;
+
     return {
       docId,
       data: {
         hustle_id: docId,
+        category: 'mev',
+        source: source.toString().toLowerCase().includes('eigenphi') ? 'eigenphi' : source,
         title,
+        metrics,
+        content,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        external_link,
+
         description: it.description || null,
-        source: it.source || it.source_platform || 'MEV',
         source_platform: it.source_platform || it.source || 'MEV',
-        link: it.link || it.explorer_url || null,
-        explorer_url: it.explorer_url || null,
+        link: external_link,
+        explorer_url: external_link,
         tier: it.tier || (lucrative ? 'Gold' : 'Silver'),
         network: it.network || 'Ethereum',
         type: it.type || (lucrative ? 'Lucrative' : 'MEV'),
-        category: it.category || (lucrative ? 'Lucrative' : null),
         profit_usd: profit,
         risk_score: it.risk_score || null,
-        timestamp: it.timestamp || new Date(),
         date_added: admin.firestore.FieldValue.serverTimestamp(),
         tx_hash: it.tx_hash || it.transaction_hash || null,
         transaction_hash: it.tx_hash || it.transaction_hash || null,
@@ -731,7 +890,14 @@ async function main() {
   // EigenPhi Sandwich 24h
   try {
     log('eigenphiSandwich24h.start');
-    const rows = await scrapeEigenPhiSandwich24h();
+    let rows = await scrapeEigenPhiSandwich24h();
+    if (!rows || rows.length === 0) {
+      log('eigenphiSandwich24h.fallback', 'API returned 0 rows; trying browser scrape');
+      rows = await scrapeEigenPhiSandwich24hBrowser();
+    }
+
+    console.log('[MEV Scraper] Preview eigenphi.sandwich first3:', rows.slice(0, 3));
+
     results.eigenphiSandwich24h.ok = true;
     results.eigenphiSandwich24h.count = rows.length;
     for (const r of rows) {
@@ -739,8 +905,14 @@ async function main() {
         tx_hash: r.tx_hash,
         profit_usd: r.profit_usd,
         tokens: r.tokens,
+        profit: r.profit || null,
+        cost: r.cost || null,
+        revenue: r.revenue || null,
+        time: r.time || null,
         timestamp: r.timestamp,
         source_platform: 'EigenPhi',
+        source: 'eigenphi',
+        external_link: `https://eigenphi.io/mev/ethereum/sandwich`,
         type: 'Sandwich',
         network: 'Ethereum',
         title: `EigenPhi Sandwich • ${r.tx_hash.slice(0, 10)}…`,

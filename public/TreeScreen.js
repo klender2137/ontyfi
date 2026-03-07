@@ -71,6 +71,42 @@ if (typeof window !== 'undefined' && window.React) {
       panOffsetRef.current = panOffset;
     });
 
+    useEffect(() => {
+      window.TreeScreenState = {
+        getState: () => {
+          return {
+            expandedIds: Array.from(expandedIds || []),
+            nodePositions: nodePositionsRef.current || {},
+            viewState: { zoom: zoomRef.current || 1, panOffset: panOffsetRef.current || { x: 0, y: 0 } },
+          };
+        },
+        applyState: (next) => {
+          const s = next || {};
+          try {
+            const ids = Array.isArray(s.expandedIds) ? s.expandedIds : [];
+            setExpandedIds(new Set(ids));
+          } catch {}
+          try {
+            if (s.nodePositions && typeof s.nodePositions === 'object') {
+              setNodePositions(s.nodePositions);
+            }
+          } catch {}
+          try {
+            if (s.viewState && typeof s.viewState === 'object') {
+              const z = Number(s.viewState.zoom || 1);
+              const po = s.viewState.panOffset && typeof s.viewState.panOffset === 'object' ? s.viewState.panOffset : { x: 0, y: 0 };
+              setViewState({ zoom: z, panOffset: { x: Number(po.x || 0), y: Number(po.y || 0) } });
+            }
+          } catch {}
+          return true;
+        }
+      };
+
+      return () => {
+        if (window.TreeScreenState) window.TreeScreenState = null;
+      };
+    }, [expandedIds, setExpandedIds]);
+
     const centerOnNode = window.TreeNavigation.createCenterOnNode(nodePositionsRef, zoomRef, panOffsetRef, setViewState, containerRef);
     const expandToNode = useCallback(window.TreeNavigation.createExpandToNode(tree, setExpandedIds, centerOnNode, getChildren, setTreeVersion), [tree, setExpandedIds, centerOnNode, setTreeVersion]);
 

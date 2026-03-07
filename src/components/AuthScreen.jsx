@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 function getFirebaseErrorMessage(error) {
   const code = error?.code;
@@ -17,6 +18,9 @@ export default function AuthScreen() {
     signUpWithEmail,
     signInWithEmail,
     signInWithGoogle,
+    linkGoogleWithPassword,
+    clearPendingGoogleLink,
+    pendingGoogleLinkEmail,
     signInWithPhantom,
     continueAsGuest,
     error: authError,
@@ -30,6 +34,20 @@ export default function AuthScreen() {
   const [localError, setLocalError] = useState(null);
 
   const error = useMemo(() => localError || authError, [localError, authError]);
+
+  async function handleGoogleLink(e) {
+    e.preventDefault();
+    setLocalError(null);
+    setSubmitting(true);
+
+    try {
+      await linkGoogleWithPassword({ email, password });
+    } catch (err) {
+      setLocalError(getFirebaseErrorMessage(err));
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   async function handleEmailSubmit(e) {
     e.preventDefault();
@@ -82,6 +100,67 @@ export default function AuthScreen() {
         <p style={{ color: '#94a3b8', marginTop: 0, marginBottom: '1.5rem' }}>
           Sign in to sync your profile, or continue as guest.
         </p>
+
+        {pendingGoogleLinkEmail ? (
+          <div style={{ background: 'rgba(59, 130, 246, 0.08)', border: '1px solid rgba(59, 130, 246, 0.35)', borderRadius: 14, padding: '1rem', marginBottom: '1rem' }}>
+            <div style={{ fontWeight: 800, marginBottom: '0.35rem' }}>Link Google to your existing account</div>
+            <div style={{ fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.75rem' }}>
+              Your email <span style={{ fontWeight: 700 }}>{pendingGoogleLinkEmail}</span> already has a password account.
+              Sign in with your password to link Google.
+            </div>
+
+            <form onSubmit={handleGoogleLink}>
+              <div style={{ marginBottom: '0.75rem' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.25rem' }}>Email</label>
+                <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  placeholder={pendingGoogleLinkEmail}
+                  autoComplete="email"
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: 10, border: '1px solid rgba(148, 163, 184, 0.3)', background: '#0b1220', color: '#f7f9ff' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '0.75rem' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.25rem' }}>Password</label>
+                <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  placeholder="••••••••"
+                  autoComplete="current-password"
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: 10, border: '1px solid rgba(148, 163, 184, 0.3)', background: '#0b1220', color: '#f7f9ff' }}
+                />
+              </div>
+
+              {error ? (
+                <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.35)', color: '#fecaca', borderRadius: 10, padding: '0.75rem', marginBottom: '0.75rem', fontSize: '0.85rem' }}>
+                  {error}
+                </div>
+              ) : null}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                style={{ width: '100%', padding: '0.85rem', borderRadius: 12, border: 'none', background: '#3b82f6', color: 'white', fontWeight: 700, cursor: 'pointer' }}
+              >
+                {submitting ? 'Please wait…' : 'Sign in & link Google'}
+              </button>
+
+              <div style={{ height: 12 }} />
+
+              <button
+                type="button"
+                onClick={clearPendingGoogleLink}
+                disabled={submitting}
+                style={{ width: '100%', padding: '0.85rem', borderRadius: 12, border: '1px solid rgba(148, 163, 184, 0.35)', background: 'transparent', color: '#cbd5e1', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
+        ) : null}
 
         <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
           <button
@@ -196,14 +275,9 @@ export default function AuthScreen() {
 
           <div style={{ height: 12 }} />
 
-          <button
-            type="button"
-            onClick={continueAsGuest}
-            disabled={submitting}
-            style={{ width: '100%', padding: '0.85rem', borderRadius: 12, border: '1px solid rgba(148, 163, 184, 0.35)', background: 'transparent', color: '#cbd5e1', fontWeight: 700, cursor: 'pointer' }}
-          >
-            Continue as Guest
-          </button>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <ConnectButton />
+          </div>
         </form>
       </div>
     </div>

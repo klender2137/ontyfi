@@ -26,6 +26,39 @@ if (typeof window !== 'undefined' && window.React) {
       }, 200);
     };
 
+    const handleLoadTreeState = async () => {
+      try {
+        if (!window.TreeStateSync || typeof window.TreeStateSync.load !== 'function') {
+          throw new Error('Tree state sync not available');
+        }
+        const state = await window.TreeStateSync.load();
+        onGoToTree();
+        setTimeout(() => {
+          try {
+            if (window.TreeStateSync && typeof window.TreeStateSync.apply === 'function') {
+              window.TreeStateSync.apply(state);
+            }
+          } catch (e) {
+            alert(e?.message || 'Failed to apply tree state');
+          }
+        }, 250);
+      } catch (e) {
+        alert(e?.message || 'Failed to load tree state');
+      }
+    };
+
+    const handleSaveTreeState = async () => {
+      try {
+        if (!window.TreeStateSync || typeof window.TreeStateSync.save !== 'function') {
+          throw new Error('Tree state sync not available');
+        }
+        await window.TreeStateSync.save();
+        alert('Tree state saved');
+      } catch (e) {
+        alert(e?.message || 'Failed to save tree state');
+      }
+    };
+
     return React.createElement('div', { className: 'screen' }, [
       React.createElement('div', { 
         key: 'nav', 
@@ -50,6 +83,21 @@ if (typeof window !== 'undefined' && window.React) {
         key: 'subtitle',
         className: 'secondary-text' 
       }, 'Bookmarked sections from your CryptoMap tree.'),
+      React.createElement('div', {
+        key: 'treestate-actions',
+        style: { marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }
+      }, [
+        React.createElement('button', {
+          key: 'load-state',
+          className: 'secondary-button',
+          onClick: handleLoadTreeState
+        }, 'Load saved Tree state'),
+        React.createElement('button', {
+          key: 'save-state',
+          className: 'secondary-button',
+          onClick: handleSaveTreeState
+        }, 'Save Tree state'),
+      ]),
       React.createElement('div', { 
         key: 'list',
         className: 'bookmarks-list' 

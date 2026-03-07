@@ -65,7 +65,29 @@ router.post('/verify', async (req, res) => {
 
     await walletRef.delete();
 
-    const uid = `solana:${walletAddress}`;
+    let uid = null;
+    const existingQuery = await db
+      .collection('users')
+      .where('wallet_address', '==', walletAddress)
+      .limit(1)
+      .get();
+
+    if (!existingQuery.empty) {
+      uid = existingQuery.docs[0].id;
+    } else {
+      uid = `solana:${walletAddress}`;
+    }
+
+    await db.collection('users').doc(uid).set({
+      uid,
+      wallet_address: walletAddress,
+      identities: admin.firestore.FieldValue.arrayUnion('phantom'),
+      metadata: {
+        last_login: admin.firestore.FieldValue.serverTimestamp(),
+        last_active: admin.firestore.FieldValue.serverTimestamp(),
+      },
+    }, { merge: true });
+
     const token = await admin.auth().createCustomToken(uid, {
       wallet_address: walletAddress,
       auth_type: 'phantom',
