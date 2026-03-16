@@ -5,6 +5,17 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { deriveEncryptionKey, encryptData, decryptData, minifyJSON, parseJSON } from '../utils/cryptoUtils';
 
+// Helper function to get user-specific localStorage key
+const getUserBookmarkKey = (userId) => {
+  return userId ? `cryptoExplorer.bookmarks.${userId}` : 'cryptoExplorer.bookmarks.guest';
+};
+
+// Helper function to get current user ID
+const getCurrentUserId = () => {
+  const auth = getAuth();
+  return auth.currentUser?.uid || null;
+};
+
 export const useAppStore = create((set, get) => ({
   // User data
   user: {
@@ -13,8 +24,12 @@ export const useAppStore = create((set, get) => ({
     activities: { streakDays: 0, totalArticlesRead: 0 }
   },
   
-  // Bookmarks
-  bookmarks: JSON.parse(localStorage.getItem('cryptoExplorer.bookmarks') || '[]'),
+  // Bookmarks - initialized with user-specific localStorage
+  bookmarks: (() => {
+    const userId = getCurrentUserId();
+    const bookmarkKey = getUserBookmarkKey(userId);
+    return JSON.parse(localStorage.getItem(bookmarkKey) || '[]');
+  })(),
   
   // Tree data
   tree: null,
@@ -32,7 +47,10 @@ export const useAppStore = create((set, get) => ({
       ? state.bookmarks.filter(b => b.id !== node.id)
       : [...state.bookmarks, node]
     
-    localStorage.setItem('cryptoExplorer.bookmarks', JSON.stringify(newBookmarks))
+    // Use user-specific localStorage key
+    const userId = getCurrentUserId();
+    const bookmarkKey = getUserBookmarkKey(userId);
+    localStorage.setItem(bookmarkKey, JSON.stringify(newBookmarks));
     return { bookmarks: newBookmarks }
   }),
   
@@ -79,7 +97,8 @@ export const useAppStore = create((set, get) => ({
 
           // Update local state with remote data
           set({ bookmarks: remoteBookmarks });
-          localStorage.setItem('cryptoExplorer.bookmarks', JSON.stringify(remoteBookmarks));
+          const bookmarkKey = getUserBookmarkKey(userId);
+          localStorage.setItem(bookmarkKey, JSON.stringify(remoteBookmarks));
           console.log('[Firebase Debug] Local bookmarks updated from remote data');
         } else {
           console.log('[Firebase Debug] No encrypted favorites found');
@@ -123,6 +142,29 @@ export const useAppStore = create((set, get) => ({
       console.error('[Analytics] Failed to log view activity:', error);
     } finally {
       // No cleanup needed
+    }
+  },
+
+  // Load bookmarks for specific user
+  loadUserBookmarks: (userId) => {
+    const bookmarkKey = getUserBookmarkKey(userId);
+    const bookmarks = JSON.parse(localStorage.getItem(bookmarkKey) || '[]');
+    set({ bookmarks });
+    console.log(`[Bookmarks] Loaded ${bookmarks.length} bookmarks for user: ${userId}`);
+  },
+
+  // Clear bookmarks when user logs out
+  clearBookmarks: () => {
+    set({ bookmarks: [] });
+    console.log('[Bookmarks] Cleared bookmarks on logout');
+  },
+
+  // Initialize bookmarks on auth state change
+  initializeBookmarksForUser: (userId) => {
+    if (userId) {
+      get().loadUserBookmarks(userId);
+    } else {
+      get().clearBookmarks();
     }
   }
 }))

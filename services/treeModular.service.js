@@ -5,7 +5,20 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DATA_DIR = path.join(__dirname, '../data');
+// Fix 5: Ensure DATA_DIR uses absolute path and verify it exists
+const DATA_DIR = (() => {
+  const dir = path.join(__dirname, '../data');
+  if (!fs.existsSync(dir)) {
+    console.error(`[treeModular] DATA_DIR does not exist: ${dir}`);
+    // Try alternative paths
+    const altDir = path.resolve(process.cwd(), 'data');
+    if (fs.existsSync(altDir)) {
+      console.log(`[treeModular] Using alternative DATA_DIR: ${altDir}`);
+      return altDir;
+    }
+  }
+  return dir;
+})();
 const TRUNK_PATH = path.join(DATA_DIR, 'cryptoTree.json');
 const BRANCHES_DIR = path.join(DATA_DIR, 'branches');
 const DESCRIPTIONS_DIR = path.join(DATA_DIR, 'descriptions');
@@ -23,9 +36,18 @@ function loadTrunk() {
   
   try {
     const rawData = fs.readFileSync(TRUNK_PATH, 'utf8');
-    trunkCache = JSON.parse(rawData);
+    const parsed = JSON.parse(rawData);
+    // Fix 2: Validate trunk structure has proper fields array
+    if (!parsed.fields || !Array.isArray(parsed.fields)) {
+      console.error('[loadTrunk] Trunk missing fields array, returning fallback');
+      trunkCache = { version: '2.0-modular', type: 'cryptoTree-trunk', fields: [] };
+      return trunkCache;
+    }
+    trunkCache = parsed;
     return trunkCache;
   } catch (error) {
+    // Fix 3: Clear cache on error to prevent stale data
+    trunkCache = null;
     console.error('Error loading trunk:', error);
     return { version: '2.0-modular', type: 'cryptoTree-trunk', fields: [] };
   }
@@ -35,6 +57,10 @@ function loadTrunk() {
  * Load a branch file
  */
 function loadBranch(branchFile) {
+  if (!branchFile || typeof branchFile !== 'string') {
+    console.warn('[loadBranch] Invalid branch file reference:', branchFile);
+    return null;
+  }
   const branchPath = path.join(DATA_DIR, branchFile);
   try {
     const rawData = fs.readFileSync(branchPath, 'utf8');
@@ -285,10 +311,23 @@ function loadAllBranches() {
   
   if (trunk.fields && Array.isArray(trunk.fields)) {
     for (const fieldRef of trunk.fields) {
-      const branch = loadBranch(fieldRef.file);
-      if (branch) {
+      // Fix 1 & 4: Skip null/undefined entries or entries without file property
+      if (!fieldRef || !fieldRef.file) {
+        console.warn('[loadAllBranches] Skipping invalid fieldRef:', fieldRef);
+        continue;
+      }
+      // Fix 2: Handle both reference format {file: "xxx"} and direct field objects
+      let branchData;
+      if (typeof fieldRef.file === 'string') {
+        branchData = loadBranch(fieldRef.file);
+      } else if (fieldRef.id && fieldRef.name) {
+        // Direct field object format (legacy/modular hybrid)
+        console.log('[loadAllBranches] Using direct field object:', fieldRef.id);
+        branchData = fieldRef;
+      }
+      if (branchData) {
         // Don't resolve descriptions here - do it in getFullTree()
-        branches.push(branch);
+        branches.push(branchData);
       }
     }
   }

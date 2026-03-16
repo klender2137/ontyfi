@@ -208,11 +208,25 @@ function getNodeChildren(node) {
   ];
 }
 
+// Helper function to get user-specific localStorage key
+const getUserBookmarkKey = () => {
+  // Try to get current Firebase user ID
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser && currentUser.uid) {
+      return `cryptoExplorer.bookmarks.${currentUser.uid}`;
+    }
+  }
+  // Fallback to guest
+  return 'cryptoExplorer.bookmarks.guest';
+};
+
 // Bookmarks hook
 function useBookmarks() {
   const [bookmarks, setBookmarks] = useState(() => {
     try {
-      const raw = window.localStorage.getItem('cryptoExplorer.bookmarks');
+      const bookmarkKey = getUserBookmarkKey();
+      const raw = window.localStorage.getItem(bookmarkKey);
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
@@ -221,7 +235,8 @@ function useBookmarks() {
 
   useEffect(() => {
     try {
-      window.localStorage.setItem('cryptoExplorer.bookmarks', JSON.stringify(bookmarks));
+      const bookmarkKey = getUserBookmarkKey();
+      window.localStorage.setItem(bookmarkKey, JSON.stringify(bookmarks));
     } catch {}
   }, [bookmarks]);
 
@@ -251,7 +266,8 @@ function useBookmarks() {
 
     try {
       const db = firebase.firestore();
-      const userId = window.localStorage.getItem('cryptoExplorer.userId') || 'anonymous-user';
+      const currentUser = firebase.auth().currentUser;
+      const userId = currentUser?.uid || 'anonymous-user';
 
       // Fetch from Firestore
       const userDocRef = db.collection('users').doc(userId);
@@ -260,6 +276,10 @@ function useBookmarks() {
         const data = docSnap.data();
         const remoteBookmarks = data.favorites || [];
         setBookmarks(remoteBookmarks);
+        
+        // Update localStorage with synced bookmarks
+        const bookmarkKey = getUserBookmarkKey();
+        window.localStorage.setItem(bookmarkKey, JSON.stringify(remoteBookmarks));
         console.log('Bookmarks synced from Firebase');
       }
 

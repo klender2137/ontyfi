@@ -164,6 +164,88 @@ class AuthPipeline0_5 {
     }
   }
 
+  async _initializeUserRole(userId, email, username) {
+    try {
+      console.log('[AuthPipeline0.5] Initializing user role:', { userId, email, username });
+      
+      // Check predefined role lists
+      const adminList = await this._loadRoleList('admins');
+      const memberList = await this._loadRoleList('members');
+      
+      let assignedRole = 'user'; // Default role
+      
+      // Check admin list
+      if (this._isInRoleList(adminList, username, email)) {
+        assignedRole = 'admin';
+        console.log('[AuthPipeline0.5] User assigned admin role');
+      }
+      // Check member list
+      else if (this._isInRoleList(memberList, username, email)) {
+        assignedRole = 'member';
+        console.log('[AuthPipeline0.5] User assigned member role');
+      }
+      
+      // Set role in both users collection and user_roles collection
+      const firestore = this.firebase.firestore();
+      
+      // Update users collection
+      await firestore.collection('users').doc(userId).update({
+        role: assignedRole,
+        role_assigned_at: new Date()
+      });
+      
+      // Set in user_roles collection for role management
+      await firestore.collection('user_roles').doc(userId).set({
+        role: assignedRole,
+        assignedAt: new Date(),
+        assignedBy: 'system',
+        email: email,
+        username: username
+      });
+      
+      console.log(`[AuthPipeline0.5] Role ${assignedRole} assigned to user ${username}`);
+      return assignedRole;
+      
+    } catch (error) {
+      console.error('[AuthPipeline0.5] Error initializing user role:', error);
+      // Default to user role on error
+      try {
+        await this.firebase.firestore().collection('user_roles').doc(userId).set({
+          role: 'user',
+          assignedAt: new Date(),
+          assignedBy: 'system'
+        });
+      } catch (fallbackError) {
+        console.error('[AuthPipeline0.5] Fallback role assignment failed:', fallbackError);
+      }
+      return 'user';
+    }
+  }
+
+  async _loadRoleList(roleName) {
+    try {
+      // In a real implementation, this would fetch from the roles files
+      // For now, using hardcoded values from the files we created
+      if (roleName === 'admins') {
+        return ['fokenstart / calliduschalk@gmail.com'];
+      } else if (roleName === 'members') {
+        return []; // Empty for now
+      }
+      return [];
+    } catch (error) {
+      console.error(`[AuthPipeline0.5] Error loading ${roleName} list:`, error);
+      return [];
+    }
+  }
+
+  _isInRoleList(roleList, username, email) {
+    return roleList.some(entry => {
+      const [listUsername, listEmail] = entry.split(' / ').map(s => s.trim());
+      return (listUsername && listUsername === username) || 
+             (listEmail && listEmail === email);
+    });
+  }
+
   async sendPasswordReset(email) {
     if (!this.firebase?.auth) {
       throw new Error('Firebase not available');
@@ -232,7 +314,7 @@ class AuthPipeline0_5 {
         email: emailNorm,
         username: usernameNorm,
         display_name: usernameNorm,
-        role: 'user',
+        role: 'user', // Will be updated by role manager
         created_at: new Date(),
         last_active: new Date(),
         auth_method: 'email'
@@ -243,6 +325,9 @@ class AuthPipeline0_5 {
           .collection('users')
           .doc(userCredential.user.uid)
           .set(userData, { merge: true });
+        
+        // Initialize user role based on predefined lists
+        await this._initializeUserRole(userCredential.user.uid, emailNorm, usernameNorm);
       } catch (firestoreError) {
         console.warn('[AuthPipeline0.5] Could not create user document:', firestoreError);
         // Continue anyway - auth was successful

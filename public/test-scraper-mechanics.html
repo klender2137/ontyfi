@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CryptoExplorer0.5 Scraper Test</title>
+    <style>
+        body {
+            background: #0f172a;
+            color: #f7f9ff;
+            font-family: monospace;
+            padding: 2rem;
+        }
+        .test-result {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+        .hustle-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>CryptoExplorer0.5 Scraper Mechanics Test</h1>
+    <div id="results"></div>
+    <div id="hustles"></div>
+
+    <script type="module">
+        // Test if we can access the scraper mechanics
+        async function runTests() {
+            const results = document.getElementById('results');
+            const hustlesDiv = document.getElementById('hustles');
+            
+            function log(message, type = 'info') {
+                const div = document.createElement('div');
+                div.className = `test-result ${type}`;
+                div.textContent = message;
+                results.appendChild(div);
+            }
+
+            log('Starting CryptoExplorer0.5 scraper mechanics test...', 'info');
+
+            try {
+                // Test 1: Check if Firebase is available
+                log('Test 1: Checking Firebase availability...', 'info');
+                if (typeof window.firebase !== 'undefined' && window.firebase.firestore) {
+                    log('✅ Firebase is available', 'success');
+                } else {
+                    log('❌ Firebase not available - will use mock data', 'error');
+                }
+
+                // Test 2: Try to connect to hustles_v2 collection
+                log('Test 2: Testing hustles_v2 connection...', 'info');
+                if (window.firebase && window.firebase.firestore) {
+                    const db = window.firebase.firestore();
+                    const query = db.collection('hustles_v2').orderBy('date_added', 'desc').limit(5);
+                    
+                    const unsubscribe = query.onSnapshot(
+                        (snapshot) => {
+                            log(`✅ Successfully connected to hustles_v2`, 'success');
+                            log(`📊 Found ${snapshot.docs.length} documents`, 'info');
+                            
+                            // Display sample hustles
+                            hustlesDiv.innerHTML = '<h2>Sample Hustles:</h2>';
+                            snapshot.docs.forEach(doc => {
+                                const data = doc.data();
+                                const hustleDiv = document.createElement('div');
+                                hustleDiv.className = 'hustle-card';
+                                hustleDiv.innerHTML = `
+                                    <h3>${data.title || data.name || 'Untitled'}</h3>
+                                    <p><strong>Source:</strong> ${data.source || data.scraper || 'Unknown'}</p>
+                                    <p><strong>Category:</strong> ${data.category || data.type || 'general'}</p>
+                                    <p><strong>Description:</strong> ${data.short_description || data.description || 'No description'}</p>
+                                    <p><strong>Network:</strong> ${data.network || 'N/A'}</p>
+                                    <p><strong>Date Added:</strong> ${data.date_added?.toDate?.()?.toLocaleString() || 'Unknown'}</p>
+                                    ${data.link ? `<p><a href="${data.link}" target="_blank" style="color: #3b82f6;">View Opportunity →</a></p>` : ''}
+                                `;
+                                hustlesDiv.appendChild(hustleDiv);
+                            });
+                            
+                            unsubscribe();
+                        },
+                        (error) => {
+                            log(`❌ Failed to connect to hustles_v2: ${error.message}`, 'error');
+                            log('Will use mock data instead', 'info');
+                        }
+                    );
+                } else {
+                    log('⚠️ Firebase not available, showing mock data', 'info');
+                    showMockData();
+                }
+
+                // Test 3: Check utility functions
+                log('Test 3: Testing utility functions...', 'info');
+                
+                // Test formatTimeAgo
+                const testTime = new Date(Date.now() - 2 * 60 * 60 * 1000); // 2 hours ago
+                const formattedTime = formatTimeAgo(testTime);
+                if (formattedTime === '2h') {
+                    log('✅ formatTimeAgo function works', 'success');
+                } else {
+                    log(`❌ formatTimeAgo failed: expected "2h", got "${formattedTime}"`, 'error');
+                }
+                
+                // Test shortText
+                const longText = 'This is a very long text that should be truncated to fit within the specified character limit';
+                const truncated = shortText(longText, 50);
+                if (truncated.length <= 51 && truncated.endsWith('…')) {
+                    log('✅ shortText function works', 'success');
+                } else {
+                    log(`❌ shortText failed: got "${truncated}"`, 'error');
+                }
+
+                // Test 4: Check alpha score calculation
+                log('Test 4: Testing alpha score calculation...', 'info');
+                const recentTime = Date.now() - 60 * 60 * 1000; // 1 hour ago
+                const alphaScore = calculateAlphaScore(recentTime);
+                if (alphaScore > 90) {
+                    log(`✅ Alpha score calculation works: ${alphaScore}`, 'success');
+                } else {
+                    log(`❌ Alpha score seems low: ${alphaScore}`, 'error');
+                }
+
+                log('\n🎉 All tests completed!', 'success');
+
+            } catch (error) {
+                log(`❌ Test failed: ${error.message}`, 'error');
+                console.error(error);
+            }
+        }
+
+        function showMockData() {
+            const hustlesDiv = document.getElementById('hustles');
+            hustlesDiv.innerHTML = '<h2>Mock Data Sample:</h2>';
+            
+            const mockHustles = [
+                {
+                    title: 'Ethereum Staking Rewards',
+                    source: 'Ethereum Foundation',
+                    category: 'yield',
+                    description: 'Earn passive income by staking ETH on the beacon chain',
+                    network: 'Ethereum',
+                    link: 'https://ethereum.org/staking'
+                },
+                {
+                    title: 'Arbitrum Airdrop Season 2',
+                    source: 'Arbitrum DAO',
+                    category: 'airdrop',
+                    description: 'Eligible users can claim ARB tokens from the second airdrop round',
+                    network: 'Arbitrum',
+                    link: 'https://arbitrum.foundation/'
+                }
+            ];
+            
+            mockHustles.forEach(hustle => {
+                const hustleDiv = document.createElement('div');
+                hustleDiv.className = 'hustle-card';
+                hustleDiv.innerHTML = `
+                    <h3>${hustle.title}</h3>
+                    <p><strong>Source:</strong> ${hustle.source}</p>
+                    <p><strong>Category:</strong> ${hustle.category}</p>
+                    <p><strong>Description:</strong> ${hustle.description}</p>
+                    <p><strong>Network:</strong> ${hustle.network}</p>
+                    <p><a href="${hustle.link}" target="_blank" style="color: #3b82f6;">View Opportunity →</a></p>
+                `;
+                hustlesDiv.appendChild(hustleDiv);
+            });
+        }
+
+        // Utility functions (copied from scraper mechanics)
+        function formatTimeAgo(dateLike) {
+            if (!dateLike) return '';
+            let ts = null;
+            try {
+                if (typeof dateLike === 'number') ts = dateLike;
+                else if (typeof dateLike.toDate === 'function') ts = dateLike.toDate().getTime();
+                else if (dateLike instanceof Date) ts = dateLike.getTime();
+                else ts = new Date(dateLike).getTime();
+            } catch { return ''; }
+            if (!Number.isFinite(ts)) return '';
+            const diffMs = Math.max(0, Date.now() - ts);
+            const diffMin = Math.floor(diffMs / (1000 * 60));
+            if (diffMin < 60) return `${diffMin}m`;
+            const diffH = Math.floor(diffMin / 60);
+            if (diffH < 24) return `${diffH}h`;
+            const diffD = Math.floor(diffH / 24);
+            return `${diffD}d`;
+        }
+
+        function shortText(text, max = 160) {
+            const t = (text || '').toString().replace(/\s+/g, ' ').trim();
+            if (!t) return '';
+            if (t.length <= max) return t;
+            return `${t.slice(0, max - 1)}…`;
+        }
+
+        function calculateAlphaScore(timestamp) {
+            const now = Date.now();
+            const ageInDays = (now - timestamp) / (1000 * 60 * 60 * 24);
+            return Math.max(0, Math.round(100 * Math.pow(0.8, ageInDays)));
+        }
+
+        // Wait for page to load then run tests
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

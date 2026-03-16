@@ -57,11 +57,25 @@
       return path.map(p => p.name || p).join(' / ');
     }
 
+    // Helper function to get user-specific localStorage key
+    const getUserBookmarkKey = () => {
+      // Try to get current Firebase user ID
+      if (typeof firebase !== 'undefined' && firebase.auth) {
+        const currentUser = firebase.auth().currentUser;
+        if (currentUser && currentUser.uid) {
+          return `cryptoExplorer.bookmarks.${currentUser.uid}`;
+        }
+      }
+      // Fallback to guest
+      return 'cryptoExplorer.bookmarks.guest';
+    };
+
     // Bookmarks hook
     function useBookmarks() {
       const [bookmarks, setBookmarks] = useState(() => {
         try {
-          const raw = window.localStorage.getItem('cryptoExplorer.bookmarks');
+          const bookmarkKey = getUserBookmarkKey();
+          const raw = window.localStorage.getItem(bookmarkKey);
           return raw ? JSON.parse(raw) : [];
         } catch {
           return [];
@@ -70,7 +84,8 @@
 
       useEffect(() => {
         try {
-          window.localStorage.setItem('cryptoExplorer.bookmarks', JSON.stringify(bookmarks));
+          const bookmarkKey = getUserBookmarkKey();
+          window.localStorage.setItem(bookmarkKey, JSON.stringify(bookmarks));
         } catch {}
       }, [bookmarks]);
 

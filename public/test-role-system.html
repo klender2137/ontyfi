@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CryptoExplorer0.5 Role System Test</title>
+    <style>
+        body {
+            background: #0f172a;
+            color: #f7f9ff;
+            font-family: monospace;
+            padding: 2rem;
+        }
+        .test-result {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+        .role-badge {
+            background: #6b7280;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0 0.25rem;
+        }
+        .role-badge.member {
+            background: #3b82f6;
+        }
+        .role-badge.admin {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <h1>CryptoExplorer0.5 Role System Test</h1>
+    <div id="results"></div>
+    <div id="role-info"></div>
+
+    <script type="module">
+        async function runTests() {
+            const results = document.getElementById('results');
+            const roleInfo = document.getElementById('role-info');
+            
+            function log(message, type = 'info') {
+                const div = document.createElement('div');
+                div.className = `test-result ${type}`;
+                div.textContent = message;
+                results.appendChild(div);
+            }
+
+            log('Starting CryptoExplorer0.5 Role System Test...', 'info');
+
+            try {
+                // Test 1: Check Firebase availability
+                log('Test 1: Checking Firebase availability...', 'info');
+                if (typeof window.firebase !== 'undefined' && window.firebase.firestore) {
+                    log('✅ Firebase is available', 'success');
+                } else {
+                    log('❌ Firebase not available', 'error');
+                    return;
+                }
+
+                // Test 2: Check role collections
+                log('Test 2: Checking role collections...', 'info');
+                const db = window.firebase.firestore();
+                
+                try {
+                    const usersSnapshot = await db.collection('users').limit(1).get();
+                    log('✅ Users collection accessible', 'success');
+                } catch (error) {
+                    log('❌ Users collection not accessible', 'error');
+                }
+
+                try {
+                    const rolesSnapshot = await db.collection('user_roles').limit(1).get();
+                    log('✅ User roles collection accessible', 'success');
+                } catch (error) {
+                    log('❌ User roles collection not accessible', 'error');
+                }
+
+                // Test 3: Check role assignment logic
+                log('Test 3: Testing role assignment logic...', 'info');
+                
+                // Test admin list checking
+                const adminList = ['fokenstart / calliduschalk@gmail.com'];
+                const testCases = [
+                    { username: 'fokenstart', email: 'calliduschalk@gmail.com', expected: 'admin' },
+                    { username: 'otheruser', email: 'other@example.com', expected: 'user' },
+                    { username: 'fokenstart', email: 'other@example.com', expected: 'admin' },
+                    { username: 'otheruser', email: 'calliduschalk@gmail.com', expected: 'admin' }
+                ];
+
+                for (const testCase of testCases) {
+                    const isInAdminList = adminList.some(entry => {
+                        const [listUsername, listEmail] = entry.split(' / ').map(s => s.trim());
+                        return (listUsername && listUsername === testCase.username) || 
+                               (listEmail && listEmail === testCase.email);
+                    });
+                    
+                    const actualRole = isInAdminList ? 'admin' : 'user';
+                    
+                    if (actualRole === testCase.expected) {
+                        log(`✅ Role assignment correct for ${testCase.username}/${testCase.email}: ${actualRole}`, 'success');
+                    } else {
+                        log(`❌ Role assignment failed for ${testCase.username}/${testCase.email}: expected ${testCase.expected}, got ${actualRole}`, 'error');
+                    }
+                }
+
+                // Test 4: Check current user role if logged in
+                log('Test 4: Checking current user role...', 'info');
+                const auth = window.firebase.auth();
+                const currentUser = auth.currentUser;
+
+                if (currentUser) {
+                    log(`✅ User logged in: ${currentUser.email}`, 'success');
+                    
+                    try {
+                        const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            const role = userData.role || 'user';
+                            
+                            log(`✅ User role found: ${role}`, 'success');
+                            
+                            // Display role info
+                            roleInfo.innerHTML = `
+                                <h2>Current User Role Information</h2>
+                                <div class="test-result info">
+                                    <p><strong>User ID:</strong> ${currentUser.uid}</p>
+                                    <p><strong>Email:</strong> ${currentUser.email}</p>
+                                    <p><strong>Username:</strong> ${userData.username || 'Not set'}</p>
+                                    <p><strong>Role:</strong> <span class="role-badge ${role}">${role}</span></p>
+                                    <p><strong>Created:</strong> ${userData.created_at?.toDate?.()?.toLocaleString() || 'Unknown'}</p>
+                                    <p><strong>Last Active:</strong> ${userData.last_active?.toDate?.()?.toLocaleString() || 'Unknown'}</p>
+                                </div>
+                            `;
+                            
+                            // Test role-based permissions
+                            const permissions = {
+                                user: ['view_tree', 'view_hustles', 'create_bookmarks'],
+                                member: ['access_premium_content', 'export_data', 'advanced_filtering'],
+                                admin: ['manage_users', 'manage_roles', 'system_config', 'view_analytics', 'manage_content']
+                            };
+                            
+                            const userPermissions = permissions[role] || permissions.user;
+                            log(`✅ User has ${userPermissions.length} permissions`, 'success');
+                            
+                        } else {
+                            log('❌ User document not found', 'error');
+                        }
+                    } catch (error) {
+                        log(`❌ Error fetching user role: ${error.message}`, 'error');
+                    }
+                } else {
+                    log('⚠️ No user logged in', 'info');
+                    roleInfo.innerHTML = `
+                        <h2>No User Logged In</h2>
+                        <div class="test-result info">
+                            <p>Please log in to test role functionality.</p>
+                            <p>Once logged in, the system will automatically assign roles based on:</p>
+                            <ul>
+                                <li>Admin list: fokenstart / calliduschalk@gmail.com</li>
+                                <li>Member list: (currently empty)</li>
+                                <li>Default: user</li>
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                // Test 5: Role statistics
+                log('Test 5: Checking role statistics...', 'info');
+                try {
+                    const roleStats = { user: 0, member: 0, admin: 0, total: 0 };
+                    
+                    const usersSnapshot = await db.collection('users').get();
+                    usersSnapshot.docs.forEach(doc => {
+                        const role = doc.data().role || 'user';
+                        roleStats[role]++;
+                        roleStats.total++;
+                    });
+                    
+                    log(`✅ Role statistics: ${JSON.stringify(roleStats)}`, 'success');
+                    
+                    const statsDiv = document.createElement('div');
+                    statsDiv.className = 'test-result info';
+                    statsDiv.innerHTML = `
+                        <h3>Role Statistics</h3>
+                        <p>Users: ${roleStats.user}</p>
+                        <p>Members: ${roleStats.member}</p>
+                        <p>Admins: ${roleStats.admin}</p>
+                        <p>Total: ${roleStats.total}</p>
+                    `;
+                    roleInfo.appendChild(statsDiv);
+                    
+                } catch (error) {
+                    log(`❌ Error getting role statistics: ${error.message}`, 'error');
+                }
+
+                log('\n🎉 All role system tests completed!', 'success');
+
+            } catch (error) {
+                log(`❌ Test failed: ${error.message}`, 'error');
+                console.error(error);
+            }
+        }
+
+        // Wait for Firebase to be available then run tests
+        if (typeof window.firebase !== 'undefined') {
+            runTests();
+        } else {
+            // Wait for Firebase to load
+            window.addEventListener('load', () => {
+                setTimeout(runTests, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

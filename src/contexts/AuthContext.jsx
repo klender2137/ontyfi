@@ -14,6 +14,7 @@ import {
 import { arrayUnion, deleteDoc, doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { auth, db } from '../services/firebase';
+import { useAppStore } from '../store/useAppStore';
 
 const AuthContext = createContext(null);
 
@@ -97,10 +98,20 @@ export function AuthProvider({ children }) {
   const [pendingGoogleLink, setPendingGoogleLink] = useState(null);
 
   const wallet = useWallet();
+  const { initializeBookmarksForUser } = useAppStore();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
       setUser(firebaseUser ?? null);
+
+      // Initialize bookmarks for the current user state
+      if (firebaseUser?.uid) {
+        console.log(`[AuthContext] User authenticated: ${firebaseUser.uid}, initializing bookmarks`);
+        initializeBookmarksForUser(firebaseUser.uid);
+      } else {
+        console.log('[AuthContext] No authenticated user, clearing bookmarks');
+        initializeBookmarksForUser(null);
+      }
 
       if (firebaseUser) {
         setIsGuest(false);
@@ -121,7 +132,7 @@ export function AuthProvider({ children }) {
     });
 
     return unsubscribe;
-  }, [wallet]);
+  }, [wallet, initializeBookmarksForUser]);
 
   const continueAsGuest = useCallback(() => {
     setIsGuest(true);
@@ -222,8 +233,19 @@ export function AuthProvider({ children }) {
 
   const signOut = useCallback(async () => {
     setError(null);
+    const currentUser = auth.currentUser;
+    const userId = currentUser?.uid;
+    
     await firebaseSignOut(auth);
     setIsGuest(false);
+    
+    // Clear user-specific bookmarks after sign out
+    if (userId) {
+      const userBookmarkKey = `cryptoExplorer.bookmarks.${userId}`;
+      localStorage.removeItem(userBookmarkKey);
+    }
+    
+    console.log('[AuthContext] User signed out, bookmarks cleared');
   }, []);
 
   const deleteAccount = useCallback(async () => {
@@ -255,7 +277,14 @@ export function AuthProvider({ children }) {
     } finally {
       try {
         localStorage.removeItem('walletSignature');
+        // Clear user-specific bookmarks
+        if (current?.uid) {
+          const userBookmarkKey = `cryptoExplorer.bookmarks.${current.uid}`;
+          localStorage.removeItem(userBookmarkKey);
+        }
+        // Also clear the old global bookmarks key for cleanup
         localStorage.removeItem('cryptoExplorer.bookmarks');
+        localStorage.removeItem('cryptoExplorer.bookmarks.guest');
       } catch {
         // ignore
       }
