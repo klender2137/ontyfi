@@ -15,6 +15,9 @@ yarn-error.log*
 *.pem
 service-account-key.json
 firebase-admin-key.json
+*-service-account.json
+*service-account*.json
+*-*-*.json
 
 # Firebase configuration
 .firebase
