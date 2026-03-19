@@ -12,8 +12,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import SolanaWalletProvider from './components/SolanaWalletProvider'
 import Home from './components/Home'
 import TreeMap from './components/TreeMap'
-import HustleFeed from './components/HustleFeed'
-import MyHustleScreen from './components/MyHustleScreen'
+import MyInsightsScreen from './components/MyInsightsScreen'
 
 const queryClient = new QueryClient();
 
@@ -37,14 +36,14 @@ function AppRoutes() {
             <TreeMap />
           </ErrorBoundary>
         } />
-        <Route path="/hustle" element={
+        <Route path="/my-phi" element={
           <ErrorBoundary>
-            <HustleFeed />
+            <MyInsightsScreen />
           </ErrorBoundary>
         } />
-        <Route path="/my-hustle" element={
+        <Route path="/my-insights" element={
           <ErrorBoundary>
-            <MyHustleScreen />
+            <MyInsightsScreen />
           </ErrorBoundary>
         } />
       </Routes>

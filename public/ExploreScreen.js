@@ -381,7 +381,7 @@ if (typeof window !== 'undefined' && window.React) {
     const [currentEchelonView, setCurrentEchelonView] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const bubbleRef = useRef(null);
-    const dragStartRef = useRef({ x: 0, y: 0, bubbleX: 0, bubbleY: 0 });
+    const dragStartRef = useRef({ x: 0, y: 0, bubbleX: 0, bubbleY: 0, grabOffsetX: 0, grabOffsetY: 0 });
     const animationFrameRef = useRef(null);
 
     useEffect(() => {
@@ -429,21 +429,30 @@ if (typeof window !== 'undefined' && window.React) {
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(true);
+
+      const cursorWorldX = e.clientX - viewportOffset.x;
+      const cursorWorldY = e.clientY - viewportOffset.y;
+      const grabOffsetX = cursorWorldX - position.x;
+      const grabOffsetY = cursorWorldY - position.y;
+
       dragStartRef.current = {
         x: e.clientX,
         y: e.clientY,
         bubbleX: position.x,
-        bubbleY: position.y
+        bubbleY: position.y,
+        grabOffsetX,
+        grabOffsetY
       };
     }, [isExploded, position]);
 
     const handleMouseMove = useCallback((e) => {
       if (!isDragging) return;
       e.preventDefault();
-      const dx = e.clientX - dragStartRef.current.x;
-      const dy = e.clientY - dragStartRef.current.y;
-      const newX = dragStartRef.current.bubbleX + dx - viewportOffset.x;
-      const newY = dragStartRef.current.bubbleY + dy - viewportOffset.y;
+
+      const cursorWorldX = e.clientX - viewportOffset.x;
+      const cursorWorldY = e.clientY - viewportOffset.y;
+      const newX = cursorWorldX - dragStartRef.current.grabOffsetX;
+      const newY = cursorWorldY - dragStartRef.current.grabOffsetY;
       onPositionChange(bubble.id, newX, newY, true);
     }, [isDragging, bubble.id, onPositionChange, viewportOffset]);
 
@@ -891,13 +900,22 @@ if (typeof window !== 'undefined' && window.React) {
           80
         );
         setBubblePositions(positions);
-        // Center the viewport on the bubble cluster center
-        const centerX = viewportSize.width * BubblePhysics.SPACE_MULTIPLIER / 2;
-        const centerY = viewportSize.height * BubblePhysics.SPACE_MULTIPLIER / 2;
-        setViewportOffset({
-          x: (viewportSize.width / 2) - centerX,
-          y: (viewportSize.height / 2) - centerY
-        });
+
+        // Center the viewport on the "Other" bubble by default (fallback to cluster center)
+        const other = positions.find(p => p.group && p.group.id === 'other');
+        if (other) {
+          setViewportOffset({
+            x: (viewportSize.width / 2) - other.x,
+            y: (viewportSize.height / 2) - other.y
+          });
+        } else {
+          const centerX = viewportSize.width * BubblePhysics.SPACE_MULTIPLIER / 2;
+          const centerY = viewportSize.height * BubblePhysics.SPACE_MULTIPLIER / 2;
+          setViewportOffset({
+            x: (viewportSize.width / 2) - centerX,
+            y: (viewportSize.height / 2) - centerY
+          });
+        }
         setZoomLevel(1);
       }
     }, [tagGroups, viewportSize]);

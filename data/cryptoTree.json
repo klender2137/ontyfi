@@ -1,0 +1,39 @@
+{
+  "version": "2.0-modular",
+  "type": "cryptoTree-trunk",
+  "fields": [
+    {
+      "id": "global-investment-bank",
+      "file": "branches/investmentBanking.json"
+    },
+    {
+      "id": "PE",
+      "file": "branches/PEbranch.json"
+    },
+    {
+      "id": "VC",
+      "file": "branches/VCbranch.json"
+    },
+    {
+      "id": "Quant",
+      "file": "branches/QunatBranch.json"
+    },
+    {
+      "id": "PubFin",
+      "file": "branches/PEbranch.json"
+    },
+    {
+      "id": "PE",
+      "file": "branches/PEbranch.json"
+    },
+    {
+      "id": "VC",
+      "file": "branches/VCbranch.json"
+    },
+    {
+      "id": "PE",
+      "file": "branches/PEbranch.json"
+    }
+
+  ]
+}

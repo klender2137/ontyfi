@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { useTreeData } from '../hooks/useTreeData'
 import { useAppStore } from '../store/useAppStore'
 import LoadingSkeleton from './LoadingSkeleton'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
+import { useInsightsV1Latest } from '../hooks/useInsightsV1Latest'
 
 const TreeMap = () => {
   const navigate = useNavigate()
@@ -12,6 +13,7 @@ const TreeMap = () => {
   const [tilePositions, setTilePositions] = useState({})
   const [tileDragStates, setTileDragStates] = useState({})
   const tileRefs = useRef({})
+  const { items: latestInsights, loading: insightsLoading, error: insightsError } = useInsightsV1Latest({ limit: 6 })
 
   if (loading) return <LoadingSkeleton />
   
@@ -54,6 +56,28 @@ const TreeMap = () => {
   }
 
   const allNodes = tree ? flattenNodes(tree.fields) : []
+
+  const newArticlesTiles = useMemo(() => {
+    if (!latestInsights.length) return [];
+    return latestInsights.map((insight, idx) => ({
+      id: `insight-${insight.docId || insight.id}-${idx}`,
+      name: insight.title || 'Untitled Insight',
+      description: insight.content ? (insight.content.length > 240 ? insight.content.slice(0, 240) + '…' : insight.content) : 'No description',
+      tags: [insight.source || 'Insights', insight.category || 'Insight'],
+      external_link: insight.external_link || null,
+      publication_date: insight.publication_date || null,
+      image_url: insight.image_url || null,
+      source: insight.source || 'Insights',
+      category: insight.category || 'Insight',
+      type: insight.type || 'Insight',
+      timestamp: insight.timestamp || null,
+      isNewArticle: true
+    }));
+  }, [latestInsights]);
+
+  const combinedTiles = useMemo(() => {
+    return [...newArticlesTiles, ...allNodes.slice(0, Math.max(0, 20 - newArticlesTiles.length))];
+  }, [newArticlesTiles, allNodes]);
 
   const getRandomPosition = (nodeId, parentRect = null) => {
     const basePositions = [
@@ -132,9 +156,10 @@ const TreeMap = () => {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
-        {allNodes.slice(0, 20).map(node => {
+        {combinedTiles.map(node => {
           const isExpanded = expandedTiles.has(node.id)
           const position = tilePositions[node.id] || { top: '10px', left: '10px' }
+          const isNewArticle = node.isNewArticle
           
           return (
             <div 
@@ -145,8 +170,8 @@ const TreeMap = () => {
               style={{ 
                 height: '200px',
                 padding: '12px',
-                background: 'rgba(15, 23, 42, 0.8)',
-                border: '1px solid rgba(148, 163, 184, 0.3)',
+                background: isNewArticle ? 'linear-gradient(135deg, rgba(34,211,238,0.12), rgba(16,185,129,0.08))' : 'rgba(15, 23, 42, 0.8)',
+                border: isNewArticle ? '1px solid rgba(34,211,238,0.5)' : '1px solid rgba(148, 163, 184, 0.3)',
                 borderRadius: '8px',
                 position: 'relative',
                 display: 'flex',
@@ -162,6 +187,17 @@ const TreeMap = () => {
                 gap: '8px'
               }}>
                 <div style={{ flexShrink: 0 }}>
+                  {isNewArticle && (
+                    <div style={{
+                      fontSize: '10px',
+                      fontWeight: '700',
+                      color: '#06b6d4',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.6px',
+                      marginBottom: '4px',
+                      opacity: 0.9
+                    }}>New Article</div>
+                  )}
                   <h4 style={{ 
                     margin: '0', 
                     color: '#f7f9ff',
@@ -218,7 +254,7 @@ const TreeMap = () => {
                       onClick={() => toggleTileExpansion(node.id)}
                       style={{
                         padding: '6px 10px',
-                        background: '#6b7280',
+                        background: isNewArticle ? '#06b6d4' : '#6b7280',
                         color: 'white',
                         border: 'none',
                         borderRadius: '4px',
@@ -228,30 +264,58 @@ const TreeMap = () => {
                         flex: 1,
                         transition: 'background-color 0.2s'
                       }}
-                      onMouseOver={(e) => e.target.style.background = '#4b5563'}
-                      onMouseOut={(e) => e.target.style.background = '#6b7280'}
+                      onMouseOver={(e) => e.target.style.background = isNewArticle ? '#0891b2' : '#4b5563'}
+                      onMouseOut={(e) => e.target.style.background = isNewArticle ? '#06b6d4' : '#6b7280'}
                     >
                       {isExpanded ? 'Fold' : 'Expand'}
                     </button>
-                    <button
-                      onClick={() => toggleBookmark(node)}
-                      style={{
-                        padding: '6px 10px',
-                        background: isBookmarked(node.id) ? '#10b981' : '#374151',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontSize: '11px',
-                        fontWeight: '500',
-                        flex: 1,
-                        transition: 'background-color 0.2s'
-                      }}
-                      onMouseOver={(e) => e.target.style.background = isBookmarked(node.id) ? '#059669' : '#4b5563'}
-                      onMouseOut={(e) => e.target.style.background = isBookmarked(node.id) ? '#10b981' : '#374151'}
-                    >
-                      {isBookmarked(node.id) ? 'Bookmarked' : 'Bookmark'}
-                    </button>
+                    {isNewArticle && node.external_link ? (
+                      <button
+                        onClick={() => {
+                          try {
+                            window.open(node.external_link, '_blank', 'noopener,noreferrer');
+                          } catch (e) {
+                            console.error('Open external link error:', e);
+                          }
+                        }}
+                        style={{
+                          padding: '6px 10px',
+                          background: '#10b981',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontSize: '11px',
+                          fontWeight: '500',
+                          flex: 1,
+                          transition: 'background-color 0.2s'
+                        }}
+                        onMouseOver={(e) => e.target.style.background = '#059669'}
+                        onMouseOut={(e) => e.target.style.background = '#10b981'}
+                      >
+                        Open
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => toggleBookmark(node)}
+                        style={{
+                          padding: '6px 10px',
+                          background: isBookmarked(node.id) ? '#10b981' : '#374151',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontSize: '11px',
+                          fontWeight: '500',
+                          flex: 1,
+                          transition: 'background-color 0.2s'
+                        }}
+                        onMouseOver={(e) => e.target.style.background = isBookmarked(node.id) ? '#059669' : '#4b5563'}
+                        onMouseOut={(e) => e.target.style.background = isBookmarked(node.id) ? '#10b981' : '#374151'}
+                      >
+                        {isBookmarked(node.id) ? 'Bookmarked' : 'Bookmark'}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -264,7 +328,7 @@ const TreeMap = () => {
                     background: 'rgba(15, 23, 42, 0.95)',
                     padding: '8px',
                     borderRadius: '6px',
-                    border: '1px solid rgba(148, 163, 184, 0.3)',
+                    border: isNewArticle ? '1px solid rgba(34,211,238,0.4)' : '1px solid rgba(148, 163, 184, 0.3)',
                     zIndex: 10,
                     maxWidth: '200px',
                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)'
@@ -276,21 +340,21 @@ const TreeMap = () => {
                     marginBottom: '4px',
                     fontWeight: '600'
                   }}>
-                    Tags from description:
+                    {isNewArticle ? 'Article tags:' : 'Tags from description:'}
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                     {node.tags.slice(0, 6).map(tag => (
                       <span 
                         key={tag}
                         style={{
-                          background: 'rgba(59, 130, 246, 0.2)',
-                          color: '#60a5fa',
+                          background: isNewArticle ? 'rgba(34,211,238,0.2)' : 'rgba(59, 130, 246, 0.2)',
+                          color: isNewArticle ? '#06b6d4' : '#60a5fa',
                           padding: '3px 6px',
                           borderRadius: '3px',
                           fontSize: '10px',
                           fontWeight: '500',
                           whiteSpace: 'nowrap',
-                          border: '1px solid rgba(59, 130, 246, 0.3)'
+                          border: isNewArticle ? '1px solid rgba(34,211,238,0.3)' : '1px solid rgba(59, 130, 246, 0.3)'
                         }}
                       >
                         {tag}

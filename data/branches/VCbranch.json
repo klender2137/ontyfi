@@ -1,0 +1,543 @@
+{
+"id": "venture-capital-ecosystem",
+"name": "Venture Capital Ecosystem",
+"description": "Global ecosystem of venture capital institutions funding and scaling innovative startups.",
+"categories": [
+
+{
+"id": "institutional-vc",
+"name": "Institutional Venture Capital",
+"description": "Professional venture capital firms managing capital from limited partners.",
+"tags": ["gp-lp","venture-fund"],
+"subcategories": [
+
+{
+"id": "fundraising-lp-relations",
+"name": "Fundraising & LP Relations",
+"description": "Managing relationships with institutional investors.",
+"nodes": [
+
+{
+"id": "lp-fund-structuring",
+"name": "Fund Structuring",
+"description": "Creating legal and financial structure of the fund.",
+"subnodes": [
+
+{
+"id": "lpa-drafting",
+"name": "Limited Partner Agreement Drafting",
+"description": "Legal documentation defining GP and LP rights.",
+"actions":[
+"draft fund governance clauses",
+"define fee structures",
+"set carried interest mechanics"
+],
+"outputs":[
+"Limited Partner Agreement",
+"Fund governance structure",
+"Carried interest waterfall"
+]
+},
+
+{
+"id": "ppm-creation",
+"name": "Private Placement Memorandum",
+"description": "Investment document describing strategy and risks.",
+"actions":[
+"describe investment thesis",
+"outline portfolio strategy",
+"present historical performance"
+],
+"outputs":[
+"Private Placement Memorandum",
+"Fund strategy document"
+]
+}
+
+]
+},
+
+{
+"id": "lp-reporting",
+"name": "LP Performance Reporting",
+"description": "Reporting fund performance metrics.",
+"subnodes": [
+
+{
+"id": "irr-calculation",
+"name": "Net IRR Calculation",
+"description": "Measuring fund return performance.",
+"actions":[
+"calculate internal rate of return",
+"adjust for fees",
+"benchmark against peers"
+],
+"outputs":[
+"Net IRR Report",
+"Quarterly LP update"
+]
+},
+
+{
+"id": "tvpi-reporting",
+"name": "TVPI Reporting",
+"description": "Total value to paid-in capital reporting.",
+"actions":[
+"calculate realized value",
+"calculate unrealized value",
+"combine with invested capital"
+],
+"outputs":[
+"TVPI metrics dashboard",
+"Fund performance sheet"
+]
+}
+
+]
+}
+
+]
+},
+
+{
+"id": "deal-sourcing",
+"name": "Deal Sourcing & Pipeline Management",
+"description": "Identifying potential startup investments.",
+"nodes":[
+
+{
+"id": "founder-outreach",
+"name": "Founder Outreach",
+"description": "Proactive founder sourcing.",
+"subnodes":[
+
+{
+"id":"linkedin-scouting",
+"name":"LinkedIn Founder Outreach",
+"description":"Direct contact with founders.",
+"actions":[
+"identify startup founders",
+"send outreach messages",
+"schedule intro meetings"
+],
+"outputs":[
+"startup pipeline database",
+"intro meeting notes"
+]
+},
+
+{
+"id":"demo-day-scouting",
+"name":"Demo Day Scouting",
+"description":"Evaluating startups at accelerator demo days.",
+"actions":[
+"attend demo events",
+"screen startup pitches",
+"rank opportunities"
+],
+"outputs":[
+"demo day deal flow list"
+]
+}
+
+]
+},
+
+{
+"id":"market-mapping",
+"name":"Market Mapping",
+"description":"Mapping startups in emerging sectors.",
+"subnodes":[
+
+{
+"id":"ai-market-map",
+"name":"AI Startup Market Map",
+"description":"Mapping generative AI companies.",
+"actions":[
+"collect startup datasets",
+"classify sectors",
+"analyze competition"
+],
+"outputs":[
+"AI sector market map"
+]
+}
+
+]
+}
+
+]
+},
+
+{
+"id":"investment-execution",
+"name":"Investment Execution",
+"description":"Evaluating and closing venture investments.",
+"nodes":[
+
+{
+"id":"startup-evaluation",
+"name":"Startup Evaluation",
+"description":"Analyzing startup viability.",
+"subnodes":[
+
+{
+"id":"unit-economics-analysis",
+"name":"Unit Economics Analysis",
+"description":"Evaluating CAC vs LTV economics.",
+"actions":[
+"analyze revenue model",
+"calculate CAC",
+"estimate lifetime value"
+],
+"outputs":[
+"Unit economics report"
+]
+},
+
+{
+"id":"customer-reference-calls",
+"name":"Customer Reference Calls",
+"description":"Validating product-market fit.",
+"actions":[
+"contact startup clients",
+"validate product value",
+"assess churn risk"
+],
+"outputs":[
+"Customer validation memo"
+]
+}
+
+]
+},
+
+{
+"id":"term-sheet-negotiation",
+"name":"Term Sheet Negotiation",
+"description":"Negotiating venture investment terms.",
+"subnodes":[
+
+{
+"id":"valuation-negotiation",
+"name":"Valuation Negotiation",
+"description":"Agreeing on startup valuation.",
+"actions":[
+"run comparable analysis",
+"model dilution scenarios",
+"negotiate ownership"
+],
+"outputs":[
+"Term sheet draft"
+]
+},
+
+{
+"id":"liquidation-preferences",
+"name":"Liquidation Preference Design",
+"description":"Structuring investor protections.",
+"actions":[
+"set preference multiple",
+"define participation rights",
+"model exit payouts"
+],
+"outputs":[
+"Liquidation preference clause"
+]
+}
+
+]
+}
+
+]
+}
+
+]
+},
+
+{
+"id": "corporate-venture-capital",
+"name": "Corporate Venture Capital",
+"description": "Investment arms of corporations investing for strategic advantage.",
+"tags":["cvc","corporate-innovation"],
+"subcategories":[
+
+{
+"id":"strategic-alignment",
+"name":"Strategic Alignment",
+"description":"Ensuring investments align with corporate strategy.",
+"nodes":[
+
+{
+"id":"technology-gap-analysis",
+"name":"Technology Gap Analysis",
+"description":"Identifying missing technologies for the corporation.",
+"subnodes":[
+{
+"id":"business-unit-interviews",
+"name":"Business Unit Interviews",
+"description":"Interviewing BU heads to identify needs.",
+"actions":[
+"collect technology requirements",
+"identify innovation gaps",
+"rank priority sectors"
+],
+"outputs":[
+"Corporate innovation roadmap"
+]
+}
+]
+}
+
+]
+},
+
+{
+"id":"market-intelligence",
+"name":"Market Intelligence",
+"description":"Monitoring startup innovation landscape.",
+"nodes":[
+
+{
+"id":"tech-conference-scouting",
+"name":"Tech Conference Scouting",
+"description":"Identifying disruptive startups.",
+"subnodes":[
+{
+"id":"startup-threat-analysis",
+"name":"Startup Threat Analysis",
+"description":"Assessing startups disrupting core business.",
+"actions":[
+"monitor startup growth",
+"analyze technologies",
+"report risks"
+],
+"outputs":[
+"Emerging disruption report"
+]
+}
+]
+}
+
+]
+}
+
+]
+},
+
+{
+"id": "micro-vc",
+"name": "Micro VC & Seed Funds",
+"description": "Small venture funds specializing in early-stage startups.",
+"tags":["seed","pre-seed"],
+"subcategories":[
+
+{
+"id":"seed-investing",
+"name":"Seed Stage Investing",
+"description":"Investing in very early stage startups.",
+"nodes":[
+
+{
+"id":"pitch-deck-screening",
+"name":"Pitch Deck Screening",
+"description":"Initial evaluation of startup pitch decks.",
+"subnodes":[
+{
+"id":"problem-solution-analysis",
+"name":"Problem Solution Analysis",
+"description":"Evaluating startup value proposition.",
+"actions":[
+"review founder narrative",
+"analyze market problem",
+"evaluate proposed solution"
+],
+"outputs":[
+"Startup screening memo"
+]
+}
+]
+}
+
+]
+}
+
+]
+},
+
+{
+"id": "venture-debt",
+"name": "Venture Debt Funds",
+"description": "Providing loans to venture-backed startups.",
+"tags":["venture-debt","startup-loans"],
+"subcategories":[
+
+{
+"id":"credit-underwriting",
+"name":"Credit Underwriting",
+"description":"Assessing startup ability to repay venture debt.",
+"nodes":[
+
+{
+"id":"cash-burn-analysis",
+"name":"Startup Cash Burn Analysis",
+"description":"Assessing runway and burn rate.",
+"subnodes":[
+{
+"id":"runway-calculation",
+"name":"Runway Calculation",
+"description":"Estimating months of cash remaining.",
+"actions":[
+"calculate burn rate",
+"analyze funding history",
+"project cash runway"
+],
+"outputs":[
+"Runway analysis report"
+]
+}
+]
+}
+
+]
+}
+
+]
+},
+
+{
+"id": "family-office-vc",
+"name": "Family Office Venture Investing",
+"description": "Direct venture investments by ultra-high-net-worth families.",
+"tags":["family-office"],
+"subcategories":[
+
+{
+"id":"direct-investments",
+"name":"Direct Startup Investments",
+"nodes":[
+{
+"id":"founder-network-investing",
+"name":"Founder Network Investing",
+"description":"Investing through trusted founder networks.",
+"subnodes":[
+{
+"id":"relationship-driven-investments",
+"name":"Relationship Driven Deals",
+"description":"Deals sourced via trusted networks.",
+"actions":[
+"meet founders",
+"evaluate personal reputation",
+"conduct lightweight diligence"
+],
+"outputs":[
+"Investment decision memo"
+]
+}
+]
+}
+]
+}
+
+]
+},
+
+{
+"id": "sovereign-vc",
+"name": "Government & Sovereign Venture Funds",
+"description": "State-backed venture investment programs.",
+"tags":["sovereign","government"],
+"subcategories":[
+
+{
+"id":"economic-development",
+"name":"Economic Development Investments",
+"nodes":[
+{
+"id":"innovation-grants",
+"name":"Startup Innovation Grants",
+"description":"Funding early innovation.",
+"subnodes":[
+{
+"id":"grant-allocation",
+"name":"Grant Allocation",
+"description":"Selecting startups for grants.",
+"actions":[
+"review applications",
+"evaluate economic impact",
+"approve funding"
+],
+"outputs":[
+"Government grant contract"
+]
+}
+]
+}
+]
+}
+
+]
+},
+
+{
+"id": "accelerators-builders",
+"name": "Accelerators & Venture Builders",
+"description": "Institutions helping startups build and scale quickly.",
+"tags":["accelerator","venture-builder"],
+"subcategories":[
+
+{
+"id":"startup-building",
+"name":"Startup Building",
+"nodes":[
+
+{
+"id":"founding-team-recruitment",
+"name":"Founding Team Recruitment",
+"description":"Recruiting early leadership for startups.",
+"subnodes":[
+{
+"id":"cto-recruitment",
+"name":"CTO Recruitment",
+"description":"Finding technical co-founders.",
+"actions":[
+"source engineers",
+"conduct interviews",
+"evaluate technical leadership"
+],
+"outputs":[
+"Founding team hiring plan"
+]
+}
+]
+},
+
+{
+"id":"mvp-development",
+"name":"MVP Development",
+"description":"Building early product prototypes.",
+"subnodes":[
+{
+"id":"tech-stack-selection",
+"name":"Tech Stack Selection",
+"description":"Selecting startup infrastructure.",
+"actions":[
+"compare cloud providers",
+"design system architecture",
+"build prototype"
+],
+"outputs":[
+"MVP prototype"
+]
+}
+]
+}
+
+]
+}
+
+]
+}
+
+]
+}

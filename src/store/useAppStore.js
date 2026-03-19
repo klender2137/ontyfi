@@ -119,32 +119,6 @@ export const useAppStore = create((set, get) => ({
     }
   },
 
-  logViewActivity: async (hustleID) => {
-    const firebaseAuth = getAuth();
-    if (!firebaseAuth.currentUser) {
-      console.log('[Analytics] No authenticated user for logging');
-      return;
-    }
-
-    const userSignature = localStorage.getItem('walletSignature');
-    if (!userSignature) {
-      console.log('[Analytics] No signature for encryption');
-      return;
-    }
-
-    try {
-      const key = await deriveEncryptionKey(userSignature);
-      const encryptedHustleID = await encryptData(key, hustleID);
-      const historyRef = doc(db, firebaseAuth.currentUser.uid, 'history', Date.now().toString());
-      await setDoc(historyRef, { hustleID: encryptedHustleID, timestamp: new Date() });
-      console.log('[Analytics] View activity logged');
-    } catch (error) {
-      console.error('[Analytics] Failed to log view activity:', error);
-    } finally {
-      // No cleanup needed
-    }
-  },
-
   // Load bookmarks for specific user
   loadUserBookmarks: (userId) => {
     const bookmarkKey = getUserBookmarkKey(userId);

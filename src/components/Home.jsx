@@ -195,10 +195,10 @@ const Home = () => {
           </div>
 
           <div 
-            onClick={() => navigate('/my-hustle')}
+            onClick={() => navigate('/my-insights')}
             role="button"
             tabIndex={0}
-            aria-label="Navigate to My Hustle real-time feed"
+            aria-label="Navigate to My Insights"
             style={{ 
               padding: '2rem',
               background: 'rgba(239, 68, 68, 0.1)',
@@ -206,44 +206,19 @@ const Home = () => {
               borderRadius: '12px',
               cursor: 'pointer',
               textAlign: 'center',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              gridColumn: 'span 2'
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault()
-                navigate('/my-hustle')
+                navigate('/my-insights')
               }
             }}
           >
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚡</div>
-            <h3 style={{ marginBottom: '0.5rem' }}>My Hustle (Real-time)</h3>
-            <p style={{ color: '#94a3b8' }}>Live alpha from DeFiLlama & Bankless</p>
-          </div>
-
-          <div 
-            onClick={() => navigate('/hustle')}
-            role="button"
-            tabIndex={0}
-            aria-label="Navigate to personalized hustle feed"
-            style={{ 
-              padding: '2rem',
-              background: 'rgba(16, 185, 129, 0.1)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              textAlign: 'center',
-              transition: 'all 0.2s ease'
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                navigate('/hustle')
-              }
-            }}
-          >
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📊</div>
-            <h3 style={{ marginBottom: '0.5rem' }}>Hustle Feed</h3>
-            <p style={{ color: '#94a3b8' }}>Personalized opportunities</p>
+            <h3 style={{ marginBottom: '0.5rem' }}>My Insights</h3>
+            <p style={{ color: '#94a3b8' }}>Finance resources synced from Drive</p>
           </div>
         </div>
 

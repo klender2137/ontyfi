@@ -15,8 +15,7 @@ export const ROLE_LEVELS = {
 
 export const PERMISSIONS = {
   // Basic permissions (all users)
-  VIEW_TREE: 'view_tree',
-  VIEW_HUSTLES: 'view_hustles',
+  VIEW_TREE: 'view_phi_tree',
   CREATE_BOOKMARKS: 'create_bookmarks',
   
   // Member permissions

@@ -1,0 +1,502 @@
+{
+"id": "public-finance-tile",
+"name": "Global Public Finance Ecosystem",
+"description": "The institutional architecture managing fiscal policy, monetary stability, sovereign debt, and public economic infrastructure worldwide.",
+"tags": [
+"public-finance",
+"fiscal-policy",
+"monetary-policy",
+"sovereign-debt",
+"public-sector"
+],
+"categories": [
+
+{
+"id": "ministry-of-finance",
+"name": "Ministry of Finance",
+"description": "Central government authority responsible for fiscal policy, national budgeting, and public debt management.",
+"tags": [
+"fiscal-policy",
+"government-budget",
+"public-debt"
+],
+"subcategories": [
+
+{
+"id": "fiscal-policy-revenue-administration",
+"name": "Fiscal Policy & Revenue Administration",
+"description": "Designing taxation policy and managing government revenues.",
+"nodes": [
+
+{
+"id": "macro-fiscal-forecasting",
+"name": "Macro Fiscal Forecasting",
+"description": "Forecasting government revenues and economic indicators.",
+"subnodes": [
+{
+"id": "gdp-tax-base-modeling",
+"name": "GDP Tax Base Modeling",
+"description": "Estimating future tax revenue based on GDP growth."
+},
+{
+"id": "inflation-impact-estimation",
+"name": "Inflation Impact Estimation",
+"description": "Modeling how inflation affects government revenues."
+},
+{
+"id": "tax-policy-simulation",
+"name": "Tax Policy Simulation",
+"description": "Evaluating fiscal outcomes of new tax proposals."
+}
+],
+"leafnodes": [
+"Medium Term Fiscal Framework Report",
+"Annual Revenue Forecast Report",
+"Fiscal Policy Impact Brief"
+]
+},
+
+{
+"id": "tax-enforcement-compliance",
+"name": "Tax Enforcement & Compliance",
+"description": "Ensuring taxpayers follow national tax laws.",
+"subnodes": [
+{
+"id": "tax-audit-programs",
+"name": "Tax Audit Programs",
+"description": "Auditing corporations and individuals for tax compliance."
+},
+{
+"id": "anti-evasion-investigations",
+"name": "Anti-Evasion Investigations",
+"description": "Investigating illegal tax avoidance schemes."
+},
+{
+"id": "digital-tax-reporting",
+"name": "Digital Tax Reporting Systems",
+"description": "Operating online tax filing infrastructure."
+}
+],
+"leafnodes": [
+"National Tax Compliance Report",
+"Corporate Tax Audit Findings",
+"Tax Enforcement Action Registry"
+]
+},
+
+{
+"id": "customs-excise-policy",
+"name": "Customs & Excise Duty Policy",
+"description": "Managing trade tariffs and excise taxation.",
+"subnodes": [
+{
+"id": "import-duty-structure",
+"name": "Import Duty Structure",
+"description": "Designing tariffs on imported goods."
+},
+{
+"id": "excise-tax-regulation",
+"name": "Excise Tax Regulation",
+"description": "Regulating taxes on alcohol, fuel and tobacco."
+},
+{
+"id": "border-revenue-monitoring",
+"name": "Border Revenue Monitoring",
+"description": "Tracking customs revenue collection."
+}
+],
+"leafnodes": [
+"National Tariff Schedule",
+"Excise Duty Regulation Code",
+"Customs Revenue Statistics"
+]
+}
+
+]
+},
+
+{
+"id": "national-budget-management",
+"name": "National Budget Management",
+"description": "Planning and executing the national budget.",
+"nodes": [
+
+{
+"id": "budget-cycle-coordination",
+"name": "Annual Budget Cycle Coordination",
+"description": "Managing the government budget preparation process.",
+"subnodes": [
+{
+"id": "spending-agency-submissions",
+"name": "Spending Agency Budget Submissions",
+"description": "Collecting funding requests from ministries."
+},
+{
+"id": "budget-ceiling-negotiations",
+"name": "Budget Ceiling Negotiations",
+"description": "Negotiating expenditure limits."
+},
+{
+"id": "parliamentary-budget-presentation",
+"name": "Parliamentary Budget Presentation",
+"description": "Preparing the official budget proposal."
+}
+],
+"leafnodes": [
+"National Budget Blue Book",
+"Parliament Budget Presentation",
+"Budget Allocation Framework"
+]
+},
+
+{
+"id": "public-investment-strategy",
+"name": "Public Investment Strategy",
+"description": "Planning national infrastructure and development investments.",
+"subnodes": [
+{
+"id": "project-cost-benefit-analysis",
+"name": "Cost Benefit Analysis",
+"description": "Evaluating economic impact of public projects."
+},
+{
+"id": "capital-project-ranking",
+"name": "Capital Project Ranking",
+"description": "Prioritizing infrastructure investments."
+},
+{
+"id": "investment-risk-evaluation",
+"name": "Investment Risk Evaluation",
+"description": "Assessing financial and economic risks."
+}
+],
+"leafnodes": [
+"National Infrastructure Investment Plan",
+"Public Investment Prioritization Matrix",
+"Economic Impact Assessment Report"
+]
+},
+
+{
+"id": "treasury-cash-management",
+"name": "Treasury Cash Management",
+"description": "Managing government liquidity and accounts.",
+"subnodes": [
+{
+"id": "tsa-reconciliation",
+"name": "Treasury Single Account Reconciliation",
+"description": "Matching daily bank balances with accounting records."
+},
+{
+"id": "government-liquidity-forecast",
+"name": "Government Liquidity Forecast",
+"description": "Forecasting short-term cash needs."
+},
+{
+"id": "public-payment-processing",
+"name": "Public Payment Processing",
+"description": "Executing government payments."
+}
+],
+"leafnodes": [
+"Treasury Cash Position Report",
+"Daily Government Liquidity Dashboard",
+"Treasury Settlement Ledger"
+]
+}
+
+]
+},
+
+{
+"id": "public-debt-management",
+"name": "Public Debt Management",
+"description": "Managing sovereign borrowing and debt markets.",
+"nodes": [
+
+{
+"id": "sovereign-bond-issuance",
+"name": "Sovereign Bond Issuance",
+"description": "Issuing government bonds in domestic and global markets.",
+"subnodes": [
+{
+"id": "bond-auction-management",
+"name": "Bond Auction Management",
+"description": "Executing government bond auctions."
+},
+{
+"id": "investor-relations-sovereign",
+"name": "Sovereign Investor Relations",
+"description": "Maintaining relationships with global bond investors."
+},
+{
+"id": "debt-instrument-design",
+"name": "Debt Instrument Design",
+"description": "Designing maturities and coupon structures."
+}
+],
+"leafnodes": [
+"Sovereign Bond Prospectus",
+"Government Bond Auction Results",
+"Sovereign Debt Issuance Calendar"
+]
+},
+
+{
+"id": "debt-risk-monitoring",
+"name": "Debt Risk Monitoring",
+"description": "Monitoring sovereign debt sustainability.",
+"subnodes": [
+{
+"id": "interest-rate-risk-analysis",
+"name": "Interest Rate Risk Analysis",
+"description": "Evaluating exposure to rate changes."
+},
+{
+"id": "currency-risk-analysis",
+"name": "Currency Risk Analysis",
+"description": "Monitoring FX debt exposure."
+},
+{
+"id": "refinancing-risk-evaluation",
+"name": "Refinancing Risk Evaluation",
+"description": "Assessing rollover risks."
+}
+],
+"leafnodes": [
+"Debt Sustainability Analysis",
+"Sovereign Risk Exposure Report",
+"Government Debt Portfolio Dashboard"
+]
+}
+
+]
+}
+
+]
+},
+
+{
+"id": "central-bank",
+"name": "Central Bank",
+"description": "Monetary authority responsible for price stability, financial supervision, and currency issuance.",
+"tags": [
+"monetary-policy",
+"inflation-control",
+"banking-regulation"
+],
+"subcategories": [
+
+{
+"id": "monetary-policy-implementation",
+"name": "Monetary Policy Implementation",
+"description": "Executing national monetary policy decisions.",
+"nodes": [
+
+{
+"id": "interest-rate-policy",
+"name": "Policy Interest Rate Setting",
+"description": "Setting benchmark interest rates.",
+"subnodes": [
+{
+"id": "inflation-target-modeling",
+"name": "Inflation Target Modeling",
+"description": "Forecasting inflation trends."
+},
+{
+"id": "policy-rate-deliberation",
+"name": "Policy Rate Deliberation",
+"description": "Determining changes in central bank rates."
+},
+{
+"id": "monetary-policy-communication",
+"name": "Monetary Policy Communication",
+"description": "Communicating rate decisions to markets."
+}
+],
+"leafnodes": [
+"Central Bank Interest Rate Decision",
+"Monetary Policy Statement",
+"Inflation Outlook Report"
+]
+},
+
+{
+"id": "open-market-operations",
+"name": "Open Market Operations",
+"description": "Managing liquidity through securities trading.",
+"subnodes": [
+{
+"id": "government-bond-purchases",
+"name": "Government Bond Purchases",
+"description": "Buying bonds to increase liquidity."
+},
+{
+"id": "repo-operations",
+"name": "Repo Market Operations",
+"description": "Short-term lending to banks."
+},
+{
+"id": "liquidity-auction-management",
+"name": "Liquidity Auction Management",
+"description": "Running liquidity auctions."
+}
+],
+"leafnodes": [
+"OMO Operation Summary",
+"Central Bank Liquidity Report",
+"Banking Sector Liquidity Dashboard"
+]
+}
+
+]
+},
+
+{
+"id": "financial-stability-supervision",
+"name": "Financial Stability & Supervision",
+"description": "Monitoring banking sector risk.",
+"nodes": [
+
+{
+"id": "bank-stress-testing",
+"name": "Bank Stress Testing",
+"description": "Testing resilience of commercial banks.",
+"subnodes": [
+{
+"id": "capital-adequacy-simulation",
+"name": "Capital Adequacy Simulation",
+"description": "Evaluating regulatory capital ratios."
+},
+{
+"id": "credit-risk-scenarios",
+"name": "Credit Risk Scenarios",
+"description": "Modeling loan default shocks."
+},
+{
+"id": "liquidity-crisis-simulation",
+"name": "Liquidity Crisis Simulation",
+"description": "Testing funding stress scenarios."
+}
+],
+"leafnodes": [
+"Bank Stress Test Results",
+"Financial Stability Report",
+"Capital Adequacy Compliance File"
+]
+}
+
+]
+},
+
+{
+"id": "currency-management",
+"name": "Currency Issuance & Management",
+"description": "Issuing and maintaining national currency.",
+"nodes": [
+
+{
+"id": "currency-production",
+"name": "Currency Production",
+"description": "Design and printing of banknotes.",
+"subnodes": [
+{
+"id": "banknote-design",
+"name": "Banknote Design",
+"description": "Designing physical banknotes."
+},
+{
+"id": "mint-production",
+"name": "Mint Production",
+"description": "Producing coins."
+},
+{
+"id": "counterfeit-detection",
+"name": "Counterfeit Detection",
+"description": "Monitoring fake currency circulation."
+}
+],
+"leafnodes": [
+"National Currency Production Plan",
+"Currency Circulation Statistics",
+"Anti-Counterfeit Security Guidelines"
+]
+}
+
+]
+}
+
+]
+},
+
+{
+"id": "international-financial-institutions",
+"name": "International Financial Institutions",
+"description": "Global organizations stabilizing the international financial system.",
+"tags":[
+"imf",
+"world-bank",
+"global-finance"
+],
+"subcategories":[
+{
+"id":"financial-stability-programs",
+"name":"Financial Stability Programs",
+"description":"Supporting countries facing macroeconomic crises.",
+"nodes":[
+{
+"id":"imf-lending-programs",
+"name":"IMF Lending Programs",
+"description":"Providing balance of payment assistance.",
+"subnodes":[
+{"id":"standby-arrangements","name":"Standby Arrangements","description":"Short-term IMF crisis lending."},
+{"id":"extended-fund-facility","name":"Extended Fund Facility","description":"Long-term structural programs."},
+{"id":"policy-conditionality","name":"Policy Conditionality","description":"Fiscal reform requirements."}
+],
+"leafnodes":[
+"IMF Program Agreement",
+"Macroeconomic Reform Roadmap",
+"IMF Country Surveillance Report"
+]
+}
+]
+}
+]
+},
+
+{
+"id":"state-owned-enterprises",
+"name":"Public Sector Enterprises",
+"description":"Government owned corporations providing national infrastructure and services.",
+"tags":[
+"soe",
+"public-corporations"
+],
+"subcategories":[
+{
+"id":"infrastructure-services",
+"name":"Infrastructure Service Delivery",
+"description":"Operating essential public infrastructure.",
+"nodes":[
+{
+"id":"transportation-networks",
+"name":"Transportation Networks",
+"description":"Operating railways, airlines and transit.",
+"subnodes":[
+{"id":"rail-network-operations","name":"Rail Network Operations","description":"Operating passenger rail networks."},
+{"id":"infrastructure-maintenance","name":"Infrastructure Maintenance","description":"Maintaining tracks and transport assets."},
+{"id":"transport-investment-planning","name":"Transport Investment Planning","description":"Planning expansion projects."}
+],
+"leafnodes":[
+"National Transportation Infrastructure Plan",
+"SOE Capital Investment Budget",
+"Public Service Delivery Report"
+]
+}
+]
+}
+]
+}
+
+]
+}

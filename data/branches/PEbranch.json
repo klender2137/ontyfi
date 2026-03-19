@@ -1,0 +1,275 @@
+{
+  "Private_Equity_Field": {
+    "categories": {
+      "Buyout_Investing": {
+        "description": "Control acquisitions of mature companies using leverage and operational improvement strategies.",
+        "subcategories": {
+          "Deal_Origination_Execution": {
+            "description": "Sourcing and completing leveraged buyout transactions.",
+            "nodes": {
+              "Deal_Sourcing": {
+                "description": "Identifying potential acquisition opportunities.",
+                "subnodes": {
+                  "Banker_Relationships": {
+                    "description": "Maintaining pipelines with M&A advisory banks.",
+                    "leafnodes": [
+                      "Bulge_Bracket_MA_Pipelines",
+                      "Elite_Boutique_Advisors",
+                      "Regional_Middle_Market_Banks",
+                      "Independent_Corporate_Finance_Advisors"
+                    ]
+                  },
+                  "Proprietary_Outreach": {
+                    "description": "Direct outreach to founders and owners.",
+                    "leafnodes": [
+                      "Founder_Outreach_Programs",
+                      "Industry_Conference_Sourcing",
+                      "Executive_Network_Referrals",
+                      "Sector_Focused_Scouting"
+                    ]
+                  },
+                  "Industry_Conferences": {
+                    "description": "Networking to identify acquisition opportunities.",
+                    "leafnodes": [
+                      "Global_PE_Conferences",
+                      "Sector_Specific_Summits",
+                      "Regional_Investment_Forums",
+                      "M&A_Networking_Events"
+                    ]
+                  },
+                  "Corporate_Carveouts": {
+                    "description": "Monitoring divestitures from large corporations.",
+                    "leafnodes": [
+                      "Divestiture_Advisory_Processes",
+                      "Spinout_Structuring",
+                      "Transitional_Service_Agreements",
+                      "Standalone_Cost_Modeling"
+                    ]
+                  }
+                }
+              },
+              "Financial_Modeling": {
+                "description": "Building leveraged buyout valuation models.",
+                "subnodes": {
+                  "Debt_Capacity_Analysis": {
+                    "description": "Estimating optimal leverage levels.",
+                    "leafnodes": [
+                      "Senior_Debt_Sizing",
+                      "Mezzanine_Tranche_Analysis",
+                      "Cash_Flow_Sweep_Modeling",
+                      "Covenant_Headroom_Testing"
+                    ]
+                  },
+                  "IRR_Sensitivity_Analysis": {
+                    "description": "Modeling return scenarios.",
+                    "leafnodes": [
+                      "Entry_Multiple_Sensitivity",
+                      "Exit_Multiple_Expansion_Contraction",
+                      "Margin_Improvement_Impact",
+                      "Deleveraging_Return_Drivers"
+                    ]
+                  }
+                }
+              },
+              "Due_Diligence": {
+                "description": "Evaluating acquisition risks and opportunities.",
+                "subnodes": {
+                  "Commercial_DD": {
+                    "description": "Assessing market competitiveness and growth potential.",
+                    "leafnodes": [
+                      "Market_Share_Analysis",
+                      "Customer_Churn_Review",
+                      "Competitive_Positioning",
+                      "Pricing_Power_Assessment"
+                    ]
+                  },
+                  "Financial_DD": {
+                    "description": "Validating historical financial performance.",
+                    "leafnodes": [
+                      "Quality_of_Earnings_QofE",
+                      "Net_Working_Capital_Analysis",
+                      "Historical_Bridge_Validation",
+                      "Tax_Compliance_Review"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "Platform_Expansion": {
+            "description": "Scaling portfolio companies through acquisitions and operational growth.",
+            "nodes": {
+              "Addon_Acquisitions": {
+                "description": "Buying smaller companies to grow platform businesses.",
+                "subnodes": {
+                  "Target_Screening": {
+                    "description": "Identifying bolt-on acquisition targets.",
+                    "leafnodes": [
+                      "Regional_Competitors",
+                      "Complementary_Product_Lines",
+                      "Distribution_Channel_Targets",
+                      "Vertical_Integration_Targets"
+                    ]
+                  },
+                  "Integration_Planning": {
+                    "description": "Preparing operational integration strategies.",
+                    "leafnodes": [
+                      "Operational_Integration",
+                      "Finance_System_Migration",
+                      "Brand_Consolidation",
+                      "Sales_Channel_Alignment"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Growth_Venture_Capital": {
+        "description": "Minority investments into scaling technology and innovation companies.",
+        "subcategories": {
+          "Sourcing_Thematic_Research": {
+            "description": "Identifying high-growth investment opportunities.",
+            "nodes": {
+              "SaaS_Identification": {
+                "description": "Identifying high retention SaaS firms.",
+                "subnodes": {
+                  "Revenue_Growth_Analysis": {
+                    "description": "Evaluating annual recurring revenue growth.",
+                    "leafnodes": [
+                      "ARR_Growth_Rates",
+                      "Net_Revenue_Retention",
+                      "Gross_Revenue_Retention",
+                      "Expansion_Revenue_Metrics"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Distressed_Special_Situations": {
+        "description": "Investing in financially distressed companies and restructuring them.",
+        "subcategories": {
+          "Liability_Management": {
+            "description": "Restructuring debt and creditor obligations.",
+            "nodes": {
+              "Debt_Restructuring": {
+                "description": "Reorganizing capital structure.",
+                "subnodes": {
+                  "Covenant_Negotiation": {
+                    "description": "Negotiating with lenders.",
+                    "leafnodes": [
+                      "Waiver_Requests",
+                      "Covenant_Reset_Negotiations",
+                      "Maintenance_vs_Incurrence_Tests",
+                      "Equity_Cure_Provisions"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Private_Credit_Structured_Capital": {
+        "description": "Providing debt financing to private companies.",
+        "subcategories": {
+          "Credit_Underwriting": {
+            "description": "Assessing borrower credit risk.",
+            "nodes": {
+              "Leverage_Analysis": {
+                "description": "Evaluating debt levels.",
+                "subnodes": {
+                  "Senior_Leverage": {
+                    "description": "Senior debt vs EBITDA.",
+                    "leafnodes": [
+                      "First_Lien_Debt_Sizing",
+                      "Unitranche_Pricing",
+                      "Senior_Net_Leverage",
+                      "Interest_Coverage_Ratios"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Infrastructure_Real_Assets": {
+        "description": "Investments into long-term infrastructure assets.",
+        "subcategories": {
+          "Asset_Underwriting": {
+            "description": "Evaluating infrastructure investment viability.",
+            "nodes": {
+              "Revenue_Model_Analysis": {
+                "description": "Assessing asset cash flow generation.",
+                "subnodes": {
+                  "Concession_Revenues": {
+                    "description": "Government concession income.",
+                    "leafnodes": [
+                      "PPP_Framework_Analysis",
+                      "Availability_Payment_Modeling",
+                      "Concession_Agreement_Terms",
+                      "Regulatory_Risk_Assessment"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Secondary_Market_Investing": {
+        "description": "Purchasing stakes in existing private equity funds.",
+        "subcategories": {
+          "Portfolio_Valuation": {
+            "description": "Valuing portfolios of PE investments.",
+            "nodes": {
+              "NAV_Analysis": {
+                "description": "Analyzing net asset values.",
+                "subnodes": {
+                  "Company_Level_Valuation": {
+                    "description": "Valuing individual portfolio companies.",
+                    "leafnodes": [
+                      "BottomUp_Portfolio_Review",
+                      "Public_Peer_Benchmarking",
+                      "Recent_Transaction_Analysis",
+                      "Discount_to_NAV_Modeling"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Portfolio_Governance_Value_Creation": {
+        "description": "Managing portfolio companies after investment.",
+        "subcategories": {
+          "Strategic_Governance": {
+            "description": "Board-level strategic oversight.",
+            "nodes": {
+              "Board_Management": {
+                "description": "Managing board participation.",
+                "subnodes": {
+                  "Board_Structure": {
+                    "description": "Defining board composition.",
+                    "leafnodes": [
+                      "Independent_Director_Selection",
+                      "Committee_Formation",
+                      "Governance_Rights_Negotiation",
+                      "Board_Observer_Roles"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

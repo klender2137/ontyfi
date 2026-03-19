@@ -1,0 +1,3442 @@
+{
+  "version": "2.0-merged",
+  "type": "cryptoTree-merged",
+  "generated": "2026-03-15T21:42:18.882Z",
+  "fields": [
+    {
+      "id": "ai-agentic-commerce",
+      "name": "AI & Agentic Commerce",
+      "description": "The transition from AI as a tool to AI as a market participant with wallet autonomy.",
+      "tags": [
+        "ai-agents",
+        "zkml",
+        "agentic-web",
+        "m2m"
+      ],
+      "descriptionRef": "descriptions/ai-agentic-commerce_ai-agentic-commerce.md",
+      "categories": [
+        {
+          "id": "ai-agent-deployment",
+          "name": "AI Agent Deployment & On-Chain Autonomy",
+          "description": "# AI Agent Deployment & On-Chain Autonomy\r\n\r\n**ID:** ai-agent-deployment\r\n**Path:** ai-agentic-commerce > ai-agent-deployment\r\n\r\n## Description\r\n\r\nDeploying autonomous entities capable of managing wallets and executing trades.\r\n\r\n## Tags\r\n\r\n- autonomy\r\n- trading-bots\r\n",
+          "tags": [
+            "autonomy",
+            "trading-bots"
+          ],
+          "subcategories": [
+            {
+              "id": "autonomous-trading-agents",
+              "name": "Autonomous Trading Agents",
+              "description": "High-frequency and LLM-driven entities that negotiate and execute market strategies.",
+              "tags": [
+                "trading",
+                "arbitrage"
+              ],
+              "nodes": [
+                {
+                  "id": "llm-arbitrage-bots",
+                  "name": "LLM-Powered Arbitrage Bots",
+                  "description": "Agents using natural language processing to identify and exploit cross-chain inefficiencies.",
+                  "tags": [
+                    "llm",
+                    "arb"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "social-alpha-scrapers",
+                      "name": "Social Media Alpha Scrapers",
+                      "description": "Bots that monitor X, Farcaster, and Telegram for early token mentions and sentiment shifts.",
+                      "tags": [
+                        "sentiment",
+                        "alpha"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "a2a-service-fees",
+                          "name": "Agent-to-Agent (A2A) Service Fees",
+                          "description": "Monetizing micro-services sold by your agent to other autonomous entities.",
+                          "tags": [
+                            "m2m-payments"
+                          ],
+                          "descriptionRef": "descriptions/ai-agentic-commerce_a2a-service-fees.md"
+                        },
+                        {
+                          "id": "custom-gpt-analysts",
+                          "name": "Custom GPT Crypto Analysts",
+                          "description": "Subscription-based GPT agents providing hyper-specific on-chain forensic reports.",
+                          "tags": [
+                            "analytics"
+                          ],
+                          "descriptionRef": "descriptions/ai-agentic-commerce_custom-gpt-analysts.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/ai-agentic-commerce_social-alpha-scrapers.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/ai-agentic-commerce_llm-arbitrage-bots.md"
+                },
+                {
+                  "id": "socialfi-narrative-agents",
+                  "name": "SocialFi Narrative Agents (Virtuals/Clanker)",
+                  "description": "Autonomous personas that build social presence to drive token value.",
+                  "tags": [
+                    "virtuals",
+                    "clanker"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "auto-token-launchers",
+                      "name": "Autonomous Token Launchers",
+                      "description": "Agents that deploy, market, and manage liquidity for their own native tokens.",
+                      "tags": [
+                        "launchpads"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "key-gated-communities",
+                          "name": "AI-Driven 'Key' Gated Communities",
+                          "description": "Access-controlled groups managed and moderated entirely by an AI persona.",
+                          "tags": [
+                            "social-gating"
+                          ],
+                          "descriptionRef": "descriptions/ai-agentic-commerce_key-gated-communities.md"
+                        },
+                        {
+                          "id": "narrative-liquidity-provision",
+                          "name": "Narrative Liquidity Provisioning",
+                          "description": "Algorithmic LP management based on social narrative strength and AI predictions.",
+                          "tags": [
+                            "liquidity"
+                          ],
+                          "descriptionRef": "descriptions/ai-agentic-commerce_narrative-liquidity-provision.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/ai-agentic-commerce_auto-token-launchers.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/ai-agentic-commerce_socialfi-narrative-agents.md"
+                }
+              ],
+              "descriptionRef": "descriptions/ai-agentic-commerce_autonomous-trading-agents.md"
+            }
+          ],
+          "descriptionRef": "descriptions/ai-agentic-commerce_ai-agent-deployment.md"
+        },
+        {
+          "id": "data-labeling-rlhf",
+          "name": "Data Economies & RLHF Training",
+          "description": "# Data Economies & RLHF Training\r\n\r\n**ID:** data-labeling-rlhf\r\n**Path:** ai-agentic-commerce > data-labeling-rlhf\r\n\r\n## Description\r\n\r\nMonetizing the human feedback loop required to refine advanced AI models.\r\n\r\n## Tags\r\n\r\n- rlhf\r\n- data-contribution\r\n",
+          "tags": [
+            "rlhf",
+            "data-contribution"
+          ],
+          "subcategories": [
+            {
+              "id": "web3-data-contribution",
+              "name": "Web3 Data Contribution",
+              "description": "Feeding clean, verified on-chain and off-chain data into AI training pipelines.",
+              "tags": [
+                "big-data",
+                "training"
+              ],
+              "nodes": [
+                {
+                  "id": "onchain-task-verification",
+                  "name": "On-chain Task Verification",
+                  "description": "Using blockchain to prove completion of data labeling tasks for model developers.",
+                  "tags": [
+                    "verification",
+                    "tasks"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "ai-feedback-loops",
+                      "name": "AI Model Feedback Loops",
+                      "description": "Earning rewards for correcting and ranking AI-generated outputs (RLHF).",
+                      "tags": [
+                        "rlhf-rewards"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "decentralized-data-tagging",
+                          "name": "Decentralized Data Tagging",
+                          "description": "Global, permissionless workforce tagging datasets for computer vision or NLP.",
+                          "tags": [
+                            "tagging"
+                          ],
+                          "descriptionRef": "descriptions/ai-agentic-commerce_decentralized-data-tagging.md"
+                        },
+                        {
+                          "id": "proof-of-personhood",
+                          "name": "Proof-of-Personhood Validation",
+                          "description": "Verifying unique human identity to ensure high-quality, non-sybil data inputs.",
+                          "tags": [
+                            "world-id",
+                            "identity"
+                          ],
+                          "descriptionRef": "descriptions/ai-agentic-commerce_proof-of-personhood.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/ai-agentic-commerce_ai-feedback-loops.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/ai-agentic-commerce_onchain-task-verification.md"
+                }
+              ],
+              "descriptionRef": "descriptions/ai-agentic-commerce_web3-data-contribution.md"
+            }
+          ],
+          "descriptionRef": "descriptions/ai-agentic-commerce_data-labeling-rlhf.md"
+        }
+      ],
+      "_source": {
+        "branchId": "ai-agentic-commerce",
+        "file": "branches/branch_ai-agentic-commerce.json"
+      }
+    },
+    {
+      "id": "defi",
+      "name": "DeFi & Yield",
+      "description": "Decentralized finance strategies focused on yield generation.",
+      "tags": [
+        "defi",
+        "yield",
+        "onchain"
+      ],
+      "categories": [
+        {
+          "id": "liquidity-provisioning",
+          "name": "Liquidity Provisioning",
+          "description": "# Liquidity Provisioning\r\n\r\n**ID:** liquidity-provisioning\r\n**Path:** defi > liquidity-provisioning\r\n\r\n## Description\r\n\r\nProviding capital to AMMs and liquidity venues.\r\n\r\n## Tags\r\n\r\n- amm\r\n- liquidity\r\n",
+          "tags": [
+            "amm",
+            "liquidity"
+          ],
+          "subcategories": [
+            {
+              "id": "concentrated-liquidity",
+              "name": "Concentrated Liquidity",
+              "description": "Range-based liquidity provisioning (Uniswap v3/v4).",
+              "tags": [
+                "uniswap",
+                "clmm"
+              ],
+              "nodes": [
+                {
+                  "id": "active-range-management",
+                  "name": "Active Range Management",
+                  "description": "Actively managing LP ranges to optimize fees.",
+                  "tags": [
+                    "active",
+                    "lp"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "cross-pair-arb",
+                      "name": "Cross-Pair Arbitrage Loops",
+                      "description": "Fee + price arbitrage across correlated pools.",
+                      "tags": [
+                        "arbitrage"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "eth-steth-arb",
+                          "name": "ETH/stETH Arbitrage",
+                          "description": "Liquid staking arbitrage opportunities.",
+                          "tags": [
+                            "lido",
+                            "staking"
+                          ],
+                          "descriptionRef": "descriptions/defi_eth-steth-arb.md"
+                        },
+                        {
+                          "id": "stable-arb",
+                          "name": "Stablecoin Arbitrage",
+                          "description": "Cross-pool stablecoin price differences.",
+                          "tags": [
+                            "usdc",
+                            "usdt"
+                          ],
+                          "descriptionRef": "descriptions/defi_stable-arb.md"
+                        },
+                        {
+                          "id": "wrapped-token-arb",
+                          "name": "Wrapped Token Arbitrage",
+                          "description": "Native vs wrapped token price gaps.",
+                          "tags": [
+                            "weth",
+                            "wbtc"
+                          ],
+                          "descriptionRef": "descriptions/defi_wrapped-token-arb.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_cross-pair-arb.md"
+                    },
+                    {
+                      "id": "v4-hooks",
+                      "name": "Hook Implementation (v4)",
+                      "description": "Custom AMM logic via Uniswap v4 hooks.",
+                      "tags": [
+                        "uniswap-v4",
+                        "hooks"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "dynamic-fee-hooks",
+                          "name": "Dynamic Fee Hooks",
+                          "description": "Volatility-based fee adjustments.",
+                          "tags": [
+                            "fees",
+                            "volatility"
+                          ],
+                          "descriptionRef": "descriptions/defi_dynamic-fee-hooks.md"
+                        },
+                        {
+                          "id": "limit-order-hooks",
+                          "name": "Limit Order Hooks",
+                          "description": "On-chain limit order execution.",
+                          "tags": [
+                            "orders",
+                            "execution"
+                          ],
+                          "descriptionRef": "descriptions/defi_limit-order-hooks.md"
+                        },
+                        {
+                          "id": "oracle-hooks",
+                          "name": "Oracle Integration Hooks",
+                          "description": "Price feed integration for advanced strategies.",
+                          "tags": [
+                            "oracle",
+                            "chainlink"
+                          ],
+                          "descriptionRef": "descriptions/defi_oracle-hooks.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_v4-hooks.md"
+                    },
+                    {
+                      "id": "jit-liquidity",
+                      "name": "Just-in-Time Liquidity",
+                      "description": "Providing liquidity only during swaps.",
+                      "tags": [
+                        "jit",
+                        "mev"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "mempool-monitoring",
+                          "name": "Mempool Monitoring",
+                          "description": "Detecting large swaps before execution.",
+                          "tags": [
+                            "mempool",
+                            "monitoring"
+                          ],
+                          "descriptionRef": "descriptions/defi_mempool-monitoring.md"
+                        },
+                        {
+                          "id": "flash-liquidity",
+                          "name": "Flash Liquidity Provision",
+                          "description": "Atomic liquidity provision and removal.",
+                          "tags": [
+                            "flash",
+                            "atomic"
+                          ],
+                          "descriptionRef": "descriptions/defi_flash-liquidity.md"
+                        },
+                        {
+                          "id": "sandwich-protection",
+                          "name": "Sandwich Attack Protection",
+                          "description": "MEV protection for JIT strategies.",
+                          "tags": [
+                            "mev",
+                            "protection"
+                          ],
+                          "descriptionRef": "descriptions/defi_sandwich-protection.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_jit-liquidity.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/defi_active-range-management.md"
+                }
+              ],
+              "descriptionRef": "descriptions/defi_concentrated-liquidity.md"
+            },
+            {
+              "id": "cross-chain-liquidity",
+              "name": "Cross-Chain Liquidity",
+              "description": "Multi-chain liquidity provision strategies.",
+              "tags": [
+                "cross-chain",
+                "multichain"
+              ],
+              "nodes": [
+                {
+                  "id": "bridge-liquidity",
+                  "name": "Bridge Liquidity",
+                  "description": "Providing liquidity to cross-chain bridges.",
+                  "tags": [
+                    "bridge",
+                    "cross-chain"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "stargate-pools",
+                      "name": "Stargate Finance Pools",
+                      "description": "LayerZero-based cross-chain liquidity.",
+                      "tags": [
+                        "stargate",
+                        "layerzero"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "usdc-pools",
+                          "name": "USDC Bridge Pools",
+                          "description": "Cross-chain USDC liquidity provision.",
+                          "tags": [
+                            "usdc",
+                            "bridge"
+                          ],
+                          "descriptionRef": "descriptions/defi_usdc-pools.md"
+                        },
+                        {
+                          "id": "eth-pools",
+                          "name": "ETH Bridge Pools",
+                          "description": "Cross-chain ETH liquidity provision.",
+                          "tags": [
+                            "eth",
+                            "bridge"
+                          ],
+                          "descriptionRef": "descriptions/defi_eth-pools.md"
+                        },
+                        {
+                          "id": "stg-rewards",
+                          "name": "STG Token Rewards",
+                          "description": "Stargate token reward optimization.",
+                          "tags": [
+                            "stg",
+                            "rewards"
+                          ],
+                          "descriptionRef": "descriptions/defi_stg-rewards.md"
+                        },
+                        {
+                          "id": "article-1770824618408",
+                          "name": "d",
+                          "description": "d",
+                          "tags": [
+                            "d"
+                          ],
+                          "content": "d",
+                          "bodySections": [],
+                          "images": [],
+                          "createdAt": "2026-02-11T15:43:38.409Z",
+                          "isArticle": true
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_stargate-pools.md"
+                    },
+                    {
+                      "id": "hop-protocol",
+                      "name": "Hop Protocol",
+                      "description": "Rollup-to-rollup bridge liquidity.",
+                      "tags": [
+                        "hop",
+                        "rollup"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "l2-arbitrage",
+                          "name": "L2 Arbitrage",
+                          "description": "Cross-rollup arbitrage opportunities.",
+                          "tags": [
+                            "arbitrage",
+                            "l2"
+                          ],
+                          "descriptionRef": "descriptions/defi_l2-arbitrage.md"
+                        },
+                        {
+                          "id": "hop-rewards",
+                          "name": "HOP Token Rewards",
+                          "description": "Hop protocol token incentives.",
+                          "tags": [
+                            "hop",
+                            "incentives"
+                          ],
+                          "descriptionRef": "descriptions/defi_hop-rewards.md"
+                        },
+                        {
+                          "id": "bonder-strategies",
+                          "name": "Bonder Strategies",
+                          "description": "Advanced bonder liquidity provision.",
+                          "tags": [
+                            "bonder",
+                            "advanced"
+                          ],
+                          "descriptionRef": "descriptions/defi_bonder-strategies.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_hop-protocol.md"
+                    },
+                    {
+                      "id": "synapse-protocol",
+                      "name": "Synapse Protocol",
+                      "description": "Cross-chain AMM and bridge liquidity.",
+                      "tags": [
+                        "synapse",
+                        "amm"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "syn-rewards",
+                          "name": "SYN Token Rewards",
+                          "description": "Synapse token reward optimization.",
+                          "tags": [
+                            "syn",
+                            "rewards"
+                          ],
+                          "descriptionRef": "descriptions/defi_syn-rewards.md"
+                        },
+                        {
+                          "id": "nusd-pools",
+                          "name": "nUSD Pools",
+                          "description": "Synapse USD liquidity provision.",
+                          "tags": [
+                            "nusd",
+                            "synthetic"
+                          ],
+                          "descriptionRef": "descriptions/defi_nusd-pools.md"
+                        },
+                        {
+                          "id": "cross-chain-swaps",
+                          "name": "Cross-Chain Swaps",
+                          "description": "Facilitating cross-chain token swaps.",
+                          "tags": [
+                            "swaps",
+                            "facilitation"
+                          ],
+                          "descriptionRef": "descriptions/defi_cross-chain-swaps.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_synapse-protocol.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/defi_bridge-liquidity.md"
+                }
+              ],
+              "descriptionRef": "descriptions/defi_cross-chain-liquidity.md"
+            },
+            {
+              "id": "full-range-liquidity",
+              "name": "Full Range Liquidity",
+              "description": "Traditional AMM liquidity provision across full price range.",
+              "tags": [
+                "full-range",
+                "traditional"
+              ],
+              "nodes": [
+                {
+                  "id": "stable-pairs",
+                  "name": "Stable Pair Strategies",
+                  "description": "Low-risk liquidity provision in stable pairs.",
+                  "tags": [
+                    "stable",
+                    "low-risk"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "usdc-usdt",
+                      "name": "USDC/USDT Pools",
+                      "description": "High-volume stablecoin pair liquidity.",
+                      "tags": [
+                        "usdc",
+                        "usdt"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "curve-pools",
+                          "name": "Curve Finance Pools",
+                          "description": "Stable swap curve pools.",
+                          "tags": [
+                            "curve",
+                            "stableswap"
+                          ],
+                          "descriptionRef": "descriptions/defi_curve-pools.md"
+                        },
+                        {
+                          "id": "balancer-stable",
+                          "name": "Balancer Stable Pools",
+                          "description": "Weighted stable pools on Balancer.",
+                          "tags": [
+                            "balancer",
+                            "weighted"
+                          ],
+                          "descriptionRef": "descriptions/defi_balancer-stable.md"
+                        },
+                        {
+                          "id": "uniswap-stable",
+                          "name": "Uniswap Stable Pairs",
+                          "description": "V2/V3 stable pair liquidity.",
+                          "tags": [
+                            "uniswap",
+                            "v2",
+                            "v3"
+                          ],
+                          "descriptionRef": "descriptions/defi_uniswap-stable.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_usdc-usdt.md"
+                    },
+                    {
+                      "id": "dai-frax",
+                      "name": "DAI/FRAX Strategies",
+                      "description": "Decentralized stablecoin pair liquidity.",
+                      "tags": [
+                        "dai",
+                        "frax"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "maker-integration",
+                          "name": "MakerDAO Integration",
+                          "description": "DAI-specific liquidity strategies.",
+                          "tags": [
+                            "maker",
+                            "dai"
+                          ],
+                          "descriptionRef": "descriptions/defi_maker-integration.md"
+                        },
+                        {
+                          "id": "frax-share",
+                          "name": "FRAX Share Rewards",
+                          "description": "FXS token reward optimization.",
+                          "tags": [
+                            "fxs",
+                            "rewards"
+                          ],
+                          "descriptionRef": "descriptions/defi_frax-share.md"
+                        },
+                        {
+                          "id": "peg-maintenance",
+                          "name": "Peg Maintenance",
+                          "description": "Helping maintain stablecoin pegs.",
+                          "tags": [
+                            "peg",
+                            "stability"
+                          ],
+                          "descriptionRef": "descriptions/defi_peg-maintenance.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_dai-frax.md"
+                    },
+                    {
+                      "id": "lusd-strategies",
+                      "name": "LUSD Strategies",
+                      "description": "Liquity USD liquidity provision.",
+                      "tags": [
+                        "lusd",
+                        "liquity"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "stability-pool",
+                          "name": "Stability Pool",
+                          "description": "LUSD stability pool participation.",
+                          "tags": [
+                            "stability",
+                            "liquidation"
+                          ],
+                          "descriptionRef": "descriptions/defi_stability-pool.md"
+                        },
+                        {
+                          "id": "lusd-eth",
+                          "name": "LUSD/ETH Pairs",
+                          "description": "LUSD paired with ETH liquidity.",
+                          "tags": [
+                            "eth",
+                            "pairing"
+                          ],
+                          "descriptionRef": "descriptions/defi_lusd-eth.md"
+                        },
+                        {
+                          "id": "lqty-rewards",
+                          "name": "LQTY Reward Optimization",
+                          "description": "Maximizing LQTY token rewards.",
+                          "tags": [
+                            "lqty",
+                            "optimization"
+                          ],
+                          "descriptionRef": "descriptions/defi_lqty-rewards.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_lusd-strategies.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/defi_stable-pairs.md"
+                }
+              ],
+              "descriptionRef": "descriptions/defi_full-range-liquidity.md"
+            }
+          ],
+          "leafnodes": [
+            {
+              "id": "article-1770668345469",
+              "name": "f",
+              "description": "f",
+              "tags": [
+                "f"
+              ],
+              "content": "f",
+              "bodySections": [],
+              "images": [],
+              "createdAt": "2026-02-09T20:19:05.469Z",
+              "isArticle": true
+            }
+          ],
+          "descriptionRef": "descriptions/defi_liquidity-provisioning.md"
+        },
+        {
+          "id": "lending-borrowing",
+          "name": "Lending & Borrowing",
+          "description": "# Lending & Borrowing\r\n\r\n**ID:** lending-borrowing\r\n**Path:** defi > lending-borrowing\r\n\r\n## Description\r\n\r\nCredit markets and collateralized borrowing.\r\n\r\n## Tags\r\n\r\n- lending\r\n- borrowing\r\n",
+          "tags": [
+            "lending",
+            "borrowing"
+          ],
+          "subcategories": [
+            {
+              "id": "overcollateralized-loans",
+              "name": "Overcollateralized Loans",
+              "description": "Loans backed by excess collateral.",
+              "tags": [
+                "cdp",
+                "stablecoin"
+              ],
+              "nodes": [
+                {
+                  "id": "stablecoin-minting",
+                  "name": "Stablecoin Minting (CDPs)",
+                  "description": "Minting stablecoins via collateralized debt.",
+                  "tags": [
+                    "maker",
+                    "cdp"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "loop-farming",
+                      "name": "Recursive Loop Farming",
+                      "description": "Leveraging collateral recursively.",
+                      "tags": [
+                        "leverage"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "eth-loop",
+                          "name": "ETH Recursive Loops",
+                          "description": "ETH collateral recursive strategies.",
+                          "tags": [
+                            "eth",
+                            "recursive"
+                          ],
+                          "descriptionRef": "descriptions/defi_eth-loop.md"
+                        },
+                        {
+                          "id": "steth-loop",
+                          "name": "stETH Loop Strategies",
+                          "description": "Liquid staking recursive farming.",
+                          "tags": [
+                            "steth",
+                            "liquid-staking"
+                          ],
+                          "descriptionRef": "descriptions/defi_steth-loop.md"
+                        },
+                        {
+                          "id": "wbtc-loop",
+                          "name": "WBTC Loop Farming",
+                          "description": "Bitcoin collateral loop strategies.",
+                          "tags": [
+                            "wbtc",
+                            "bitcoin"
+                          ],
+                          "descriptionRef": "descriptions/defi_wbtc-loop.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_loop-farming.md"
+                    },
+                    {
+                      "id": "rate-arbitrage",
+                      "name": "Interest Rate Arbitrage",
+                      "description": "Borrow low, lend high across protocols.",
+                      "tags": [
+                        "rates"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "aave-compound",
+                          "name": "Aave-Compound Arbitrage",
+                          "description": "Rate differences between major protocols.",
+                          "tags": [
+                            "aave",
+                            "compound"
+                          ],
+                          "descriptionRef": "descriptions/defi_aave-compound.md"
+                        },
+                        {
+                          "id": "maker-rates",
+                          "name": "MakerDAO Rate Optimization",
+                          "description": "Optimizing DAI borrowing rates.",
+                          "tags": [
+                            "maker",
+                            "dai"
+                          ],
+                          "descriptionRef": "descriptions/defi_maker-rates.md"
+                        },
+                        {
+                          "id": "curve-rates",
+                          "name": "Curve Lending Rates",
+                          "description": "Curve finance lending optimization.",
+                          "tags": [
+                            "curve",
+                            "lending"
+                          ],
+                          "descriptionRef": "descriptions/defi_curve-rates.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_rate-arbitrage.md"
+                    },
+                    {
+                      "id": "flash-loans",
+                      "name": "Flash Loan Execution",
+                      "description": "Atomic uncollateralized borrowing.",
+                      "tags": [
+                        "flashloan"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "liquidation-flash",
+                          "name": "Flash Loan Liquidations",
+                          "description": "Using flash loans for liquidations.",
+                          "tags": [
+                            "liquidation",
+                            "atomic"
+                          ],
+                          "descriptionRef": "descriptions/defi_liquidation-flash.md"
+                        },
+                        {
+                          "id": "arbitrage-flash",
+                          "name": "Flash Loan Arbitrage",
+                          "description": "Risk-free arbitrage with flash loans.",
+                          "tags": [
+                            "arbitrage",
+                            "risk-free"
+                          ],
+                          "descriptionRef": "descriptions/defi_arbitrage-flash.md"
+                        },
+                        {
+                          "id": "collateral-swap",
+                          "name": "Collateral Swapping",
+                          "description": "Atomic collateral type changes.",
+                          "tags": [
+                            "collateral",
+                            "swap"
+                          ],
+                          "descriptionRef": "descriptions/defi_collateral-swap.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/defi_flash-loans.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/defi_stablecoin-minting.md"
+                }
+              ],
+              "descriptionRef": "descriptions/defi_overcollateralized-loans.md"
+            }
+          ],
+          "descriptionRef": "descriptions/defi_lending-borrowing.md"
+        }
+      ],
+      "descriptionRef": "descriptions/defi_defi.md",
+      "_source": {
+        "branchId": "defi",
+        "file": "branches/branch_defi.json"
+      }
+    },
+    {
+      "id": "gaming-socialfi",
+      "name": "Gaming & SocialFi",
+      "description": "The 2026 digital hustle landscape, integrating social graph monetization and AI-driven play-to-airdrop automation.",
+      "tags": [
+        "gamefi",
+        "socialfi",
+        "farcaster",
+        "metaverse"
+      ],
+      "descriptionRef": "descriptions/gaming-socialfi_gaming-socialfi.md",
+      "categories": [
+        {
+          "id": "gamefi-economies",
+          "name": "GameFi Economies & Mechanical Extraction",
+          "description": "# GameFi Economies & Mechanical Extraction\r\n\r\n**ID:** gamefi-economies\r\n**Path:** gaming-socialfi > gamefi-economies\r\n\r\n## Description\r\n\r\nExploiting in-game financial loops and asset-based cash flow.\r\n\r\n## Tags\r\n\r\n- gaming-roi\r\n- nft-utility\r\n",
+          "tags": [
+            "gaming-roi",
+            "nft-utility"
+          ],
+          "subcategories": [
+            {
+              "id": "asset-scholarship",
+              "name": "Asset Scholarship & Renting",
+              "description": "Yield generation through the distribution of high-value gaming assets to active players.",
+              "tags": [
+                "scholarship",
+                "renting"
+              ],
+              "nodes": [
+                {
+                  "id": "nft-lending",
+                  "name": "NFT Lending for Players",
+                  "description": "Providing collateral-free NFT loans via smart contract escrow (ERC-4907).",
+                  "tags": [
+                    "lending",
+                    "erc4907"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "resource-extraction",
+                      "name": "Resource Extraction Grinding",
+                      "description": "Coordinating player guilds to farm specific high-demand raw materials for crafting economies.",
+                      "tags": [
+                        "farming",
+                        "crafting"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "marketplace-flipping",
+                          "name": "In-game Marketplace Flipping",
+                          "description": "Arbitraging item price gaps between regional game servers and web-based secondary markets.",
+                          "tags": [
+                            "arbitrage",
+                            "flipping"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_marketplace-flipping.md"
+                        },
+                        {
+                          "id": "esports-betting",
+                          "name": "Esports Betting & Tournaments",
+                          "description": "Staking on internal matches or winning community-funded prize pools via skill-based execution.",
+                          "tags": [
+                            "esports",
+                            "betting"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_esports-betting.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_resource-extraction.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_nft-lending.md"
+                },
+                {
+                  "id": "guild-mgmt-systems",
+                  "name": "Guild Management Systems",
+                  "description": "Infrastructure for scaling multi-game operations and player analytics.",
+                  "tags": [
+                    "guilds",
+                    "dao"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "cross-game-portability",
+                      "name": "Cross-Game Asset Portability",
+                      "description": "Arbitraging utility between games that share the same NFT standard or metaverse engine.",
+                      "tags": [
+                        "interoperability"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "yield-bearing-tooling",
+                          "name": "Yield-Bearing In-Game Tooling",
+                          "description": "Deploying automated bots to provide services (like healing or transport) to paying players.",
+                          "tags": [
+                            "service-economy"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_yield-bearing-tooling.md"
+                        },
+                        {
+                          "id": "auto-rent-rebalancing",
+                          "name": "Automated Rent Rebalancing",
+                          "description": "Algorithmic adjustment of rental rates based on live in-game token inflation/deflation.",
+                          "tags": [
+                            "algorithmic-rent"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_auto-rent-rebalancing.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_cross-game-portability.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_guild-mgmt-systems.md"
+                }
+              ],
+              "descriptionRef": "descriptions/gaming-socialfi_asset-scholarship.md"
+            }
+          ],
+          "descriptionRef": "descriptions/gaming-socialfi_gamefi-economies.md"
+        },
+        {
+          "id": "socialfi-networks",
+          "name": "SocialFi Networks & Creator Arbitrage",
+          "description": "# SocialFi Networks & Creator Arbitrage\r\n\r\n**ID:** socialfi-networks\r\n**Path:** gaming-socialfi > socialfi-networks\r\n\r\n## Description\r\n\r\nTokenizing social influence and interactive content modules.\r\n\r\n## Tags\r\n\r\n- social-graph\r\n- farcaster\r\n- monetization\r\n",
+          "tags": [
+            "social-graph",
+            "farcaster",
+            "monetization"
+          ],
+          "subcategories": [
+            {
+              "id": "creator-keys-shares",
+              "name": "Creator Keys & Shares",
+              "description": "Speculating on the value of personal influence and community access.",
+              "tags": [
+                "keys",
+                "friend-tech"
+              ],
+              "nodes": [
+                {
+                  "id": "farcaster-frame-dev",
+                  "name": "Farcaster Frame Development",
+                  "description": "Building interactive 'mini-apps' directly within social feeds for instant on-chain actions.",
+                  "tags": [
+                    "frames",
+                    "farcaster"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "friendtech-trading",
+                      "name": "Friend.tech Style Trading",
+                      "description": "High-frequency sniping of 'creator keys' using bonding curve sentiment analysis.",
+                      "tags": [
+                        "sniping",
+                        "bonding-curve"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "tip-to-earn-mechanics",
+                          "name": "Tip-to-Earn Mechanics",
+                          "description": "Exploiting 'Proof of Engagement' rewards by generating high-signal social content.",
+                          "tags": [
+                            "engagement",
+                            "rewards"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_tip-to-earn-mechanics.md"
+                        },
+                        {
+                          "id": "community-gated-content",
+                          "name": "Community Gated Content",
+                          "description": "Creating exclusive 'Frame-based' marketplaces only accessible to specific token holders.",
+                          "tags": [
+                            "gating",
+                            "exclusive"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_community-gated-content.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_friendtech-trading.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_farcaster-frame-dev.md"
+                },
+                {
+                  "id": "infofi-signal-markets",
+                  "name": "InfoFi Signal Markets",
+                  "description": "The convergence of information quality and financial reputation.",
+                  "tags": [
+                    "reputation",
+                    "infofi"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "prediction-based-gating",
+                      "name": "Prediction-Based Gating",
+                      "description": "Restricting social group access based on a user's past accuracy in prediction markets.",
+                      "tags": [
+                        "prediction",
+                        "reputation"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "reputation-linked-lending",
+                          "name": "Reputation-Linked Lending",
+                          "description": "Borrowing assets with lower collateral requirements by staking social graph reputation.",
+                          "tags": [
+                            "undercollateralized",
+                            "social-credit"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_reputation-linked-lending.md"
+                        },
+                        {
+                          "id": "social-graph-tokenization",
+                          "name": "Social Graph Tokenization",
+                          "description": "Selling fractional ownership of your future referral fees and social commissions.",
+                          "tags": [
+                            "fractionalization",
+                            "referrals"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_social-graph-tokenization.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_prediction-based-gating.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_infofi-signal-markets.md"
+                }
+              ],
+              "descriptionRef": "descriptions/gaming-socialfi_creator-keys-shares.md"
+            }
+          ],
+          "descriptionRef": "descriptions/gaming-socialfi_socialfi-networks.md"
+        },
+        {
+          "id": "metaverse-real-estate",
+          "name": "Metaverse Real Estate & Infrastructure",
+          "description": "# Metaverse Real Estate & Infrastructure\r\n\r\n**ID:** metaverse-real-estate\r\n**Path:** gaming-socialfi > metaverse-real-estate\r\n\r\n## Description\r\n\r\nDigital land ownership and spatial monetization strategies.\r\n\r\n## Tags\r\n\r\n- metaverse\r\n- land\r\n- spatial-web\r\n",
+          "tags": [
+            "metaverse",
+            "land",
+            "spatial-web"
+          ],
+          "subcategories": [
+            {
+              "id": "virtual-land-monetization",
+              "name": "Virtual Land Monetization",
+              "description": "Extracting value from high-traffic virtual coordinate points.",
+              "tags": [
+                "real-estate",
+                "advertising"
+              ],
+              "nodes": [
+                {
+                  "id": "digital-billboard-renting",
+                  "name": "Digital Billboard Renting",
+                  "description": "Leasing pixel space on virtual structures for brand placement and programmatic ads.",
+                  "tags": [
+                    "ads",
+                    "spatial-marketing"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "virtual-event-hosting",
+                      "name": "Virtual Event Hosting",
+                      "description": "Charging entry or vendor fees for digital concerts, AMAs, and product launches.",
+                      "tags": [
+                        "events",
+                        "ticketing"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "metaverse-architectural-services",
+                          "name": "Metaverse Architectural Services",
+                          "description": "Designing high-fidelity 3D environments and social hubs for corporations.",
+                          "tags": [
+                            "design",
+                            "3d-modeling"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_metaverse-architectural-services.md"
+                        },
+                        {
+                          "id": "avatar-wearable-design",
+                          "name": "Avatar Wearable Design",
+                          "description": "Creating and flipping limited-edition digital fashion and equipment.",
+                          "tags": [
+                            "fashion",
+                            "skin-market"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_avatar-wearable-design.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_virtual-event-hosting.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_digital-billboard-renting.md"
+                },
+                {
+                  "id": "spatial-compute-renting",
+                  "name": "Spatial Compute Renting",
+                  "description": "Renting land parcels to host decentralized AI agents or specialized NPC services.",
+                  "tags": [
+                    "ai",
+                    "hosting"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "ai-agent-npc-hosting",
+                      "name": "AI Agent NPC Hosting",
+                      "description": "Hosting autonomous NPCs that facilitate player trades or provide game-master services.",
+                      "tags": [
+                        "automation",
+                        "ai-npc"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "brand-showrooms",
+                          "name": "Interactive Brand Showrooms",
+                          "description": "Building playable mini-games for brands within a larger metaverse ecosystem.",
+                          "tags": [
+                            "marketing",
+                            "gamification"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_brand-showrooms.md"
+                        },
+                        {
+                          "id": "cross-platform-bridging",
+                          "name": "Cross-Platform Asset Bridging",
+                          "description": "Providing services that port 3D assets between Sandbox, Decentraland, and others.",
+                          "tags": [
+                            "bridging",
+                            "assets"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_cross-platform-bridging.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_ai-agent-npc-hosting.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_spatial-compute-renting.md"
+                }
+              ],
+              "descriptionRef": "descriptions/gaming-socialfi_virtual-land-monetization.md"
+            }
+          ],
+          "descriptionRef": "descriptions/gaming-socialfi_metaverse-real-estate.md"
+        },
+        {
+          "id": "play-to-airdrop",
+          "name": "Play-to-Airdrop & Sybil Ops",
+          "description": "# Play-to-Airdrop & Sybil Ops\r\n\r\n**ID:** play-to-airdrop\r\n**Path:** gaming-socialfi > play-to-airdrop\r\n\r\n## Description\r\n\r\nMaximizing token distribution through active engagement and account scaling.\r\n\r\n## Tags\r\n\r\n- airdrop\r\n- farming\r\n- grinding\r\n",
+          "tags": [
+            "airdrop",
+            "farming",
+            "grinding"
+          ],
+          "subcategories": [
+            {
+              "id": "seasonal-leaderboard",
+              "name": "Seasonal Leaderboard Grinding",
+              "description": "Securing top-tier reward allocations by out-competing other players in points races.",
+              "tags": [
+                "leaderboard",
+                "competitions"
+              ],
+              "nodes": [
+                {
+                  "id": "referral-multiplier",
+                  "name": "Referral Multiplier Stacking",
+                  "description": "Using social influence or automated loops to stack airdrop multipliers.",
+                  "tags": [
+                    "referral-sybil",
+                    "growth"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "multi-account-mgmt",
+                      "name": "Multi-Account Management",
+                      "description": "Operating account clusters with distinct fingerprints to avoid Sybil detection.",
+                      "tags": [
+                        "sybil",
+                        "privacy"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "automated-gameplay-scripts",
+                          "name": "Automated Gameplay Scripts",
+                          "description": "Using AI-vision or protocol-level bots to perform repetitive 'airdrop-eligible' tasks.",
+                          "tags": [
+                            "bots",
+                            "automation"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_automated-gameplay-scripts.md"
+                        },
+                        {
+                          "id": "reward-extraction-liquidation",
+                          "name": "Reward Extraction Liquidation",
+                          "description": "Real-time hedging of expected airdrop value using pre-market futures.",
+                          "tags": [
+                            "hedging",
+                            "pre-market"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_reward-extraction-liquidation.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_multi-account-mgmt.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_referral-multiplier.md"
+                },
+                {
+                  "id": "proof-of-play-validation",
+                  "name": "Proof of Play Validation",
+                  "description": "Bypassing biometric or behavior-based 'human' checks to scale automated farming.",
+                  "tags": [
+                    "anti-sybil",
+                    "bypass"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "anti-sybil-bypass",
+                      "name": "Anti-Sybil Resistance Bypass",
+                      "description": "Using residency proxies and AI-generated behavior patterns to mimic human players.",
+                      "tags": [
+                        "obfuscation"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "whale-tracking-social",
+                          "name": "Community-Driven Whale Tracking",
+                          "description": "Following high-value wallets to discover stealth-launched airdrop opportunities.",
+                          "tags": [
+                            "whale-watching"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_whale-tracking-social.md"
+                        },
+                        {
+                          "id": "early-alpha-flipping",
+                          "name": "Early-Access Alpha Flipping",
+                          "description": "Gaining access to closed betas and selling invitations or pre-leveled accounts.",
+                          "tags": [
+                            "access-flipping"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_early-alpha-flipping.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_anti-sybil-bypass.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_proof-of-play-validation.md"
+                }
+              ],
+              "descriptionRef": "descriptions/gaming-socialfi_seasonal-leaderboard.md"
+            }
+          ],
+          "descriptionRef": "descriptions/gaming-socialfi_play-to-airdrop.md"
+        },
+        {
+          "id": "social-daos",
+          "name": "Social DAOs & Collective Intelligence",
+          "description": "# Social DAOs & Collective Intelligence\r\n\r\n**ID:** social-daos\r\n**Path:** gaming-socialfi > social-daos\r\n\r\n## Description\r\n\r\nLeveraging group capital and governance for financial advantage.\r\n\r\n## Tags\r\n\r\n- dao\r\n- governance\r\n- treasury\r\n",
+          "tags": [
+            "dao",
+            "governance",
+            "treasury"
+          ],
+          "subcategories": [
+            {
+              "id": "membership-nft-gating",
+              "name": "Membership NFT Gating",
+              "description": "Accessing exclusive investment flow and tools via ownership of membership tokens.",
+              "tags": [
+                "exclusivity",
+                "alpha"
+              ],
+              "nodes": [
+                {
+                  "id": "alpha-group-trading",
+                  "name": "Alpha Group Access Trading",
+                  "description": "Flipping entry spots for top-tier gated DAOs and trading groups.",
+                  "tags": [
+                    "access",
+                    "flipping"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "shared-treasury-invest",
+                      "name": "Shared Treasury Investment",
+                      "description": "Co-investing with DAO members into seed-round deals or NFT mints.",
+                      "tags": [
+                        "co-investing",
+                        "vc"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "collaborative-mint-sniping",
+                          "name": "Collaborative Mint Sniping",
+                          "description": "Coordinating block-level buy orders with DAO members to sweep new collections.",
+                          "tags": [
+                            "sniping",
+                            "mints"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_collaborative-mint-sniping.md"
+                        },
+                        {
+                          "id": "dao-token-speculation",
+                          "name": "DAO Token Speculation",
+                          "description": "Trading governance tokens based on upcoming treasury-backed initiatives.",
+                          "tags": [
+                            "governance-spec"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_dao-token-speculation.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_shared-treasury-invest.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_alpha-group-trading.md"
+                },
+                {
+                  "id": "governance-weight-farming",
+                  "name": "Governance Weight Farming",
+                  "description": "Amassing voting power to influence DAO treasury outflows and grants.",
+                  "tags": [
+                    "voting-power",
+                    "grants"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "strategic-voting-delegation",
+                      "name": "Strategic Voting Delegation",
+                      "description": "Renting voting power to third parties for specific proposal outcomes.",
+                      "tags": [
+                        "bribery-markets",
+                        "delegation"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "proposal-bounties-execution",
+                          "name": "Proposal Bounties & Execution",
+                          "description": "Claiming treasury rewards for writing and passing specific DAO improvement proposals.",
+                          "tags": [
+                            "bounties"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_proposal-bounties-execution.md"
+                        },
+                        {
+                          "id": "treasury-arb-raids",
+                          "name": "Treasury Arbitrage & Exit Raids",
+                          "description": "Force-closing undervalued DAOs to liquidate the treasury to token holders.",
+                          "tags": [
+                            "raiding",
+                            "arbitrage"
+                          ],
+                          "descriptionRef": "descriptions/gaming-socialfi_treasury-arb-raids.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/gaming-socialfi_strategic-voting-delegation.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/gaming-socialfi_governance-weight-farming.md"
+                }
+              ],
+              "descriptionRef": "descriptions/gaming-socialfi_membership-nft-gating.md"
+            }
+          ],
+          "descriptionRef": "descriptions/gaming-socialfi_social-daos.md"
+        }
+      ],
+      "_source": {
+        "branchId": "gaming-socialfi",
+        "file": "branches/branch_gaming-socialfi.json"
+      }
+    },
+    {
+      "id": "speculation-arbitrage",
+      "name": "Speculation & The Arbitrage Totality",
+      "description": "Advanced mechanical alpha exploiting market inefficiencies across execution layers and platforms.",
+      "tags": [
+        "arbitrage",
+        "mev",
+        "alpha",
+        "high-frequency"
+      ],
+      "descriptionRef": "descriptions/speculation-arbitrage_speculation-arbitrage.md",
+      "categories": [
+        {
+          "id": "mev-execution",
+          "name": "MEV & Execution Infrastructure",
+          "description": "# MEV & Execution Infrastructure\r\n\r\n**ID:** mev-execution\r\n**Path:** speculation-arbitrage > mev-execution\r\n\r\n## Description\r\n\r\nExploiting the block production pipeline and mempool transparency.\r\n\r\n## Tags\r\n\r\n- mev\r\n- validators\r\n- mempool\r\n",
+          "tags": [
+            "mev",
+            "validators",
+            "mempool"
+          ],
+          "subcategories": [
+            {
+              "id": "validator-level-arb",
+              "name": "Validator-Level Arbitrage",
+              "description": "Direct extraction via consensus layer influence and block space control.",
+              "tags": [
+                "consensus",
+                "infrastructure"
+              ],
+              "nodes": [
+                {
+                  "id": "mev-boost-relays",
+                  "name": "MEV-Boost & Private Relays",
+                  "description": "Routing through BloXroute, Flashbots, or Jito to bypass public mempools.",
+                  "tags": [
+                    "relays",
+                    "private-tx"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "block-building-strategy",
+                      "name": "Block Building Strategy",
+                      "description": "Optimizing transaction order for maximum extracted value within a single slot.",
+                      "tags": [
+                        "builder",
+                        "searcher"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "inclusion-list-manipulation",
+                          "name": "Inclusion List Manipulation",
+                          "description": "Exploiting forced inclusion mechanics to trigger or delay specific contract calls.",
+                          "tags": [
+                            "censorship-resistance",
+                            "logic-manipulation"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_inclusion-list-manipulation.md"
+                        },
+                        {
+                          "id": "jit-liquidity-injection",
+                          "name": "JIT (Just-In-Time) Liquidity Injection",
+                          "description": "Adding and removing liquidity in the same block to capture swap fees with zero price risk.",
+                          "tags": [
+                            "uniswap-v3",
+                            "lp-sniping"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_jit-liquidity-injection.md"
+                        },
+                        {
+                          "id": "builder-searcher-integration",
+                          "name": "Builder-Searcher Vertical Integration",
+                          "description": "Internalizing the entire flow from searcher logic to block proposal to eliminate competition.",
+                          "tags": [
+                            "vertical-integration",
+                            "monopoly-alpha"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_builder-searcher-integration.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/speculation-arbitrage_block-building-strategy.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/speculation-arbitrage_mev-boost-relays.md"
+                }
+              ],
+              "descriptionRef": "descriptions/speculation-arbitrage_validator-level-arb.md"
+            },
+            {
+              "id": "mempool-forensics",
+              "name": "Mempool Forensics",
+              "description": "Real-time analysis of pending transactions to predict and exploit market moves.",
+              "tags": [
+                "forensics",
+                "data-streaming"
+              ],
+              "nodes": [
+                {
+                  "id": "backrunning-logic",
+                  "name": "Backrunning Logic",
+                  "description": "Executing trades immediately after large 'oracle' or 'whale' transactions.",
+                  "tags": [
+                    "automation",
+                    "latency"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "atomic-triangular-arb",
+                      "name": "Atomic DEX-to-DEX Triangular Arb",
+                      "description": "Multi-step swaps within one block to exploit price gaps between different AMMs.",
+                      "tags": [
+                        "atomic",
+                        "dex-arb"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "sandwich-resilience-tuning",
+                          "name": "Sandwich Attack Resilience Tuning",
+                          "description": "Optimizing slippage and gas to remain invisible to generic sandwich bots.",
+                          "tags": [
+                            "security",
+                            "stealth"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_sandwich-resilience-tuning.md"
+                        },
+                        {
+                          "id": "private-rpc-routing",
+                          "name": "Private RPC/Marlin Protocol Routing",
+                          "description": "Utilizing Marlin or specialized RPCs to gain a millisecond edge on propagation.",
+                          "tags": [
+                            "networking",
+                            "low-latency"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_private-rpc-routing.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/speculation-arbitrage_atomic-triangular-arb.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/speculation-arbitrage_backrunning-logic.md"
+                }
+              ],
+              "descriptionRef": "descriptions/speculation-arbitrage_mempool-forensics.md"
+            }
+          ],
+          "descriptionRef": "descriptions/speculation-arbitrage_mev-execution.md"
+        },
+        {
+          "id": "cross-chain-intents",
+          "name": "Cross-Chain Intent & Solver Dynamics",
+          "description": "# Cross-Chain Intent & Solver Dynamics\r\n\r\n**ID:** cross-chain-intents\r\n**Path:** speculation-arbitrage > cross-chain-intents\r\n\r\n## Description\r\n\r\nThe evolution of bridging: competing for user outcomes rather than just moving tokens.\r\n\r\n## Tags\r\n\r\n- intents\r\n- solvers\r\n- interoperability\r\n",
+          "tags": [
+            "intents",
+            "solvers",
+            "interoperability"
+          ],
+          "subcategories": [
+            {
+              "id": "outcome-based-settlement",
+              "name": "Outcome-Based Settlement",
+              "description": "Strategies revolving around CoW Swap, UniswapX, and specialized fillers.",
+              "tags": [
+                "settlement",
+                "liquidity"
+              ],
+              "nodes": [
+                {
+                  "id": "solver-competition",
+                  "name": "Solver Competition (CoW/UniswapX)",
+                  "description": "Competing in auctions to fulfill user intents with off-chain liquidity.",
+                  "tags": [
+                    "auctions",
+                    "solver"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "batch-auction-optimization",
+                      "name": "Batch Auction Optimization",
+                      "description": "Grouping multiple user intents to find 'Coincidence of Wants' for risk-free profit.",
+                      "tags": [
+                        "batching",
+                        "efficiency"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "cow-discovery",
+                          "name": "Coincidence of Wants (CoW) Discovery",
+                          "description": "Matching internal orders to bypass DEX fees entirely.",
+                          "tags": [
+                            "matching-engine"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_cow-discovery.md"
+                        },
+                        {
+                          "id": "gas-free-bundling",
+                          "name": "Gas-Free Transaction Bundling",
+                          "description": "Using meta-transactions to hide execution costs from the final settlement price.",
+                          "tags": [
+                            "meta-tx"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_gas-free-bundling.md"
+                        },
+                        {
+                          "id": "multi-chain-co-settlement",
+                          "name": "Multi-Chain Co-Settlement Logic",
+                          "description": "Simultaneously resolving intents across L1 and L2 to unlock fragmented liquidity.",
+                          "tags": [
+                            "cross-domain"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_multi-chain-co-settlement.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/speculation-arbitrage_batch-auction-optimization.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/speculation-arbitrage_solver-competition.md"
+                }
+              ],
+              "descriptionRef": "descriptions/speculation-arbitrage_outcome-based-settlement.md"
+            },
+            {
+              "id": "liquidity-rebalancing-lr",
+              "name": "Liquidity Rebalancing (LR)",
+              "description": "Arbitraging the flow of assets between bridge vaults and intent-based systems.",
+              "tags": [
+                "rebalancing",
+                "bridge-arb"
+              ],
+              "nodes": [
+                {
+                  "id": "bridge-imbalance-harvesting",
+                  "name": "Bridge Imbalance Harvesting",
+                  "description": "Identifying protocols that pay 'rebalancing rewards' for moving funds to depleted chains.",
+                  "tags": [
+                    "stargate",
+                    "across"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "across-protocol-solving",
+                      "name": "Across Protocol Intent Solving",
+                      "description": "Acting as a relayer for the Across protocol to capture the spread on cross-chain fills.",
+                      "tags": [
+                        "relayer",
+                        "alpha"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "intent-solving-logic",
+                          "name": "Across Protocol Intent Solving (Logic)",
+                          "description": "Algorithmic selection of cross-chain intents with the highest payout-to-risk ratio.",
+                          "tags": [
+                            "automation"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_intent-solving-logic.md"
+                        },
+                        {
+                          "id": "native-asset-rewards",
+                          "name": "Native-Asset Rebalancing Rewards",
+                          "description": "Earning protocol incentives for stabilizing cross-chain asset pegs.",
+                          "tags": [
+                            "pegs"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_native-asset-rewards.md"
+                        },
+                        {
+                          "id": "zero-tvl-lp",
+                          "name": "Zero-TVL Liquidity Provision (deBridge)",
+                          "description": "Providing 'intent' without locking capital, by using flash-swaps on the destination chain.",
+                          "tags": [
+                            "debridge",
+                            "flash-liquidity"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_zero-tvl-lp.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/speculation-arbitrage_across-protocol-solving.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/speculation-arbitrage_bridge-imbalance-harvesting.md"
+                }
+              ],
+              "descriptionRef": "descriptions/speculation-arbitrage_liquidity-rebalancing-lr.md"
+            }
+          ],
+          "descriptionRef": "descriptions/speculation-arbitrage_cross-chain-intents.md"
+        },
+        {
+          "id": "prediction-event-arb",
+          "name": "Prediction Market & Event Arbitrage",
+          "description": "# Prediction Market & Event Arbitrage\r\n\r\n**ID:** prediction-event-arb\r\n**Path:** speculation-arbitrage > prediction-event-arb\r\n\r\n## Description\r\n\r\nExploiting information lag and platform-specific odds discrepancies.\r\n\r\n## Tags\r\n\r\n- prediction-markets\r\n- polymarket\r\n- hedging\r\n",
+          "tags": [
+            "prediction-markets",
+            "polymarket",
+            "hedging"
+          ],
+          "subcategories": [
+            {
+              "id": "info-convergence",
+              "name": "Information Convergence",
+              "description": "Detecting price discovery on social platforms before it hits the order books.",
+              "tags": [
+                "sentiment",
+                "social-signal"
+              ],
+              "nodes": [
+                {
+                  "id": "synthetic-odds-hedging",
+                  "name": "Synthetic Odds Hedging",
+                  "description": "Creating delta-neutral positions across competing prediction venues.",
+                  "tags": [
+                    "hedging",
+                    "market-neutral"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "polymarket-kalshi-spreads",
+                      "name": "Polymarket vs. Kalshi Spreads",
+                      "description": "Exploiting the price difference between crypto-native and regulated prediction markets.",
+                      "tags": [
+                        "cross-platform",
+                        "regulatory-arb"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "regulatory-gating-arb",
+                          "name": "Regulatory Gating Arbitrage",
+                          "description": "Arbitraging access-restricted markets by monitoring global vs regional odds.",
+                          "tags": [
+                            "compliance-arb"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_regulatory-gating-arb.md"
+                        },
+                        {
+                          "id": "oracle-refresh-exploitation",
+                          "name": "Oracle Refresh Rate Exploitation",
+                          "description": "Trading against stale oracle data during rapid real-world event shifts.",
+                          "tags": [
+                            "oracle-lag"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_oracle-refresh-exploitation.md"
+                        },
+                        {
+                          "id": "sentiment-lag-analysis",
+                          "name": "Cross-Platform Sentiment Lag Analysis",
+                          "description": "Using X/TikTok data clusters to front-run sentiment shifts on Polymarket.",
+                          "tags": [
+                            "nlp",
+                            "social-arb"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_sentiment-lag-analysis.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/speculation-arbitrage_polymarket-kalshi-spreads.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/speculation-arbitrage_synthetic-odds-hedging.md"
+                }
+              ],
+              "descriptionRef": "descriptions/speculation-arbitrage_info-convergence.md"
+            },
+            {
+              "id": "event-lifecycle",
+              "name": "Event Lifecycle Exploitation",
+              "description": "Arbitraging the period between an event occurring and the official market resolution.",
+              "tags": [
+                "resolution",
+                "event-trading"
+              ],
+              "nodes": [
+                {
+                  "id": "resolution-criteria-arb",
+                  "name": "Resolution Criteria Arbitrage",
+                  "description": "Finding edge cases in market rules where one outcome is technically certain but unpriced.",
+                  "tags": [
+                    "legal-arb"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "info-asymmetry-leaks",
+                      "name": "Information Asymmetry (X/TikTok Leaks)",
+                      "description": "Monitoring niche communities for 'ground truth' reports ahead of mainstream news.",
+                      "tags": [
+                        "leaks",
+                        "intelligence"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "liquidity-mining-prediction",
+                          "name": "Liquidity Mining for Prediction Pools",
+                          "description": "Capturing LP rewards in prediction markets while hedging the underlying outcome.",
+                          "tags": [
+                            "yield"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_liquidity-mining-prediction.md"
+                        },
+                        {
+                          "id": "legging-risk-management",
+                          "name": "Legging Risk Management (Dynamic Hedging)",
+                          "description": "Advanced algorithms to manage the exposure time when entering multi-leg arb trades.",
+                          "tags": [
+                            "risk-management"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_legging-risk-management.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/speculation-arbitrage_info-asymmetry-leaks.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/speculation-arbitrage_resolution-criteria-arb.md"
+                }
+              ],
+              "descriptionRef": "descriptions/speculation-arbitrage_event-lifecycle.md"
+            }
+          ],
+          "descriptionRef": "descriptions/speculation-arbitrage_prediction-event-arb.md"
+        },
+        {
+          "id": "yield-derivative-arb",
+          "name": "Yield & Derivative Arbitrage",
+          "description": "# Yield & Derivative Arbitrage\r\n\r\n**ID:** yield-derivative-arb\r\n**Path:** speculation-arbitrage > yield-derivative-arb\r\n\r\n## Description\r\n\r\nCapturing the spread between spot, futures, and liquid staking tokens.\r\n\r\n## Tags\r\n\r\n- derivatives\r\n- basis-trading\r\n- lst\r\n",
+          "tags": [
+            "derivatives",
+            "basis-trading",
+            "lst"
+          ],
+          "subcategories": [
+            {
+              "id": "capital-efficiency-loops",
+              "name": "Capital Efficiency Loops",
+              "description": "Maximizing ROI on staked assets through recursive borrowing and peg exploitation.",
+              "tags": [
+                "restaking",
+                "leverage"
+              ],
+              "nodes": [
+                {
+                  "id": "lst-lrt-arb",
+                  "name": "Liquid Staking (LST) & Restaking (LRT)",
+                  "description": "Strategies for EigenLayer, Symbiotic, and Lido ecosystem assets.",
+                  "tags": [
+                    "eigenlayer",
+                    "lrt"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "peg-stability-arb",
+                      "name": "Peg-Stability Arbitrage (stETH/ETH)",
+                      "description": "Buying LSTs during mass-depeg events to capture the mean reversion to 1:1.",
+                      "tags": [
+                        "pegs",
+                        "mean-reversion"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "leveraged-lrt-farming",
+                          "name": "Leveraged LRT Farming (EigenLayer/Symbiotic)",
+                          "description": "Looping LRTs to multiply points and yield while monitoring liquidation thresholds.",
+                          "tags": [
+                            "points-farming"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_leveraged-lrt-farming.md"
+                        },
+                        {
+                          "id": "secondary-market-sniping",
+                          "name": "Secondary Market Discount Sniping",
+                          "description": "Finding discounted LST/LRT positions in secondary markets (Pendle/Curve).",
+                          "tags": [
+                            "pendle",
+                            "discounts"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_secondary-market-sniping.md"
+                        },
+                        {
+                          "id": "slash-protection-hedging",
+                          "name": "Slash-Protection Insurance Hedging",
+                          "description": "Arbitraging the cost of validator insurance against the actual risk of slashing.",
+                          "tags": [
+                            "insurance",
+                            "risk"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_slash-protection-hedging.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/speculation-arbitrage_peg-stability-arb.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/speculation-arbitrage_lst-lrt-arb.md"
+                }
+              ],
+              "descriptionRef": "descriptions/speculation-arbitrage_capital-efficiency-loops.md"
+            },
+            {
+              "id": "funding-rate-harvesting",
+              "name": "Funding Rate Harvesting",
+              "description": "Capturing the difference in cost-of-carry between centralized and decentralized venues.",
+              "tags": [
+                "funding-rates",
+                "basis"
+              ],
+              "nodes": [
+                {
+                  "id": "cex-dex-basis",
+                  "name": "CEX-to-DEX Basis Trading",
+                  "description": "Exploiting the delta between Binance/OKX funding and Hyperliquid/dYdX rates.",
+                  "tags": [
+                    "hyperliquid",
+                    "perps"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "delta-neutral-yield",
+                      "name": "Delta-Neutral Yield Extraction",
+                      "description": "Simultaneous long spot / short perp positions to farm high funding rates safely.",
+                      "tags": [
+                        "delta-neutral"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "perps-to-spot-funding",
+                          "name": "Perps-to-Spot Funding Arb",
+                          "description": "Exploiting periods where spot premium exceeds perp funding costs.",
+                          "tags": [
+                            "premium-arb"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_perps-to-spot-funding.md"
+                        },
+                        {
+                          "id": "cross-venue-margin",
+                          "name": "Cross-Venue Margin Utilization",
+                          "description": "Using unified margin accounts to execute arbitrage with minimal collateral drag.",
+                          "tags": [
+                            "efficiency",
+                            "margin"
+                          ],
+                          "descriptionRef": "descriptions/speculation-arbitrage_cross-venue-margin.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/speculation-arbitrage_delta-neutral-yield.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/speculation-arbitrage_cex-dex-basis.md"
+                }
+              ],
+              "descriptionRef": "descriptions/speculation-arbitrage_funding-rate-harvesting.md"
+            }
+          ],
+          "descriptionRef": "descriptions/speculation-arbitrage_yield-derivative-arb.md"
+        }
+      ],
+      "_source": {
+        "branchId": "speculation-arbitrage",
+        "file": "branches/branch_speculation-arbitrage.json"
+      }
+    },
+    {
+      "id": "governance-security",
+      "name": "Governance & Security (The Meta-Hustle)",
+      "description": "High-trust professional roles in the institutional Web3 era, focusing on strategic oversight, defensive auditing, and regulatory alignment.",
+      "tags": [
+        "governance",
+        "security",
+        "auditing",
+        "compliance"
+      ],
+      "descriptionRef": "descriptions/governance_security_governance-security.md",
+      "categories": [
+        {
+          "id": "strategic-dao-participation",
+          "name": "Strategic DAO Participation & Delegation",
+          "description": "Exerting influence and extracting value through governance leadership and treasury oversight.",
+          "tags": [
+            "dao",
+            "delegation",
+            "treasury"
+          ],
+          "subcategories": [
+            {
+              "id": "governance-delegate-roles",
+              "name": "Governance Delegate Roles",
+              "description": "Acting as a representative for token holders to steer protocol direction.",
+              "tags": [
+                "delegate",
+                "voting"
+              ],
+              "nodes": [
+                {
+                  "id": "paid-delegate-programs",
+                  "name": "Paid Delegate Programs",
+                  "description": "Securing official compensation from DAO treasuries for active participation and voting.",
+                  "tags": [
+                    "compensation",
+                    "governance-ops"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "proposal-drafting-services",
+                      "name": "Proposal Drafting Services",
+                      "description": "Authoring technical and economic improvement proposals (EIPs/TIPs) for protocols.",
+                      "tags": [
+                        "proposal-writer"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "dao-treasury-management",
+                          "name": "DAO Treasury Management",
+                          "description": "Consulting on asset allocation and yield-farming strategies for DAO-controlled funds.",
+                          "tags": [
+                            "asset-management"
+                          ]
+                        },
+                        {
+                          "id": "grant-writing-acquisition",
+                          "name": "Grant Writing & Acquisition",
+                          "description": "Navigating ecosystem funds to secure non-dilutive capital for development and research.",
+                          "tags": [
+                            "grants",
+                            "funding"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "gaas-provisioning",
+                  "name": "Governance-as-a-Service (GaaS)",
+                  "description": "Professionalizing governance through outsourced expertise and automated tools.",
+                  "tags": [
+                    "gaas",
+                    "outsourcing"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "liquid-governance-proxying",
+                      "name": "Liquid Governance Proxying",
+                      "description": "Creating secondary markets for voting power without selling underlying assets.",
+                      "tags": [
+                        "voting-power"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "cross-protocol-voting-strategy",
+                          "name": "Cross-Protocol Voting Strategy",
+                          "description": "Coordinating votes across multiple DAOs to maximize synergy in a modular ecosystem.",
+                          "tags": [
+                            "strategic-voting"
+                          ]
+                        },
+                        {
+                          "id": "automated-proposal-simulation",
+                          "name": "Automated Proposal Simulation",
+                          "description": "Using digital twins to predict the economic impact of governance changes before voting.",
+                          "tags": [
+                            "simulation",
+                            "risk-mitigation"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cyber-security-resilience",
+          "name": "Cyber-Security & Protocol Resilience",
+          "description": "Offensive and defensive strategies to secure on-chain assets and infrastructure.",
+          "tags": [
+            "security",
+            "auditing",
+            "red-teaming"
+          ],
+          "subcategories": [
+            {
+              "id": "bug-bounty-hunting",
+              "name": "Bug Bounty Hunting",
+              "description": "Identifying and responsibly disclosing vulnerabilities in smart contracts and protocols.",
+              "tags": [
+                "immunefi",
+                "white-hat"
+              ],
+              "nodes": [
+                {
+                  "id": "immunefi-protocol-audits",
+                  "name": "Immunefi Protocol Audits",
+                  "description": "Engaging in structured audit contests and high-stakes vulnerability research.",
+                  "tags": [
+                    "auditing",
+                    "bug-bounty"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "white-hat-exploit-reporting",
+                      "name": "White-hat Exploit Reporting",
+                      "description": "Developing proof-of-concept exploits to verify critical flaws and claim bounties.",
+                      "tags": [
+                        "poc",
+                        "exploit"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "formal-verification-services",
+                          "name": "Formal Verification Services",
+                          "description": "Using mathematical proofs to guarantee code correctness and security properties.",
+                          "tags": [
+                            "math-security"
+                          ]
+                        },
+                        {
+                          "id": "smart-contract-monitoring",
+                          "name": "Smart Contract Monitoring",
+                          "description": "Deploying real-time sentinel bots to detect and pause contracts during attacks.",
+                          "tags": [
+                            "monitoring",
+                            "sentinel"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "offensive-sec-red-teaming",
+                  "name": "Offensive Security & Red Teaming",
+                  "description": "Simulating sophisticated attacks to stress-test protocol defenses and team responses.",
+                  "tags": [
+                    "red-team",
+                    "simulated-attack"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "phishing-sim-defense",
+                      "name": "Phishing Simulation & Defense",
+                      "description": "Testing community and team resilience against social engineering and front-end hacks.",
+                      "tags": [
+                        "social-engineering"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "flash-loan-scans",
+                          "name": "Flash Loan Vulnerability Scans",
+                          "description": "Automated scanning for price-manipulation vectors and logical edge cases.",
+                          "tags": [
+                            "flash-loans"
+                          ]
+                        },
+                        {
+                          "id": "real-time-incident-response",
+                          "name": "Real-time Incident Response",
+                          "description": "Professional 'war room' coordination for multi-signature recovery and emergency pausing.",
+                          "tags": [
+                            "emergency-ops"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "compliance-legal-services",
+          "name": "Institutional Compliance & On-Chain Legal",
+          "description": "Navigating the intersection of decentralized technology and global regulatory frameworks.",
+          "tags": [
+            "legal",
+            "compliance",
+            "mica"
+          ],
+          "subcategories": [
+            {
+              "id": "onchain-identity-verification",
+              "name": "On-chain Identity Verification",
+              "description": "Developing and integrating sybil-resistant identity layers for regulated dApps.",
+              "tags": [
+                "kyc",
+                "aml",
+                "identity"
+              ],
+              "nodes": [
+                {
+                  "id": "kyc-aml-integration",
+                  "name": "KYC/AML Integration for Protocols",
+                  "description": "Building privacy-preserving compliance gates using zero-knowledge proofs.",
+                  "tags": [
+                    "zk-kyc",
+                    "compliance-gate"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "institutional-onboarding-tools",
+                      "name": "Institutional On-boarding Tools",
+                      "description": "Creating the stack required for traditional finance (TradFi) to enter DeFi safely.",
+                      "tags": [
+                        "tradfi-onramp"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "tax-reporting-automation",
+                          "name": "Tax Reporting Automation",
+                          "description": "Solving the complexity of cost-basis and gain reporting for high-frequency on-chain activity.",
+                          "tags": [
+                            "tax-tech"
+                          ]
+                        },
+                        {
+                          "id": "regulatory-sandbox-participation",
+                          "name": "Regulatory Sandbox Participation",
+                          "description": "Liaising with regulators to pilot innovative financial products in controlled environments.",
+                          "tags": [
+                            "sandbox",
+                            "policy"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "mica-dora-advisory",
+                  "name": "MiCA/DORA Compliance Advisory",
+                  "description": "Consulting for European crypto-asset service providers on resilience and licensing.",
+                  "tags": [
+                    "mica",
+                    "regulation"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "proof-of-reserves-auditing",
+                      "name": "Proof-of-Reserves (PoR) Auditing",
+                      "description": "Verifying CEX and protocol solvency via cryptographic attestation of on-chain holdings.",
+                      "tags": [
+                        "solvency",
+                        "attestation"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "tokenized-legal-wrappers",
+                          "name": "Tokenized Asset Legal Wrappers",
+                          "description": "Constructing the legal frameworks for Real World Assets (RWA) and on-chain debt.",
+                          "tags": [
+                            "rwa-legal"
+                          ]
+                        },
+                        {
+                          "id": "jurisdictional-arb-consulting",
+                          "name": "Jurisdictional Arbitrage Consulting",
+                          "description": "Identifying the optimal global locations for protocol entities and treasury operations.",
+                          "tags": [
+                            "tax-arbitrage"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "_source": {
+        "branchId": "governance-security",
+        "file": "branches/branch_governance-security.json"
+      }
+    },
+    {
+      "id": "modular-chain-abstraction",
+      "name": "Modular Ecosystems & Chain Abstraction",
+      "description": "Strategies for the post-fragmentation era: leveraging Intent-Solving, Blob-Space Arbitrage, and Shared Security across L2/L3 stacks.",
+      "tags": [
+        "modular",
+        "chain-abstraction",
+        "intents",
+        "restaking"
+      ],
+      "descriptionRef": "descriptions/modular-chain-abstraction_modular-chain-abstraction.md",
+      "categories": [
+        {
+          "id": "interop-intent-commerce",
+          "name": "Interoperability & Intent-Based Commerce",
+          "description": "# Interoperability & Intent-Based Commerce\r\n\r\n**ID:** interop-intent-commerce\r\n**Path:** modular-chain-abstraction > interop-intent-commerce\r\n\r\n## Description\r\n\r\nMoving away from manual bridging toward declarative, outcome-oriented transaction execution.\r\n\r\n## Tags\r\n\r\n- interop\r\n- solvers\r\n- ccip\r\n",
+          "tags": [
+            "interop",
+            "solvers",
+            "ccip"
+          ],
+          "subcategories": [
+            {
+              "id": "interoperability-hubs",
+              "name": "Interoperability Hubs",
+              "description": "Core protocols enabling the movement of data and value between sovereign environments.",
+              "tags": [
+                "layerzero",
+                "wormhole"
+              ],
+              "nodes": [
+                {
+                  "id": "cross-chain-messaging",
+                  "name": "Cross-Chain Message Passing (CCIP/LayerZero)",
+                  "description": "Maintaining state consistency across multiple chains via secure messaging relays.",
+                  "tags": [
+                    "messaging",
+                    "state-sync"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "intent-solvers",
+                      "name": "Intent-Based Solvers (Filler Networks)",
+                      "description": "Operating as a 'solver' to fulfill user-desired outcomes for a fee using private inventory.",
+                      "tags": [
+                        "solver",
+                        "jit-liquidity"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "cross-chain-liq-aggregation",
+                          "name": "Cross-Chain Liquidity Aggregation",
+                          "description": "Consolidating fragmented pools into a single virtual liquidity source for large-scale trades.",
+                          "tags": [
+                            "aggregation",
+                            "liquidity"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_cross-chain-liq-aggregation.md"
+                        },
+                        {
+                          "id": "gas-abstraction-paymasters",
+                          "name": "Gas Abstraction Services (Paymasters)",
+                          "description": "Running paymaster nodes that allow users to pay gas in any ERC-20 token or via off-chain credit.",
+                          "tags": [
+                            "gasless",
+                            "paymaster"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_gas-abstraction-paymasters.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/modular-chain-abstraction_intent-solvers.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/modular-chain-abstraction_cross-chain-messaging.md"
+                }
+              ],
+              "descriptionRef": "descriptions/modular-chain-abstraction_interoperability-hubs.md"
+            }
+          ],
+          "descriptionRef": "descriptions/modular-chain-abstraction_interop-intent-commerce.md"
+        },
+        {
+          "id": "rollup-raas-economy",
+          "name": "Modular Rollup Stacks & RaaS Economy",
+          "description": "# Modular Rollup Stacks & RaaS Economy\r\n\r\n**ID:** rollup-raas-economy\r\n**Path:** modular-chain-abstraction > rollup-raas-economy\r\n\r\n## Description\r\n\r\nMonetizing the deployment and maintenance of application-specific execution layers.\r\n\r\n## Tags\r\n\r\n- raas\r\n- app-chains\r\n- l3\r\n",
+          "tags": [
+            "raas",
+            "app-chains",
+            "l3"
+          ],
+          "subcategories": [
+            {
+              "id": "modular-rollup-stacks",
+              "name": "Modular Rollup Stacks",
+              "description": "Frameworks like OP Stack, Arbitrum Orbit, and ZK Stack for deploying custom L2s/L3s.",
+              "tags": [
+                "op-stack",
+                "orbit"
+              ],
+              "nodes": [
+                {
+                  "id": "raas-launching",
+                  "name": "Rollup-as-a-Service (RaaS / AltLayer)",
+                  "description": "Deploying and managing turn-key rollup solutions for third-party protocols.",
+                  "tags": [
+                    "deployment",
+                    "infrastructure"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "app-chain-launching",
+                      "name": "App-Chain Deployment & Launching",
+                      "description": "Customizing L3s for specific use cases like high-frequency trading or social media.",
+                      "tags": [
+                        "appchains"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "sequencer-rev-share",
+                          "name": "Sequencer Revenue Sharing",
+                          "description": "Capturing a percentage of transaction fees from managed rollup sequencers.",
+                          "tags": [
+                            "sequencing",
+                            "revenue"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_sequencer-rev-share.md"
+                        },
+                        {
+                          "id": "custom-execution-env",
+                          "name": "Custom Execution Environments",
+                          "description": "Building and selling specialized VMs (MoveVM, SolVM) for modular rollups.",
+                          "tags": [
+                            "virtual-machines"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_custom-execution-env.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/modular-chain-abstraction_app-chain-launching.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/modular-chain-abstraction_raas-launching.md"
+                },
+                {
+                  "id": "specialized-l3-hyperchains",
+                  "name": "Specialized L3 'Hyper-Chains'",
+                  "description": "High-performance layers built on top of L2s for ultra-low latency.",
+                  "tags": [
+                    "l3",
+                    "hyperchains"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "hft-rollups",
+                      "name": "High-Frequency Trading Rollups",
+                      "description": "Developing rollups optimized for millisecond execution and zero-latency orderbooks.",
+                      "tags": [
+                        "trading",
+                        "latency"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "privacy-zk-stacks",
+                          "name": "Privacy-Preserving ZK-Stacks",
+                          "description": "Operating ZK-Rollups that offer native transaction privacy for institutional clients.",
+                          "tags": [
+                            "privacy",
+                            "zkp"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_privacy-zk-stacks.md"
+                        },
+                        {
+                          "id": "focg-engines",
+                          "name": "Fully On-Chain Game (FOCG) Engines",
+                          "description": "Providing specialized execution for persistent, high-tick-rate gaming states.",
+                          "tags": [
+                            "gaming",
+                            "engine"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_focg-engines.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/modular-chain-abstraction_hft-rollups.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/modular-chain-abstraction_specialized-l3-hyperchains.md"
+                }
+              ],
+              "descriptionRef": "descriptions/modular-chain-abstraction_modular-rollup-stacks.md"
+            }
+          ],
+          "descriptionRef": "descriptions/modular-chain-abstraction_rollup-raas-economy.md"
+        },
+        {
+          "id": "da-blob-arbitrage",
+          "name": "Data Availability (DA) & Blob Arbitrage",
+          "description": "# Data Availability (DA) & Blob Arbitrage\r\n\r\n**ID:** da-blob-arbitrage\r\n**Path:** modular-chain-abstraction > da-blob-arbitrage\r\n\r\n## Description\r\n\r\nThe economy of storing and verifying blockchain transaction data efficiently.\r\n\r\n## Tags\r\n\r\n- celestia\r\n- blob-space\r\n- eip-4844\r\n",
+          "tags": [
+            "celestia",
+            "blob-space",
+            "eip-4844"
+          ],
+          "subcategories": [
+            {
+              "id": "da-optimization",
+              "name": "Data Availability (DA) Optimization",
+              "description": "Reducing the cost of data posting for rollups while maintaining security.",
+              "tags": [
+                "data-availability"
+              ],
+              "nodes": [
+                {
+                  "id": "off-chain-da-solutions",
+                  "name": "Off-chain DA Solutions (Celestia/Avail)",
+                  "description": "Participating in specialized DA networks to offer cheaper data storage than Ethereum Mainnet.",
+                  "tags": [
+                    "da-layer",
+                    "sampling"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "da-committee-participation",
+                      "name": "DA Committee Participation",
+                      "description": "Staking tokens to join Data Availability Committees (DACs) and earn validation fees.",
+                      "tags": [
+                        "validation",
+                        "dac"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "blob-space-arbitrage",
+                          "name": "Blob Space Arbitrage (EIP-4844)",
+                          "description": "Buying and selling blob space futures to hedge against L2 congestion spikes.",
+                          "tags": [
+                            "arbitrage",
+                            "futures"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_blob-space-arbitrage.md"
+                        },
+                        {
+                          "id": "light-client-sampling",
+                          "name": "Light Client Sampling Rewards",
+                          "description": "Running light nodes that perform data availability sampling to secure the network.",
+                          "tags": [
+                            "light-nodes"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_light-client-sampling.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/modular-chain-abstraction_da-committee-participation.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/modular-chain-abstraction_off-chain-da-solutions.md"
+                },
+                {
+                  "id": "da-backed-content",
+                  "name": "DA-Backed Content Integrity",
+                  "description": "Using DA layers to provide permanent, verifiable proof of digital media and archives.",
+                  "tags": [
+                    "immutability"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "immutability-as-a-service",
+                      "name": "Immutability-as-a-Service (IaaS)",
+                      "description": "Guaranteeing the long-term storage of sensitive institutional data via DA proofs.",
+                      "tags": [
+                        "service"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "forensic-data-reconstruction",
+                          "name": "Forensic Data Reconstruction Pools",
+                          "description": "Incentivized networks that reconstruct lost rollup state from historical blobs.",
+                          "tags": [
+                            "recovery"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_forensic-data-reconstruction.md"
+                        },
+                        {
+                          "id": "archive-incentive-nodes",
+                          "name": "Long-Term Archive Incentive Nodes",
+                          "description": "Earning rewards for maintaining full historical archives of modular rollup data.",
+                          "tags": [
+                            "archiving"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_archive-incentive-nodes.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/modular-chain-abstraction_immutability-as-a-service.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/modular-chain-abstraction_da-backed-content.md"
+                }
+              ],
+              "descriptionRef": "descriptions/modular-chain-abstraction_da-optimization.md"
+            }
+          ],
+          "descriptionRef": "descriptions/modular-chain-abstraction_da-blob-arbitrage.md"
+        },
+        {
+          "id": "shared-security-restaking",
+          "name": "Shared Security & Restaking Markets",
+          "description": "# Shared Security & Restaking Markets\r\n\r\n**ID:** shared-security-restaking\r\n**Path:** modular-chain-abstraction > shared-security-restaking\r\n\r\n## Description\r\n\r\nThe 'Security-as-a-Service' economy powered by EigenLayer and Symbiotic.\r\n\r\n## Tags\r\n\r\n- restaking\r\n- shared-security\r\n- avs\r\n",
+          "tags": [
+            "restaking",
+            "shared-security",
+            "avs"
+          ],
+          "subcategories": [
+            {
+              "id": "shared-security-models",
+              "name": "Shared Security Models",
+              "description": "Exporting the economic security of major networks like Ethereum to other services.",
+              "tags": [
+                "eigenlayer"
+              ],
+              "nodes": [
+                {
+                  "id": "mesh-security-delegation",
+                  "name": "Mesh Security Delegation (EigenLayer/Symbiotic)",
+                  "description": "Delegating restaked ETH to secure multiple Actively Validated Services (AVS).",
+                  "tags": [
+                    "delegation",
+                    "yield-stacking"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "cross-chain-validator-sets",
+                      "name": "Cross-Chain Validator Sets",
+                      "description": "Participating in validation for multi-chain networks using a single collateral source.",
+                      "tags": [
+                        "validation"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "slashing-insurance-products",
+                          "name": "Slashing Insurance Products",
+                          "description": "Offering insurance to restakers against inadvertent slashing events in AVS.",
+                          "tags": [
+                            "insurance",
+                            "risk"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_slashing-insurance-products.md"
+                        },
+                        {
+                          "id": "security-lease-markets",
+                          "name": "Security Lease Markets",
+                          "description": "Marketplaces where new chains 'rent' crypto-economic security from established pools.",
+                          "tags": [
+                            "renting"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_security-lease-markets.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/modular-chain-abstraction_cross-chain-validator-sets.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/modular-chain-abstraction_mesh-security-delegation.md"
+                },
+                {
+                  "id": "actively-validated-services",
+                  "name": "Actively Validated Services (AVS)",
+                  "description": "Operating the specific software (oracles, bridges) that runs on restaked security.",
+                  "tags": [
+                    "software-ops"
+                  ],
+                  "subnodes": [
+                    {
+                      "id": "oracle-network-restaking",
+                      "name": "Oracle Network Restaking",
+                      "description": "Restaking to provide high-integrity, decentralized data feeds with slashing guarantees.",
+                      "tags": [
+                        "oracles"
+                      ],
+                      "leafnodes": [
+                        {
+                          "id": "fast-finality-attestation",
+                          "name": "Fast-Finality Bridge Attestation",
+                          "description": "Using AVS to provide economic guarantees for fast bridge withdrawals.",
+                          "tags": [
+                            "finality"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_fast-finality-attestation.md"
+                        },
+                        {
+                          "id": "caas-nodes",
+                          "name": "Compliance-as-a-Service (CaaS) Nodes",
+                          "description": "Running validator nodes that automatically verify transaction compliance for institutional chains.",
+                          "tags": [
+                            "compliance"
+                          ],
+                          "descriptionRef": "descriptions/modular-chain-abstraction_caas-nodes.md"
+                        }
+                      ],
+                      "descriptionRef": "descriptions/modular-chain-abstraction_oracle-network-restaking.md"
+                    }
+                  ],
+                  "descriptionRef": "descriptions/modular-chain-abstraction_actively-validated-services.md"
+                }
+              ],
+              "descriptionRef": "descriptions/modular-chain-abstraction_shared-security-models.md"
+            }
+          ],
+          "descriptionRef": "descriptions/modular-chain-abstraction_shared-security-restaking.md"
+        }
+      ],
+      "_source": {
+        "branchId": "modular-chain-abstraction",
+        "file": "branches/branch_modular-chain-abstraction.json"
+      }
+    },
+    {
+      "id": "speculation-alpha",
+      "name": "Speculation & Alpha Exploration",
+      "description": "# Speculation & Alpha Exploration\r\n\r\n**ID:** speculation-alpha\r\n**Path:** speculation-alpha\r\n\r\n## Description\r\n\r\nAdvanced strategies for generating alpha through speculative trading and market opportunities.\r\n\r\n## Tags\r\n\r\n- cryptocurrency\r\n- trading\r\n- defi\r\n\r\n\r\n## The Bigger Picture\r\n\r\nThe Speculation & Alpha Exploration branch is not merely about getting rich fast; it\r\nis a philosophical framework that treats information asymmetry, timing, and capital\r\nallocation as weapons. Deep dives into chain data, social sentiment, and off-chain\r\nintel are daily bread for participants.\r\n\r\n### Why this branch matters\r\n\r\nWhile yield farming and DeFi focus on the supply side of opportunities, speculation\r\naddresses the demand side: where will the next wave of capital flow? By mastering\r\nthis branch, hustlers learn to anticipate not only price moves but entire market\r\nregimes.\r\n",
+      "tags": [
+        "cryptocurrency",
+        "trading",
+        "defi"
+      ],
+      "descriptionRef": "descriptions/speculation-alpha.md",
+      "children": [
+        {
+          "id": "airdrop-farming",
+          "name": "Airdrop Farming",
+          "description": "Systematic approach to earning potential airdrops through protocol interaction and ecosystem participation.",
+          "tags": [
+            "airdrop",
+            "farming",
+            "ecosystem"
+          ],
+          "descriptionRef": "descriptions/speculation-alpha_airdrop-farming.md",
+          "children": [
+            {
+              "id": "protocol-interaction",
+              "name": "Protocol Interaction",
+              "description": "Strategic engagement with DeFi protocols to maximize airdrop eligibility through meaningful usage.",
+              "tags": [
+                "protocols",
+                "interaction",
+                "defi"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_protocol-interaction.md",
+              "children": [
+                {
+                  "id": "cross-chain-volume-mining",
+                  "name": "Cross-Chain Volume Mining",
+                  "description": "Generating transaction volume across multiple blockchain networks to qualify for cross-chain protocol airdrops.",
+                  "tags": [
+                    "cross-chain",
+                    "volume",
+                    "mining"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_cross-chain-volume-mining.md",
+                  "children": [
+                    {
+                      "id": "mainnet-bridge-volume",
+                      "name": "Mainnet Bridge Volume (Official & Third-Party)",
+                      "description": "Utilizing official and third-party bridges to generate meaningful cross-chain transaction volume.",
+                      "tags": [
+                        "bridges",
+                        "mainnet",
+                        "volume"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_mainnet-bridge-volume.md",
+                      "children": [
+                        {
+                          "id": "uam-retention",
+                          "name": "Unique Active Months (UAM) Retention",
+                          "description": "Maintaining consistent monthly activity to meet airdrop eligibility criteria based on user retention metrics.",
+                          "tags": [
+                            "retention",
+                            "activity",
+                            "metrics"
+                          ],
+                          "descriptionRef": "descriptions/speculation-alpha_uam-retention.md",
+                          "children": [
+                            {
+                              "id": "tiered-sybil-resistance",
+                              "name": "Tiered Sybil-Resistance Verification",
+                              "description": "Progressive verification levels to prove authentic user behavior and avoid sybil detection mechanisms.",
+                              "tags": [
+                                "sybil",
+                                "verification",
+                                "resistance"
+                              ],
+                              "descriptionRef": "descriptions/speculation-alpha_tiered-sybil-resistance.md"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "ecosystem-reputation",
+                  "name": "Ecosystem Reputation Building",
+                  "description": "Establishing authentic on-chain identity and reputation within DeFi ecosystems for enhanced airdrop eligibility.",
+                  "tags": [
+                    "reputation",
+                    "identity",
+                    "ecosystem"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_ecosystem-reputation.md",
+                  "children": [
+                    {
+                      "id": "dev-airdrop-deployment",
+                      "name": "Contract Deployment (Developer-Specific Airdrops)",
+                      "description": "Deploying smart contracts and interacting with protocols to qualify for developer-focused airdrop programs.",
+                      "tags": [
+                        "development",
+                        "contracts",
+                        "airdrops"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_dev-airdrop-deployment.md",
+                      "children": [
+                        {
+                          "id": "governance-engagement",
+                          "name": "Governance Engagement (Snapshot/On-Chain Voting)",
+                          "description": "Active participation in protocol governance through voting and proposal engagement to demonstrate commitment.",
+                          "tags": [
+                            "governance",
+                            "voting",
+                            "snapshot"
+                          ],
+                          "descriptionRef": "descriptions/speculation-alpha_governance-engagement.md",
+                          "children": [
+                            {
+                              "id": "onchain-identity-attestation",
+                              "name": "Social Proof & On-Chain Identity Attestation",
+                              "description": "Building verifiable on-chain identity through social connections and protocol attestations.",
+                              "tags": [
+                                "identity",
+                                "attestation",
+                                "social-proof"
+                              ],
+                              "descriptionRef": "descriptions/speculation-alpha_onchain-identity-attestation.md"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "memecoin-hustling",
+          "name": "Memecoin Hustling",
+          "description": "Strategic trading and participation in meme coin ecosystems for speculative gains and early entry opportunities.",
+          "tags": [
+            "memecoins",
+            "speculation",
+            "trading"
+          ],
+          "descriptionRef": "descriptions/speculation-alpha_memecoin-hustling.md",
+          "children": [
+            {
+              "id": "execution-sniping",
+              "name": "Execution & Sniping",
+              "description": "Rapid execution strategies for early entry into promising token launches and liquidity events.",
+              "tags": [
+                "execution",
+                "sniping",
+                "speed"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_execution-sniping.md",
+              "children": [
+                {
+                  "id": "launchpad-monitoring",
+                  "name": "Launchpad Monitoring (Pump.fun/Moonshot)",
+                  "description": "Real-time monitoring of token launchpads for early identification of high-potential projects.",
+                  "tags": [
+                    "launchpads",
+                    "monitoring",
+                    "pump-fun"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_launchpad-monitoring.md",
+                  "children": [
+                    {
+                      "id": "bonding-curve-entry",
+                      "name": "Bonding Curve Early Entry (First 5 Transactions)",
+                      "description": "Positioning within the first transactions of bonding curve launches for maximum upside potential.",
+                      "tags": [
+                        "bonding-curves",
+                        "early-entry",
+                        "positioning"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_bonding-curve-entry.md",
+                      "children": [
+                        {
+                          "id": "custom-rpc-speed",
+                          "name": "Custom RPC Node Execution (Speed-Meta)",
+                          "description": "Using optimized RPC nodes and infrastructure for transaction speed advantages in competitive launches.",
+                          "tags": [
+                            "rpc",
+                            "speed",
+                            "infrastructure"
+                          ],
+                          "descriptionRef": "descriptions/speculation-alpha_custom-rpc-speed.md",
+                          "children": [
+                            {
+                              "id": "liquidity-lock-verification",
+                              "name": "Anti-Rug Liquidity Lock Verification",
+                              "description": "Rapid verification of liquidity locks and contract security to avoid rug pull scenarios.",
+                              "tags": [
+                                "security",
+                                "liquidity-locks",
+                                "verification"
+                              ],
+                              "descriptionRef": "descriptions/speculation-alpha_liquidity-lock-verification.md"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "narrative-sentiment-analysis",
+                  "name": "Narrative & Sentiment Analysis",
+                  "description": "Analyzing social media sentiment and narrative trends to identify emerging meme coin opportunities.",
+                  "tags": [
+                    "sentiment",
+                    "narratives",
+                    "analysis"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_narrative-sentiment-analysis.md",
+                  "children": [
+                    {
+                      "id": "viral-social-tracking",
+                      "name": "Viral TikTok/X Sentiment Tracking",
+                      "description": "Monitoring viral content and social media platforms for early signals of meme coin momentum.",
+                      "tags": [
+                        "social-tracking",
+                        "viral",
+                        "tiktok"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_viral-social-tracking.md",
+                      "children": [
+                        {
+                          "id": "dev-wallet-bundle",
+                          "name": "Developer Wallet Bundle Detection",
+                          "description": "Identifying developer wallet clusters and insider activity patterns for early project insights.",
+                          "tags": [
+                            "wallets",
+                            "developers",
+                            "insider"
+                          ],
+                          "descriptionRef": "descriptions/speculation-alpha_dev-wallet-bundle.md",
+                          "children": [
+                            {
+                              "id": "ai-agent-heatmaps",
+                              "name": "AI-Agent Mention Heatmaps",
+                              "description": "Tracking AI agent mentions and automated trading signals for market sentiment analysis.",
+                              "tags": [
+                                "ai-agents",
+                                "heatmaps",
+                                "signals"
+                              ],
+                              "descriptionRef": "descriptions/speculation-alpha_ai-agent-heatmaps.md"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "prediction-markets",
+          "name": "Prediction Markets",
+          "description": "Strategic participation in prediction markets for alpha generation through information arbitrage.",
+          "tags": [
+            "prediction-markets",
+            "arbitrage",
+            "information"
+          ],
+          "descriptionRef": "descriptions/speculation-alpha_prediction-markets.md",
+          "children": [
+            {
+              "id": "delta-neutral-arbitrage",
+              "name": "Delta-Neutral Arbitrage",
+              "description": "Market-neutral strategies exploiting price discrepancies across prediction market platforms.",
+              "tags": [
+                "delta-neutral",
+                "arbitrage",
+                "market-neutral"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_delta-neutral-arbitrage.md",
+              "children": [
+                {
+                  "id": "cross-platform-hedging",
+                  "name": "Cross-Platform Odds Hedging",
+                  "description": "Simultaneous positioning across multiple prediction platforms to capture spread opportunities.",
+                  "tags": [
+                    "hedging",
+                    "cross-platform",
+                    "spreads"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_cross-platform-hedging.md",
+                  "children": [
+                    {
+                      "id": "polymarket-kalshi-spread",
+                      "name": "Polymarket vs. Kalshi Spread Capture",
+                      "description": "Exploiting pricing differences between Polymarket and Kalshi for risk-free profits.",
+                      "tags": [
+                        "polymarket",
+                        "kalshi",
+                        "spreads"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_polymarket-kalshi-spread.md",
+                      "children": [
+                        {
+                          "id": "yes-no-volume-mining",
+                          "name": "Yes/No Delta-Neutral Volume Mining",
+                          "description": "Generating volume through balanced yes/no positions to qualify for market maker rewards.",
+                          "tags": [
+                            "volume-mining",
+                            "market-making",
+                            "rewards"
+                          ],
+                          "descriptionRef": "descriptions/speculation-alpha_yes-no-volume-mining.md"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "event-rule-arbitrage",
+                  "name": "Event Rule Arbitrage",
+                  "description": "Exploiting rule differences between prediction platforms for systematic advantages.",
+                  "tags": [
+                    "rules",
+                    "arbitrage",
+                    "platforms"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_event-rule-arbitrage.md",
+                  "children": [
+                    {
+                      "id": "market-liquidity-provisioning",
+                      "name": "Market Liquidity Provisioning",
+                      "description": "Providing liquidity to prediction markets while hedging positions for fee capture.",
+                      "tags": [
+                        "liquidity",
+                        "provisioning",
+                        "fees"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_market-liquidity-provisioning.md"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "information-arbitrage",
+          "name": "Information Arbitrage",
+          "description": "Capitalizing on information asymmetries across markets and platforms for profitable trading opportunities.",
+          "tags": [
+            "information",
+            "arbitrage",
+            "asymmetry"
+          ],
+          "descriptionRef": "descriptions/speculation-alpha_information-arbitrage.md",
+          "children": [
+            {
+              "id": "niche-market-amm-mining",
+              "name": "Niche Market AMM Mining",
+              "description": "Identifying and exploiting inefficiencies in less-known automated market makers.",
+              "tags": [
+                "niche-markets",
+                "amm",
+                "mining"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_niche-market-amm-mining.md",
+              "children": [
+                {
+                  "id": "jurisdictional-legal-arb",
+                  "name": "Jurisdictional Legal Arbitrage",
+                  "description": "Exploiting regulatory differences across jurisdictions for trading advantages.",
+                  "tags": [
+                    "jurisdiction",
+                    "legal",
+                    "arbitrage"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_jurisdictional-legal-arb.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "token-launchpads",
+          "name": "Token Launchpads",
+          "description": "Strategic participation in token launch platforms for early access to high-potential projects.",
+          "tags": [
+            "launchpads",
+            "ido",
+            "early-access"
+          ],
+          "descriptionRef": "descriptions/speculation-alpha_token-launchpads.md",
+          "children": [
+            {
+              "id": "strategic-ido-participation",
+              "name": "Strategic IDO Participation",
+              "description": "Selective participation in initial DEX offerings based on project quality and market conditions.",
+              "tags": [
+                "ido",
+                "participation",
+                "strategy"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_strategic-ido-participation.md",
+              "children": [
+                {
+                  "id": "capital-allocation-strategy",
+                  "name": "Capital Allocation Strategy",
+                  "description": "Optimizing capital deployment across multiple launch opportunities for risk-adjusted returns.",
+                  "tags": [
+                    "capital",
+                    "allocation",
+                    "strategy"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_capital-allocation-strategy.md",
+                  "children": [
+                    {
+                      "id": "tier-staking-optimization",
+                      "name": "Tier Staking Optimization",
+                      "description": "Maximizing allocation tiers through strategic staking and platform engagement.",
+                      "tags": [
+                        "staking",
+                        "tiers",
+                        "optimization"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_tier-staking-optimization.md"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "whitelist-spot-flipping",
+              "name": "Whitelist Spot Flipping",
+              "description": "Capitalizing on whitelist arbitrage opportunities by securing spots and trading allocations.",
+              "tags": [
+                "whitelist",
+                "arbitrage",
+                "flipping"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_whitelist-spot-flipping.md",
+              "children": [
+                {
+                  "id": "refund-policy-exploitation",
+                  "name": "Refund Policy Exploitation",
+                  "description": "Understanding and utilizing platform refund policies for risk mitigation in launch participation.",
+                  "tags": [
+                    "refunds",
+                    "policies",
+                    "risk-mitigation"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_refund-policy-exploitation.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "access-sybil-management",
+          "name": "Access & Sybil Management",
+          "description": "Managing multiple identities and access methods for optimal launch participation.",
+          "tags": [
+            "access",
+            "sybil",
+            "management"
+          ],
+          "descriptionRef": "descriptions/speculation-alpha_access-sybil-management.md",
+          "children": [
+            {
+              "id": "governance-gating-access",
+              "name": "Governance Gating Access",
+              "description": "Navigating governance-based access controls for exclusive launch opportunities.",
+              "tags": [
+                "governance",
+                "access",
+                "gating"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_governance-gating-access.md",
+              "children": [
+                {
+                  "id": "multi-account-pooling",
+                  "name": "Multi-Account Pooling",
+                  "description": "Coordinating multiple accounts for increased allocation probabilities.",
+                  "tags": [
+                    "multi-account",
+                    "pooling",
+                    "coordination"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_multi-account-pooling.md"
+                }
+              ]
+            },
+            {
+              "id": "venture-daos-retail-access",
+              "name": "Venture DAOs Retail Access",
+              "description": "Gaining retail access to venture DAO deals and exclusive investment opportunities.",
+              "tags": [
+                "venture",
+                "daos",
+                "retail-access"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_venture-daos-retail-access.md"
+            }
+          ]
+        },
+        {
+          "id": "intelligence-forensics",
+          "name": "Intelligence & Forensics",
+          "description": "Advanced on-chain analysis and intelligence gathering for predictive trading advantages.",
+          "tags": [
+            "intelligence",
+            "forensics",
+            "analysis"
+          ],
+          "descriptionRef": "descriptions/speculation-alpha_intelligence-forensics.md",
+          "children": [
+            {
+              "id": "smart-money-tracking",
+              "name": "Smart Money Tracking",
+              "description": "Monitoring and following sophisticated trading patterns for market insights.",
+              "tags": [
+                "smart-money",
+                "tracking",
+                "insights"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_smart-money-tracking.md",
+              "children": [
+                {
+                  "id": "wallet-monitoring-alerting",
+                  "name": "Wallet Monitoring & Alerting",
+                  "description": "Real-time monitoring of key wallets for trading signals and opportunities.",
+                  "tags": [
+                    "monitoring",
+                    "alerts",
+                    "wallets"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_wallet-monitoring-alerting.md",
+                  "children": [
+                    {
+                      "id": "whale-inflow-outflow-alerts",
+                      "name": "Whale Inflow/Outflow Alerts",
+                      "description": "Tracking large wallet movements for market impact prediction.",
+                      "tags": [
+                        "whales",
+                        "inflow",
+                        "outflow"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_whale-inflow-outflow-alerts.md"
+                    }
+                  ]
+                },
+                {
+                  "id": "vc-fund-distribution-tracking",
+                  "name": "VC Fund Distribution Tracking",
+                  "description": "Monitoring venture capital fund distributions for early investment opportunities.",
+                  "tags": [
+                    "vc",
+                    "distributions",
+                    "tracking"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_vc-fund-distribution-tracking.md",
+                  "children": [
+                    {
+                      "id": "smart-money-copy-trading",
+                      "name": "Smart Money Copy Trading",
+                      "description": "Automated copying of successful trading strategies from identified smart money addresses.",
+                      "tags": [
+                        "copy-trading",
+                        "automation",
+                        "strategies"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_smart-money-copy-trading.md"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "investigative-forensics",
+              "name": "Investigative Forensics",
+              "description": "Deep on-chain investigation for uncovering alpha-generating information.",
+              "tags": [
+                "investigative",
+                "forensics",
+                "alpha"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_investigative-forensics.md",
+              "children": [
+                {
+                  "id": "insider-mint-detection",
+                  "name": "Insider Mint Detection",
+                  "description": "Identifying potential insider trading through early mint and transfer patterns.",
+                  "tags": [
+                    "insider",
+                    "detection",
+                    "patterns"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_insider-mint-detection.md",
+                  "children": [
+                    {
+                      "id": "exchange-inflow-frontrunning",
+                      "name": "Exchange Inflow Frontrunning",
+                      "description": "Positioning ahead of known exchange inflows from insider information.",
+                      "tags": [
+                        "frontrunning",
+                        "exchanges",
+                        "inflows"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_exchange-inflow-frontrunning.md"
+                    }
+                  ]
+                },
+                {
+                  "id": "stolen-asset-blacklist",
+                  "name": "Stolen Asset Blacklist",
+                  "description": "Maintaining and utilizing blacklists of stolen assets for risk management.",
+                  "tags": [
+                    "blacklist",
+                    "stolen-assets",
+                    "risk-management"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_stolen-asset-blacklist.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "yield-delta-exploration",
+          "name": "Yield & Delta Exploration",
+          "description": "Advanced yield farming and delta-neutral strategies for consistent returns.",
+          "tags": [
+            "yield",
+            "delta",
+            "exploration"
+          ],
+          "descriptionRef": "descriptions/speculation-alpha_yield-delta-exploration.md",
+          "children": [
+            {
+              "id": "synthetic-asset-yields",
+              "name": "Synthetic Asset Yields",
+              "description": "Generating yield through synthetic asset positions and strategies.",
+              "tags": [
+                "synthetic",
+                "assets",
+                "yields"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_synthetic-asset-yields.md",
+              "children": [
+                {
+                  "id": "delta-neutral-perp-arbitrage",
+                  "name": "Delta-Neutral Perpetual Arbitrage",
+                  "description": "Exploiting funding rate differences across perpetual trading platforms.",
+                  "tags": [
+                    "delta-neutral",
+                    "perpetuals",
+                    "arbitrage"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_delta-neutral-perp-arbitrage.md",
+                  "children": [
+                    {
+                      "id": "long-spot-short-perp-harvesting",
+                      "name": "Long Spot Short Perp Harvesting",
+                      "description": "Capturing funding premiums through balanced spot and perpetual positions.",
+                      "tags": [
+                        "harvesting",
+                        "funding",
+                        "premiums"
+                      ],
+                      "descriptionRef": "descriptions/speculation-alpha_long-spot-short-perp-harvesting.md"
+                    }
+                  ]
+                },
+                {
+                  "id": "cross-dex-funding-disparity",
+                  "name": "Cross-DEX Funding Disparity",
+                  "description": "Exploiting funding rate differences between decentralized exchanges.",
+                  "tags": [
+                    "cross-dex",
+                    "funding",
+                    "disparity"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_cross-dex-funding-disparity.md"
+                }
+              ]
+            },
+            {
+              "id": "lst-yield-loops",
+              "name": "LST Yield Loops",
+              "description": "Creating yield loops through liquid staking token strategies.",
+              "tags": [
+                "lst",
+                "yield-loops",
+                "staking"
+              ],
+              "descriptionRef": "descriptions/speculation-alpha_lst-yield-loops.md",
+              "children": [
+                {
+                  "id": "volatility-market-capture",
+                  "name": "Volatility Market Capture",
+                  "description": "Profiting from volatility through structured products and options.",
+                  "tags": [
+                    "volatility",
+                    "options",
+                    "structured-products"
+                  ],
+                  "descriptionRef": "descriptions/speculation-alpha_volatility-market-capture.md"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "_source": {
+        "branchId": "speculation-alpha",
+        "file": "branches/branch_speculation-alpha.json"
+      }
+    }
+  ]
+}

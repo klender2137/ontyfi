@@ -22,7 +22,6 @@ function initializeApp() {
   
   function checkComponents() {
     const componentsLoaded = {
-      MyHustleScreen: typeof window.MyHustleScreen === 'function',
       LevelUpScreen: typeof window.LevelUpScreen === 'function',
       TreeScreen: typeof window.TreeScreen === 'function',
       UserAccount: typeof window.UserAccount === 'function',
@@ -684,99 +683,7 @@ if (!window.cryptoHustleTree) {
   window.cryptoHustleTree = { fields: [] };
 }
 
-// Fallback components for MyHustle and LevelUp if not loaded
-function FallbackMyHustleScreen({ onGoHome, onGoToTree }) {
-  const [retryCount, setRetryCount] = useState(0);
-  const [isRetrying, setIsRetrying] = useState(false);
-  const [componentFound, setComponentFound] = useState(false);
-  
-  // Listen for component ready event
-  useEffect(() => {
-    const handleComponentReady = () => {
-      console.log('MyHustleScreen ready event received');
-      setComponentFound(true);
-    };
-    
-    window.addEventListener('MyHustleScreenReady', handleComponentReady);
-    
-    // Also check periodically
-    const checkInterval = setInterval(() => {
-      if (window.MyHustleScreen && typeof window.MyHustleScreen === 'function' && window.MyHustleScreen !== FallbackMyHustleScreen) {
-        console.log('MyHustleScreen found via periodic check');
-        setComponentFound(true);
-        clearInterval(checkInterval);
-      }
-    }, 1000);
-    
-    return () => {
-      window.removeEventListener('MyHustleScreenReady', handleComponentReady);
-      clearInterval(checkInterval);
-    };
-  }, []);
-  
-  const handleRetry = () => {
-    setIsRetrying(true);
-    setRetryCount(prev => prev + 1);
-    
-    // Check if component is now available
-    setTimeout(() => {
-      if (window.MyHustleScreen && typeof window.MyHustleScreen === 'function' && window.MyHustleScreen !== FallbackMyHustleScreen) {
-        setComponentFound(true);
-        setIsRetrying(false);
-      } else {
-        setIsRetrying(false);
-      }
-    }, 1000);
-  };
-  
-  if (componentFound) {
-    return (
-      <div className="screen" style={{ padding: '2rem', textAlign: 'center' }}>
-        <h2>My Hustle</h2>
-        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-        <p>Component loaded! Refreshing...</p>
-      </div>
-    );
-  }
-  
-  return (
-    <div className="screen" style={{ padding: '2rem', textAlign: 'center' }}>
-      <h2>My Hustle Dashboard</h2>
-      <div style={{ marginBottom: '2rem' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</div>
-        <p style={{ color: '#94a3b8', marginBottom: '1rem' }}>
-          The My Hustle component is still loading. This may take a moment.
-        </p>
-        <p style={{ fontSize: '0.9rem', color: '#6b7280' }}>
-          Retry attempts: {retryCount}
-        </p>
-        <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>
-          Component status: {typeof window.MyHustleScreen} | React: {typeof window.React}
-        </p>
-      </div>
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-        <button 
-          className="primary-button" 
-          onClick={handleRetry}
-          disabled={isRetrying}
-          style={{ opacity: isRetrying ? 0.6 : 1 }}
-        >
-          {isRetrying ? 'Retrying...' : 'Retry Loading'}
-        </button>
-        <button className="secondary-button" onClick={onGoHome}>
-          ← Home
-        </button>
-        <button className="secondary-button" onClick={onGoToTree}>
-          🌳 Tree
-        </button>
-        <button className="secondary-button" onClick={() => window.location.reload()}>
-          Reload Page
-        </button>
-      </div>
-    </div>
-  );
-}
-
+// Fallback components for LevelUp if not loaded
 function FallbackLevelUpScreen({ onGoHome, onGoToTree }) {
   const [retryCount, setRetryCount] = useState(0);
   const [isRetrying, setIsRetrying] = useState(false);
@@ -823,17 +730,6 @@ function FallbackLevelUpScreen({ onGoHome, onGoToTree }) {
       </div>
     </div>
   );
-}
-
-// Utiliser les composants chargés ou les fallbacks - LOGIQUE CORRIGÉE
-function getMyHustleScreen() {
-  // Vérifier si le vrai composant MyHustle est chargé
-  if (window.MyHustleScreen && typeof window.MyHustleScreen === 'function') {
-    console.log('Using loaded MyHustleScreen');
-    return window.MyHustleScreen;
-  }
-  console.log('Using fallback MyHustleScreen');
-  return FallbackMyHustleScreen;
 }
 
 function getLevelUpScreen() {
@@ -3132,7 +3028,6 @@ function AppRoot() {
                   tree,
                   windowTree: window.cryptoHustleTree,
                   TreeScreen: typeof window.TreeScreen,
-                  MyHustleScreen: typeof window.MyHustleScreen,
                   LevelUpScreen: typeof window.LevelUpScreen
                 });
                 if (window.TreeScreenDebugger) {
@@ -3186,7 +3081,18 @@ function AppRoot() {
         />
       )}
       {screen === 'my-hustle' && !showAccount && (
-        React.createElement(getMyHustleScreen(), { onGoHome: goHome, onGoToTree: goToTree })
+        <div className="screen" style={{ padding: '2rem', textAlign: 'center' }}>
+          <h2>Redirecting to MyInsights</h2>
+          <p style={{ color: '#94a3b8', marginBottom: '1rem' }}>
+            My Hustle has been replaced by MyInsights. Redirecting now...
+          </p>
+          <button className="primary-button" onClick={() => (window.location.href = '/my-insights')}>
+            Go to MyInsights
+          </button>
+          <button className="secondary-button" onClick={goHome} style={{ marginLeft: '0.5rem' }}>
+            ← Home
+          </button>
+        </div>
       )}
       {screen === 'level-up' && !showAccount && (
         React.createElement(getLevelUpScreen(), { onGoHome: goHome, onGoToTree: goToTree })
