@@ -3,12 +3,16 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  
-  root: 'public', 
+  root: 'public',
   build: {
-  
-    outDir: '../dist', 
+    outDir: '../dist',
     emptyOutDir: true,
+    target: 'esnext', // <--- ADD THIS LINE
+  },
+  esbuild: {
+    supported: {
+      'top-level-await': true // <--- AND THIS BLOCK
+    },
   },
   server: {
     port: 3001,
