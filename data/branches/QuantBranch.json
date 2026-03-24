@@ -1,0 +1,449 @@
+{
+  "id": "quantitative-finance",
+  "name": "Quantitative Finance",
+  "description": "The intersection of mathematics, computer science and financial theory where algorithmic models drive capital allocation.",
+  "tags": ["quantitative-finance", "algorithmic-trading", "data-science"],
+  "institutions": [
+    {
+      "id": "systemic-hedge-funds",
+      "name": "Systemic Hedge Funds",
+      "description": "Black-box investment firms relying on large-scale statistical models and automated strategies.",
+      "functions": [
+        {
+          "id": "alpha-discovery",
+          "name": "Alpha Signal Discovery",
+          "description": "Researching statistical patterns and inefficiencies across markets.",
+          "descriptionRef": "descriptions/QuantBranch_alpha-discovery.md"
+        },
+        {
+          "id": "portfolio-optimization",
+          "name": "Portfolio Optimization",
+          "description": "Constructing portfolios using mathematical risk-return optimization.",
+          "descriptionRef": "descriptions/QuantBranch_portfolio-optimization.md"
+        },
+        {
+          "id": "automated-trading",
+          "name": "Automated Trading Systems",
+          "description": "Deploying algorithmic execution across global markets.",
+          "descriptionRef": "descriptions/QuantBranch_automated-trading.md"
+        },
+        {
+          "id": "alternative-data-analysis",
+          "name": "Alternative Data Processing",
+          "description": "Analyzing satellite, sentiment, and other unconventional datasets.",
+          "descriptionRef": "descriptions/QuantBranch_alternative-data-analysis.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "quant-researcher",
+              "name": "Quantitative Researcher",
+              "descriptionRef": "descriptions/QuantBranch_quant-researcher.md"
+            },
+            {
+              "id": "quant-pm",
+              "name": "Quant Portfolio Manager",
+              "descriptionRef": "descriptions/QuantBranch_quant-pm.md"
+            },
+            {
+              "id": "data-scientist",
+              "name": "Financial Data Scientist",
+              "descriptionRef": "descriptions/QuantBranch_data-scientist.md"
+            },
+            {
+              "id": "strategy-engineer",
+              "name": "Algorithmic Strategy Engineer",
+              "descriptionRef": "descriptions/QuantBranch_strategy-engineer.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "signal-backtesting",
+              "name": "Signal Backtesting",
+              "descriptionRef": "descriptions/QuantBranch_signal-backtesting.md"
+            },
+            {
+              "id": "factor-modeling",
+              "name": "Factor Model Construction",
+              "descriptionRef": "descriptions/QuantBranch_factor-modeling.md"
+            },
+            {
+              "id": "strategy-deployment",
+              "name": "Trading Strategy Deployment",
+              "descriptionRef": "descriptions/QuantBranch_strategy-deployment.md"
+            },
+            {
+              "id": "risk-monitoring",
+              "name": "Portfolio Risk Monitoring",
+              "descriptionRef": "descriptions/QuantBranch_risk-monitoring.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/QuantBranch_systemic-hedge-funds.md"
+    },
+    {
+      "id": "investment-bank-strats",
+      "name": "Investment Bank Strats Groups",
+      "description": "Quantitative teams within banks building pricing engines and derivatives infrastructure.",
+      "functions": [
+        {
+          "id": "derivatives-pricing",
+          "name": "Derivatives Pricing Models",
+          "description": "Developing mathematical models to price options and structured products.",
+          "descriptionRef": "descriptions/QuantBranch_derivatives-pricing.md"
+        },
+        {
+          "id": "risk-engine-development",
+          "name": "Risk Engine Development",
+          "description": "Building large-scale risk and valuation infrastructure.",
+          "descriptionRef": "descriptions/QuantBranch_risk-engine-development.md"
+        },
+        {
+          "id": "trading-desk-support",
+          "name": "Trading Desk Support",
+          "description": "Providing quant models directly used by trading desks.",
+          "descriptionRef": "descriptions/QuantBranch_trading-desk-support.md"
+        },
+        {
+          "id": "market-data-modeling",
+          "name": "Market Data Modeling",
+          "description": "Cleaning and structuring high-frequency market data feeds.",
+          "descriptionRef": "descriptions/QuantBranch_market-data-modeling.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "desk-quant",
+              "name": "Front Office Quant",
+              "descriptionRef": "descriptions/QuantBranch_desk-quant.md"
+            },
+            {
+              "id": "quant-dev",
+              "name": "Quant Developer (C++/Python)",
+              "descriptionRef": "descriptions/QuantBranch_quant-dev.md"
+            },
+            {
+              "id": "financial-engineer",
+              "name": "Financial Engineer",
+              "descriptionRef": "descriptions/QuantBranch_financial-engineer.md"
+            },
+            {
+              "id": "model-validator",
+              "name": "Quant Model Validator",
+              "descriptionRef": "descriptions/QuantBranch_model-validator.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "vol-surface",
+              "name": "Volatility Surface Calibration",
+              "descriptionRef": "descriptions/QuantBranch_vol-surface.md"
+            },
+            {
+              "id": "monte-carlo",
+              "name": "Monte Carlo Derivative Pricing",
+              "descriptionRef": "descriptions/QuantBranch_monte-carlo.md"
+            },
+            {
+              "id": "risk-sensitivity",
+              "name": "Greeks Sensitivity Analysis",
+              "descriptionRef": "descriptions/QuantBranch_risk-sensitivity.md"
+            },
+            {
+              "id": "pricing-library",
+              "name": "Pricing Library Development",
+              "descriptionRef": "descriptions/QuantBranch_pricing-library.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/QuantBranch_investment-bank-strats.md"
+    },
+    {
+      "id": "hft-firms",
+      "name": "High Frequency Trading Firms",
+      "description": "Trading firms focused on ultra-low latency execution and microsecond-level market signals.",
+      "functions": [
+        {
+          "id": "latency-optimization",
+          "name": "Ultra-Low Latency Engineering",
+          "description": "Reducing execution time of trading algorithms.",
+          "descriptionRef": "descriptions/QuantBranch_latency-optimization.md"
+        },
+        {
+          "id": "market-making",
+          "name": "Automated Market Making",
+          "description": "Providing liquidity through continuous bid-ask quoting.",
+          "descriptionRef": "descriptions/QuantBranch_market-making.md"
+        },
+        {
+          "id": "order-book-modeling",
+          "name": "Order Book Microstructure Modeling",
+          "description": "Modeling price dynamics at millisecond timeframes.",
+          "descriptionRef": "descriptions/QuantBranch_order-book-modeling.md"
+        },
+        {
+          "id": "execution-algorithms",
+          "name": "Execution Algorithm Engineering",
+          "description": "Designing algorithms that minimize market impact.",
+          "descriptionRef": "descriptions/QuantBranch_execution-algorithms.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "hft-quant",
+              "name": "High Frequency Quant Researcher",
+              "descriptionRef": "descriptions/QuantBranch_hft-quant.md"
+            },
+            {
+              "id": "low-latency-dev",
+              "name": "Low Latency Systems Developer",
+              "descriptionRef": "descriptions/QuantBranch_low-latency-dev.md"
+            },
+            {
+              "id": "algo-trader",
+              "name": "Algorithmic Trader",
+              "descriptionRef": "descriptions/QuantBranch_algo-trader.md"
+            },
+            {
+              "id": "market-microstructure-analyst",
+              "name": "Market Microstructure Analyst",
+              "descriptionRef": "descriptions/QuantBranch_market-microstructure-analyst.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "order-book-analysis",
+              "name": "Order Book Dynamics Analysis",
+              "descriptionRef": "descriptions/QuantBranch_order-book-analysis.md"
+            },
+            {
+              "id": "execution-splitting",
+              "name": "Order Execution Optimization",
+              "descriptionRef": "descriptions/QuantBranch_execution-splitting.md"
+            },
+            {
+              "id": "latency-testing",
+              "name": "Latency Stress Testing",
+              "descriptionRef": "descriptions/QuantBranch_latency-testing.md"
+            },
+            {
+              "id": "spread-arbitrage",
+              "name": "Bid-Ask Spread Arbitrage Monitoring",
+              "descriptionRef": "descriptions/QuantBranch_spread-arbitrage.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/QuantBranch_hft-firms.md"
+    },
+    {
+      "id": "asset-management-quant",
+      "name": "Asset Management Quant Desks",
+      "description": "Quant teams managing factor-based portfolios and smart beta investment strategies.",
+      "functions": [
+        {
+          "id": "factor-investing",
+          "name": "Factor Investing Research",
+          "description": "Studying factors like value, momentum, and quality.",
+          "descriptionRef": "descriptions/QuantBranch_factor-investing.md"
+        },
+        {
+          "id": "portfolio-allocation",
+          "name": "Quant Portfolio Allocation",
+          "description": "Allocating capital using optimization techniques.",
+          "descriptionRef": "descriptions/QuantBranch_portfolio-allocation.md"
+        },
+        {
+          "id": "risk-decomposition",
+          "name": "Risk Decomposition",
+          "description": "Breaking down portfolio risk across factors.",
+          "descriptionRef": "descriptions/QuantBranch_risk-decomposition.md"
+        },
+        {
+          "id": "performance-attribution",
+          "name": "Performance Attribution",
+          "description": "Analyzing sources of portfolio return.",
+          "descriptionRef": "descriptions/QuantBranch_performance-attribution.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "quant-pm-am",
+              "name": "Quant Portfolio Manager",
+              "descriptionRef": "descriptions/QuantBranch_quant-pm-am.md"
+            },
+            {
+              "id": "factor-researcher",
+              "name": "Factor Research Analyst",
+              "descriptionRef": "descriptions/QuantBranch_factor-researcher.md"
+            },
+            {
+              "id": "risk-analyst",
+              "name": "Portfolio Risk Analyst",
+              "descriptionRef": "descriptions/QuantBranch_risk-analyst.md"
+            },
+            {
+              "id": "investment-data-scientist",
+              "name": "Investment Data Scientist",
+              "descriptionRef": "descriptions/QuantBranch_investment-data-scientist.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "factor-backtest",
+              "name": "Factor Strategy Backtesting",
+              "descriptionRef": "descriptions/QuantBranch_factor-backtest.md"
+            },
+            {
+              "id": "portfolio-rebalancing",
+              "name": "Portfolio Rebalancing Algorithms",
+              "descriptionRef": "descriptions/QuantBranch_portfolio-rebalancing.md"
+            },
+            {
+              "id": "performance-attribution-analysis",
+              "name": "Performance Attribution Analysis",
+              "descriptionRef": "descriptions/QuantBranch_performance-attribution-analysis.md"
+            },
+            {
+              "id": "risk-budgeting",
+              "name": "Risk Budget Allocation",
+              "descriptionRef": "descriptions/QuantBranch_risk-budgeting.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/QuantBranch_asset-management-quant.md"
+    },
+    {
+      "id": "proprietary-trading",
+      "name": "Proprietary Trading Houses",
+      "description": "Trading firms deploying their own capital through systematic statistical strategies.",
+      "functions": [
+        {
+          "id": "stat-arb",
+          "name": "Statistical Arbitrage",
+          "description": "Exploiting pricing inefficiencies between correlated assets.",
+          "descriptionRef": "descriptions/QuantBranch_stat-arb.md"
+        },
+        {
+          "id": "strategy-research",
+          "name": "Strategy Research",
+          "description": "Designing and testing algorithmic trading ideas.",
+          "descriptionRef": "descriptions/QuantBranch_strategy-research.md"
+        },
+        {
+          "id": "risk-control",
+          "name": "Trading Risk Control",
+          "description": "Monitoring exposure across strategies.",
+          "descriptionRef": "descriptions/QuantBranch_risk-control.md"
+        },
+        {
+          "id": "data-engineering",
+          "name": "Market Data Engineering",
+          "description": "Building pipelines for large-scale financial data.",
+          "descriptionRef": "descriptions/QuantBranch_data-engineering.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "prop-trader",
+              "name": "Proprietary Trader",
+              "descriptionRef": "descriptions/QuantBranch_prop-trader.md"
+            },
+            {
+              "id": "quant-strategist",
+              "name": "Quant Strategist",
+              "descriptionRef": "descriptions/QuantBranch_quant-strategist.md"
+            },
+            {
+              "id": "trading-analyst",
+              "name": "Trading Strategy Analyst",
+              "descriptionRef": "descriptions/QuantBranch_trading-analyst.md"
+            },
+            {
+              "id": "risk-quant",
+              "name": "Trading Risk Quant",
+              "descriptionRef": "descriptions/QuantBranch_risk-quant.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "pair-trading",
+              "name": "Pairs Trading Model Development",
+              "descriptionRef": "descriptions/QuantBranch_pair-trading.md"
+            },
+            {
+              "id": "strategy-backtesting",
+              "name": "Strategy Backtesting Frameworks",
+              "descriptionRef": "descriptions/QuantBranch_strategy-backtesting.md"
+            },
+            {
+              "id": "trade-signal-monitoring",
+              "name": "Live Trading Signal Monitoring",
+              "descriptionRef": "descriptions/QuantBranch_trade-signal-monitoring.md"
+            },
+            {
+              "id": "risk-limits",
+              "name": "Strategy Risk Limit Enforcement",
+              "descriptionRef": "descriptions/QuantBranch_risk-limits.md"
+            }
+          ],
+          "descriptionRef": "descriptions/QuantBranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/QuantBranch_proprietary-trading.md"
+    }
+  ],
+  "descriptionRef": "descriptions/QuantBranch_quantitative-finance.md"
+}

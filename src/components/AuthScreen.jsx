@@ -96,7 +96,7 @@ export default function AuthScreen() {
   return (
     <div style={{ minHeight: '100vh', background: '#0f172a', color: '#f7f9ff', padding: '2rem' }}>
       <div style={{ maxWidth: 420, margin: '0 auto' }}>
-        <h1 style={{ fontSize: '1.8rem', marginBottom: '0.25rem' }}>CryptoExplorer</h1>
+        <h1 style={{ fontSize: '1.8rem', marginBottom: '0.25rem' }}>OntyFi</h1>
         <p style={{ color: '#94a3b8', marginTop: 0, marginBottom: '1.5rem' }}>
           Sign in to sync your profile, or continue as guest.
         </p>

@@ -24,6 +24,18 @@ function getGoogleAuth() {
   return auth;
 }
 
+export async function getDriveFileContent(fileId) {
+  const auth = getGoogleAuth();
+  const drive = google.drive({ version: 'v3', auth });
+
+  const resp = await drive.files.get({
+    fileId,
+    alt: 'media',
+  });
+
+  return resp.data;
+}
+
 export async function getDriveFiles(folderId) {
   const auth = getGoogleAuth();
   const drive = google.drive({ version: 'v3', auth });
@@ -34,7 +46,7 @@ export async function getDriveFiles(folderId) {
   do {
     const resp = await drive.files.list({
       q: `'${folderId}' in parents and trashed = false`,
-      fields: 'nextPageToken, files(id, name, mimeType, iconLink, webContentLink, webViewLink)',
+      fields: 'nextPageToken, files(id, name, mimeType, iconLink, webContentLink, webViewLink, thumbnailLink)',
       pageSize: 100,
       pageToken,
       supportsAllDrives: true,
@@ -50,6 +62,7 @@ export async function getDriveFiles(folderId) {
         iconLink: f.iconLink || null,
         webContentLink: f.webContentLink || null,
         webViewLink: f.webViewLink || null,
+        thumbnailLink: f.thumbnailLink || null,
       });
     }
 

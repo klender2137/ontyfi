@@ -30,7 +30,7 @@ const Home = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <h1 style={{ fontSize: '2.5rem' }}>
-            CryptoExplorer
+            OntyFi
           </h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             {isAuthenticated ? (
@@ -169,6 +169,32 @@ const Home = () => {
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
           <div 
+            onClick={() => navigate('/my-insights')}
+            role="button"
+            tabIndex={0}
+            aria-label="Navigate to MyInsights"
+            style={{ 
+              padding: '2rem',
+              background: 'rgba(167, 139, 250, 0.1)',
+              border: '1px solid rgba(167, 139, 250, 0.3)',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              textAlign: 'center',
+              transition: 'all 0.2s ease'
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                navigate('/my-insights')
+              }
+            }}
+          >
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>💎</div>
+            <h3 style={{ marginBottom: '0.5rem' }}>MyInsights</h3>
+            <p style={{ color: '#94a3b8' }}>Exclusive research and market materials</p>
+          </div>
+
+          <div 
             onClick={() => navigate('/tree')}
             role="button"
             tabIndex={0}
@@ -192,33 +218,6 @@ const Home = () => {
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🌳</div>
             <h3 style={{ marginBottom: '0.5rem' }}>CryptoMap Tree</h3>
             <p style={{ color: '#94a3b8' }}>Explore the comprehensive crypto knowledge map</p>
-          </div>
-
-          <div 
-            onClick={() => navigate('/my-insights')}
-            role="button"
-            tabIndex={0}
-            aria-label="Navigate to My Insights"
-            style={{ 
-              padding: '2rem',
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              textAlign: 'center',
-              transition: 'all 0.2s ease',
-              gridColumn: 'span 2'
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                navigate('/my-insights')
-              }
-            }}
-          >
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚡</div>
-            <h3 style={{ marginBottom: '0.5rem' }}>My Insights</h3>
-            <p style={{ color: '#94a3b8' }}>Finance resources synced from Drive</p>
           </div>
         </div>
 

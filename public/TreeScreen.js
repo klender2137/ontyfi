@@ -695,12 +695,6 @@ if (typeof window !== 'undefined' && window.React) {
           }, tree.fields.map(field => renderRecursive(field)).filter(Boolean))
         ])
       ]),
-      React.createElement('div', { key: 'zoom-controls', style: { position: 'absolute', bottom: '20px', right: '20px', zIndex: 200, display: 'flex', flexDirection: 'column', gap: '0.5rem' } }, [
-        React.createElement('button', { key: 'home-btn', onClick: () => { if (onGoHome) { onGoHome(); } else { console.warn('TreeScreen: onGoHome prop not provided'); } }, style: { padding: '0.5rem', background: '#10b981', border: '1px solid #059669', borderRadius: '4px', color: '#f7f9ff', cursor: 'pointer', fontSize: '0.8rem' } }, '← Home'),
-        React.createElement('button', { key: 'zoom-in', onClick: () => setViewState(prev => ({ ...prev, zoom: Math.min(3, prev.zoom * 1.2) })), style: { padding: '0.5rem', background: '#374151', border: '1px solid #4b5563', borderRadius: '4px', color: '#f7f9ff', cursor: 'pointer' } }, '+'),
-        React.createElement('button', { key: 'zoom-out', onClick: () => setViewState(prev => ({ ...prev, zoom: Math.max(0.1, prev.zoom * 0.8) })), style: { padding: '0.5rem', background: '#374151', border: '1px solid #4b5563', borderRadius: '4px', color: '#f7f9ff', cursor: 'pointer' } }, '−'),
-        React.createElement('button', { key: 'zoom-reset', onClick: () => { setViewState(prev => ({ ...prev, zoom: 1 })); if (!hasInitiallyPositioned) { const positions = Object.values(nodePositions); if (positions.length > 0) { const centerX = positions.reduce((sum, pos) => sum + pos.x, 0) / positions.length; const centerY = positions.reduce((sum, pos) => sum + pos.y, 0) / positions.length; const containerRect = containerRef.current?.getBoundingClientRect(); if (containerRect) setViewState(prev => ({ ...prev, panOffset: { x: containerRect.width / 2 - centerX, y: containerRect.height / 2 - centerY } })); } } }, style: { padding: '0.5rem', background: '#374151', border: '1px solid #4b5563', borderRadius: '4px', color: '#f7f9ff', cursor: 'pointer', fontSize: '0.8rem' } }, '⌂')
-      ])
     ]);
   }
 

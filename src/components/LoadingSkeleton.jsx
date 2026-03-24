@@ -18,7 +18,7 @@ const LoadingSkeleton = () => (
       animation: 'spin 1s linear infinite',
       marginBottom: '1rem'
     }} />
-    <h2 style={{ marginBottom: '0.5rem' }}>Loading CryptoExplorer</h2>
+    <h2 style={{ marginBottom: '0.5rem' }}>Loading OntyFi</h2>
     <p style={{ color: '#94a3b8' }}>Preparing your personalized experience...</p>
     
     <style>{`

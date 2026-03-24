@@ -3,7 +3,7 @@
   "type": "cryptoTree-trunk",
   "fields": [
     {
-      "id": "global-investment-bank",
+      "id": "ma-investment-banking",
       "file": "branches/investmentBanking.json"
     },
     {
@@ -16,24 +16,27 @@
     },
     {
       "id": "Quant",
-      "file": "branches/QunatBranch.json"
+      "file": "branches/QuantBranch.json"
     },
     {
       "id": "PubFin",
-      "file": "branches/PEbranch.json"
+      "file": "branches/pubfinBranch.json"
     },
     {
-      "id": "PE",
-      "file": "branches/PEbranch.json"
+      "id": "hedge-funds-root",
+      "file": "branches/HedgeFbranche.json"
     },
     {
-      "id": "VC",
-      "file": "branches/VCbranch.json"
+      "id": "risk-management-sector",
+      "file": "branches/RiskMbranche.json"
     },
     {
-      "id": "PE",
-      "file": "branches/PEbranch.json"
+      "id": "asset-management-root",
+      "file": "branches/AssetMangementBranch.json"
+    },
+    {
+      "id": "fpna-root",
+      "file": "branches/FPnAbranch.json"
     }
-
   ]
 }

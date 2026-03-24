@@ -7,7 +7,9 @@ if (typeof window !== 'undefined') {
       ...(node.nodes || []),
       ...(node.subnodes || []),
       ...(node.leafnodes || []),
-      ...(node.children || [])
+      ...(node.children || []),
+      ...(node.institutions || []),  // Added for branches like investmentBanking, VCbranch, etc.
+      ...(node.tiles || [])           // Added for RiskMbranche and similar structures
     ],
 
     flattenTree: (tree, getChildren) => {

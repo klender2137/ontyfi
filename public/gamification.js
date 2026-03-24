@@ -17,7 +17,7 @@
       visit_all_screens: {
         id: 'visit_all_screens',
         title: 'Visit All Screens',
-        description: 'Open the Tree, Explore, My Hustle, and Level Up screens',
+        description: 'Open the Tree, Explore, and Level Up screens',
         reward: 100
       },
       bubble_bounce: {
@@ -26,6 +26,13 @@
         description: 'Pop tag bubbles 25 times',
         reward: 150,
         target: 25
+      },
+      curious: {
+        id: 'curious',
+        title: 'Curious Explorer',
+        description: 'Open all 9 core tiles in the TreeMap',
+        reward: 50,
+        target: 9
       }
     };
 
@@ -222,6 +229,7 @@
 
           tx.set(userRef, {
             croin_balance: newBalance,
+            balance: newBalance, // Persistent balance value
             lifetime_points: newLifetime,
             level: newLevel,
             last_seen: fb.firestore.FieldValue.serverTimestamp(),
@@ -330,7 +338,6 @@
       const user = getAuthedUser();
       if (!fb || !fb.firestore || !user?.uid) return;
 
-      await ensureQuestDoc(user.uid, 'bubble_bounce');
       const userRef = fb.firestore().collection('users').doc(user.uid);
       const questRef = fb.firestore().collection('user_quests').doc(user.uid).collection('quests').doc('bubble_bounce');
 
@@ -338,7 +345,9 @@
         const qSnap = await tx.get(questRef);
         if (!qSnap.exists) return;
         const q = qSnap.data() || {};
-        if (q.status !== 'in_progress') return;
+        
+        // One-time completion check
+        if (q.status === 'completed' || q.status === 'claimable') return;
 
         const target = Number(q.target) || QUEST_DEFS.bubble_bounce.target || 25;
         const nextProgress = (Number(q.progress) || 0) + 1;
@@ -424,6 +433,68 @@
       });
     }
 
+    async function loadQuestFromMD(questId) {
+      try {
+        const response = await fetch(`/data/quests/${questId}.md`);
+        if (!response.ok) return null;
+        const text = await response.text();
+        const lines = text.split('\n');
+        const quest = { id: questId };
+        
+        lines.forEach(line => {
+          if (line.startsWith('# TITLE:')) quest.title = line.replace('# TITLE:', '').trim();
+          if (line.startsWith('# DESCRIPTION:')) quest.description = line.replace('# DESCRIPTION:', '').trim();
+          if (line.startsWith('# REWARD:')) quest.reward = parseInt(line.replace('# REWARD:', '').trim());
+          if (line.startsWith('# TARGET:')) quest.target = parseInt(line.replace('# TARGET:', '').trim());
+        });
+        
+        const scriptMatch = text.match(/# SCRIPT:\s*([\s\S]*)/);
+        if (scriptMatch && scriptMatch[1]) {
+          quest.script = scriptMatch[1].trim();
+        }
+        
+        return quest;
+      } catch (e) {
+        console.warn(`[Gamification] Failed to load quest MD for ${questId}:`, e);
+        return null;
+      }
+    }
+
+    async function trackTileOpen(nodeId) {
+      const fb = getFirebase();
+      const user = getAuthedUser();
+      if (!fb || !fb.firestore || !user?.uid) return;
+
+      const userRef = fb.firestore().collection('users').doc(user.uid);
+      const questRef = fb.firestore().collection('user_quests').doc(user.uid).collection('quests').doc('curious');
+      
+      const snap = await userRef.get();
+      const data = snap.data() || {};
+      const openedTiles = data.stats?.opened_core_tiles || [];
+      
+      if (!openedTiles.includes(nodeId)) {
+        await userRef.set({
+          'stats.opened_core_tiles': fb.firestore.FieldValue.arrayUnion(nodeId)
+        }, { merge: true });
+        
+        const nextCount = openedTiles.length + 1;
+        const target = QUEST_DEFS.curious.target;
+
+        await fb.firestore().runTransaction(async (tx) => {
+          const qSnap = await tx.get(questRef);
+          if (!qSnap.exists) return;
+          const q = qSnap.data() || {};
+          if (q.status === 'completed' || q.status === 'claimable') return;
+
+          if (nextCount >= target) {
+            tx.set(questRef, { status: 'claimable', progress: target }, { merge: true });
+          } else {
+            tx.set(questRef, { status: 'in_progress', progress: nextCount }, { merge: true });
+          }
+        });
+      }
+    }
+
     window.Gamification = {
       QUEST_DEFS,
       calculateLevel,
@@ -439,6 +510,8 @@
       trackScreenVisit,
       incrementInAppTime,
       trackBubbleBounce,
+      trackTileOpen,
+      loadQuestFromMD,
       subscribeUserProfile,
       subscribeUserQuests,
       subscribeLeaderboard

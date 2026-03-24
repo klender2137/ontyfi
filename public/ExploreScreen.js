@@ -475,11 +475,14 @@ if (typeof window !== 'undefined' && window.React) {
 
     const handleDoubleClick = useCallback(() => {
       if (!isExploded && !isDragging) {
+        // Track bubble bounce for quests
         try {
           if (typeof window !== 'undefined' && window.Gamification && typeof window.Gamification.trackBubbleBounce === 'function') {
             window.Gamification.trackBubbleBounce().catch(() => {});
           }
-        } catch (e) {}
+        } catch (e) {
+          console.warn('Bubble bounce tracking failed:', e);
+        }
         onExplode(bubble.id);
       }
     }, [isExploded, isDragging, bubble.id, onExplode]);
@@ -901,12 +904,18 @@ if (typeof window !== 'undefined' && window.React) {
         );
         setBubblePositions(positions);
 
-        // Center the viewport on the "Other" bubble by default (fallback to cluster center)
-        const other = positions.find(p => p.group && p.group.id === 'other');
-        if (other) {
+        // Spawn centered on the bubble cluster so circles are immediately in the FOV.
+        if (positions.length > 0) {
+          const sum = positions.reduce((acc, p) => {
+            acc.x += p.x;
+            acc.y += p.y;
+            return acc;
+          }, { x: 0, y: 0 });
+          const cx = sum.x / positions.length;
+          const cy = sum.y / positions.length;
           setViewportOffset({
-            x: (viewportSize.width / 2) - other.x,
-            y: (viewportSize.height / 2) - other.y
+            x: (viewportSize.width / 2) - cx,
+            y: (viewportSize.height / 2) - cy
           });
         } else {
           const centerX = viewportSize.width * BubblePhysics.SPACE_MULTIPLIER / 2;
@@ -1199,21 +1208,7 @@ if (typeof window !== 'undefined' && window.React) {
               fontSize: '13px',
               transition: 'all 0.2s ease'
             }
-          }, '← Home'),
-          React.createElement('button', {
-            key: 'tree-btn',
-            onClick: onGoToTree,
-            style: {
-              background: 'rgba(30, 41, 59, 0.8)',
-              color: '#94a3b8',
-              border: '1px solid rgba(148, 163, 184, 0.3)',
-              borderRadius: '8px',
-              padding: '10px 16px',
-              cursor: 'pointer',
-              fontSize: '13px',
-              transition: 'all 0.2s ease'
-            }
-          }, '🌳 Tree')
+          }, '← Home')
         ])
       ]),
 
@@ -1312,7 +1307,7 @@ if (typeof window !== 'undefined' && window.React) {
         style: {
           position: 'absolute',
           bottom: '20px',
-          right: '20px',
+          left: '20px',
           width: '200px',
           height: '150px',
           background: 'rgba(15, 23, 42, 0.9)',

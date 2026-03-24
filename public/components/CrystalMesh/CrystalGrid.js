@@ -1,6 +1,6 @@
 /**
  * Crystal Mesh UI Components - UI Only
- * Extracted from the Crystal Mesh MyHustle implementation
+ * Crystal mesh visualization component
  */
 
 if (typeof window !== 'undefined' && window.React) {

@@ -6,8 +6,9 @@
 let dotenvLoaded = false;
 
 try {
-  // top-level await is allowed in ESM modules
-  await import('dotenv/config');
+  const dotenv = await import('dotenv');
+  dotenv.config({ path: '.env.local' });
+  dotenv.config();
   dotenvLoaded = true;
 } catch (err) {
   console.warn('dotenv package not found; continuing without loading .env');

@@ -1,0 +1,449 @@
+{
+  "id": "fpa-sector",
+  "name": "Financial Planning & Analysis (FP&A)",
+  "description": "The financial intelligence layer of organizations responsible for planning, forecasting, and guiding strategic financial decisions.",
+  "tags": ["financial-planning", "FP&A", "forecasting"],
+  "institutions": [
+    {
+      "id": "corporate-hq-fpa",
+      "name": "Corporate HQ FP&A",
+      "description": "Centralized FP&A teams responsible for consolidated budgets and enterprise-wide financial strategy.",
+      "functions": [
+        {
+          "id": "global-budget-consolidation",
+          "name": "Global Budget Consolidation",
+          "description": "Aggregating financial plans across all business units into a unified corporate budget.",
+          "descriptionRef": "descriptions/FPnAbranch_global-budget-consolidation.md"
+        },
+        {
+          "id": "strategic-financial-planning",
+          "name": "Strategic Financial Planning",
+          "description": "Modeling long-term financial trajectories aligned with company strategy.",
+          "descriptionRef": "descriptions/FPnAbranch_strategic-financial-planning.md"
+        },
+        {
+          "id": "executive-performance-reporting",
+          "name": "Executive Performance Reporting",
+          "description": "Producing financial dashboards and board-level summaries.",
+          "descriptionRef": "descriptions/FPnAbranch_executive-performance-reporting.md"
+        },
+        {
+          "id": "capital-allocation-oversight",
+          "name": "Capital Allocation Oversight",
+          "description": "Guiding investment decisions across divisions.",
+          "descriptionRef": "descriptions/FPnAbranch_capital-allocation-oversight.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "junior-fpa-analyst",
+              "name": "Junior FP&A Analyst",
+              "descriptionRef": "descriptions/FPnAbranch_junior-fpa-analyst.md"
+            },
+            {
+              "id": "senior-fpa-analyst",
+              "name": "Senior FP&A Analyst",
+              "descriptionRef": "descriptions/FPnAbranch_senior-fpa-analyst.md"
+            },
+            {
+              "id": "fpa-manager",
+              "name": "FP&A Manager",
+              "descriptionRef": "descriptions/FPnAbranch_fpa-manager.md"
+            },
+            {
+              "id": "director-fpa",
+              "name": "Director of FP&A",
+              "descriptionRef": "descriptions/FPnAbranch_director-fpa.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "budget-consolidation",
+              "name": "Annual Budget Consolidation",
+              "descriptionRef": "descriptions/FPnAbranch_budget-consolidation.md"
+            },
+            {
+              "id": "board-deck-preparation",
+              "name": "Executive Board Deck Preparation",
+              "descriptionRef": "descriptions/FPnAbranch_board-deck-preparation.md"
+            },
+            {
+              "id": "financial-kpi-monitoring",
+              "name": "Corporate KPI Monitoring",
+              "descriptionRef": "descriptions/FPnAbranch_financial-kpi-monitoring.md"
+            },
+            {
+              "id": "long-term-planning-model",
+              "name": "Building Long-Term Strategic Models",
+              "descriptionRef": "descriptions/FPnAbranch_long-term-planning-model.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/FPnAbranch_corporate-hq-fpa.md"
+    },
+    {
+      "id": "business-unit-finance",
+      "name": "Business Unit (BU) Finance",
+      "description": "Embedded finance teams working inside departments to manage their financial performance.",
+      "functions": [
+        {
+          "id": "department-pnl-management",
+          "name": "Department P&L Management",
+          "description": "Monitoring revenue and cost performance of a specific business unit.",
+          "descriptionRef": "descriptions/FPnAbranch_department-pnl-management.md"
+        },
+        {
+          "id": "operational-budgeting",
+          "name": "Operational Budgeting",
+          "description": "Preparing departmental budgets aligned with operational plans.",
+          "descriptionRef": "descriptions/FPnAbranch_operational-budgeting.md"
+        },
+        {
+          "id": "cross-functional-partnership",
+          "name": "Cross-Functional Business Partnership",
+          "description": "Supporting department heads with financial insights.",
+          "descriptionRef": "descriptions/FPnAbranch_cross-functional-partnership.md"
+        },
+        {
+          "id": "cost-efficiency-analysis",
+          "name": "Cost Efficiency Analysis",
+          "description": "Identifying opportunities to optimize operational expenses.",
+          "descriptionRef": "descriptions/FPnAbranch_cost-efficiency-analysis.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "bu-financial-analyst",
+              "name": "Business Unit Financial Analyst",
+              "descriptionRef": "descriptions/FPnAbranch_bu-financial-analyst.md"
+            },
+            {
+              "id": "senior-bu-analyst",
+              "name": "Senior BU Finance Analyst",
+              "descriptionRef": "descriptions/FPnAbranch_senior-bu-analyst.md"
+            },
+            {
+              "id": "finance-business-partner",
+              "name": "Finance Business Partner",
+              "descriptionRef": "descriptions/FPnAbranch_finance-business-partner.md"
+            },
+            {
+              "id": "bu-finance-manager",
+              "name": "Business Unit Finance Manager",
+              "descriptionRef": "descriptions/FPnAbranch_bu-finance-manager.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "opex-management",
+              "name": "Operating Expense (OpEx) Management",
+              "descriptionRef": "descriptions/FPnAbranch_opex-management.md"
+            },
+            {
+              "id": "marketing-spend-analysis",
+              "name": "Marketing Spend Performance Analysis",
+              "descriptionRef": "descriptions/FPnAbranch_marketing-spend-analysis.md"
+            },
+            {
+              "id": "sales-forecast-model",
+              "name": "Sales Forecast Modeling",
+              "descriptionRef": "descriptions/FPnAbranch_sales-forecast-model.md"
+            },
+            {
+              "id": "department-budget-tracking",
+              "name": "Department Budget Tracking",
+              "descriptionRef": "descriptions/FPnAbranch_department-budget-tracking.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/FPnAbranch_business-unit-finance.md"
+    },
+    {
+      "id": "regional-finance",
+      "name": "Regional / Geographic Finance",
+      "description": "Finance teams managing region-specific financial planning considering tax, FX, and market dynamics.",
+      "functions": [
+        {
+          "id": "regional-forecasting",
+          "name": "Regional Financial Forecasting",
+          "description": "Developing financial projections tailored to regional markets.",
+          "descriptionRef": "descriptions/FPnAbranch_regional-forecasting.md"
+        },
+        {
+          "id": "fx-risk-management",
+          "name": "Currency Risk Management",
+          "description": "Analyzing exchange rate impacts on revenue and costs.",
+          "descriptionRef": "descriptions/FPnAbranch_fx-risk-management.md"
+        },
+        {
+          "id": "tax-optimization",
+          "name": "Regional Tax Optimization",
+          "description": "Structuring operations to ensure tax efficiency.",
+          "descriptionRef": "descriptions/FPnAbranch_tax-optimization.md"
+        },
+        {
+          "id": "market-performance-analysis",
+          "name": "Market Performance Analysis",
+          "description": "Evaluating profitability across geographic markets.",
+          "descriptionRef": "descriptions/FPnAbranch_market-performance-analysis.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "regional-finance-analyst",
+              "name": "Regional Finance Analyst",
+              "descriptionRef": "descriptions/FPnAbranch_regional-finance-analyst.md"
+            },
+            {
+              "id": "fx-analyst",
+              "name": "Foreign Exchange Analyst",
+              "descriptionRef": "descriptions/FPnAbranch_fx-analyst.md"
+            },
+            {
+              "id": "regional-finance-manager",
+              "name": "Regional Finance Manager",
+              "descriptionRef": "descriptions/FPnAbranch_regional-finance-manager.md"
+            },
+            {
+              "id": "regional-finance-director",
+              "name": "Regional Finance Director",
+              "descriptionRef": "descriptions/FPnAbranch_regional-finance-director.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "fx-impact-analysis",
+              "name": "FX Impact Analysis on Revenue",
+              "descriptionRef": "descriptions/FPnAbranch_fx-impact-analysis.md"
+            },
+            {
+              "id": "regional-budget-adjustment",
+              "name": "Regional Budget Adjustments",
+              "descriptionRef": "descriptions/FPnAbranch_regional-budget-adjustment.md"
+            },
+            {
+              "id": "tax-planning-analysis",
+              "name": "Local Tax Planning Analysis",
+              "descriptionRef": "descriptions/FPnAbranch_tax-planning-analysis.md"
+            },
+            {
+              "id": "regional-performance-report",
+              "name": "Regional Performance Reporting",
+              "descriptionRef": "descriptions/FPnAbranch_regional-performance-report.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/FPnAbranch_regional-finance.md"
+    },
+    {
+      "id": "fpa-consulting",
+      "name": "FP&A Consulting / Outsourced FP&A",
+      "description": "External consultants providing financial modeling and planning support to companies.",
+      "functions": [
+        {
+          "id": "financial-model-development",
+          "name": "Financial Model Development",
+          "description": "Building integrated financial models for corporate clients.",
+          "descriptionRef": "descriptions/FPnAbranch_financial-model-development.md"
+        },
+        {
+          "id": "performance-improvement",
+          "name": "Performance Improvement Advisory",
+          "description": "Helping firms optimize cost structures and profitability.",
+          "descriptionRef": "descriptions/FPnAbranch_performance-improvement.md"
+        },
+        {
+          "id": "forecasting-system-implementation",
+          "name": "Forecasting System Implementation",
+          "description": "Deploying FP&A tools and processes.",
+          "descriptionRef": "descriptions/FPnAbranch_forecasting-system-implementation.md"
+        },
+        {
+          "id": "strategic-financial-advisory",
+          "name": "Strategic Financial Advisory",
+          "description": "Supporting executive-level financial decisions.",
+          "descriptionRef": "descriptions/FPnAbranch_strategic-financial-advisory.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "consulting-analyst",
+              "name": "FP&A Consulting Analyst",
+              "descriptionRef": "descriptions/FPnAbranch_consulting-analyst.md"
+            },
+            {
+              "id": "consulting-associate",
+              "name": "Financial Advisory Associate",
+              "descriptionRef": "descriptions/FPnAbranch_consulting-associate.md"
+            },
+            {
+              "id": "consulting-manager",
+              "name": "FP&A Consulting Manager",
+              "descriptionRef": "descriptions/FPnAbranch_consulting-manager.md"
+            },
+            {
+              "id": "consulting-partner",
+              "name": "Financial Advisory Partner",
+              "descriptionRef": "descriptions/FPnAbranch_consulting-partner.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "client-model-building",
+              "name": "Client Financial Model Building",
+              "descriptionRef": "descriptions/FPnAbranch_client-model-building.md"
+            },
+            {
+              "id": "forecasting-framework-design",
+              "name": "Forecasting Framework Design",
+              "descriptionRef": "descriptions/FPnAbranch_forecasting-framework-design.md"
+            },
+            {
+              "id": "data-integration",
+              "name": "ERP Data Integration for Planning",
+              "descriptionRef": "descriptions/FPnAbranch_data-integration.md"
+            },
+            {
+              "id": "financial-diagnostic",
+              "name": "Financial Diagnostic Reviews",
+              "descriptionRef": "descriptions/FPnAbranch_financial-diagnostic.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/FPnAbranch_fpa-consulting.md"
+    },
+    {
+      "id": "private-equity-portfolio-fpa",
+      "name": "Private Equity Portfolio FP&A",
+      "description": "High-performance FP&A teams inside PE-owned companies focused on value creation and exit preparation.",
+      "functions": [
+        {
+          "id": "value-creation-modeling",
+          "name": "Value Creation Modeling",
+          "description": "Developing financial strategies to increase portfolio company value.",
+          "descriptionRef": "descriptions/FPnAbranch_value-creation-modeling.md"
+        },
+        {
+          "id": "cash-flow-optimization",
+          "name": "Cash Flow Optimization",
+          "description": "Managing liquidity to support growth and investor expectations.",
+          "descriptionRef": "descriptions/FPnAbranch_cash-flow-optimization.md"
+        },
+        {
+          "id": "exit-readiness-planning",
+          "name": "Exit Readiness Planning",
+          "description": "Preparing financial reporting for IPO or acquisition.",
+          "descriptionRef": "descriptions/FPnAbranch_exit-readiness-planning.md"
+        },
+        {
+          "id": "operational-performance-tracking",
+          "name": "Operational Performance Tracking",
+          "description": "Monitoring KPIs tied to private equity investment theses.",
+          "descriptionRef": "descriptions/FPnAbranch_operational-performance-tracking.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "portfolio-fpa-analyst",
+              "name": "Portfolio FP&A Analyst",
+              "descriptionRef": "descriptions/FPnAbranch_portfolio-fpa-analyst.md"
+            },
+            {
+              "id": "senior-portfolio-analyst",
+              "name": "Senior FP&A Analyst (PE Portfolio)",
+              "descriptionRef": "descriptions/FPnAbranch_senior-portfolio-analyst.md"
+            },
+            {
+              "id": "portfolio-finance-manager",
+              "name": "Portfolio Finance Manager",
+              "descriptionRef": "descriptions/FPnAbranch_portfolio-finance-manager.md"
+            },
+            {
+              "id": "portfolio-cfo",
+              "name": "Portfolio Company CFO",
+              "descriptionRef": "descriptions/FPnAbranch_portfolio-cfo.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "cash-flow-forecast",
+              "name": "Weekly Cash Flow Forecasting",
+              "descriptionRef": "descriptions/FPnAbranch_cash-flow-forecast.md"
+            },
+            {
+              "id": "headcount-planning",
+              "name": "Headcount Cost Planning",
+              "descriptionRef": "descriptions/FPnAbranch_headcount-planning.md"
+            },
+            {
+              "id": "value-driver-analysis",
+              "name": "Value Driver Analysis",
+              "descriptionRef": "descriptions/FPnAbranch_value-driver-analysis.md"
+            },
+            {
+              "id": "investor-reporting",
+              "name": "Investor Reporting for PE Sponsors",
+              "descriptionRef": "descriptions/FPnAbranch_investor-reporting.md"
+            }
+          ],
+          "descriptionRef": "descriptions/FPnAbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/FPnAbranch_private-equity-portfolio-fpa.md"
+    }
+  ],
+  "descriptionRef": "descriptions/FPnAbranch_fpa-sector.md"
+}

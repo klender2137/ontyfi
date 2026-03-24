@@ -30,15 +30,15 @@ function AppRoutes() {
   return (
     <Suspense fallback={<LoadingSkeleton />}>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={
+          <ErrorBoundary>
+            <MyInsightsScreen />
+          </ErrorBoundary>
+        } />
+        <Route path="/home" element={<Home />} />
         <Route path="/tree" element={
           <ErrorBoundary>
             <TreeMap />
-          </ErrorBoundary>
-        } />
-        <Route path="/my-phi" element={
-          <ErrorBoundary>
-            <MyInsightsScreen />
           </ErrorBoundary>
         } />
         <Route path="/my-insights" element={

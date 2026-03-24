@@ -3,17 +3,17 @@ import { useTreeData } from '../hooks/useTreeData'
 import { useAppStore } from '../store/useAppStore'
 import LoadingSkeleton from './LoadingSkeleton'
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { useInsightsV1Latest } from '../hooks/useInsightsV1Latest'
 
 const TreeMap = () => {
   const navigate = useNavigate()
   const { tree, loading, error } = useTreeData()
   const { toggleBookmark, isBookmarked } = useAppStore()
   const [expandedTiles, setExpandedTiles] = useState(new Set())
+  const [justExpanded, setJustExpanded] = useState(new Set())
   const [tilePositions, setTilePositions] = useState({})
   const [tileDragStates, setTileDragStates] = useState({})
+  const [dragStartPositions, setDragStartPositions] = useState({})
   const tileRefs = useRef({})
-  const { items: latestInsights, loading: insightsLoading, error: insightsError } = useInsightsV1Latest({ limit: 6 })
 
   if (loading) return <LoadingSkeleton />
   
@@ -57,27 +57,9 @@ const TreeMap = () => {
 
   const allNodes = tree ? flattenNodes(tree.fields) : []
 
-  const newArticlesTiles = useMemo(() => {
-    if (!latestInsights.length) return [];
-    return latestInsights.map((insight, idx) => ({
-      id: `insight-${insight.docId || insight.id}-${idx}`,
-      name: insight.title || 'Untitled Insight',
-      description: insight.content ? (insight.content.length > 240 ? insight.content.slice(0, 240) + '…' : insight.content) : 'No description',
-      tags: [insight.source || 'Insights', insight.category || 'Insight'],
-      external_link: insight.external_link || null,
-      publication_date: insight.publication_date || null,
-      image_url: insight.image_url || null,
-      source: insight.source || 'Insights',
-      category: insight.category || 'Insight',
-      type: insight.type || 'Insight',
-      timestamp: insight.timestamp || null,
-      isNewArticle: true
-    }));
-  }, [latestInsights]);
-
   const combinedTiles = useMemo(() => {
-    return [...newArticlesTiles, ...allNodes.slice(0, Math.max(0, 20 - newArticlesTiles.length))];
-  }, [newArticlesTiles, allNodes]);
+    return allNodes.slice(0, 20)
+  }, [allNodes])
 
   const getRandomPosition = (nodeId, parentRect = null) => {
     const basePositions = [
@@ -107,7 +89,12 @@ const TreeMap = () => {
     }))
   }
 
-  const toggleTileExpansion = (nodeId) => {
+  const toggleTileExpansion = (nodeId, e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    
     setExpandedTiles(prev => {
       const newSet = new Set(prev)
       const tileElement = tileRefs.current[nodeId]
@@ -125,8 +112,27 @@ const TreeMap = () => {
       
       if (newSet.has(nodeId)) {
         newSet.delete(nodeId)
+        setJustExpanded(prevJust => {
+          const next = new Set(prevJust)
+          next.delete(nodeId)
+          return next
+        })
       } else {
+        // Track tile open for quests ONLY when expanding
+        if (typeof window !== 'undefined' && window.Gamification && window.Gamification.trackTileOpen) {
+          window.Gamification.trackTileOpen(nodeId).catch(err => console.warn('Quest tracking failed:', err));
+        }
+
         newSet.add(nodeId)
+        setJustExpanded(prevJust => new Set(prevJust).add(nodeId))
+        setTimeout(() => {
+          setJustExpanded(prevJust => {
+            const next = new Set(prevJust)
+            next.delete(nodeId)
+            return next
+          })
+        }, 500)
+
         setTilePositions(prev => ({
           ...prev,
           [nodeId]: getRandomPosition(nodeId, parentRect)
@@ -166,7 +172,34 @@ const TreeMap = () => {
               key={node.id}
               ref={el => tileRefs.current[node.id] = el}
               draggable
-              onDragEnd={() => handleTileDrag(node.id)}
+              onDragStart={(e) => {
+                setDragStartPositions(prev => ({
+                  ...prev,
+                  [node.id]: { x: e.clientX, y: e.clientY }
+                }))
+              }}
+              onDragEnd={(e) => {
+                const startPos = dragStartPositions[node.id]
+                if (startPos) {
+                  const dx = e.clientX - startPos.x
+                  const dy = e.clientY - startPos.y
+                  const distance = Math.sqrt(dx * dx + dy * dy)
+                  if (distance > 5) {
+                    handleTileDrag(node.id)
+                  }
+                }
+              }}
+              onClick={(e) => {
+                if (tileDragStates[node.id]?.wasDragged) {
+                  setTileDragStates(prev => {
+                    const next = { ...prev }
+                    delete next[node.id]
+                    return next
+                  })
+                  return
+                }
+                toggleTileExpansion(node.id, e)
+              }}
               style={{ 
                 height: '200px',
                 padding: '12px',
@@ -251,7 +284,7 @@ const TreeMap = () => {
                 <div style={{ flexShrink: 0 }}>
                   <div style={{ display: 'flex', gap: '6px' }}>
                     <button
-                      onClick={() => toggleTileExpansion(node.id)}
+                      onClick={(e) => toggleTileExpansion(node.id, e)}
                       style={{
                         padding: '6px 10px',
                         background: isNewArticle ? '#06b6d4' : '#6b7280',
@@ -271,11 +304,12 @@ const TreeMap = () => {
                     </button>
                     {isNewArticle && node.external_link ? (
                       <button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           try {
                             window.open(node.external_link, '_blank', 'noopener,noreferrer');
-                          } catch (e) {
-                            console.error('Open external link error:', e);
+                          } catch (err) {
+                            console.error('Open external link error:', err);
                           }
                         }}
                         style={{
@@ -297,7 +331,10 @@ const TreeMap = () => {
                       </button>
                     ) : (
                       <button
-                        onClick={() => toggleBookmark(node)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleBookmark(node);
+                        }}
                         style={{
                           padding: '6px 10px',
                           background: isBookmarked(node.id) ? '#10b981' : '#374151',

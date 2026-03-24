@@ -1,543 +1,449 @@
 {
-"id": "venture-capital-ecosystem",
-"name": "Venture Capital Ecosystem",
-"description": "Global ecosystem of venture capital institutions funding and scaling innovative startups.",
-"categories": [
-
-{
-"id": "institutional-vc",
-"name": "Institutional Venture Capital",
-"description": "Professional venture capital firms managing capital from limited partners.",
-"tags": ["gp-lp","venture-fund"],
-"subcategories": [
-
-{
-"id": "fundraising-lp-relations",
-"name": "Fundraising & LP Relations",
-"description": "Managing relationships with institutional investors.",
-"nodes": [
-
-{
-"id": "lp-fund-structuring",
-"name": "Fund Structuring",
-"description": "Creating legal and financial structure of the fund.",
-"subnodes": [
-
-{
-"id": "lpa-drafting",
-"name": "Limited Partner Agreement Drafting",
-"description": "Legal documentation defining GP and LP rights.",
-"actions":[
-"draft fund governance clauses",
-"define fee structures",
-"set carried interest mechanics"
-],
-"outputs":[
-"Limited Partner Agreement",
-"Fund governance structure",
-"Carried interest waterfall"
-]
-},
-
-{
-"id": "ppm-creation",
-"name": "Private Placement Memorandum",
-"description": "Investment document describing strategy and risks.",
-"actions":[
-"describe investment thesis",
-"outline portfolio strategy",
-"present historical performance"
-],
-"outputs":[
-"Private Placement Memorandum",
-"Fund strategy document"
-]
-}
-
-]
-},
-
-{
-"id": "lp-reporting",
-"name": "LP Performance Reporting",
-"description": "Reporting fund performance metrics.",
-"subnodes": [
-
-{
-"id": "irr-calculation",
-"name": "Net IRR Calculation",
-"description": "Measuring fund return performance.",
-"actions":[
-"calculate internal rate of return",
-"adjust for fees",
-"benchmark against peers"
-],
-"outputs":[
-"Net IRR Report",
-"Quarterly LP update"
-]
-},
-
-{
-"id": "tvpi-reporting",
-"name": "TVPI Reporting",
-"description": "Total value to paid-in capital reporting.",
-"actions":[
-"calculate realized value",
-"calculate unrealized value",
-"combine with invested capital"
-],
-"outputs":[
-"TVPI metrics dashboard",
-"Fund performance sheet"
-]
-}
-
-]
-}
-
-]
-},
-
-{
-"id": "deal-sourcing",
-"name": "Deal Sourcing & Pipeline Management",
-"description": "Identifying potential startup investments.",
-"nodes":[
-
-{
-"id": "founder-outreach",
-"name": "Founder Outreach",
-"description": "Proactive founder sourcing.",
-"subnodes":[
-
-{
-"id":"linkedin-scouting",
-"name":"LinkedIn Founder Outreach",
-"description":"Direct contact with founders.",
-"actions":[
-"identify startup founders",
-"send outreach messages",
-"schedule intro meetings"
-],
-"outputs":[
-"startup pipeline database",
-"intro meeting notes"
-]
-},
-
-{
-"id":"demo-day-scouting",
-"name":"Demo Day Scouting",
-"description":"Evaluating startups at accelerator demo days.",
-"actions":[
-"attend demo events",
-"screen startup pitches",
-"rank opportunities"
-],
-"outputs":[
-"demo day deal flow list"
-]
-}
-
-]
-},
-
-{
-"id":"market-mapping",
-"name":"Market Mapping",
-"description":"Mapping startups in emerging sectors.",
-"subnodes":[
-
-{
-"id":"ai-market-map",
-"name":"AI Startup Market Map",
-"description":"Mapping generative AI companies.",
-"actions":[
-"collect startup datasets",
-"classify sectors",
-"analyze competition"
-],
-"outputs":[
-"AI sector market map"
-]
-}
-
-]
-}
-
-]
-},
-
-{
-"id":"investment-execution",
-"name":"Investment Execution",
-"description":"Evaluating and closing venture investments.",
-"nodes":[
-
-{
-"id":"startup-evaluation",
-"name":"Startup Evaluation",
-"description":"Analyzing startup viability.",
-"subnodes":[
-
-{
-"id":"unit-economics-analysis",
-"name":"Unit Economics Analysis",
-"description":"Evaluating CAC vs LTV economics.",
-"actions":[
-"analyze revenue model",
-"calculate CAC",
-"estimate lifetime value"
-],
-"outputs":[
-"Unit economics report"
-]
-},
-
-{
-"id":"customer-reference-calls",
-"name":"Customer Reference Calls",
-"description":"Validating product-market fit.",
-"actions":[
-"contact startup clients",
-"validate product value",
-"assess churn risk"
-],
-"outputs":[
-"Customer validation memo"
-]
-}
-
-]
-},
-
-{
-"id":"term-sheet-negotiation",
-"name":"Term Sheet Negotiation",
-"description":"Negotiating venture investment terms.",
-"subnodes":[
-
-{
-"id":"valuation-negotiation",
-"name":"Valuation Negotiation",
-"description":"Agreeing on startup valuation.",
-"actions":[
-"run comparable analysis",
-"model dilution scenarios",
-"negotiate ownership"
-],
-"outputs":[
-"Term sheet draft"
-]
-},
-
-{
-"id":"liquidation-preferences",
-"name":"Liquidation Preference Design",
-"description":"Structuring investor protections.",
-"actions":[
-"set preference multiple",
-"define participation rights",
-"model exit payouts"
-],
-"outputs":[
-"Liquidation preference clause"
-]
-}
-
-]
-}
-
-]
-}
-
-]
-},
-
-{
-"id": "corporate-venture-capital",
-"name": "Corporate Venture Capital",
-"description": "Investment arms of corporations investing for strategic advantage.",
-"tags":["cvc","corporate-innovation"],
-"subcategories":[
-
-{
-"id":"strategic-alignment",
-"name":"Strategic Alignment",
-"description":"Ensuring investments align with corporate strategy.",
-"nodes":[
-
-{
-"id":"technology-gap-analysis",
-"name":"Technology Gap Analysis",
-"description":"Identifying missing technologies for the corporation.",
-"subnodes":[
-{
-"id":"business-unit-interviews",
-"name":"Business Unit Interviews",
-"description":"Interviewing BU heads to identify needs.",
-"actions":[
-"collect technology requirements",
-"identify innovation gaps",
-"rank priority sectors"
-],
-"outputs":[
-"Corporate innovation roadmap"
-]
-}
-]
-}
-
-]
-},
-
-{
-"id":"market-intelligence",
-"name":"Market Intelligence",
-"description":"Monitoring startup innovation landscape.",
-"nodes":[
-
-{
-"id":"tech-conference-scouting",
-"name":"Tech Conference Scouting",
-"description":"Identifying disruptive startups.",
-"subnodes":[
-{
-"id":"startup-threat-analysis",
-"name":"Startup Threat Analysis",
-"description":"Assessing startups disrupting core business.",
-"actions":[
-"monitor startup growth",
-"analyze technologies",
-"report risks"
-],
-"outputs":[
-"Emerging disruption report"
-]
-}
-]
-}
-
-]
-}
-
-]
-},
-
-{
-"id": "micro-vc",
-"name": "Micro VC & Seed Funds",
-"description": "Small venture funds specializing in early-stage startups.",
-"tags":["seed","pre-seed"],
-"subcategories":[
-
-{
-"id":"seed-investing",
-"name":"Seed Stage Investing",
-"description":"Investing in very early stage startups.",
-"nodes":[
-
-{
-"id":"pitch-deck-screening",
-"name":"Pitch Deck Screening",
-"description":"Initial evaluation of startup pitch decks.",
-"subnodes":[
-{
-"id":"problem-solution-analysis",
-"name":"Problem Solution Analysis",
-"description":"Evaluating startup value proposition.",
-"actions":[
-"review founder narrative",
-"analyze market problem",
-"evaluate proposed solution"
-],
-"outputs":[
-"Startup screening memo"
-]
-}
-]
-}
-
-]
-}
-
-]
-},
-
-{
-"id": "venture-debt",
-"name": "Venture Debt Funds",
-"description": "Providing loans to venture-backed startups.",
-"tags":["venture-debt","startup-loans"],
-"subcategories":[
-
-{
-"id":"credit-underwriting",
-"name":"Credit Underwriting",
-"description":"Assessing startup ability to repay venture debt.",
-"nodes":[
-
-{
-"id":"cash-burn-analysis",
-"name":"Startup Cash Burn Analysis",
-"description":"Assessing runway and burn rate.",
-"subnodes":[
-{
-"id":"runway-calculation",
-"name":"Runway Calculation",
-"description":"Estimating months of cash remaining.",
-"actions":[
-"calculate burn rate",
-"analyze funding history",
-"project cash runway"
-],
-"outputs":[
-"Runway analysis report"
-]
-}
-]
-}
-
-]
-}
-
-]
-},
-
-{
-"id": "family-office-vc",
-"name": "Family Office Venture Investing",
-"description": "Direct venture investments by ultra-high-net-worth families.",
-"tags":["family-office"],
-"subcategories":[
-
-{
-"id":"direct-investments",
-"name":"Direct Startup Investments",
-"nodes":[
-{
-"id":"founder-network-investing",
-"name":"Founder Network Investing",
-"description":"Investing through trusted founder networks.",
-"subnodes":[
-{
-"id":"relationship-driven-investments",
-"name":"Relationship Driven Deals",
-"description":"Deals sourced via trusted networks.",
-"actions":[
-"meet founders",
-"evaluate personal reputation",
-"conduct lightweight diligence"
-],
-"outputs":[
-"Investment decision memo"
-]
-}
-]
-}
-]
-}
-
-]
-},
-
-{
-"id": "sovereign-vc",
-"name": "Government & Sovereign Venture Funds",
-"description": "State-backed venture investment programs.",
-"tags":["sovereign","government"],
-"subcategories":[
-
-{
-"id":"economic-development",
-"name":"Economic Development Investments",
-"nodes":[
-{
-"id":"innovation-grants",
-"name":"Startup Innovation Grants",
-"description":"Funding early innovation.",
-"subnodes":[
-{
-"id":"grant-allocation",
-"name":"Grant Allocation",
-"description":"Selecting startups for grants.",
-"actions":[
-"review applications",
-"evaluate economic impact",
-"approve funding"
-],
-"outputs":[
-"Government grant contract"
-]
-}
-]
-}
-]
-}
-
-]
-},
-
-{
-"id": "accelerators-builders",
-"name": "Accelerators & Venture Builders",
-"description": "Institutions helping startups build and scale quickly.",
-"tags":["accelerator","venture-builder"],
-"subcategories":[
-
-{
-"id":"startup-building",
-"name":"Startup Building",
-"nodes":[
-
-{
-"id":"founding-team-recruitment",
-"name":"Founding Team Recruitment",
-"description":"Recruiting early leadership for startups.",
-"subnodes":[
-{
-"id":"cto-recruitment",
-"name":"CTO Recruitment",
-"description":"Finding technical co-founders.",
-"actions":[
-"source engineers",
-"conduct interviews",
-"evaluate technical leadership"
-],
-"outputs":[
-"Founding team hiring plan"
-]
-}
-]
-},
-
-{
-"id":"mvp-development",
-"name":"MVP Development",
-"description":"Building early product prototypes.",
-"subnodes":[
-{
-"id":"tech-stack-selection",
-"name":"Tech Stack Selection",
-"description":"Selecting startup infrastructure.",
-"actions":[
-"compare cloud providers",
-"design system architecture",
-"build prototype"
-],
-"outputs":[
-"MVP prototype"
-]
-}
-]
-}
-
-]
-}
-
-]
-}
-
-]
+  "id": "venture-capital-sector",
+  "name": "Venture Capital",
+  "description": "The venture capital ecosystem responsible for financing high-growth startups and innovation-driven companies.",
+  "tags": ["venture-capital", "startups", "fund-management"],
+  "institutions": [
+    {
+      "id": "institutional-vc",
+      "name": "Institutional Venture Capital (GP/LP Model)",
+      "description": "Traditional VC firms managing 10-year funds on behalf of Limited Partners.",
+      "functions": [
+        {
+          "id": "fund-formation",
+          "name": "Fund Formation",
+          "description": "Structuring venture funds and raising capital from LPs.",
+          "descriptionRef": "descriptions/VCbranch_fund-formation.md"
+        },
+        {
+          "id": "portfolio-construction",
+          "name": "Portfolio Construction",
+          "description": "Building diversified portfolios across stages and sectors.",
+          "descriptionRef": "descriptions/VCbranch_portfolio-construction.md"
+        },
+        {
+          "id": "investment-committee-governance",
+          "name": "Investment Committee Governance",
+          "description": "Internal decision-making framework for approving investments.",
+          "descriptionRef": "descriptions/VCbranch_investment-committee-governance.md"
+        },
+        {
+          "id": "exit-management",
+          "name": "Exit Strategy Management",
+          "description": "Managing IPOs, acquisitions, and secondary exits.",
+          "descriptionRef": "descriptions/VCbranch_exit-management.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "vc-analyst",
+              "name": "Analyst",
+              "descriptionRef": "descriptions/VCbranch_vc-analyst.md"
+            },
+            {
+              "id": "vc-associate",
+              "name": "Associate",
+              "descriptionRef": "descriptions/VCbranch_vc-associate.md"
+            },
+            {
+              "id": "vc-principal",
+              "name": "Principal / Vice President",
+              "descriptionRef": "descriptions/VCbranch_vc-principal.md"
+            },
+            {
+              "id": "vc-general-partner",
+              "name": "Managing Director / General Partner",
+              "descriptionRef": "descriptions/VCbranch_vc-general-partner.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "market-mapping",
+              "name": "Market Mapping & Startup Sourcing",
+              "descriptionRef": "descriptions/VCbranch_market-mapping.md"
+            },
+            {
+              "id": "investment-memo",
+              "name": "Investment Memo Drafting",
+              "descriptionRef": "descriptions/VCbranch_investment-memo.md"
+            },
+            {
+              "id": "term-sheet-negotiation",
+              "name": "Term Sheet Negotiation",
+              "descriptionRef": "descriptions/VCbranch_term-sheet-negotiation.md"
+            },
+            {
+              "id": "board-participation",
+              "name": "Board Governance & Strategic Guidance",
+              "descriptionRef": "descriptions/VCbranch_board-participation.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/VCbranch_institutional-vc.md"
+    },
+    {
+      "id": "corporate-vc",
+      "name": "Corporate Venture Capital (CVC)",
+      "description": "Investment arms of large corporations seeking strategic partnerships and technology insights.",
+      "functions": [
+        {
+          "id": "strategic-innovation-scouting",
+          "name": "Strategic Innovation Scouting",
+          "description": "Identifying startups aligned with corporate strategy.",
+          "descriptionRef": "descriptions/VCbranch_strategic-innovation-scouting.md"
+        },
+        {
+          "id": "technology-integration",
+          "name": "Technology Integration",
+          "description": "Connecting startup innovations with corporate product ecosystems.",
+          "descriptionRef": "descriptions/VCbranch_technology-integration.md"
+        },
+        {
+          "id": "strategic-partnership-development",
+          "name": "Strategic Partnership Development",
+          "description": "Facilitating joint ventures or commercial agreements.",
+          "descriptionRef": "descriptions/VCbranch_strategic-partnership-development.md"
+        },
+        {
+          "id": "competitive-intelligence",
+          "name": "Competitive Intelligence",
+          "description": "Monitoring technological disruption in the industry.",
+          "descriptionRef": "descriptions/VCbranch_competitive-intelligence.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "cvc-analyst",
+              "name": "Investment Analyst",
+              "descriptionRef": "descriptions/VCbranch_cvc-analyst.md"
+            },
+            {
+              "id": "cvc-manager",
+              "name": "Corporate VC Manager",
+              "descriptionRef": "descriptions/VCbranch_cvc-manager.md"
+            },
+            {
+              "id": "cvc-director",
+              "name": "Investment Director",
+              "descriptionRef": "descriptions/VCbranch_cvc-director.md"
+            },
+            {
+              "id": "cvc-head",
+              "name": "Head of Corporate Venture Capital",
+              "descriptionRef": "descriptions/VCbranch_cvc-head.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "startup-scouting",
+              "name": "Startup Scouting & Technology Monitoring",
+              "descriptionRef": "descriptions/VCbranch_startup-scouting.md"
+            },
+            {
+              "id": "strategic-due-diligence",
+              "name": "Strategic Due Diligence",
+              "descriptionRef": "descriptions/VCbranch_strategic-due-diligence.md"
+            },
+            {
+              "id": "pilot-projects",
+              "name": "Launching Pilot Projects With Startups",
+              "descriptionRef": "descriptions/VCbranch_pilot-projects.md"
+            },
+            {
+              "id": "ecosystem-building",
+              "name": "Building Corporate Innovation Ecosystems",
+              "descriptionRef": "descriptions/VCbranch_ecosystem-building.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/VCbranch_corporate-vc.md"
+    },
+    {
+      "id": "micro-vc",
+      "name": "Micro-VC & Seed Funds",
+      "description": "Small venture funds specializing in pre-seed and seed stage investments.",
+      "functions": [
+        {
+          "id": "early-stage-discovery",
+          "name": "Early Stage Discovery",
+          "description": "Identifying founders at the earliest company stages.",
+          "descriptionRef": "descriptions/VCbranch_early-stage-discovery.md"
+        },
+        {
+          "id": "high-conviction-investing",
+          "name": "High Conviction Investing",
+          "description": "Making small but concentrated early bets.",
+          "descriptionRef": "descriptions/VCbranch_high-conviction-investing.md"
+        },
+        {
+          "id": "founder-mentorship",
+          "name": "Founder Mentorship",
+          "description": "Helping first-time founders refine product-market fit.",
+          "descriptionRef": "descriptions/VCbranch_founder-mentorship.md"
+        },
+        {
+          "id": "seed-network-building",
+          "name": "Angel & Syndicate Coordination",
+          "description": "Organizing syndicates of angels and early investors.",
+          "descriptionRef": "descriptions/VCbranch_seed-network-building.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "seed-analyst",
+              "name": "Seed Investment Analyst",
+              "descriptionRef": "descriptions/VCbranch_seed-analyst.md"
+            },
+            {
+              "id": "seed-associate",
+              "name": "Investment Associate",
+              "descriptionRef": "descriptions/VCbranch_seed-associate.md"
+            },
+            {
+              "id": "seed-partner",
+              "name": "Partner",
+              "descriptionRef": "descriptions/VCbranch_seed-partner.md"
+            },
+            {
+              "id": "seed-fund-manager",
+              "name": "Fund Manager",
+              "descriptionRef": "descriptions/VCbranch_seed-fund-manager.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "pitch-deck-screening",
+              "name": "Pitch Deck Screening",
+              "descriptionRef": "descriptions/VCbranch_pitch-deck-screening.md"
+            },
+            {
+              "id": "founder-interviews",
+              "name": "Founder Interviews & Market Validation",
+              "descriptionRef": "descriptions/VCbranch_founder-interviews.md"
+            },
+            {
+              "id": "seed-round-structuring",
+              "name": "Seed Round Structuring",
+              "descriptionRef": "descriptions/VCbranch_seed-round-structuring.md"
+            },
+            {
+              "id": "ecosystem-networking",
+              "name": "Angel & Accelerator Networking",
+              "descriptionRef": "descriptions/VCbranch_ecosystem-networking.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/VCbranch_micro-vc.md"
+    },
+    {
+      "id": "venture-debt",
+      "name": "Venture Debt Funds",
+      "description": "Specialized lenders providing non-dilutive capital to venture-backed startups.",
+      "functions": [
+        {
+          "id": "structured-startup-lending",
+          "name": "Structured Startup Lending",
+          "description": "Providing loans tailored to startup growth stages.",
+          "descriptionRef": "descriptions/VCbranch_structured-startup-lending.md"
+        },
+        {
+          "id": "warrant-financing",
+          "name": "Warrant-Linked Financing",
+          "description": "Combining debt instruments with equity warrants.",
+          "descriptionRef": "descriptions/VCbranch_warrant-financing.md"
+        },
+        {
+          "id": "credit-risk-analysis",
+          "name": "Startup Credit Risk Analysis",
+          "description": "Evaluating financial sustainability of startups.",
+          "descriptionRef": "descriptions/VCbranch_credit-risk-analysis.md"
+        },
+        {
+          "id": "growth-capital-management",
+          "name": "Growth Capital Structuring",
+          "description": "Designing financing aligned with venture-backed growth.",
+          "descriptionRef": "descriptions/VCbranch_growth-capital-management.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "venture-debt-analyst",
+              "name": "Credit Analyst",
+              "descriptionRef": "descriptions/VCbranch_venture-debt-analyst.md"
+            },
+            {
+              "id": "venture-debt-associate",
+              "name": "Debt Investment Associate",
+              "descriptionRef": "descriptions/VCbranch_venture-debt-associate.md"
+            },
+            {
+              "id": "venture-debt-director",
+              "name": "Debt Investment Director",
+              "descriptionRef": "descriptions/VCbranch_venture-debt-director.md"
+            },
+            {
+              "id": "venture-debt-partner",
+              "name": "Managing Partner",
+              "descriptionRef": "descriptions/VCbranch_venture-debt-partner.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "loan-structuring",
+              "name": "Loan Structuring for Startups",
+              "descriptionRef": "descriptions/VCbranch_loan-structuring.md"
+            },
+            {
+              "id": "financial-covenants",
+              "name": "Designing Financial Covenants",
+              "descriptionRef": "descriptions/VCbranch_financial-covenants.md"
+            },
+            {
+              "id": "runway-analysis",
+              "name": "Startup Runway Analysis",
+              "descriptionRef": "descriptions/VCbranch_runway-analysis.md"
+            },
+            {
+              "id": "portfolio-monitoring",
+              "name": "Debt Portfolio Monitoring",
+              "descriptionRef": "descriptions/VCbranch_portfolio-monitoring.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/VCbranch_venture-debt.md"
+    },
+    {
+      "id": "accelerators",
+      "name": "Accelerators & Venture Builders",
+      "description": "Organizations providing early-stage startups with capital, mentorship, and operational support.",
+      "functions": [
+        {
+          "id": "startup-incubation",
+          "name": "Startup Incubation",
+          "description": "Helping founders transform ideas into companies.",
+          "descriptionRef": "descriptions/VCbranch_startup-incubation.md"
+        },
+        {
+          "id": "mentor-network-coordination",
+          "name": "Mentor Network Coordination",
+          "description": "Connecting founders with experienced operators.",
+          "descriptionRef": "descriptions/VCbranch_mentor-network-coordination.md"
+        },
+        {
+          "id": "demo-day-preparation",
+          "name": "Demo Day Preparation",
+          "description": "Preparing startups to pitch investors.",
+          "descriptionRef": "descriptions/VCbranch_demo-day-preparation.md"
+        },
+        {
+          "id": "venture-building",
+          "name": "Venture Building",
+          "description": "Creating startups internally through structured company building.",
+          "descriptionRef": "descriptions/VCbranch_venture-building.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "program-manager",
+              "name": "Accelerator Program Manager",
+              "descriptionRef": "descriptions/VCbranch_program-manager.md"
+            },
+            {
+              "id": "startup-mentor",
+              "name": "Startup Mentor / Advisor",
+              "descriptionRef": "descriptions/VCbranch_startup-mentor.md"
+            },
+            {
+              "id": "platform-lead",
+              "name": "Platform Lead",
+              "descriptionRef": "descriptions/VCbranch_platform-lead.md"
+            },
+            {
+              "id": "venture-builder",
+              "name": "Venture Builder / EIR",
+              "descriptionRef": "descriptions/VCbranch_venture-builder.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "founder-coaching",
+              "name": "Founder Coaching Sessions",
+              "descriptionRef": "descriptions/VCbranch_founder-coaching.md"
+            },
+            {
+              "id": "product-market-fit",
+              "name": "Product-Market Fit Workshops",
+              "descriptionRef": "descriptions/VCbranch_product-market-fit.md"
+            },
+            {
+              "id": "demo-day",
+              "name": "Investor Demo Day Organization",
+              "descriptionRef": "descriptions/VCbranch_demo-day.md"
+            },
+            {
+              "id": "startup-scaling",
+              "name": "Startup Scaling Playbooks",
+              "descriptionRef": "descriptions/VCbranch_startup-scaling.md"
+            }
+          ],
+          "descriptionRef": "descriptions/VCbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/VCbranch_accelerators.md"
+    }
+  ],
+  "descriptionRef": "descriptions/VCbranch_venture-capital-sector.md"
 }

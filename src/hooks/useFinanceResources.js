@@ -33,6 +33,8 @@ export const useFinanceResources = () => {
           }
         }
       } catch {
+        // Clear corrupted cache
+        try { localStorage.removeItem(CACHE_KEY); } catch {}
       }
 
       try {
@@ -61,9 +63,13 @@ export const useFinanceResources = () => {
       } catch (e) {
         if (!cancelled) {
           setLoading(false);
+          // Don't block UI on error - show empty state with error message
           setError(e?.message || 'Failed to load finance resources');
-          setData(null);
-          setFiles([]);
+          // Keep any stale data visible rather than clearing entirely
+          if (!data) {
+            setData(null);
+            setFiles([]);
+          }
         }
       }
     };

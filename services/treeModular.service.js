@@ -274,15 +274,38 @@ function resolveDescriptions(node) {
     }
     
     // Extract and merge other metadata from description file
-    const content = fs.readFileSync(path.join(DATA_DIR, node.descriptionRef), 'utf8');
-    const titleMatch = content.match(/^#\s+(.+)$/m);
-    if (titleMatch && !node.name) {
-      node.name = titleMatch[1].trim();
-    }
-    
-    const idMatch = content.match(/\*\*ID:\*\*\s+(.+)$/m);
-    if (idMatch && !node.id) {
-      node.id = idMatch[1].trim();
+    try {
+      let descPath = path.join(DATA_DIR, node.descriptionRef);
+
+      if (!fs.existsSync(descPath)) {
+        try {
+          const dir = path.dirname(descPath);
+          const base = path.basename(descPath, '.md');
+          const candidates = fs.readdirSync(dir).filter(f => f.endsWith('.md') && f.includes(base));
+          if (candidates.length > 0) {
+            descPath = path.join(dir, candidates[0]);
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      if (fs.existsSync(descPath)) {
+        const content = fs.readFileSync(descPath, 'utf8');
+        const titleMatch = content.match(/^#\s+(.+)$/m);
+        if (titleMatch && !node.name) {
+          node.name = titleMatch[1].trim();
+        }
+
+        const idMatch = content.match(/\*\*ID:\*\*\s+(.+)$/m);
+        if (idMatch && !node.id) {
+          node.id = idMatch[1].trim();
+        }
+      } else {
+        console.warn(`[resolveDescriptions] Description file not found for ${node.id}: ${node.descriptionRef}`);
+      }
+    } catch (e) {
+      console.warn(`[resolveDescriptions] Failed to read metadata for ${node.id} (${node.descriptionRef}):`, e?.message || e);
     }
     
     // Keep the ref for client-side full description loading

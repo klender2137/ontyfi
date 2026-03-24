@@ -19,124 +19,142 @@
   // ==========================================
   // STORAGE & USER DATA MANAGEMENT
   // ==========================================
-  const Storage = {
-    KEYS: {
-      SEARCH_HISTORY: 'cryptoExplorer.searchHistory',
-      USER_PREFERENCES: 'cryptoExplorer.searchPreferences',
-      VIEW_HISTORY: 'cryptoExplorer.viewHistory',
-      FAVORITE_SEARCHES: 'cryptoExplorer.favoriteSearches'
-    },
-
-    getSearchHistory() {
+    const getUserId = () => {
       try {
-        return JSON.parse(localStorage.getItem(this.KEYS.SEARCH_HISTORY) || '[]');
+        return window.localStorage.getItem('cryptoExplorer.userId') || 'guest';
       } catch {
-        return [];
+        return 'guest';
       }
-    },
+    };
 
-    addToSearchHistory(query) {
-      if (!query || query.trim().length < 2) return;
-      
-      try {
-        const history = this.getSearchHistory();
-        const trimmed = query.trim();
-        const filtered = history.filter(item => item.toLowerCase() !== trimmed.toLowerCase());
-        const updated = [trimmed, ...filtered].slice(0, 30); // Keep last 30 searches
-        localStorage.setItem(this.KEYS.SEARCH_HISTORY, JSON.stringify(updated));
-      } catch (e) {
-        console.warn('Failed to save search history:', e);
+    const Storage = {
+      KEYS: {
+        SEARCH_HISTORY: (uid) => `cryptoExplorer.searchHistory.${uid}`,
+        USER_PREFERENCES: (uid) => `cryptoExplorer.searchPreferences.${uid}`,
+        VIEW_HISTORY: (uid) => `cryptoExplorer.viewHistory.${uid}`,
+        FAVORITE_SEARCHES: (uid) => `cryptoExplorer.favoriteSearches.${uid}`
+      },
+
+      getSearchHistory() {
+        try {
+          const uid = getUserId();
+          return JSON.parse(localStorage.getItem(this.KEYS.SEARCH_HISTORY(uid)) || '[]');
+        } catch {
+          return [];
+        }
+      },
+
+      addToSearchHistory(query) {
+        if (!query || query.trim().length < 2) return;
+        
+        try {
+          const uid = getUserId();
+          const history = this.getSearchHistory();
+          const trimmed = query.trim();
+          const filtered = history.filter(item => item.toLowerCase() !== trimmed.toLowerCase());
+          const updated = [trimmed, ...filtered].slice(0, 30); // Keep last 30 searches
+          localStorage.setItem(this.KEYS.SEARCH_HISTORY(uid), JSON.stringify(updated));
+        } catch (e) {
+          console.warn('Failed to save search history:', e);
+        }
+      },
+
+      getUserPreferences() {
+        try {
+          const uid = getUserId();
+          const defaults = {
+            searchMode: 'smart',
+            showSuggestions: true,
+            maxSuggestions: 10,
+            highlightMatches: true,
+            searchInDescription: true,
+            searchInTags: true,
+            prioritizeRecent: true,
+            theme: 'dark'
+          };
+          return { ...defaults, ...JSON.parse(localStorage.getItem(this.KEYS.USER_PREFERENCES(uid)) || '{}') };
+        } catch {
+          return defaults;
+        }
+      },
+
+      updateUserPreferences(prefs) {
+        try {
+          const uid = getUserId();
+          const current = this.getUserPreferences();
+          const updated = { ...current, ...prefs };
+          localStorage.setItem(this.KEYS.USER_PREFERENCES(uid), JSON.stringify(updated));
+          return updated;
+        } catch (e) {
+          console.warn('Failed to save preferences:', e);
+          return prefs;
+        }
+      },
+
+      getViewHistory() {
+        try {
+          const uid = getUserId();
+          return JSON.parse(localStorage.getItem(this.KEYS.VIEW_HISTORY(uid)) || '[]');
+        } catch {
+          return [];
+        }
+      },
+
+      addToViewHistory(nodeId, nodeName, nodePath = []) {
+        if (!nodeId) return;
+        
+        try {
+          const uid = getUserId();
+          const history = this.getViewHistory();
+          const filtered = history.filter(item => item.nodeId !== nodeId);
+          const updated = [{
+            nodeId,
+            nodeName,
+            nodePath: Array.isArray(nodePath) ? nodePath : [nodePath].filter(Boolean),
+            timestamp: Date.now(),
+            visitCount: (history.find(h => h.nodeId === nodeId)?.visitCount || 0) + 1
+          }, ...filtered].slice(0, 100);
+          localStorage.setItem(this.KEYS.VIEW_HISTORY(uid), JSON.stringify(updated));
+        } catch (e) {
+          console.warn('Failed to save view history:', e);
+        }
+      },
+
+      getFavoriteSearches() {
+        try {
+          const uid = getUserId();
+          return JSON.parse(localStorage.getItem(this.KEYS.FAVORITE_SEARCHES(uid)) || '[]');
+        } catch {
+          return [];
+        }
+      },
+
+      toggleFavoriteSearch(query) {
+        try {
+          const uid = getUserId();
+          const favorites = this.getFavoriteSearches();
+          const exists = favorites.includes(query);
+          const updated = exists 
+            ? favorites.filter(f => f !== query)
+            : [query, ...favorites].slice(0, 20);
+          localStorage.setItem(this.KEYS.FAVORITE_SEARCHES(uid), JSON.stringify(updated));
+          return !exists;
+        } catch (e) {
+          console.warn('Failed to toggle favorite:', e);
+          return false;
+        }
+      },
+
+      clearSearchHistory() {
+        const uid = getUserId();
+        localStorage.removeItem(this.KEYS.SEARCH_HISTORY(uid));
+      },
+
+      clearViewHistory() {
+        const uid = getUserId();
+        localStorage.removeItem(this.KEYS.VIEW_HISTORY(uid));
       }
-    },
-
-    getUserPreferences() {
-      try {
-        const defaults = {
-          searchMode: 'smart',
-          showSuggestions: true,
-          maxSuggestions: 10,
-          highlightMatches: true,
-          searchInDescription: true,
-          searchInTags: true,
-          prioritizeRecent: true,
-          theme: 'dark'
-        };
-        return { ...defaults, ...JSON.parse(localStorage.getItem(this.KEYS.USER_PREFERENCES) || '{}') };
-      } catch {
-        return defaults;
-      }
-    },
-
-    updateUserPreferences(prefs) {
-      try {
-        const current = this.getUserPreferences();
-        const updated = { ...current, ...prefs };
-        localStorage.setItem(this.KEYS.USER_PREFERENCES, JSON.stringify(updated));
-        return updated;
-      } catch (e) {
-        console.warn('Failed to save preferences:', e);
-        return prefs;
-      }
-    },
-
-    getViewHistory() {
-      try {
-        return JSON.parse(localStorage.getItem(this.KEYS.VIEW_HISTORY) || '[]');
-      } catch {
-        return [];
-      }
-    },
-
-    addToViewHistory(nodeId, nodeName, nodePath = []) {
-      if (!nodeId) return;
-      
-      try {
-        const history = this.getViewHistory();
-        const filtered = history.filter(item => item.nodeId !== nodeId);
-        const updated = [{
-          nodeId,
-          nodeName,
-          nodePath: Array.isArray(nodePath) ? nodePath : [nodePath].filter(Boolean),
-          timestamp: Date.now(),
-          visitCount: (history.find(h => h.nodeId === nodeId)?.visitCount || 0) + 1
-        }, ...filtered].slice(0, 100);
-        localStorage.setItem(this.KEYS.VIEW_HISTORY, JSON.stringify(updated));
-      } catch (e) {
-        console.warn('Failed to save view history:', e);
-      }
-    },
-
-    getFavoriteSearches() {
-      try {
-        return JSON.parse(localStorage.getItem(this.KEYS.FAVORITE_SEARCHES) || '[]');
-      } catch {
-        return [];
-      }
-    },
-
-    toggleFavoriteSearch(query) {
-      try {
-        const favorites = this.getFavoriteSearches();
-        const exists = favorites.includes(query);
-        const updated = exists 
-          ? favorites.filter(f => f !== query)
-          : [query, ...favorites].slice(0, 20);
-        localStorage.setItem(this.KEYS.FAVORITE_SEARCHES, JSON.stringify(updated));
-        return !exists;
-      } catch (e) {
-        console.warn('Failed to toggle favorite:', e);
-        return false;
-      }
-    },
-
-    clearSearchHistory() {
-      localStorage.removeItem(this.KEYS.SEARCH_HISTORY);
-    },
-
-    clearViewHistory() {
-      localStorage.removeItem(this.KEYS.VIEW_HISTORY);
-    }
-  };
+    };
 
   // ==========================================
   // SEARCH MODE DETECTION & PARSING

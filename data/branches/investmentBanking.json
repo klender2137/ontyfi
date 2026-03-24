@@ -1,855 +1,449 @@
 {
-  "id": "global-investment-bank",
-  "name": "Global Investment Banking Institution",
-  "description": "Top-level organization managing strategy, capital allocation, and global financial intermediation.",
-  "categories": [
+  "id": "ma-investment-banking",
+  "name": "M&A / Investment Banking",
+  "description": "Global financial sector focused on mergers, acquisitions, capital raising, and strategic advisory.",
+  "tags": ["investment-banking", "M&A", "capital-raising"],
+  "institutions": [
     {
-      "id": "investment-banking-division",
-      "name": "Investment Banking Division (IBD)",
-      "description": "Front-office advisory and capital raising activities.",
-      "tags": [
-        "investment-banking",
-        "advisory",
-        "capital-raising"
-      ],
-      "subcategories": [
+      "id": "bulge-bracket-banks",
+      "name": "Bulge Bracket Banks",
+      "description": "Global investment banking institutions handling large cross-border deals and providing full financial services.",
+      "functions": [
         {
-          "id": "mna-advisory",
-          "name": "Mergers & Acquisitions Advisory",
-          "description": "Strategic M&A transaction advisory services.",
-          "tags": [
-            "mna",
-            "mergers",
-            "acquisitions"
-          ],
-          "nodes": [
+          "id": "global-ma-advisory",
+          "name": "Global M&A Advisory",
+          "description": "Advising corporations on large-scale mergers, acquisitions, and strategic transactions.",
+          "descriptionRef": "descriptions/investmentBanking_global-ma-advisory.md"
+        },
+        {
+          "id": "capital-markets-underwriting",
+          "name": "Capital Markets Underwriting",
+          "description": "Structuring and underwriting IPOs, bond issuances, and other securities offerings.",
+          "descriptionRef": "descriptions/investmentBanking_capital-markets-underwriting.md"
+        },
+        {
+          "id": "cross-border-deal-structuring",
+          "name": "Cross-Border Deal Structuring",
+          "description": "Designing complex transaction structures across jurisdictions.",
+          "descriptionRef": "descriptions/investmentBanking_cross-border-deal-structuring.md"
+        },
+        {
+          "id": "strategic-financial-advisory",
+          "name": "Strategic Financial Advisory",
+          "description": "Providing board-level guidance on corporate strategy and financing.",
+          "descriptionRef": "descriptions/investmentBanking_strategic-financial-advisory.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
             {
-              "id": "strategic-transaction-advisory",
-              "name": "Strategic Transaction Advisory",
-              "description": "Comprehensive strategic transaction guidance.",
-              "tags": [
-                "strategy",
-                "transactions"
-              ],
-              "subnodes": [
-                {
-                  "id": "corporate-merger-structuring",
-                  "name": "Corporate Merger Structuring",
-                  "description": "Structuring corporate merger transactions.",
-                  "tags": [
-                    "merger",
-                    "structuring"
-                  ]
-                },
-                {
-                  "id": "hostile-takeover-defense",
-                  "name": "Hostile Takeover Defense",
-                  "description": "Defense strategies against hostile takeovers.",
-                  "tags": [
-                    "takeover",
-                    "defense"
-                  ]
-                },
-                {
-                  "id": "cross-border-acquisition-strategy",
-                  "name": "Cross-Border Acquisition Strategy",
-                  "description": "International acquisition planning.",
-                  "tags": [
-                    "cross-border",
-                    "acquisition"
-                  ]
-                },
-                {
-                  "id": "strategic-divestiture-advisory",
-                  "name": "Strategic Divestiture Advisory",
-                  "description": "Strategic asset divestiture guidance.",
-                  "tags": [
-                    "divestiture",
-                    "strategy"
-                  ]
-                }
-              ]
+              "id": "bb-analyst",
+              "name": "Investment Banking Analyst",
+              "descriptionRef": "descriptions/investmentBanking_bb-analyst.md"
+            },
+            {
+              "id": "bb-associate",
+              "name": "Investment Banking Associate",
+              "descriptionRef": "descriptions/investmentBanking_bb-associate.md"
+            },
+            {
+              "id": "bb-vp",
+              "name": "Vice President (M&A)",
+              "descriptionRef": "descriptions/investmentBanking_bb-vp.md"
+            },
+            {
+              "id": "bb-md",
+              "name": "Managing Director",
+              "descriptionRef": "descriptions/investmentBanking_bb-md.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "pitchbook-creation",
+              "name": "Pitch Book Preparation",
+              "descriptionRef": "descriptions/investmentBanking_pitchbook-creation.md"
+            },
+            {
+              "id": "valuation-modeling",
+              "name": "Financial Valuation Modeling",
+              "descriptionRef": "descriptions/investmentBanking_valuation-modeling.md"
             },
             {
               "id": "deal-execution",
-              "name": "Deal Execution Team",
-              "description": "End-to-end deal execution services.",
-              "tags": [
-                "execution",
-                "deal-management"
-              ],
-              "subnodes": [
-                {
-                  "id": "financial-modeling-valuation",
-                  "name": "Financial Modeling & Valuation",
-                  "description": "Comprehensive financial analysis and valuation.",
-                  "tags": [
-                    "modeling",
-                    "valuation"
-                  ]
-                },
-                {
-                  "id": "due-diligence-coordination",
-                  "name": "Due Diligence Coordination",
-                  "description": "Comprehensive due diligence management.",
-                  "tags": [
-                    "due-diligence",
-                    "coordination"
-                  ]
-                },
-                {
-                  "id": "deal-process-management",
-                  "name": "Deal Process Management",
-                  "description": "Managing the complete deal process.",
-                  "tags": [
-                    "process",
-                    "management"
-                  ]
-                },
-                {
-                  "id": "negotiation-support",
-                  "name": "Negotiation Support",
-                  "description": "Strategic negotiation assistance.",
-                  "tags": [
-                    "negotiation",
-                    "support"
-                  ]
-                }
-              ]
+              "name": "Coordinating Multi-Billion Deal Execution",
+              "descriptionRef": "descriptions/investmentBanking_deal-execution.md"
             },
             {
-              "id": "industry-coverage-mna",
-              "name": "Industry Coverage M&A",
-              "description": "Industry-specific M&A expertise.",
-              "tags": [
-                "industry",
-                "coverage"
-              ],
-              "subnodes": [
-                {
-                  "id": "technology-mna-coverage",
-                  "name": "Technology M&A Coverage",
-                  "description": "Technology sector M&A specialization.",
-                  "tags": [
-                    "technology",
-                    "mna"
-                  ]
-                },
-                {
-                  "id": "healthcare-consolidation-advisory",
-                  "name": "Healthcare Consolidation Advisory",
-                  "description": "Healthcare sector consolidation expertise.",
-                  "tags": [
-                    "healthcare",
-                    "consolidation"
-                  ]
-                },
-                {
-                  "id": "industrial-sector-acquisitions",
-                  "name": "Industrial Sector Acquisitions",
-                  "description": "Industrial sector acquisition services.",
-                  "tags": [
-                    "industrial",
-                    "acquisitions"
-                  ]
-                },
-                {
-                  "id": "energy-transition-mna",
-                  "name": "Energy Transition M&A",
-                  "description": "Energy sector transition M&A advisory.",
-                  "tags": [
-                    "energy",
-                    "transition"
-                  ]
-                }
-              ]
+              "id": "client-strategy",
+              "name": "Advising CEOs on Strategic Transactions",
+              "descriptionRef": "descriptions/investmentBanking_client-strategy.md"
             }
-          ]
-        },
-
-        {
-          "id": "equity-capital-markets",
-          "name": "Equity Capital Markets (ECM)",
-          "description": "Equity capital raising and market services.",
-          "tags": [
-            "equity",
-            "capital-markets",
-            "ecm"
           ],
-          "nodes": [
-            {
-              "id": "ipo-advisory",
-              "name": "IPO Advisory",
-              "description": "Initial public offering advisory services.",
-              "tags": [
-                "ipo",
-                "advisory"
-              ],
-              "subnodes": [
-                {
-                  "id": "ipo-structuring-strategy",
-                  "name": "IPO Structuring Strategy",
-                  "description": "Strategic IPO planning and structuring.",
-                  "tags": [
-                    "structuring",
-                    "strategy"
-                  ]
-                },
-                {
-                  "id": "prospectus-drafting-support",
-                  "name": "Prospectus Drafting Support",
-                  "description": "Professional prospectus preparation.",
-                  "tags": [
-                    "prospectus",
-                    "drafting"
-                  ]
-                },
-                {
-                  "id": "roadshow-coordination",
-                  "name": "Roadshow Coordination",
-                  "description": "Investor roadshow management.",
-                  "tags": [
-                    "roadshow",
-                    "coordination"
-                  ]
-                },
-                {
-                  "id": "investor-targeting",
-                  "name": "Investor Targeting",
-                  "description": "Strategic investor identification.",
-                  "tags": [
-                    "investor",
-                    "targeting"
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "follow-on-offerings",
-              "name": "Follow-On Equity Offerings",
-              "description": "Secondary equity issuance services.",
-              "tags": [
-                "follow-on",
-                "offerings"
-              ],
-              "subnodes": [
-                {
-                  "id": "secondary-share-issuance",
-                  "name": "Secondary Share Issuance",
-                  "description": "Secondary equity offering management.",
-                  "tags": [
-                    "secondary",
-                    "issuance"
-                  ]
-                },
-                {
-                  "id": "rights-offerings",
-                  "name": "Rights Offerings",
-                  "description": "Rights issue structuring and execution.",
-                  "tags": [
-                    "rights",
-                    "offerings"
-                  ]
-                },
-                {
-                  "id": "accelerated-bookbuilds",
-                  "name": "Accelerated Bookbuilds",
-                  "description": "Fast-track equity offerings.",
-                  "tags": [
-                    "accelerated",
-                    "bookbuilds"
-                  ]
-                },
-                {
-                  "id": "block-trade-placements",
-                  "name": "Block Trade Placements",
-                  "description": "Large block trade execution.",
-                  "tags": [
-                    "block-trade",
-                    "placements"
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "equity-structuring",
-              "name": "Equity Product Structuring",
-              "description": "Complex equity product design.",
-              "tags": [
-                "structuring",
-                "products"
-              ],
-              "subnodes": [
-                {
-                  "id": "convertible-bond-structures",
-                  "name": "Convertible Bond Structures",
-                  "description": "Convertible bond instrument design.",
-                  "tags": [
-                    "convertible",
-                    "bonds"
-                  ]
-                },
-                {
-                  "id": "preferred-share-issuance",
-                  "name": "Preferred Share Issuance",
-                  "description": "Preferred equity structuring.",
-                  "tags": [
-                    "preferred",
-                    "shares"
-                  ]
-                },
-                {
-                  "id": "equity-linked-derivatives",
-                  "name": "Equity-Linked Derivatives",
-                  "description": "Equity derivative products.",
-                  "tags": [
-                    "derivatives",
-                    "equity-linked"
-                  ]
-                },
-                {
-                  "id": "hybrid-capital-instruments",
-                  "name": "Hybrid Capital Instruments",
-                  "description": "Hybrid equity-debt instruments.",
-                  "tags": [
-                    "hybrid",
-                    "capital"
-                  ]
-                }
-              ]
-            }
-          ]
+          "descriptionRef": "descriptions/investmentBanking_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/investmentBanking_bulge-bracket-banks.md"
+    },
+    {
+      "id": "elite-boutiques",
+      "name": "Elite Boutique Advisory Firms",
+      "description": "High-prestige advisory-only investment banks focused exclusively on M&A and restructuring.",
+      "functions": [
+        {
+          "id": "pure-ma-advisory",
+          "name": "Pure M&A Advisory",
+          "description": "Providing independent advisory services without lending conflicts.",
+          "descriptionRef": "descriptions/investmentBanking_pure-ma-advisory.md"
         },
         {
-          "id": "debt-capital-markets",
-          "name": "Debt Capital Markets (DCM)",
-          "description": "Debt capital raising and fixed income services.",
-          "tags": [
-            "debt",
-            "capital-markets",
-            "dcm"
+          "id": "strategic-board-advisory",
+          "name": "Board-Level Strategic Advisory",
+          "description": "Guiding boards of directors on strategic deals and corporate restructuring.",
+          "descriptionRef": "descriptions/investmentBanking_strategic-board-advisory.md"
+        },
+        {
+          "id": "defense-advisory",
+          "name": "Shareholder Defense Advisory",
+          "description": "Advising companies against hostile takeovers.",
+          "descriptionRef": "descriptions/investmentBanking_defense-advisory.md"
+        },
+        {
+          "id": "special-situations-advisory",
+          "name": "Special Situations Advisory",
+          "description": "Advising on restructurings and complex strategic transformations.",
+          "descriptionRef": "descriptions/investmentBanking_special-situations-advisory.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "eb-analyst",
+              "name": "M&A Analyst",
+              "descriptionRef": "descriptions/investmentBanking_eb-analyst.md"
+            },
+            {
+              "id": "eb-associate",
+              "name": "M&A Associate",
+              "descriptionRef": "descriptions/investmentBanking_eb-associate.md"
+            },
+            {
+              "id": "eb-vp",
+              "name": "Vice President Advisory",
+              "descriptionRef": "descriptions/investmentBanking_eb-vp.md"
+            },
+            {
+              "id": "eb-partner",
+              "name": "Senior Managing Director / Partner",
+              "descriptionRef": "descriptions/investmentBanking_eb-partner.md"
+            }
           ],
-          "nodes": [
+          "descriptionRef": "descriptions/investmentBanking_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
             {
-              "id": "corporate-bond-issuance",
-              "name": "Corporate Bond Origination",
-              "description": "Corporate debt issuance services.",
-              "tags": [
-                "corporate",
-                "bonds"
-              ],
-              "subnodes": [
-                {
-                  "id": "investment-grade-bond-issuance",
-                  "name": "Investment Grade Bond Issuance",
-                  "description": "Investment grade debt structuring.",
-                  "tags": [
-                    "investment-grade",
-                    "bonds"
-                  ]
-                },
-                {
-                  "id": "high-yield-bond-structuring",
-                  "name": "High Yield Bond Structuring",
-                  "description": "High yield debt instruments.",
-                  "tags": [
-                    "high-yield",
-                    "bonds"
-                  ]
-                },
-                {
-                  "id": "green-bond-underwriting",
-                  "name": "Green Bond Underwriting",
-                  "description": "Sustainable bond issuance.",
-                  "tags": [
-                    "green",
-                    "bonds"
-                  ]
-                },
-                {
-                  "id": "private-debt-placements",
-                  "name": "Private Debt Placements",
-                  "description": "Private debt market services.",
-                  "tags": [
-                    "private",
-                    "debt"
-                  ]
-                }
-              ]
+              "id": "deal-valuation",
+              "name": "Preparing Valuation Analysis for Clients",
+              "descriptionRef": "descriptions/investmentBanking_deal-valuation.md"
             },
             {
-              "id": "structured-finance",
-              "name": "Structured Finance",
-              "description": "Complex structured finance products.",
-              "tags": [
-                "structured",
-                "finance"
-              ],
-              "subnodes": [
-                {
-                  "id": "asset-backed-securities",
-                  "name": "Asset-Backed Securities",
-                  "description": "ABS structuring and issuance.",
-                  "tags": [
-                    "abs",
-                    "securitization"
-                  ]
-                },
-                {
-                  "id": "mortgage-backed-securities",
-                  "name": "Mortgage-Backed Securities",
-                  "description": "MBS products and services.",
-                  "tags": [
-                    "mbs",
-                    "mortgage"
-                  ]
-                },
-                {
-                  "id": "collateralized-loan-obligations",
-                  "name": "Collateralized Loan Obligations",
-                  "description": "CLO structuring and management.",
-                  "tags": [
-                    "clo",
-                    "collateralized"
-                  ]
-                },
-                {
-                  "id": "infrastructure-financing-structures",
-                  "name": "Infrastructure Financing Structures",
-                  "description": "Infrastructure project finance.",
-                  "tags": [
-                    "infrastructure",
-                    "financing"
-                  ]
-                }
-              ]
+              "id": "deal-negotiation-support",
+              "name": "Supporting Transaction Negotiations",
+              "descriptionRef": "descriptions/investmentBanking_deal-negotiation-support.md"
             },
             {
-              "id": "sovereign-dcm",
-              "name": "Sovereign & Public Sector Financing",
-              "description": "Government and public sector debt services.",
-              "tags": [
-                "sovereign",
-                "public-sector"
-              ],
-              "subnodes": [
-                {
-                  "id": "government-bond-issuance",
-                  "name": "Government Bond Issuance",
-                  "description": "Sovereign bond issuance.",
-                  "tags": [
-                    "government",
-                    "bonds"
-                  ]
-                },
-                {
-                  "id": "municipal-bond-advisory",
-                  "name": "Municipal Bond Advisory",
-                  "description": "Municipal debt advisory.",
-                  "tags": [
-                    "municipal",
-                    "bonds"
-                  ]
-                },
-                {
-                  "id": "public-infrastructure-debt",
-                  "name": "Public Infrastructure Debt",
-                  "description": "Infrastructure project debt.",
-                  "tags": [
-                    "infrastructure",
-                    "debt"
-                  ]
-                },
-                {
-                  "id": "development-bank-financing",
-                  "name": "Development Bank Financing",
-                  "description": "Development bank funding.",
-                  "tags": [
-                    "development",
-                    "financing"
-                  ]
-                }
-              ]
+              "id": "board-presentations",
+              "name": "Preparing Board-Level Presentations",
+              "descriptionRef": "descriptions/investmentBanking_board-presentations.md"
+            },
+            {
+              "id": "strategic-options-analysis",
+              "name": "Evaluating Strategic Alternatives",
+              "descriptionRef": "descriptions/investmentBanking_strategic-options-analysis.md"
             }
-          ]
+          ],
+          "descriptionRef": "descriptions/investmentBanking_tasks.md"
         }
-      ]
+      ],
+      "descriptionRef": "descriptions/investmentBanking_elite-boutiques.md"
     },
-
     {
-      "id": "global-markets",
-      "name": "Global Markets (Sales & Trading)",
-      "description": "Secondary market liquidity provision and institutional trading.",
-      "units": [
-
+      "id": "middle-market-banks",
+      "name": "Middle-Market Investment Banks",
+      "description": "Banks specializing in advising mid-sized companies on mergers, acquisitions, and capital raising.",
+      "functions": [
         {
-          "id": "equities-trading",
-          "name": "Equities Trading",
-          "teams": [
-
-            {
-              "id": "market-making",
-              "name": "Equity Market Making",
-              "functions": [
-                "Exchange liquidity provision",
-                "Algorithmic market making",
-                "ETF arbitrage",
-                "Block trade facilitation"
-              ]
-            },
-            {
-              "id": "equity-derivatives",
-              "name": "Equity Derivatives Desk",
-              "functions": [
-                "Options trading",
-                "Volatility arbitrage",
-                "Structured derivatives",
-                "Variance swaps"
-              ]
-            },
-            {
-              "id": "prime-brokerage",
-              "name": "Prime Brokerage",
-              "functions": [
-                "Hedge fund financing",
-                "Short selling infrastructure",
-                "Margin lending",
-                "Clearing & settlement"
-              ]
-            }
-
-          ]
+          "id": "mid-market-ma",
+          "name": "Mid-Market M&A Advisory",
+          "description": "Managing acquisitions and company sales in the mid-market segment.",
+          "descriptionRef": "descriptions/investmentBanking_mid-market-ma.md"
         },
-
         {
-          "id": "fixed-income-trading",
-          "name": "Fixed Income Trading",
-          "teams": [
-
-            {
-              "id": "rates-trading",
-              "name": "Interest Rate Trading",
-              "functions": [
-                "Treasury trading",
-                "Interest rate swaps",
-                "Yield curve arbitrage",
-                "Macro positioning"
-              ]
-            },
-            {
-              "id": "credit-trading",
-              "name": "Credit Trading",
-              "functions": [
-                "Corporate bond trading",
-                "Distressed debt trading",
-                "Credit default swaps",
-                "Loan trading"
-              ]
-            },
-            {
-              "id": "macro-trading",
-              "name": "Macro Trading Strategies",
-              "functions": [
-                "Global macro positioning",
-                "Cross-asset arbitrage",
-                "Sovereign spread trading",
-                "Commodity macro hedging"
-              ]
-            }
-
-          ]
+          "id": "private-company-sales",
+          "name": "Private Company Sale Advisory",
+          "description": "Helping founders sell businesses to strategic buyers or private equity.",
+          "descriptionRef": "descriptions/investmentBanking_private-company-sales.md"
         },
-
         {
-          "id": "institutional-sales",
-          "name": "Institutional Sales",
-          "teams": [
-
-            {
-              "id": "asset-manager-sales",
-              "name": "Asset Manager Coverage",
-              "functions": [
-                "Portfolio trade execution",
-                "Research distribution",
-                "Capital markets access",
-                "ETF liquidity services"
-              ]
-            },
-            {
-              "id": "hedge-fund-sales",
-              "name": "Hedge Fund Coverage",
-              "functions": [
-                "Alpha strategy sourcing",
-                "Leverage structuring",
-                "Derivative hedging advisory",
-                "Liquidity provision"
-              ]
-            },
-            {
-              "id": "sovereign-client-sales",
-              "name": "Sovereign Wealth Client Coverage",
-              "functions": [
-                "Strategic portfolio trades",
-                "Private market introductions",
-                "Cross-border asset allocation",
-                "Macro hedging programs"
-              ]
-            }
-
-          ]
+          "id": "growth-capital-advisory",
+          "name": "Growth Capital Advisory",
+          "description": "Structuring financing rounds for expanding companies.",
+          "descriptionRef": "descriptions/investmentBanking_growth-capital-advisory.md"
+        },
+        {
+          "id": "financial-restructuring",
+          "name": "Financial Restructuring Advisory",
+          "description": "Helping distressed companies restructure finances.",
+          "descriptionRef": "descriptions/investmentBanking_financial-restructuring.md"
         }
-
-      ]
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "mm-analyst",
+              "name": "Corporate Finance Analyst",
+              "descriptionRef": "descriptions/investmentBanking_mm-analyst.md"
+            },
+            {
+              "id": "mm-associate",
+              "name": "Corporate Finance Associate",
+              "descriptionRef": "descriptions/investmentBanking_mm-associate.md"
+            },
+            {
+              "id": "mm-vp",
+              "name": "Vice President Mid-Market Advisory",
+              "descriptionRef": "descriptions/investmentBanking_mm-vp.md"
+            },
+            {
+              "id": "mm-md",
+              "name": "Managing Director Corporate Finance",
+              "descriptionRef": "descriptions/investmentBanking_mm-md.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "company-valuation",
+              "name": "Valuing Mid-Sized Companies",
+              "descriptionRef": "descriptions/investmentBanking_company-valuation.md"
+            },
+            {
+              "id": "buyer-outreach",
+              "name": "Contacting Strategic Buyers",
+              "descriptionRef": "descriptions/investmentBanking_buyer-outreach.md"
+            },
+            {
+              "id": "deal-room-management",
+              "name": "Managing Virtual Data Rooms",
+              "descriptionRef": "descriptions/investmentBanking_deal-room-management.md"
+            },
+            {
+              "id": "investor-presentations",
+              "name": "Preparing Investor Presentations",
+              "descriptionRef": "descriptions/investmentBanking_investor-presentations.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/investmentBanking_middle-market-banks.md"
     },
-
     {
-      "id": "asset-wealth-management",
-      "name": "Asset & Wealth Management",
-      "description": "Institutional and private client portfolio management.",
-      "units": [
-
+      "id": "industry-boutiques",
+      "name": "Industry-Specific Boutique Banks",
+      "description": "Advisory firms specialized in specific sectors such as technology, healthcare, or energy.",
+      "functions": [
         {
-          "id": "institutional-asset-management",
-          "name": "Institutional Portfolio Management",
-          "teams": [
-            {
-              "id": "pension-funds",
-              "name": "Pension Fund Management",
-              "functions": [
-                "Liability-driven investing",
-                "Strategic asset allocation",
-                "Risk hedging strategies",
-                "Long-term alpha generation"
-              ]
-            },
-            {
-              "id": "endowments",
-              "name": "Endowment & Foundation Portfolios",
-              "functions": [
-                "Alternative investment allocation",
-                "Private equity exposure",
-                "Real asset diversification",
-                "Long horizon capital preservation"
-              ]
-            },
-            {
-              "id": "sovereign-wealth",
-              "name": "Sovereign Wealth Mandates",
-              "functions": [
-                "Strategic macro allocation",
-                "Infrastructure investments",
-                "Energy transition portfolios",
-                "Geopolitical diversification"
-              ]
-            }
-          ]
+          "id": "sector-ma-advisory",
+          "name": "Sector-Specific M&A Advisory",
+          "description": "Advising companies within a specialized industry niche.",
+          "descriptionRef": "descriptions/investmentBanking_sector-ma-advisory.md"
         },
-
         {
-          "id": "private-wealth",
-          "name": "Private Wealth Advisory",
-          "teams": [
-            {
-              "id": "uhnw-advisory",
-              "name": "Ultra High Net Worth Advisory",
-              "functions": [
-                "Family office structuring",
-                "Direct private investments",
-                "Tax optimization",
-                "Succession planning"
-              ]
-            },
-            {
-              "id": "portfolio-management",
-              "name": "Discretionary Portfolio Management",
-              "functions": [
-                "Multi-asset portfolios",
-                "Risk optimization",
-                "Capital preservation",
-                "Income generation strategies"
-              ]
-            },
-            {
-              "id": "estate-structuring",
-              "name": "Estate & Trust Structuring",
-              "functions": [
-                "Cross-border trusts",
-                "Wealth transfer vehicles",
-                "Tax-efficient estate planning",
-                "Philanthropic foundations"
-              ]
-            }
-          ]
+          "id": "technology-deal-advisory",
+          "name": "Technology Deal Advisory",
+          "description": "Advising tech companies on acquisitions and strategic partnerships.",
+          "descriptionRef": "descriptions/investmentBanking_technology-deal-advisory.md"
+        },
+        {
+          "id": "healthcare-transactions",
+          "name": "Healthcare Transaction Advisory",
+          "description": "Managing deals for pharmaceutical and biotech firms.",
+          "descriptionRef": "descriptions/investmentBanking_healthcare-transactions.md"
+        },
+        {
+          "id": "industry-intelligence",
+          "name": "Industry Market Intelligence",
+          "description": "Providing specialized industry insights to support deal-making.",
+          "descriptionRef": "descriptions/investmentBanking_industry-intelligence.md"
         }
-
-      ]
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "sector-analyst",
+              "name": "Sector Investment Banking Analyst",
+              "descriptionRef": "descriptions/investmentBanking_sector-analyst.md"
+            },
+            {
+              "id": "sector-associate",
+              "name": "Industry Coverage Associate",
+              "descriptionRef": "descriptions/investmentBanking_sector-associate.md"
+            },
+            {
+              "id": "sector-vp",
+              "name": "Sector Advisory Vice President",
+              "descriptionRef": "descriptions/investmentBanking_sector-vp.md"
+            },
+            {
+              "id": "sector-md",
+              "name": "Sector Managing Director",
+              "descriptionRef": "descriptions/investmentBanking_sector-md.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "sector-research",
+              "name": "Industry Research & Trend Analysis",
+              "descriptionRef": "descriptions/investmentBanking_sector-research.md"
+            },
+            {
+              "id": "sector-comps",
+              "name": "Sector Trading Comparables Analysis",
+              "descriptionRef": "descriptions/investmentBanking_sector-comps.md"
+            },
+            {
+              "id": "deal-sourcing",
+              "name": "Sourcing Sector-Specific Deals",
+              "descriptionRef": "descriptions/investmentBanking_deal-sourcing.md"
+            },
+            {
+              "id": "buyer-identification",
+              "name": "Identifying Strategic Buyers in Sector",
+              "descriptionRef": "descriptions/investmentBanking_buyer-identification.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/investmentBanking_industry-boutiques.md"
     },
-
     {
-      "id": "merchant-banking",
-      "name": "Merchant Banking / Principal Investing",
-      "description": "Direct investments using the bank’s own balance sheet.",
-      "units": [
-
+      "id": "regional-full-service-banks",
+      "name": "Regional Full-Service Investment Banks",
+      "description": "Regional financial institutions providing advisory services and corporate lending for local companies.",
+      "functions": [
         {
-          "id": "private-equity",
-          "name": "Private Equity Investments",
-          "teams": [
-            {
-              "id": "buyout-strategies",
-              "name": "Leveraged Buyouts",
-              "functions": [
-                "Target acquisition screening",
-                "Debt structuring",
-                "Operational value creation",
-                "Exit strategy planning"
-              ]
-            },
-            {
-              "id": "growth-equity",
-              "name": "Growth Equity Investments",
-              "functions": [
-                "Late-stage startup investments",
-                "Scaling capital injections",
-                "Strategic board participation",
-                "IPO exit preparation"
-              ]
-            },
-            {
-              "id": "sector-focused-pe",
-              "name": "Sector-Focused Funds",
-              "functions": [
-                "Technology buyouts",
-                "Healthcare platform consolidation",
-                "Energy infrastructure acquisitions",
-                "Fintech growth capital"
-              ]
-            }
-          ]
+          "id": "regional-ma-advisory",
+          "name": "Regional M&A Advisory",
+          "description": "Advising regional champions on acquisitions and sales.",
+          "descriptionRef": "descriptions/investmentBanking_regional-ma-advisory.md"
         },
-
         {
-          "id": "venture-investments",
-          "name": "Venture Capital",
-          "teams": [
-            {
-              "id": "early-stage-vc",
-              "name": "Early Stage Investments",
-              "functions": [
-                "Seed funding",
-                "Series A/B investments",
-                "Startup incubation",
-                "Founder mentorship"
-              ]
-            },
-            {
-              "id": "deep-tech-vc",
-              "name": "Deep Tech Venture Investing",
-              "functions": [
-                "AI infrastructure",
-                "Quantum computing startups",
-                "Biotech research ventures",
-                "Robotics platforms"
-              ]
-            },
-            {
-              "id": "venture-platform",
-              "name": "Startup Platform Support",
-              "functions": [
-                "Talent recruitment networks",
-                "Go-to-market strategy",
-                "Strategic partnerships",
-                "Follow-on capital syndication"
-              ]
-            }
-          ]
-        }
-
-      ]
-    },
-
-    {
-      "id": "middle-back-office",
-      "name": "Middle & Back Office Infrastructure",
-      "description": "Risk, compliance, technology, and operational support.",
-      "units": [
-
-        {
-          "id": "risk-management",
-          "name": "Risk Management",
-          "teams": [
-            {
-              "id": "market-risk",
-              "name": "Market Risk Control",
-              "functions": [
-                "VaR modeling",
-                "Stress testing",
-                "Portfolio exposure limits",
-                "Liquidity risk monitoring"
-              ]
-            },
-            {
-              "id": "credit-risk",
-              "name": "Credit Risk Assessment",
-              "functions": [
-                "Counterparty risk analysis",
-                "Credit rating modeling",
-                "Loan default monitoring",
-                "Exposure mitigation"
-              ]
-            },
-            {
-              "id": "operational-risk",
-              "name": "Operational Risk",
-              "functions": [
-                "Internal control frameworks",
-                "Fraud prevention",
-                "Process audits",
-                "Regulatory compliance risk"
-              ]
-            }
-          ]
+          "id": "corporate-lending",
+          "name": "Corporate Lending",
+          "description": "Providing loans and financing solutions to local companies.",
+          "descriptionRef": "descriptions/investmentBanking_corporate-lending.md"
         },
-
         {
-          "id": "technology-infrastructure",
-          "name": "Technology Infrastructure",
-          "teams": [
-            {
-              "id": "trading-systems",
-              "name": "Trading Platform Engineering",
-              "functions": [
-                "Low latency trading systems",
-                "Market data feeds",
-                "Algorithmic execution engines",
-                "Order routing platforms"
-              ]
-            },
-            {
-              "id": "data-analytics",
-              "name": "Financial Data Engineering",
-              "functions": [
-                "Data warehousing",
-                "Quantitative research datasets",
-                "AI-driven analytics",
-                "Client reporting systems"
-              ]
-            },
-            {
-              "id": "cybersecurity",
-              "name": "Cybersecurity Operations",
-              "functions": [
-                "Network defense",
-                "Fraud detection systems",
-                "Secure transaction processing",
-                "Threat intelligence monitoring"
-              ]
-            }
-          ]
+          "id": "regional-capital-markets",
+          "name": "Regional Capital Markets",
+          "description": "Facilitating bond and equity issuance for regional businesses.",
+          "descriptionRef": "descriptions/investmentBanking_regional-capital-markets.md"
+        },
+        {
+          "id": "relationship-banking",
+          "name": "Corporate Relationship Banking",
+          "description": "Maintaining long-term relationships with regional corporate clients.",
+          "descriptionRef": "descriptions/investmentBanking_relationship-banking.md"
         }
-
-      ]
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "regional-analyst",
+              "name": "Corporate Banking Analyst",
+              "descriptionRef": "descriptions/investmentBanking_regional-analyst.md"
+            },
+            {
+              "id": "regional-associate",
+              "name": "Corporate Finance Associate",
+              "descriptionRef": "descriptions/investmentBanking_regional-associate.md"
+            },
+            {
+              "id": "regional-vp",
+              "name": "Vice President Corporate Banking",
+              "descriptionRef": "descriptions/investmentBanking_regional-vp.md"
+            },
+            {
+              "id": "regional-director",
+              "name": "Regional Managing Director",
+              "descriptionRef": "descriptions/investmentBanking_regional-director.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "loan-structuring",
+              "name": "Structuring Corporate Loans",
+              "descriptionRef": "descriptions/investmentBanking_loan-structuring.md"
+            },
+            {
+              "id": "regional-client-advisory",
+              "name": "Advising Regional Corporate Clients",
+              "descriptionRef": "descriptions/investmentBanking_regional-client-advisory.md"
+            },
+            {
+              "id": "deal-origination",
+              "name": "Originating Regional Transactions",
+              "descriptionRef": "descriptions/investmentBanking_deal-origination.md"
+            },
+            {
+              "id": "credit-analysis",
+              "name": "Performing Corporate Credit Analysis",
+              "descriptionRef": "descriptions/investmentBanking_credit-analysis.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/investmentBanking_regional-full-service-banks.md"
     }
-
-  ]
+  ],
+  "descriptionRef": "descriptions/investmentBanking_ma-investment-banking.md"
 }

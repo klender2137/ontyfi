@@ -1,275 +1,455 @@
 {
-  "Private_Equity_Field": {
-    "categories": {
-      "Buyout_Investing": {
-        "description": "Control acquisitions of mature companies using leverage and operational improvement strategies.",
-        "subcategories": {
-          "Deal_Origination_Execution": {
-            "description": "Sourcing and completing leveraged buyout transactions.",
-            "nodes": {
-              "Deal_Sourcing": {
-                "description": "Identifying potential acquisition opportunities.",
-                "subnodes": {
-                  "Banker_Relationships": {
-                    "description": "Maintaining pipelines with M&A advisory banks.",
-                    "leafnodes": [
-                      "Bulge_Bracket_MA_Pipelines",
-                      "Elite_Boutique_Advisors",
-                      "Regional_Middle_Market_Banks",
-                      "Independent_Corporate_Finance_Advisors"
-                    ]
-                  },
-                  "Proprietary_Outreach": {
-                    "description": "Direct outreach to founders and owners.",
-                    "leafnodes": [
-                      "Founder_Outreach_Programs",
-                      "Industry_Conference_Sourcing",
-                      "Executive_Network_Referrals",
-                      "Sector_Focused_Scouting"
-                    ]
-                  },
-                  "Industry_Conferences": {
-                    "description": "Networking to identify acquisition opportunities.",
-                    "leafnodes": [
-                      "Global_PE_Conferences",
-                      "Sector_Specific_Summits",
-                      "Regional_Investment_Forums",
-                      "M&A_Networking_Events"
-                    ]
-                  },
-                  "Corporate_Carveouts": {
-                    "description": "Monitoring divestitures from large corporations.",
-                    "leafnodes": [
-                      "Divestiture_Advisory_Processes",
-                      "Spinout_Structuring",
-                      "Transitional_Service_Agreements",
-                      "Standalone_Cost_Modeling"
-                    ]
-                  }
-                }
-              },
-              "Financial_Modeling": {
-                "description": "Building leveraged buyout valuation models.",
-                "subnodes": {
-                  "Debt_Capacity_Analysis": {
-                    "description": "Estimating optimal leverage levels.",
-                    "leafnodes": [
-                      "Senior_Debt_Sizing",
-                      "Mezzanine_Tranche_Analysis",
-                      "Cash_Flow_Sweep_Modeling",
-                      "Covenant_Headroom_Testing"
-                    ]
-                  },
-                  "IRR_Sensitivity_Analysis": {
-                    "description": "Modeling return scenarios.",
-                    "leafnodes": [
-                      "Entry_Multiple_Sensitivity",
-                      "Exit_Multiple_Expansion_Contraction",
-                      "Margin_Improvement_Impact",
-                      "Deleveraging_Return_Drivers"
-                    ]
-                  }
-                }
-              },
-              "Due_Diligence": {
-                "description": "Evaluating acquisition risks and opportunities.",
-                "subnodes": {
-                  "Commercial_DD": {
-                    "description": "Assessing market competitiveness and growth potential.",
-                    "leafnodes": [
-                      "Market_Share_Analysis",
-                      "Customer_Churn_Review",
-                      "Competitive_Positioning",
-                      "Pricing_Power_Assessment"
-                    ]
-                  },
-                  "Financial_DD": {
-                    "description": "Validating historical financial performance.",
-                    "leafnodes": [
-                      "Quality_of_Earnings_QofE",
-                      "Net_Working_Capital_Analysis",
-                      "Historical_Bridge_Validation",
-                      "Tax_Compliance_Review"
-                    ]
-                  }
-                }
-              }
-            }
-          },
-          "Platform_Expansion": {
-            "description": "Scaling portfolio companies through acquisitions and operational growth.",
-            "nodes": {
-              "Addon_Acquisitions": {
-                "description": "Buying smaller companies to grow platform businesses.",
-                "subnodes": {
-                  "Target_Screening": {
-                    "description": "Identifying bolt-on acquisition targets.",
-                    "leafnodes": [
-                      "Regional_Competitors",
-                      "Complementary_Product_Lines",
-                      "Distribution_Channel_Targets",
-                      "Vertical_Integration_Targets"
-                    ]
-                  },
-                  "Integration_Planning": {
-                    "description": "Preparing operational integration strategies.",
-                    "leafnodes": [
-                      "Operational_Integration",
-                      "Finance_System_Migration",
-                      "Brand_Consolidation",
-                      "Sales_Channel_Alignment"
-                    ]
-                  }
-                }
-              }
-            }
-          }
+  "id": "private-equity-sector",
+  "name": "Private Equity",
+  "type": "core-root",
+  "description": "Investment sector focused on acquiring, improving, and exiting companies through private ownership structures.",
+  "tags": ["private-equity", "leveraged-buyout", "LBO"],
+  "institutions": [
+    {
+      "id": "large-cap-lbo",
+      "name": "Large-Cap LBO Funds",
+      "description": "Global mega funds executing multi-billion leveraged buyouts of large corporations.",
+      "functions": [
+        {
+          "id": "mega-buyout-execution",
+          "name": "Mega Buyout Execution",
+          "description": "Structuring and executing multi-billion leveraged acquisitions.",
+          "descriptionRef": "descriptions/PEbranch_mega-buyout-execution.md"
+        },
+        {
+          "id": "debt-structuring",
+          "name": "Complex Debt Structuring",
+          "description": "Designing layered financing structures including senior, mezzanine, and PIK instruments.",
+          "descriptionRef": "descriptions/PEbranch_debt-structuring.md"
+        },
+        {
+          "id": "portfolio-value-creation",
+          "name": "Portfolio Value Creation",
+          "description": "Driving operational improvements and strategic repositioning.",
+          "descriptionRef": "descriptions/PEbranch_portfolio-value-creation.md"
+        },
+        {
+          "id": "global-exit-strategy",
+          "name": "Global Exit Strategy",
+          "description": "Planning IPOs or secondary buyouts to maximize investor returns.",
+          "descriptionRef": "descriptions/PEbranch_global-exit-strategy.md"
         }
-      },
-      "Growth_Venture_Capital": {
-        "description": "Minority investments into scaling technology and innovation companies.",
-        "subcategories": {
-          "Sourcing_Thematic_Research": {
-            "description": "Identifying high-growth investment opportunities.",
-            "nodes": {
-              "SaaS_Identification": {
-                "description": "Identifying high retention SaaS firms.",
-                "subnodes": {
-                  "Revenue_Growth_Analysis": {
-                    "description": "Evaluating annual recurring revenue growth.",
-                    "leafnodes": [
-                      "ARR_Growth_Rates",
-                      "Net_Revenue_Retention",
-                      "Gross_Revenue_Retention",
-                      "Expansion_Revenue_Metrics"
-                    ]
-                  }
-                }
-              }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "lbo-analyst",
+              "name": "Private Equity Analyst",
+              "descriptionRef": "descriptions/PEbranch_lbo-analyst.md"
+            },
+            {
+              "id": "lbo-associate",
+              "name": "Private Equity Associate",
+              "descriptionRef": "descriptions/PEbranch_lbo-associate.md"
+            },
+            {
+              "id": "lbo-vp",
+              "name": "Vice President",
+              "descriptionRef": "descriptions/PEbranch_lbo-vp.md"
+            },
+            {
+              "id": "lbo-principal",
+              "name": "Principal",
+              "descriptionRef": "descriptions/PEbranch_lbo-principal.md"
+            },
+            {
+              "id": "lbo-gp",
+              "name": "Managing Director / General Partner",
+              "descriptionRef": "descriptions/PEbranch_lbo-gp.md"
             }
-          }
-        }
-      },
-      "Distressed_Special_Situations": {
-        "description": "Investing in financially distressed companies and restructuring them.",
-        "subcategories": {
-          "Liability_Management": {
-            "description": "Restructuring debt and creditor obligations.",
-            "nodes": {
-              "Debt_Restructuring": {
-                "description": "Reorganizing capital structure.",
-                "subnodes": {
-                  "Covenant_Negotiation": {
-                    "description": "Negotiating with lenders.",
-                    "leafnodes": [
-                      "Waiver_Requests",
-                      "Covenant_Reset_Negotiations",
-                      "Maintenance_vs_Incurrence_Tests",
-                      "Equity_Cure_Provisions"
-                    ]
-                  }
-                }
-              }
+          ],
+          "descriptionRef": "descriptions/PEbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "lbo-modeling",
+              "name": "Building Full LBO Financial Models",
+              "descriptionRef": "descriptions/PEbranch_lbo-modeling.md"
+            },
+            {
+              "id": "bank-syndication",
+              "name": "Negotiating Debt Syndication with Banks",
+              "descriptionRef": "descriptions/PEbranch_bank-syndication.md"
+            },
+            {
+              "id": "ic-memo",
+              "name": "Drafting Investment Committee Memorandums",
+              "descriptionRef": "descriptions/PEbranch_ic-memo.md"
+            },
+            {
+              "id": "portfolio-board",
+              "name": "Participating in Portfolio Company Boards",
+              "descriptionRef": "descriptions/PEbranch_portfolio-board.md"
             }
-          }
+          ],
+          "descriptionRef": "descriptions/PEbranch_tasks.md"
         }
-      },
-      "Private_Credit_Structured_Capital": {
-        "description": "Providing debt financing to private companies.",
-        "subcategories": {
-          "Credit_Underwriting": {
-            "description": "Assessing borrower credit risk.",
-            "nodes": {
-              "Leverage_Analysis": {
-                "description": "Evaluating debt levels.",
-                "subnodes": {
-                  "Senior_Leverage": {
-                    "description": "Senior debt vs EBITDA.",
-                    "leafnodes": [
-                      "First_Lien_Debt_Sizing",
-                      "Unitranche_Pricing",
-                      "Senior_Net_Leverage",
-                      "Interest_Coverage_Ratios"
-                    ]
-                  }
-                }
-              }
+      ],
+      "descriptionRef": "descriptions/PEbranch_large-cap-lbo.md"
+    },
+    {
+      "id": "mid-market-pe",
+      "name": "Mid-Market Private Equity",
+      "description": "Funds investing in SMEs with enterprise values typically between €50M and €500M.",
+      "functions": [
+        {
+          "id": "sme-acquisitions",
+          "name": "SME Acquisition Strategy",
+          "description": "Identifying and acquiring mid-sized companies with growth potential.",
+          "descriptionRef": "descriptions/PEbranch_sme-acquisitions.md"
+        },
+        {
+          "id": "buy-and-build",
+          "name": "Buy-and-Build Consolidation",
+          "description": "Expanding companies via strategic add-on acquisitions.",
+          "descriptionRef": "descriptions/PEbranch_buy-and-build.md"
+        },
+        {
+          "id": "operational-improvement",
+          "name": "Operational Efficiency Programs",
+          "description": "Improving margins through operational restructuring.",
+          "descriptionRef": "descriptions/PEbranch_operational-improvement.md"
+        },
+        {
+          "id": "regional-expansion",
+          "name": "Regional Market Expansion",
+          "description": "Supporting portfolio companies in expanding to new markets.",
+          "descriptionRef": "descriptions/PEbranch_regional-expansion.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "mm-analyst",
+              "name": "Investment Analyst",
+              "descriptionRef": "descriptions/PEbranch_mm-analyst.md"
+            },
+            {
+              "id": "mm-associate",
+              "name": "Investment Associate",
+              "descriptionRef": "descriptions/PEbranch_mm-associate.md"
+            },
+            {
+              "id": "mm-vp",
+              "name": "Investment Vice President",
+              "descriptionRef": "descriptions/PEbranch_mm-vp.md"
+            },
+            {
+              "id": "mm-director",
+              "name": "Investment Director",
+              "descriptionRef": "descriptions/PEbranch_mm-director.md"
             }
-          }
-        }
-      },
-      "Infrastructure_Real_Assets": {
-        "description": "Investments into long-term infrastructure assets.",
-        "subcategories": {
-          "Asset_Underwriting": {
-            "description": "Evaluating infrastructure investment viability.",
-            "nodes": {
-              "Revenue_Model_Analysis": {
-                "description": "Assessing asset cash flow generation.",
-                "subnodes": {
-                  "Concession_Revenues": {
-                    "description": "Government concession income.",
-                    "leafnodes": [
-                      "PPP_Framework_Analysis",
-                      "Availability_Payment_Modeling",
-                      "Concession_Agreement_Terms",
-                      "Regulatory_Risk_Assessment"
-                    ]
-                  }
-                }
-              }
+          ],
+          "descriptionRef": "descriptions/PEbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "market-screening",
+              "name": "Screening SME Acquisition Targets",
+              "descriptionRef": "descriptions/PEbranch_market-screening.md"
+            },
+            {
+              "id": "valuation-analysis",
+              "name": "Performing Comparable Valuation Analysis",
+              "descriptionRef": "descriptions/PEbranch_valuation-analysis.md"
+            },
+            {
+              "id": "due-diligence",
+              "name": "Coordinating Commercial Due Diligence",
+              "descriptionRef": "descriptions/PEbranch_due-diligence.md"
+            },
+            {
+              "id": "integration-plan",
+              "name": "Designing Post-Acquisition Integration Plans",
+              "descriptionRef": "descriptions/PEbranch_integration-plan.md"
             }
-          }
+          ],
+          "descriptionRef": "descriptions/PEbranch_tasks.md"
         }
-      },
-      "Secondary_Market_Investing": {
-        "description": "Purchasing stakes in existing private equity funds.",
-        "subcategories": {
-          "Portfolio_Valuation": {
-            "description": "Valuing portfolios of PE investments.",
-            "nodes": {
-              "NAV_Analysis": {
-                "description": "Analyzing net asset values.",
-                "subnodes": {
-                  "Company_Level_Valuation": {
-                    "description": "Valuing individual portfolio companies.",
-                    "leafnodes": [
-                      "BottomUp_Portfolio_Review",
-                      "Public_Peer_Benchmarking",
-                      "Recent_Transaction_Analysis",
-                      "Discount_to_NAV_Modeling"
-                    ]
-                  }
-                }
-              }
+      ],
+      "descriptionRef": "descriptions/PEbranch_mid-market-pe.md"
+    },
+    {
+      "id": "secondaries",
+      "name": "Secondaries Funds",
+      "description": "Funds purchasing existing stakes in private equity funds from LPs seeking liquidity.",
+      "functions": [
+        {
+          "id": "lp-stake-acquisition",
+          "name": "LP Stake Acquisition",
+          "description": "Purchasing limited partner interests in existing PE funds.",
+          "descriptionRef": "descriptions/PEbranch_lp-stake-acquisition.md"
+        },
+        {
+          "id": "portfolio-valuation",
+          "name": "Portfolio Valuation Analysis",
+          "description": "Assessing fair value of fund holdings.",
+          "descriptionRef": "descriptions/PEbranch_portfolio-valuation.md"
+        },
+        {
+          "id": "liquidity-provision",
+          "name": "Liquidity Provision",
+          "description": "Providing early liquidity to LPs locked in long-term PE funds.",
+          "descriptionRef": "descriptions/PEbranch_liquidity-provision.md"
+        },
+        {
+          "id": "secondary-portfolio-management",
+          "name": "Secondary Portfolio Management",
+          "description": "Managing diversified exposure across multiple funds.",
+          "descriptionRef": "descriptions/PEbranch_secondary-portfolio-management.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "sec-analyst",
+              "name": "Secondaries Investment Analyst",
+              "descriptionRef": "descriptions/PEbranch_sec-analyst.md"
+            },
+            {
+              "id": "sec-associate",
+              "name": "Secondaries Associate",
+              "descriptionRef": "descriptions/PEbranch_sec-associate.md"
+            },
+            {
+              "id": "sec-vp",
+              "name": "Secondaries Vice President",
+              "descriptionRef": "descriptions/PEbranch_sec-vp.md"
+            },
+            {
+              "id": "sec-partner",
+              "name": "Secondaries Partner",
+              "descriptionRef": "descriptions/PEbranch_sec-partner.md"
             }
-          }
-        }
-      },
-      "Portfolio_Governance_Value_Creation": {
-        "description": "Managing portfolio companies after investment.",
-        "subcategories": {
-          "Strategic_Governance": {
-            "description": "Board-level strategic oversight.",
-            "nodes": {
-              "Board_Management": {
-                "description": "Managing board participation.",
-                "subnodes": {
-                  "Board_Structure": {
-                    "description": "Defining board composition.",
-                    "leafnodes": [
-                      "Independent_Director_Selection",
-                      "Committee_Formation",
-                      "Governance_Rights_Negotiation",
-                      "Board_Observer_Roles"
-                    ]
-                  }
-                }
-              }
+          ],
+          "descriptionRef": "descriptions/PEbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "fund-valuation",
+              "name": "Valuing Existing PE Fund Portfolios",
+              "descriptionRef": "descriptions/PEbranch_fund-valuation.md"
+            },
+            {
+              "id": "lp-negotiations",
+              "name": "Negotiating LP Stake Purchases",
+              "descriptionRef": "descriptions/PEbranch_lp-negotiations.md"
+            },
+            {
+              "id": "discount-analysis",
+              "name": "Determining Secondary Market Discounts",
+              "descriptionRef": "descriptions/PEbranch_discount-analysis.md"
+            },
+            {
+              "id": "fund-performance",
+              "name": "Monitoring Underlying Fund Performance",
+              "descriptionRef": "descriptions/PEbranch_fund-performance.md"
             }
-          }
+          ],
+          "descriptionRef": "descriptions/PEbranch_tasks.md"
         }
-      }
+      ],
+      "descriptionRef": "descriptions/PEbranch_secondaries.md"
+    },
+    {
+      "id": "coinvestment-vehicles",
+      "name": "Co-Investment Vehicles",
+      "description": "Investment structures where LPs invest directly alongside the GP in specific deals.",
+      "functions": [
+        {
+          "id": "direct-deal-participation",
+          "name": "Direct Deal Participation",
+          "description": "Allowing LPs to invest directly in specific portfolio acquisitions.",
+          "descriptionRef": "descriptions/PEbranch_direct-deal-participation.md"
+        },
+        {
+          "id": "fee-optimization",
+          "name": "Fee Reduction Structuring",
+          "description": "Reducing management and carried interest costs for LP investors.",
+          "descriptionRef": "descriptions/PEbranch_fee-optimization.md"
+        },
+        {
+          "id": "deal-syndication",
+          "name": "Deal Syndication",
+          "description": "Sharing deal exposure between multiple institutional investors.",
+          "descriptionRef": "descriptions/PEbranch_deal-syndication.md"
+        },
+        {
+          "id": "lp-strategic-partnership",
+          "name": "LP Strategic Partnerships",
+          "description": "Strengthening relationships between GPs and institutional LPs.",
+          "descriptionRef": "descriptions/PEbranch_lp-strategic-partnership.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "coinvest-analyst",
+              "name": "Co-Investment Analyst",
+              "descriptionRef": "descriptions/PEbranch_coinvest-analyst.md"
+            },
+            {
+              "id": "coinvest-associate",
+              "name": "Co-Investment Associate",
+              "descriptionRef": "descriptions/PEbranch_coinvest-associate.md"
+            },
+            {
+              "id": "coinvest-vp",
+              "name": "Co-Investment Vice President",
+              "descriptionRef": "descriptions/PEbranch_coinvest-vp.md"
+            },
+            {
+              "id": "coinvest-director",
+              "name": "Co-Investment Director",
+              "descriptionRef": "descriptions/PEbranch_coinvest-director.md"
+            }
+          ],
+          "descriptionRef": "descriptions/PEbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "deal-evaluation",
+              "name": "Evaluating Direct Co-Investment Opportunities",
+              "descriptionRef": "descriptions/PEbranch_deal-evaluation.md"
+            },
+            {
+              "id": "lp-reporting",
+              "name": "Preparing Detailed LP Investment Reports",
+              "descriptionRef": "descriptions/PEbranch_lp-reporting.md"
+            },
+            {
+              "id": "capital-allocation",
+              "name": "Allocating Capital Across Deals",
+              "descriptionRef": "descriptions/PEbranch_capital-allocation.md"
+            },
+            {
+              "id": "deal-syndication-execution",
+              "name": "Executing Co-Investment Syndications",
+              "descriptionRef": "descriptions/PEbranch_deal-syndication-execution.md"
+            }
+          ],
+          "descriptionRef": "descriptions/PEbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/PEbranch_coinvestment-vehicles.md"
+    },
+    {
+      "id": "venture-debt",
+      "name": "Venture Debt Funds",
+      "description": "Specialized lenders providing non-dilutive capital to venture-backed startups.",
+      "functions": [
+        {
+          "id": "structured-startup-lending",
+          "name": "Structured Startup Lending",
+          "description": "Providing loans tailored to startup growth stages.",
+          "descriptionRef": "descriptions/PEbranch_structured-startup-lending.md"
+        },
+        {
+          "id": "warrant-financing",
+          "name": "Warrant-Linked Financing",
+          "description": "Combining debt instruments with equity warrants.",
+          "descriptionRef": "descriptions/PEbranch_warrant-financing.md"
+        },
+        {
+          "id": "credit-risk-analysis",
+          "name": "Startup Credit Risk Analysis",
+          "description": "Evaluating financial sustainability of startups.",
+          "descriptionRef": "descriptions/PEbranch_credit-risk-analysis.md"
+        },
+        {
+          "id": "growth-capital-management",
+          "name": "Growth Capital Structuring",
+          "description": "Designing financing aligned with venture-backed growth.",
+          "descriptionRef": "descriptions/PEbranch_growth-capital-management.md"
+        }
+      ],
+      "categories": [
+        {
+          "id": "jobs",
+          "name": "Jobs",
+          "roles": [
+            {
+              "id": "venture-debt-analyst",
+              "name": "Credit Analyst",
+              "descriptionRef": "descriptions/PEbranch_venture-debt-analyst.md"
+            },
+            {
+              "id": "venture-debt-associate",
+              "name": "Debt Investment Associate",
+              "descriptionRef": "descriptions/PEbranch_venture-debt-associate.md"
+            },
+            {
+              "id": "venture-debt-director",
+              "name": "Debt Investment Director",
+              "descriptionRef": "descriptions/PEbranch_venture-debt-director.md"
+            },
+            {
+              "id": "venture-debt-partner",
+              "name": "Managing Partner",
+              "descriptionRef": "descriptions/PEbranch_venture-debt-partner.md"
+            }
+          ],
+          "descriptionRef": "descriptions/PEbranch_jobs.md"
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "activities": [
+            {
+              "id": "loan-structuring",
+              "name": "Loan Structuring for Startups",
+              "descriptionRef": "descriptions/PEbranch_loan-structuring.md"
+            },
+            {
+              "id": "financial-covenants",
+              "name": "Designing Financial Covenants",
+              "descriptionRef": "descriptions/PEbranch_financial-covenants.md"
+            },
+            {
+              "id": "runway-analysis",
+              "name": "Startup Runway Analysis",
+              "descriptionRef": "descriptions/PEbranch_runway-analysis.md"
+            },
+            {
+              "id": "portfolio-monitoring",
+              "name": "Debt Portfolio Monitoring",
+              "descriptionRef": "descriptions/PEbranch_portfolio-monitoring.md"
+            }
+          ],
+          "descriptionRef": "descriptions/PEbranch_tasks.md"
+        }
+      ],
+      "descriptionRef": "descriptions/PEbranch_venture-debt.md"
     }
-  }
+  ],
+  "descriptionRef": "descriptions/PEbranch_private-equity-sector.md"
 }

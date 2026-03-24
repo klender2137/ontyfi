@@ -569,19 +569,19 @@ class AuthPipeline0_5 {
       const provider = new window.ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const address = await signer.getAddress();
-      const network = await provider.getNetwork();
 
+      const network = await provider.getNetwork();
       const siweMessage = new window.SiweMessage({
         domain: window.location.host,
         address,
-        statement: 'Sign in to CryptoExplorer',
+        statement: 'Sign in to OntyFi',
         uri: window.location.origin,
         version: '1',
         chainId: String(network?.chainId || 1),
         nonce,
       });
 
-      const message = typeof siweMessage.prepareMessage === 'function' ? siweMessage.prepareMessage() : siweMessage.toMessage();
+      const message = siweMessage.prepareMessage();
       const signature = await signer.signMessage(message);
 
       const verifyRes = await fetch('/api/ethereum-auth/verify', {
@@ -614,7 +614,7 @@ class AuthPipeline0_5 {
       // Create a guest user object
       const guestUser = {
         uid: 'guest-' + Date.now(),
-        email: 'guest@cryptoexplorer.local',
+        email: 'guest@ontyfi.local',
         username: 'Guest User',
         isGuest: true,
         created_at: new Date(),
@@ -726,7 +726,7 @@ try {
       signInAsGuest: async () => {
         const guestUser = {
           uid: 'guest-' + Date.now(),
-          email: 'guest@cryptoexplorer.local',
+          email: 'guest@ontyfi.local',
           username: 'Guest User',
           isGuest: true,
           created_at: new Date(),
@@ -774,7 +774,7 @@ try {
     signInAsGuest: async () => {
       const guestUser = {
         uid: 'guest-' + Date.now(),
-        email: 'guest@cryptoexplorer.local',
+        email: 'guest@ontyfi.local',
         username: 'Guest User',
         isGuest: true,
         created_at: new Date(),

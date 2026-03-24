@@ -6,7 +6,7 @@ import { getAuth, signInWithCustomToken } from 'firebase/auth';
 import { auth as firebaseAuth } from '../services/firebase';
 
 export const config = getDefaultConfig({
-  appName: 'Crypto Explorer',
+  appName: 'OntyFi',
   projectId: 'f8cb8d5d5d3f026da76336d47b706b67', // Provided by user
   chains: [mainnet, polygon, optimism, arbitrum, base, solana, solanaDevnet],
   siweConfig: {
@@ -18,7 +18,7 @@ export const config = getDefaultConfig({
     createMessage: ({ nonce, address, chainId }) => ({
       domain: window.location.host,
       address,
-      statement: 'Sign in with Ethereum to CryptoExplorer.',
+      statement: 'Sign in with Ethereum to OntyFi.',
       uri: window.location.origin,
       version: '1',
       chainId,
