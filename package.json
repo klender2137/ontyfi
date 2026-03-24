@@ -1,10 +1,11 @@
 {
-  "name": "cryptoexplorer",
+  "name": "ontyfi",
   "version": "2.0.0",
-  "description": "CryptoExplorer - Unified Authentication Pipeline with Custom Token Architecture",
+  "description": "OntyFi - Unified Authentication Pipeline with Custom Token Architecture",
   "type": "module",
   "main": "server.js",
   "scripts": {
+    "preinstall": "npm config set legacy-peer-deps true",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "node server.js",
