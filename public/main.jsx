@@ -846,7 +846,15 @@ function ArticleScreen({ node, onBackToTree, bookmarksApi, userAccount, onGoHome
     } catch {}
   }, [safeNode.id, quizId]);
 
-  const flatNodes = useMemo(() => flattenTree(window.cryptoHustleTree?.fields || []), []);
+  const flatNodes = useMemo(() => {
+    try {
+      if (typeof window !== 'undefined' && window.TreeUtils && typeof window.TreeUtils.flattenTree === 'function') {
+        const getChildren = window.TreeUtils.getChildren;
+        return window.TreeUtils.flattenTree(window.cryptoHustleTree || { fields: [] }, getChildren);
+      }
+    } catch {}
+    return flattenTree(window.cryptoHustleTree?.fields || []);
+  }, []);
 
   // Build full hierarchical path from prime tile to current tile
   const fullTilePath = useMemo(() => {

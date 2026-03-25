@@ -1,5 +1,5 @@
 // tree-utils.js - Utility functions and helpers
-if (typeof window !== 'undefined') {
+ if (typeof window !== 'undefined') {
   window.TreeUtils = {
     getChildren: (node) => [
       ...(node.categories || []),
@@ -16,11 +16,20 @@ if (typeof window !== 'undefined') {
       if (!tree || !tree.fields) return [];
       const flatten = (nodes, path = []) => {
         return nodes.reduce((acc, node) => {
-          const currentPath = [...path, node.name];
-          const fullPathString = currentPath.join(' / ');
-          const nodeWithPaths = { ...node, path: currentPath, fullPath: currentPath, pathString: fullPathString };
+          const nodeName = node && node.name ? node.name : '';
+          const currentHierarchy = [...path, { id: node.id, name: nodeName }];
+          const currentFullPath = currentHierarchy.map(p => p.name);
+          const fullPathString = currentFullPath.join(' / ');
+          const nodeWithPaths = {
+            ...node,
+            hierarchy: currentHierarchy,
+            path: currentHierarchy.slice(0, -1),
+            fullPath: currentFullPath,
+            fullPathIds: currentHierarchy.map(p => p.id),
+            pathString: fullPathString,
+          };
           const children = getChildren(node);
-          const childResults = children.length > 0 ? flatten(children, currentPath) : [];
+          const childResults = children.length > 0 ? flatten(children, currentHierarchy) : [];
           return [...acc, nodeWithPaths, ...childResults];
         }, []);
       };
@@ -33,14 +42,16 @@ if (typeof window !== 'undefined') {
       if (q.includes(' / ')) {
         const pathParts = q.split(' / ').map(p => p.trim());
         return flatNodes.filter(n => {
-          if (!n.fullPath) return false;
-          // fullPath is now consistently a string
-          const nodePathStr = n.fullPath.toLowerCase();
-          return pathParts.every(part => nodePathStr.includes(part.toLowerCase()));
+          const fp = n.fullPath;
+          const nodePathStr = Array.isArray(fp) ? fp.join(' / ') : (typeof fp === 'string' ? fp : String(fp || ''));
+          if (!nodePathStr) return false;
+          return pathParts.every(part => nodePathStr.toLowerCase().includes(part.toLowerCase()));
         });
       }
       return flatNodes.filter(n => {
-        const pathString = n.fullPath || n.name;
+        const fp = n.fullPath;
+        const nodePathStr = Array.isArray(fp) ? fp.join(' / ') : (typeof fp === 'string' ? fp : '');
+        const pathString = n.pathString || nodePathStr || n.name;
         return n.name.toLowerCase().includes(q) || n.description?.toLowerCase().includes(q) || pathString.toLowerCase().includes(q) || (n.tags || []).some(t => t.toLowerCase().includes(q));
       });
     },
