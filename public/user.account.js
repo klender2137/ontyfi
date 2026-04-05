@@ -176,8 +176,24 @@ const UserAccount = (function() {
     return user.role;
   }
 
-  // Check if user is admin
-  function isAdmin() {
+  // Check if user is admin - now async and server-verified
+  async function isAdmin() {
+    // Use AdminUtils server-side verification if available
+    if (typeof AdminUtils !== 'undefined' && AdminUtils.isAdmin) {
+      return await AdminUtils.isAdmin();
+    }
+    
+    // Fallback: check local role but this is not secure
+    // In production, always use AdminUtils
+    const user = loadUser();
+    return user.role === 'admin';
+  }
+
+  // Synchronous check for initial render (not secure, use for UI only)
+  function isAdminSync() {
+    if (typeof AdminUtils !== 'undefined' && AdminUtils.isAdminSync) {
+      return AdminUtils.isAdminSync();
+    }
     const user = loadUser();
     return user.role === 'admin';
   }
@@ -271,6 +287,7 @@ const UserAccount = (function() {
     updatePFP,
     updateUserRole,
     isAdmin,
+    isAdminSync,
     getRole,
     getUserData,
     getActivitiesSummary,

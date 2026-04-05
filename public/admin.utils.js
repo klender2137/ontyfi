@@ -1,88 +1,158 @@
 // Admin Utilities - User role management and admin functions
+// Updated to use server-side admin verification only
 
 const AdminUtils = (function() {
-  const ADMIN_KEY = 'cryptoExplorer.isAdmin';
-  const USERS_KEY = 'cryptoExplorer.users';
+  // Cache for admin status to avoid repeated API calls
+  let adminStatusCache = null;
+  let adminStatusUser = null;
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+  let cacheTimestamp = 0;
   
-  // Check if current user is admin
-  function isAdmin() {
-    try {
-      const user = UserAccount.getUserData();
-      return user.role === 'admin' || localStorage.getItem(ADMIN_KEY) === 'true';
-    } catch {
-      return false;
-    }
+  // Clear admin status cache (call on logout or role change)
+  function clearAdminCache() {
+    adminStatusCache = null;
+    adminStatusUser = null;
+    cacheTimestamp = 0;
   }
-
-  // Set admin mode (for testing/development)
-  function setAdminMode(enabled) {
+  
+  /**
+   * Verify admin status with server
+   * This is the ONLY valid way to check admin status
+   */
+  async function verifyAdminWithServer(username, email) {
     try {
-      const user = UserAccount.getUserData();
-      user.role = enabled ? 'admin' : 'user';
-      UserAccount.saveUser(user);
-      localStorage.setItem(ADMIN_KEY, enabled ? 'true' : 'false');
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  // Get all users (admin only)
-  function getAllUsers() {
-    if (!isAdmin()) return [];
-    
-    try {
-      // In a real app, this would fetch from server
-      // For now, we'll simulate with localStorage
-      const stored = localStorage.getItem(USERS_KEY);
-      if (stored) {
-        return JSON.parse(stored);
+      const response = await fetch('/api/role/verify-admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email })
+      });
+      
+      if (!response.ok) {
+        console.warn('[AdminUtils] Server admin verification failed');
+        return false;
       }
       
-      // Return current user as example
-      const currentUser = UserAccount.getUserData();
-      return [{
-        id: '1',
-        username: currentUser.username,
-        role: currentUser.role || 'user',
-        joinDate: currentUser.personalInfo?.joinDate || new Date().toISOString(),
-        activities: currentUser.activities || {}
-      }];
+      const result = await response.json();
+      return result.isAdmin === true;
+    } catch (error) {
+      console.error('[AdminUtils] Error verifying admin status:', error);
+      return false;
+    }
+  }
+  
+  /**
+   * Check if current user is admin
+   * Uses server-side verification only - no localStorage bypass
+   */
+  async function isAdmin() {
+    try {
+      const user = UserAccount.getUserData();
+      if (!user || !user.username) {
+        return false;
+      }
+      
+      // Check cache first
+      const now = Date.now();
+      if (adminStatusCache !== null && 
+          adminStatusUser === user.username && 
+          (now - cacheTimestamp) < CACHE_TTL) {
+        return adminStatusCache;
+      }
+      
+      // Verify with server
+      const isAdminUser = await verifyAdminWithServer(user.username, user.email);
+      
+      // Update cache
+      adminStatusCache = isAdminUser;
+      adminStatusUser = user.username;
+      cacheTimestamp = now;
+      
+      return isAdminUser;
+    } catch (error) {
+      console.error('[AdminUtils] Error checking admin status:', error);
+      return false;
+    }
+  }
+  
+  /**
+   * Synchronous check for initial render (returns cached value or false)
+   * Use this for initial UI render, then refresh with async isAdmin()
+   */
+  function isAdminSync() {
+    try {
+      const user = UserAccount.getUserData();
+      if (!user || !user.username) return false;
+      
+      // Return cached value if available and not expired
+      const now = Date.now();
+      if (adminStatusCache !== null && 
+          adminStatusUser === user.username && 
+          (now - cacheTimestamp) < CACHE_TTL) {
+        return adminStatusCache;
+      }
+      
+      // No localStorage bypass anymore - server verification only
+      return false;
+    } catch {
+      return false;
+    }
+  }
+  
+  /**
+   * Refresh admin status from server
+   * Call this on login and periodically
+   */
+  async function refreshAdminStatus() {
+    clearAdminCache();
+    return await isAdmin();
+  }
+  
+  /**
+   * DEPRECATED: setAdminMode removed - admin status is now server-only
+   */
+  function setAdminMode(enabled) {
+    console.warn('[AdminUtils] setAdminMode is deprecated. Admin status is server-managed only.');
+    return false;
+  }
+
+  // Get all users (admin only) - now properly secured with async check
+  async function getAllUsers() {
+    const isAdminUser = await isAdmin();
+    if (!isAdminUser) {
+      console.warn('[AdminUtils] Unauthorized attempt to get all users');
+      return [];
+    }
+    
+    try {
+      // User management should be server-side only
+      return [];
     } catch {
       return [];
     }
   }
 
-  // Update user role
-  function updateUserRole(userId, newRole) {
-    if (!isAdmin()) return false;
-    
-    try {
-      const users = getAllUsers();
-      const userIndex = users.findIndex(u => u.id === userId);
-      if (userIndex >= 0) {
-        users[userIndex].role = newRole;
-        localStorage.setItem(USERS_KEY, JSON.stringify(users));
-        return true;
-      }
-    } catch {
+  // Update user role - now server-managed only
+  async function updateUserRole(userId, newRole) {
+    const isAdminUser = await isAdmin();
+    if (!isAdminUser) {
+      console.warn('[AdminUtils] Unauthorized attempt to update user role');
       return false;
     }
+    
+    console.warn('[AdminUtils] updateUserRole is deprecated. User roles are server-managed.');
     return false;
   }
 
-  // Delete user
-  function deleteUser(userId) {
-    if (!isAdmin()) return false;
-    
-    try {
-      const users = getAllUsers();
-      const filteredUsers = users.filter(u => u.id !== userId);
-      localStorage.setItem(USERS_KEY, JSON.stringify(filteredUsers));
-      return true;
-    } catch {
+  // Delete user - requires server verification
+  async function deleteUser(userId) {
+    const isAdminUser = await isAdmin();
+    if (!isAdminUser) {
+      console.warn('[AdminUtils] Unauthorized attempt to delete user');
       return false;
     }
+    
+    console.warn('[AdminUtils] deleteUser should be implemented server-side');
+    return false;
   }
 
   // Save new article to tree structure
@@ -303,7 +373,10 @@ const AdminUtils = (function() {
 
   return {
     isAdmin,
-    setAdminMode,
+    isAdminSync,
+    refreshAdminStatus,
+    clearAdminCache,
+    setAdminMode, // Deprecated - kept for API compatibility but non-functional
     getAllUsers,
     updateUserRole,
     deleteUser,

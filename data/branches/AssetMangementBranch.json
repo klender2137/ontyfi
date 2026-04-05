@@ -1,7 +1,7 @@
 {
   "id": "asset-management-ecosystem",
   "name": "Global Asset Management Institution",
-  "description": "Top-level structure representing institutions that allocate, manage, and steward global capital across public and private markets.",
+  "descriptionRef": "descriptions/AssetManagementCore.md",
   "tags": [
     "asset-management",
     "investment-management",
@@ -11,7 +11,6 @@
     {
       "id": "institutional-asset-managers",
       "name": "Institutional Asset Managers",
-      "description": "Global firms managing mutual funds, ETFs, and institutional mandates.",
       "tags": [
         "mutual-funds",
         "etf",
@@ -677,5 +676,5 @@
       "descriptionRef": "descriptions/AssetMangementBranch_endowments-foundations.md"
     }
   ],
-  "descriptionRef": "descriptions/AssetMangementBranch_asset-management-ecosystem.md"
+  "descriptionRef": "descriptions/AssetManagementCore.md"
 }

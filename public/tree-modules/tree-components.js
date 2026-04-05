@@ -174,6 +174,20 @@ if (typeof window !== 'undefined' && window.React) {
       }, [
         React.createElement('div', { key: 'header', className: 'tree-section-header' }, [
           React.createElement('div', { key: 'title', className: 'tree-section-title', onClick: (e) => { e.stopPropagation(); onOpen && onOpen(node); }, style: { cursor: 'pointer' } }, node.name),
+          // Display hierarchical path from root branch to this tile
+          node.pathString && React.createElement('div', { 
+            key: 'path', 
+            className: 'tree-section-path',
+            style: { 
+              fontSize: '0.65rem', 
+              color: '#64748b', 
+              marginTop: '0.15rem',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            },
+            title: node.pathString
+          }, node.pathString),
           shortDesc && React.createElement('div', { key: 'description', className: 'tree-section-description' }, shortDesc)
         ]),
         React.createElement('div', { key: 'meta', className: 'tree-section-meta' }, [

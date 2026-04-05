@@ -143,7 +143,25 @@ export default function AuthScreen() {
               <button
                 type="submit"
                 disabled={submitting}
-                style={{ width: '100%', padding: '0.85rem', borderRadius: 12, border: 'none', background: '#3b82f6', color: 'white', fontWeight: 700, cursor: 'pointer' }}
+                style={{ 
+                  width: '100%', 
+                  padding: '0.85rem', 
+                  minHeight: '44px',
+                  borderRadius: 12, 
+                  border: 'none', 
+                  background: '#3b82f6', 
+                  color: 'white', 
+                  fontWeight: 700, 
+                  cursor: 'pointer',
+                  touchAction: 'manipulation',
+                  transition: 'transform 0.1s ease'
+                }}
+                onTouchStart={(e) => {
+                  if (!submitting) e.currentTarget.style.transform = 'scale(0.98)'
+                }}
+                onTouchEnd={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)'
+                }}
               >
                 {submitting ? 'Please wait…' : 'Sign in & link Google'}
               </button>
@@ -154,7 +172,25 @@ export default function AuthScreen() {
                 type="button"
                 onClick={clearPendingGoogleLink}
                 disabled={submitting}
-                style={{ width: '100%', padding: '0.85rem', borderRadius: 12, border: '1px solid rgba(148, 163, 184, 0.35)', background: 'transparent', color: '#cbd5e1', fontWeight: 700, cursor: 'pointer' }}
+                style={{ 
+                  width: '100%', 
+                  padding: '0.85rem', 
+                  minHeight: '44px',
+                  borderRadius: 12, 
+                  border: '1px solid rgba(148, 163, 184, 0.35)', 
+                  background: 'transparent', 
+                  color: '#cbd5e1', 
+                  fontWeight: 700, 
+                  cursor: 'pointer',
+                  touchAction: 'manipulation',
+                  transition: 'transform 0.1s ease'
+                }}
+                onTouchStart={(e) => {
+                  if (!submitting) e.currentTarget.style.transform = 'scale(0.98)'
+                }}
+                onTouchEnd={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)'
+                }}
               >
                 Cancel
               </button>
@@ -169,11 +205,20 @@ export default function AuthScreen() {
             style={{
               flex: 1,
               padding: '0.75rem',
+              minHeight: '44px',
               borderRadius: 10,
               border: mode === 'signin' ? '1px solid #3b82f6' : '1px solid rgba(148, 163, 184, 0.3)',
               background: mode === 'signin' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(15, 23, 42, 0.8)',
               color: '#f7f9ff',
               cursor: 'pointer',
+              touchAction: 'manipulation',
+              transition: 'transform 0.1s ease'
+            }}
+            onTouchStart={(e) => {
+              if (!submitting) e.currentTarget.style.transform = 'scale(0.98)'
+            }}
+            onTouchEnd={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
             }}
           >
             Sign in
@@ -184,11 +229,20 @@ export default function AuthScreen() {
             style={{
               flex: 1,
               padding: '0.75rem',
+              minHeight: '44px',
               borderRadius: 10,
               border: mode === 'signup' ? '1px solid #3b82f6' : '1px solid rgba(148, 163, 184, 0.3)',
               background: mode === 'signup' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(15, 23, 42, 0.8)',
               color: '#f7f9ff',
               cursor: 'pointer',
+              touchAction: 'manipulation',
+              transition: 'transform 0.1s ease'
+            }}
+            onTouchStart={(e) => {
+              if (!submitting) e.currentTarget.style.transform = 'scale(0.98)'
+            }}
+            onTouchEnd={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
             }}
           >
             Sign up
@@ -246,7 +300,25 @@ export default function AuthScreen() {
           <button
             type="submit"
             disabled={submitting}
-            style={{ width: '100%', padding: '0.85rem', borderRadius: 12, border: 'none', background: '#3b82f6', color: 'white', fontWeight: 700, cursor: 'pointer' }}
+            style={{ 
+              width: '100%', 
+              padding: '0.85rem', 
+              minHeight: '44px',
+              borderRadius: 12, 
+              border: 'none', 
+              background: '#3b82f6', 
+              color: 'white', 
+              fontWeight: 700, 
+              cursor: 'pointer',
+              touchAction: 'manipulation',
+              transition: 'transform 0.1s ease'
+            }}
+            onTouchStart={(e) => {
+              if (!submitting) e.currentTarget.style.transform = 'scale(0.98)'
+            }}
+            onTouchEnd={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+            }}
           >
             {submitting ? 'Please wait…' : mode === 'signup' ? 'Create account' : 'Sign in'}
           </button>
@@ -257,7 +329,25 @@ export default function AuthScreen() {
             type="button"
             onClick={handleGoogle}
             disabled={submitting}
-            style={{ width: '100%', padding: '0.85rem', borderRadius: 12, border: '1px solid rgba(148, 163, 184, 0.35)', background: 'rgba(15, 23, 42, 0.8)', color: 'white', fontWeight: 700, cursor: 'pointer' }}
+            style={{ 
+              width: '100%', 
+              padding: '0.85rem', 
+              minHeight: '44px',
+              borderRadius: 12, 
+              border: '1px solid rgba(148, 163, 184, 0.35)', 
+              background: 'rgba(15, 23, 42, 0.8)', 
+              color: 'white', 
+              fontWeight: 700, 
+              cursor: 'pointer',
+              touchAction: 'manipulation',
+              transition: 'transform 0.1s ease'
+            }}
+            onTouchStart={(e) => {
+              if (!submitting) e.currentTarget.style.transform = 'scale(0.98)'
+            }}
+            onTouchEnd={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+            }}
           >
             Continue with Google
           </button>
@@ -268,7 +358,25 @@ export default function AuthScreen() {
             type="button"
             onClick={handlePhantom}
             disabled={submitting}
-            style={{ width: '100%', padding: '0.85rem', borderRadius: 12, border: '1px solid rgba(148, 163, 184, 0.35)', background: 'rgba(15, 23, 42, 0.8)', color: 'white', fontWeight: 700, cursor: 'pointer' }}
+            style={{ 
+              width: '100%', 
+              padding: '0.85rem', 
+              minHeight: '44px',
+              borderRadius: 12, 
+              border: '1px solid rgba(148, 163, 184, 0.35)', 
+              background: 'rgba(15, 23, 42, 0.8)', 
+              color: 'white', 
+              fontWeight: 700, 
+              cursor: 'pointer',
+              touchAction: 'manipulation',
+              transition: 'transform 0.1s ease'
+            }}
+            onTouchStart={(e) => {
+              if (!submitting) e.currentTarget.style.transform = 'scale(0.98)'
+            }}
+            onTouchEnd={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+            }}
           >
             Continue with Phantom
           </button>

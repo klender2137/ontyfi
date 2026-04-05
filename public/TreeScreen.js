@@ -47,6 +47,8 @@ if (typeof window !== 'undefined' && window.React) {
     const [viewState, setViewState] = useState({ zoom: 1, panOffset: { x: 0, y: 0 } });
     const { zoom, panOffset } = viewState;
     const [isPanning, setIsPanning] = useState(false);
+    const activePointersRef = useRef(new Map());
+    const pinchRef = useRef(null);
     const [nodeThemes, setNodeThemes] = useState(() => {
       try { return JSON.parse(localStorage.getItem('cryptoExplorer.nodeThemes')) || {}; } catch { return {}; }
     });
@@ -211,6 +213,104 @@ if (typeof window !== 'undefined' && window.React) {
       panInfo.current = { startX: e.clientX, startY: e.clientY, initialPanX: panOffset.x, initialPanY: panOffset.y };
     }, [draggedNodeId, panOffset]);
 
+    const handlePointerDown = useCallback((e) => {
+      try {
+        if (e.pointerType === 'mouse') return;
+        if (draggedNodeId || e.target.closest('.tree-section-tile')) return;
+        e.preventDefault();
+        const el = containerRef.current;
+        if (el && typeof el.setPointerCapture === 'function') {
+          try { el.setPointerCapture(e.pointerId); } catch {}
+        }
+
+        activePointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        const pts = Array.from(activePointersRef.current.values());
+        if (pts.length === 1) {
+          setIsPanning(true);
+          panInfo.current = { startX: pts[0].x, startY: pts[0].y, initialPanX: panOffsetRef.current.x, initialPanY: panOffsetRef.current.y };
+          pinchRef.current = null;
+        } else if (pts.length === 2) {
+          const dx = pts[1].x - pts[0].x;
+          const dy = pts[1].y - pts[0].y;
+          const dist = Math.hypot(dx, dy);
+          const rect = containerRef.current?.getBoundingClientRect();
+          const cx = (pts[0].x + pts[1].x) / 2;
+          const cy = (pts[0].y + pts[1].y) / 2;
+          const localX = rect ? cx - rect.left : cx;
+          const localY = rect ? cy - rect.top : cy;
+          const z0 = zoomRef.current || 1;
+          const po0 = panOffsetRef.current || { x: 0, y: 0 };
+          const worldX = (localX - po0.x) / z0;
+          const worldY = (localY - po0.y) / z0;
+          pinchRef.current = {
+            dist,
+            zoom: z0,
+            centerLocal: { x: localX, y: localY },
+            centerWorld: { x: worldX, y: worldY },
+          };
+          setIsPanning(false);
+        }
+      } catch {}
+    }, [draggedNodeId]);
+
+    const handlePointerMove = useCallback((e) => {
+      try {
+        if (e.pointerType === 'mouse') return;
+        if (!activePointersRef.current.has(e.pointerId)) return;
+        e.preventDefault();
+
+        activePointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        const pts = Array.from(activePointersRef.current.values());
+
+        if (pts.length === 2 && pinchRef.current) {
+          const dx = pts[1].x - pts[0].x;
+          const dy = pts[1].y - pts[0].y;
+          const dist = Math.hypot(dx, dy);
+          const ratio = pinchRef.current.dist > 0 ? (dist / pinchRef.current.dist) : 1;
+          const nextZoom = Math.max(0.1, Math.min(3, pinchRef.current.zoom * ratio));
+          setViewState(prev => ({
+            zoom: nextZoom,
+            panOffset: {
+              x: pinchRef.current.centerLocal.x - pinchRef.current.centerWorld.x * nextZoom,
+              y: pinchRef.current.centerLocal.y - pinchRef.current.centerWorld.y * nextZoom,
+            }
+          }));
+          return;
+        }
+
+        if (pts.length === 1 && panInfo.current) {
+          const deltaX = pts[0].x - panInfo.current.startX;
+          const deltaY = pts[0].y - panInfo.current.startY;
+          setViewState(prev => ({
+            ...prev,
+            panOffset: {
+              x: panInfo.current.initialPanX + deltaX,
+              y: panInfo.current.initialPanY + deltaY,
+            }
+          }));
+        }
+      } catch {}
+    }, []);
+
+    const handlePointerUpOrCancel = useCallback((e) => {
+      try {
+        if (e.pointerType === 'mouse') return;
+        activePointersRef.current.delete(e.pointerId);
+        const pts = Array.from(activePointersRef.current.values());
+        if (pts.length === 1) {
+          panInfo.current = { startX: pts[0].x, startY: pts[0].y, initialPanX: panOffsetRef.current.x, initialPanY: panOffsetRef.current.y };
+          pinchRef.current = null;
+          setIsPanning(true);
+        } else if (pts.length === 0) {
+          pinchRef.current = null;
+          setIsPanning(false);
+        }
+      } catch {
+        setIsPanning(false);
+      }
+    }, []);
+
     const handleMouseMove = useCallback((e) => {
       if (draggedNodeId && dragInfo.current) {
         const rect = containerRef.current?.getBoundingClientRect();
@@ -308,6 +408,16 @@ if (typeof window !== 'undefined' && window.React) {
 
     const flatNodes = useMemo(() => window.TreeUtils.flattenTree(tree, getChildren), [tree]);
     
+    const nodeDataMap = useMemo(() => {
+      const map = new Map();
+      flatNodes.forEach(node => {
+        if (node.id) {
+          map.set(node.id, node);
+        }
+      });
+      return map;
+    }, [flatNodes]);
+    
     // Search handlers
     const handleSearch = React.useCallback((query, results) => {
       setSearch(query);
@@ -375,11 +485,18 @@ if (typeof window !== 'undefined' && window.React) {
       const nodeNotes = notes.filter(n => n.sectionId === node.id);
       const children = getChildren(node);
       const isExpanded = expandedIds.has(node.id);
+      
+      // Enrich node with path data from flattened tree
+      const enrichedNode = {
+        ...node,
+        ...(nodeDataMap.get(node.id) || {})
+      };
+      
       return React.createElement(React.Fragment, { key: node.id }, [
-        React.createElement(TreeTile, { key: `tile-${node.id}`, node, position: pos, level, isExpanded, childrenCount: children.length, hasNotes: nodeNotes.length > 0, onMouseDown: handleMouseDownRef.current, onOpen: onOpenArticleRef.current, onClick: handleTileClickRef.current, onRightClick: handleNodeRightClickRef.current, onThemeChange: applyThemeToHierarchyRef.current, onCopyLink: copyNodeLinkRef.current, nodeTheme: themeManager.getNodeTheme(node.id) }),
+        React.createElement(TreeTile, { key: `tile-${node.id}`, node: enrichedNode, position: pos, level, isExpanded, childrenCount: children.length, hasNotes: nodeNotes.length > 0, onMouseDown: handleMouseDownRef.current, onOpen: onOpenArticleRef.current, onClick: handleTileClickRef.current, onRightClick: handleNodeRightClickRef.current, onThemeChange: applyThemeToHierarchyRef.current, onCopyLink: copyNodeLinkRef.current, nodeTheme: themeManager.getNodeTheme(node.id) }),
         ...(isExpanded ? children.map(child => renderRecursive(child, level + 1)).filter(Boolean) : [])
       ]);
-    }, [nodePositions, expandedIds, notes, themeManager]);
+    }, [nodePositions, expandedIds, notes, themeManager, nodeDataMap]);
 
     useEffect(() => {
       const handleTreeUpdate = () => { setTreeVersion(prev => prev + 1); setNodePositions({}); setExpandedIds(new Set()); };
@@ -633,13 +750,19 @@ if (typeof window !== 'undefined' && window.React) {
           bottom: '0', 
           overflow: 'hidden', 
           background: 'radial-gradient(circle at center, rgba(15, 23, 42, 0.8), rgba(5, 8, 20, 0.9))',
-          transition: 'top 0.3s ease'
+          transition: 'top 0.3s ease',
+          touchAction: 'none',
+          overscrollBehavior: 'none'
         }, 
         onMouseDown: handlePanStart, 
         onMouseMove: handleMouseMove, 
         onMouseUp: handleMouseUp, 
         onMouseLeave: handleMouseUp, 
-        onWheel: handleWheel 
+        onWheel: handleWheel,
+        onPointerDown: handlePointerDown,
+        onPointerMove: handlePointerMove,
+        onPointerUp: handlePointerUpOrCancel,
+        onPointerCancel: handlePointerUpOrCancel
       }, [
         React.createElement('div', { 
           key: 'tree-world', 

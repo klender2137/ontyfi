@@ -1,7 +1,7 @@
 {
   "id": "quantitative-finance",
   "name": "Quantitative Finance",
-  "description": "The intersection of mathematics, computer science and financial theory where algorithmic models drive capital allocation.",
+  "descriptionRef": "descriptions/QuantBranchCore.md",
   "tags": ["quantitative-finance", "algorithmic-trading", "data-science"],
   "institutions": [
     {
@@ -271,12 +271,11 @@
     {
       "id": "asset-management-quant",
       "name": "Asset Management Quant Desks",
-      "description": "Quant teams managing factor-based portfolios and smart beta investment strategies.",
+      "descriptionRef": "descriptions/QuantBranch_asset-management-quant.md",
       "functions": [
         {
           "id": "factor-investing",
           "name": "Factor Investing Research",
-          "description": "Studying factors like value, momentum, and quality.",
           "descriptionRef": "descriptions/QuantBranch_factor-investing.md"
         },
         {
@@ -445,5 +444,5 @@
       "descriptionRef": "descriptions/QuantBranch_proprietary-trading.md"
     }
   ],
-  "descriptionRef": "descriptions/QuantBranch_quantitative-finance.md"
+  "descriptionRef": "descriptions/QuantBranchCore.md"
 }

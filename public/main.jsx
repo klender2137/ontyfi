@@ -294,7 +294,7 @@ function useBookmarks() {
 }
 
 // Full Description hook
-function useFullDescription(descriptionRef) {
+function useFullDescription(descriptionRef, nodeTitle) {
   const [fullDescription, setFullDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -312,11 +312,17 @@ function useFullDescription(descriptionRef) {
         if (headerText.toLowerCase() === 'description' || headerText.toLowerCase() === 'tags') {
           return null; // Skip these headers
         }
-        return `<h2 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 600; color: #f7f9ff;">${headerText}</h2>`;
+        return `<h2 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 600; color: #f7f9ff;">${escapeHtml(headerText)}</h2>`;
+      }
+
+      // Handle H3 headers (### )
+      if (line.startsWith('### ')) {
+        const headerText = line.substring(4).trim();
+        return `<h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; font-size: 1.25rem; font-weight: 600; color: #f7f9ff;">${escapeHtml(headerText)}</h3>`;
       }
 
       // Handle horizontal rules
-      if (line.trim() === '---') {
+      if (line.trim() === '---' || line.trim() === '***' || line.trim() === '___') {
         return `<hr style="border: none; height: 1px; background: rgba(148, 163, 184, 0.3); margin: 2rem 0;" />`;
       }
 
@@ -330,38 +336,61 @@ function useFullDescription(descriptionRef) {
             'padding: 0.5rem; text-align: left; font-weight: 600; border-bottom: 1px solid rgba(148, 163, 184, 0.3);' :
             'padding: 0.5rem; text-align: left; border-bottom: 1px solid rgba(148, 163, 184, 0.2);';
 
-          return `<tr>${cells.map(cell => `<${cellTag} style="${cellStyle}">${cell}</${cellTag}>`).join('')}</tr>`;
+          return `<tr>${cells.map(cell => `<${cellTag} style="${cellStyle}">${escapeHtml(cell)}</${cellTag}>`).join('')}</tr>`;
         }
       }
 
-      // Handle bold text **text**
-      line = line.replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: 600;">$1</strong>');
+      // Handle bold text **text** (process first, more specific)
+      line = line.replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight: 600;">$1</strong>');
 
-      // Handle italic text *text*
-      line = line.replace(/(?<!\*)\*(?!\*)([^*]+?)(?<!\*)\*(?!\*)/g, '<em style="font-style: italic;">$1</em>');
+      // Handle italic text *text* or _text_
+      line = line.replace(/\*([^*]+)\*/g, '<em style="font-style: italic;">$1</em>');
+      line = line.replace(/_([^_]+)_/g, '<em style="font-style: italic;">$1</em>');
 
       // Handle inline code `code`
       line = line.replace(/`([^`]+)`/g, '<code style="background: rgba(148, 163, 184, 0.1); padding: 0.125rem 0.25rem; border-radius: 3px; font-family: \'Monaco\', \'Menlo\', \'Ubuntu Mono\', monospace; font-size: 0.9em;">$1</code>');
 
+      // Handle links [text](url)
+      line = line.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color: #60a5fa; text-decoration: underline;" target="_blank" rel="noopener noreferrer">$1</a>');
+
       // Handle numbered lists
       if (/^\d+\.\s/.test(line)) {
-        return `<li style="margin-bottom: 0.5rem; margin-left: 1.5rem;">${line}</li>`;
+        const content = line.replace(/^\d+\.\s/, '');
+        return `<li style="margin-bottom: 0.5rem; margin-left: 1.5rem;">${content}</li>`;
       }
 
       // Handle bullet points
-      if (/^[*-]\s/.test(line)) {
-        return `<li style="margin-bottom: 0.5rem; margin-left: 1.5rem;">${line.substring(2)}</li>`;
+      if (/^[-*+]\s/.test(line)) {
+        const content = line.substring(2);
+        return `<li style="margin-bottom: 0.5rem; margin-left: 1.5rem; list-style-type: disc;">${content}</li>`;
       }
 
-      // Regular paragraph
+      // Handle blockquotes
+      if (line.trim().startsWith('>')) {
+        const content = line.trim().substring(1).trim();
+        return `<blockquote style="border-left: 3px solid rgba(148, 163, 184, 0.5); padding-left: 1rem; margin: 1rem 0; color: #94a3b8; font-style: italic;">${content}</blockquote>`;
+      }
+
+      // Regular paragraph (non-empty)
       if (line.trim()) {
         return `<p style="margin-bottom: 1rem; line-height: 1.6;">${line}</p>`;
       }
 
-      return line;
+      return '';
     }).filter(line => line !== null); // Remove null lines (filtered headers)
 
     return processedLines.join('\n');
+  }
+
+  // Helper function to escape HTML special characters
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   // Filter content to remove metadata and the tags section but preserve
@@ -371,17 +400,27 @@ function useFullDescription(descriptionRef) {
   // headers inside the description could prematurely truncate the text.  We
   // now strip only the #/## headers used for metadata and delete the tags block
   // without cutting off subsequent content.
-  function filterDescriptionContent(content) {
+  function filterDescriptionContent(content, nodeTitle) {
     if (!content) return '';
 
     const lines = content.split('\n');
     const filtered = [];
     let skippingTags = false;
+    let foundFirstH1 = false;
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      // drop top‑level title and metadata lines
-      if (/^#\s+/.test(line)) continue;
+
+      // Handle H1 title - skip if it matches the node title (prevent duplication)
+      if (!foundFirstH1 && /^#\s+/.test(line)) {
+        foundFirstH1 = true;
+        const h1Text = line.replace(/^#\s+/, '').trim();
+        if (h1Text.toLowerCase() === (nodeTitle || '').toLowerCase()) {
+          continue; // Skip this H1 as it matches the tile/article title
+        }
+      }
+
+      // drop metadata lines
       if (/^\*\*ID:/i.test(line)) continue;
       if (/^\*\*Path:/i.test(line)) continue;
       if (/^\*\*Branch:/i.test(line)) continue;
@@ -422,8 +461,8 @@ function useFullDescription(descriptionRef) {
         return response.text();
       })
       .then(content => {
-        // Filter content to show only description section
-        const filteredContent = filterDescriptionContent(content);
+        // Filter content to show only description section, passing nodeTitle to prevent duplicate titles
+        const filteredContent = filterDescriptionContent(content, nodeTitle);
         // Render markdown to HTML
         const renderedContent = renderMarkdown(filteredContent);
         setFullDescription(renderedContent);
@@ -543,14 +582,32 @@ function NavOverlay({ onClose, onNavigate, isAdmin, currentScreen }) {
 function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree, onOpenArticle }) {
   const activities = userAccount.getActivitiesSummary();
   const bookmarks = bookmarksApi.bookmarks.slice(0, 3);
-  const [isAdmin, setIsAdmin] = useState(userAccount.isAdmin());
-  const [adminModeEnabled, setAdminModeEnabled] = useState(() => {
-    try {
-      return window.localStorage.getItem('cryptoExplorer.adminMode') === 'true';
-    } catch {
-      return false;
-    }
-  });
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminLoading, setAdminLoading] = useState(true);
+
+  // Check admin status on mount (server-verified)
+  useEffect(() => {
+    const checkAdmin = async () => {
+      setAdminLoading(true);
+      try {
+        // Use AdminUtils for server-side verification
+        if (typeof AdminUtils !== 'undefined' && AdminUtils.isAdmin) {
+          const adminStatus = await AdminUtils.isAdmin();
+          setIsAdmin(adminStatus);
+        } else {
+          // Fallback to sync check (will return false until server verification)
+          setIsAdmin(userAccount.isAdminSync ? userAccount.isAdminSync() : false);
+        }
+      } catch (error) {
+        console.error('[HomeScreen] Error checking admin status:', error);
+        setIsAdmin(false);
+      } finally {
+        setAdminLoading(false);
+      }
+    };
+    
+    checkAdmin();
+  }, []);
 
   // Update streak on mount
   useEffect(() => {
@@ -571,52 +628,13 @@ function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree
     }
   }, []);
 
-  // Toggle admin mode
-  const toggleAdmin = () => {
-    if (!userAccount.isAdmin()) return;
-    const next = !adminModeEnabled;
-    try {
-      window.localStorage.setItem('cryptoExplorer.adminMode', next ? 'true' : 'false');
-    } catch {}
-    setAdminModeEnabled(next);
-  };
-
   const navigateToMyInsights = () => {
     setScreen('my-insights');
   };
 
   return (
     <div className="screen">
-      {userAccount.isAdmin() && (
-        <div style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          background: 'rgba(15, 23, 42, 0.9)',
-          border: `1px solid ${adminModeEnabled ? '#10b981' : 'rgba(148, 163, 184, 0.3)'}`,
-          borderRadius: '8px',
-          padding: '0.5rem',
-          zIndex: 100,
-          fontSize: '0.8rem'
-        }}>
-          <div style={{ color: '#94a3b8', marginBottom: '0.25rem' }}>Admin Mode</div>
-          <button
-            onClick={toggleAdmin}
-            style={{
-              padding: '0.25rem 0.75rem',
-              background: adminModeEnabled ? '#10b981' : '#374151',
-              border: 'none',
-              borderRadius: '4px',
-              color: 'white',
-              cursor: 'pointer',
-              fontSize: '0.75rem',
-              fontWeight: '600'
-            }}
-          >
-            {adminModeEnabled ? 'ON' : 'OFF'}
-          </button>
-        </div>
-      )}
+      {/* Admin indicator removed - no longer allows local toggle */}
 
       <UserCard userAccount={userAccount} onToggleAccount={onOpenAccount} isAccountOpen={false} />
 
@@ -809,8 +827,33 @@ function ArticleScreen({ node, onBackToTree, bookmarksApi, userAccount, onGoHome
     ...node
   };
 
+  // Admin status state
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminChecked, setAdminChecked] = useState(false);
+
+  // Check admin status on mount
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        if (typeof AdminUtils !== 'undefined' && AdminUtils.isAdmin) {
+          const adminStatus = await AdminUtils.isAdmin();
+          setIsAdmin(adminStatus);
+        } else {
+          setIsAdmin(userAccount.isAdminSync ? userAccount.isAdminSync() : false);
+        }
+      } catch (error) {
+        console.error('[ArticleScreen] Error checking admin status:', error);
+        setIsAdmin(false);
+      } finally {
+        setAdminChecked(true);
+      }
+    };
+    
+    checkAdmin();
+  }, []);
+
   // Load full description from markdown file
-  const { fullDescription, loading, error } = useFullDescription(safeNode.descriptionRef);
+  const { fullDescription, loading, error } = useFullDescription(safeNode.descriptionRef, safeNode.name);
 
   // Quiz tag scan: look for [QUIZ_ID: some_id] in markdown-derived description HTML or fallback content
   const quizId = useMemo(() => {
@@ -923,7 +966,7 @@ function ArticleScreen({ node, onBackToTree, bookmarksApi, userAccount, onGoHome
         <div className="article-path">
           <span className="article-path-code">{fullTilePath}</span>
           <button className="copy-button" onClick={handleCopy}>Copy path</button>
-          {userAccount.isAdmin() && (
+          {adminChecked && isAdmin && (
             <button className="delete-button" onClick={handleDelete} style={{ marginLeft: '0.5rem', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.5)', color: '#f87171' }}>Delete Article</button>
           )}
         </div>

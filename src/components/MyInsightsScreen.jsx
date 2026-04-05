@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { TextLayoutEngine } from '../utils/TextLayoutEngine';
 
 const CACHE_KEY = 'my_insights_files';
 const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
@@ -148,7 +149,24 @@ const DocumentViewer = ({ file, onClose }) => {
             <p>{error}</p>
             <button 
               onClick={() => window.open(file.webViewLink, '_blank')}
-              style={{ background: '#1e293b', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', marginTop: '10px' }}
+              style={{ 
+                background: '#1e293b', 
+                color: '#fff', 
+                border: 'none', 
+                padding: '12px 24px', 
+                minHeight: '44px',
+                borderRadius: '8px', 
+                cursor: 'pointer', 
+                marginTop: '10px',
+                touchAction: 'manipulation',
+                transition: 'transform 0.1s ease'
+              }}
+              onTouchStart={(e) => {
+                e.currentTarget.style.transform = 'scale(0.96)'
+              }}
+              onTouchEnd={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+              }}
             >Open in Google Drive</button>
           </div>
         )}
@@ -344,6 +362,58 @@ const MyInsightsScreen = () => {
 
   useEffect(() => { fetchFiles(); }, [fetchFiles]);
 
+  const tickerItems = useMemo(() => {
+    if (!tickers || tickers.length === 0) return [];
+    return tickers.map((ticker, idx) => {
+      const text = `${ticker.symbol}: $${ticker.price.toFixed(2)} (${ticker.change >= 0 ? '+' : ''}${ticker.change.toFixed(2)}%)`;
+      return { ticker, idx, text };
+    });
+  }, [tickers]);
+
+  const tickerNaturalWidths = useMemo(() => {
+    if (tickerItems.length === 0) return {};
+    const font = 'bold 14px monospace';
+    const widths = {};
+    for (const item of tickerItems) {
+      widths[item.ticker.symbol] = TextLayoutEngine.measureNaturalWidth(item.text, font);
+    }
+    return widths;
+  }, [tickerItems]);
+
+  const fileCards = useMemo(() => {
+    return files.map(file => {
+      const info = getFileTypeInfo(file);
+      return (
+        <div 
+          key={file.id} 
+          onClick={() => setSelectedFile(file)} 
+          style={{ 
+            background: 'rgba(255,255,255,0.03)', 
+            backdropFilter: 'blur(12px)', 
+            padding: '24px', 
+            borderRadius: '20px', 
+            border: '1px solid rgba(255,255,255,0.1)', 
+            cursor: 'pointer',
+            transition: 'transform 0.1s ease, box-shadow 0.15s ease',
+            touchAction: 'manipulation'
+          }}
+          onTouchStart={(e) => {
+            e.currentTarget.style.transform = 'scale(0.98)'
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,255,255,0.1)'
+          }}
+          onTouchEnd={(e) => {
+            e.currentTarget.style.transform = 'scale(1)'
+            e.currentTarget.style.boxShadow = 'none'
+          }}
+        >
+          <div style={{ fontSize: '2rem', marginBottom: '12px' }}>{info.icon}</div>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>{file.name}</h3>
+          <div style={{ color: info.color, fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase' }}>{info.label}</div>
+        </div>
+      );
+    });
+  }, [files]);
+
   const initShader = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
@@ -518,22 +588,26 @@ const MyInsightsScreen = () => {
         
         {/* Commuting Tickers Overlay */}
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1, pointerEvents: 'none', opacity: 0.4, overflow: 'hidden' }}>
-          {tickers && tickers.length > 0 ? tickers.map((ticker, idx) => (
-            <div key={ticker.symbol} style={{ 
-              position: 'absolute', 
-              color: ticker.change >= 0 ? '#4ade80' : '#f87171', 
-              fontFamily: 'monospace', 
-              fontSize: '0.9rem', 
-              whiteSpace: 'nowrap', 
-              top: `${(idx * 10) % 100}%`, 
-              left: '-200px', 
-              fontWeight: 'bold',
-              textShadow: '0 0 10px rgba(0,0,0,0.5)',
-              animation: `commute ${20 + idx * 5}s linear infinite` 
-            }}>
-              {ticker.symbol}: ${ticker.price.toFixed(2)} ({ticker.change >= 0 ? '+' : ''}{ticker.change.toFixed(2)}%)
-            </div>
-          )) : null}
+          {tickerItems.length > 0 ? tickerItems.map(({ ticker, idx, text }) => {
+            const measuredWidth = tickerNaturalWidths[ticker.symbol];
+            const startLeft = typeof measuredWidth === 'number' ? `${-(measuredWidth + 24)}px` : '-200px';
+            return (
+              <div key={ticker.symbol} style={{ 
+                position: 'absolute', 
+                color: ticker.change >= 0 ? '#4ade80' : '#f87171', 
+                fontFamily: 'monospace', 
+                fontSize: '0.9rem', 
+                whiteSpace: 'nowrap', 
+                top: `${(idx * 10) % 100}%`, 
+                left: startLeft, 
+                fontWeight: 'bold',
+                textShadow: '0 0 10px rgba(0,0,0,0.5)',
+                animation: `commute ${20 + idx * 5}s linear infinite` 
+              }}>
+                {text}
+              </div>
+            );
+          }) : null}
         </div>
 
         <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
@@ -551,16 +625,7 @@ const MyInsightsScreen = () => {
           {error && <div style={{ padding: '20px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '12px', marginBottom: '20px', color: '#fecaca' }}>{error}</div>}
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
-            {files.map(file => {
-              const info = getFileTypeInfo(file);
-              return (
-                <div key={file.id} onClick={() => setSelectedFile(file)} style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(12px)', padding: '24px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer' }}>
-                  <div style={{ fontSize: '2rem', marginBottom: '12px' }}>{info.icon}</div>
-                  <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>{file.name}</h3>
-                  <div style={{ color: info.color, fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase' }}>{info.label}</div>
-                </div>
-              );
-            })}
+            {fileCards}
           </div>
         </div>
 

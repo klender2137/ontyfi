@@ -424,11 +424,17 @@ if (typeof window !== 'undefined' && window.React) {
       }
     }, [isExploded, position.x, position.y, bubble.allNodes.length]);
 
-    const handleMouseDown = useCallback((e) => {
+    const handlePointerDown = useCallback((e) => {
       if (isExploded) return;
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(true);
+
+      try {
+        if (bubbleRef.current && typeof bubbleRef.current.setPointerCapture === 'function') {
+          bubbleRef.current.setPointerCapture(e.pointerId);
+        }
+      } catch {}
 
       const cursorWorldX = e.clientX - viewportOffset.x;
       const cursorWorldY = e.clientY - viewportOffset.y;
@@ -443,9 +449,9 @@ if (typeof window !== 'undefined' && window.React) {
         grabOffsetX,
         grabOffsetY
       };
-    }, [isExploded, position]);
+    }, [isExploded, position.x, position.y, viewportOffset.x, viewportOffset.y]);
 
-    const handleMouseMove = useCallback((e) => {
+    const handlePointerMove = useCallback((e) => {
       if (!isDragging) return;
       e.preventDefault();
 
@@ -454,24 +460,19 @@ if (typeof window !== 'undefined' && window.React) {
       const newX = cursorWorldX - dragStartRef.current.grabOffsetX;
       const newY = cursorWorldY - dragStartRef.current.grabOffsetY;
       onPositionChange(bubble.id, newX, newY, true);
-    }, [isDragging, bubble.id, onPositionChange, viewportOffset]);
+    }, [isDragging, bubble.id, onPositionChange, viewportOffset.x, viewportOffset.y]);
 
-    const handleMouseUp = useCallback((e) => {
+    const handlePointerUpOrCancel = useCallback((e) => {
       if (!isDragging) return;
+      e.preventDefault();
       setIsDragging(false);
+      try {
+        if (bubbleRef.current && typeof bubbleRef.current.releasePointerCapture === 'function') {
+          bubbleRef.current.releasePointerCapture(e.pointerId);
+        }
+      } catch {}
       onPositionChange(bubble.id, position.x, position.y, false);
-    }, [isDragging, bubble.id, onPositionChange, position]);
-
-    useEffect(() => {
-      if (isDragging) {
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
-        return () => {
-          document.removeEventListener('mousemove', handleMouseMove);
-          document.removeEventListener('mouseup', handleMouseUp);
-        };
-      }
-    }, [isDragging, handleMouseMove, handleMouseUp]);
+    }, [isDragging, bubble.id, onPositionChange, position.x, position.y]);
 
     const handleDoubleClick = useCallback(() => {
       if (!isExploded && !isDragging) {
@@ -522,11 +523,15 @@ if (typeof window !== 'undefined' && window.React) {
             : `0 10px 40px ${bubble.color.glow}, inset 0 -5px 30px rgba(0,0,0,0.2)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease, box-shadow 0.3s ease',
           zIndex: isDragging || isHovered ? 100 : 1,
-          userSelect: 'none'
+          userSelect: 'none',
+          touchAction: 'none'
         },
         onMouseEnter: () => setIsHovered(true),
         onMouseLeave: () => setIsHovered(false),
-        onMouseDown: handleMouseDown,
+        onPointerDown: handlePointerDown,
+        onPointerMove: handlePointerMove,
+        onPointerUp: handlePointerUpOrCancel,
+        onPointerCancel: handlePointerUpOrCancel,
         onDoubleClick: handleDoubleClick
       }, [
         React.createElement('div', {
@@ -968,6 +973,9 @@ if (typeof window !== 'undefined' && window.React) {
     }, []);
 
     const handleTouchStart = useCallback((e) => {
+      if (e.target && (e.target.closest('.tag-bubble') || e.target.closest('.exploded-tile') || e.target.closest('button'))) {
+        return;
+      }
       if (e.touches.length === 2) {
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
@@ -987,6 +995,9 @@ if (typeof window !== 'undefined' && window.React) {
     }, [zoomLevel, viewportOffset]);
 
     const handleTouchMove = useCallback((e) => {
+      if (e.target && (e.target.closest('.tag-bubble') || e.target.closest('.exploded-tile') || e.target.closest('button'))) {
+        return;
+      }
       e.preventDefault();
       if (e.touches.length === 2 && touchStartRef.current.distance > 0) {
         const dx = e.touches[0].clientX - e.touches[1].clientX;
@@ -1089,9 +1100,11 @@ if (typeof window !== 'undefined' && window.React) {
       className: 'screen tag-bubble-explore',
       style: {
         position: 'relative',
+        touchAction: 'none',
+        overscrollBehavior: 'none',
         overflow: 'hidden',
-        background: 'radial-gradient(ellipse at center, #0f172a 0%, #020617 100%)',
-        maxWidth: '100%',
+        padding: 0,
+        maxWidth: 'none',
         width: '100%',
         height: '100vh',
         margin: 0,

@@ -2,12 +2,14 @@
   "id": "risk-management-sector",
   "name": "Risk Management",
   "type": "core-root",
+  "descriptionRef": "descriptions/RiskMbranchCore.md",
   "tags": ["risk-management", "compliance", "market-risk"],
   "tiles": [
     {
       "id": "gsibs",
       "name": "Global Systemically Important Banks (G-SIBs)",
       "description": "Large international banks with massive internal risk control departments managing systemic financial exposure.",
+      "descriptionRef": "descriptions/RiskMbranchGsibs.md",
       "functions": [
         {
           "id": "market-risk-monitoring",
@@ -425,5 +427,5 @@
       "descriptionRef": "descriptions/RiskMbranche_risk-consulting.md"
     }
   ],
-  "descriptionRef": "descriptions/RiskMbranche_risk-management-sector.md"
+  "descriptionRef": "descriptions/RiskMbranchCore.md"
 }

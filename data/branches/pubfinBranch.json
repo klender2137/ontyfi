@@ -1,7 +1,7 @@
 {
   "id": "public-finance-core",
   "name": "Public Finance Sector",
-  "description": "Core sovereign financial system managing taxation, expenditure, monetary policy, and public investment.",
+  "descriptionRef": "descriptions/PubFinCore.md",
   "tags": ["public-finance", "fiscal-policy", "sovereign-debt"],
   "categories": [
     {
@@ -836,5 +836,5 @@
       "descriptionRef": "descriptions/pubfinBranch_tax-customs-administration.md"
     }
   ],
-  "descriptionRef": "descriptions/pubfinBranch_public-finance-core.md"
+  "descriptionRef": "descriptions/PubFinCore.md"
 }

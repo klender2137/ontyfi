@@ -41,13 +41,23 @@ const Home = () => {
                     await signOut()
                   }}
                   style={{
-                    padding: '0.6rem 0.9rem',
+                    padding: '0.75rem 1rem',
+                    minWidth: '44px',
+                    minHeight: '44px',
                     borderRadius: '10px',
                     border: '1px solid rgba(148, 163, 184, 0.35)',
                     background: 'rgba(15, 23, 42, 0.8)',
                     color: '#f7f9ff',
                     fontWeight: 700,
                     cursor: 'pointer',
+                    touchAction: 'manipulation',
+                    transition: 'transform 0.1s ease'
+                  }}
+                  onTouchStart={(e) => {
+                    e.currentTarget.style.transform = 'scale(0.96)'
+                  }}
+                  onTouchEnd={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)'
                   }}
                 >
                   Logout
@@ -60,13 +70,23 @@ const Home = () => {
                     setShowDeleteConfirm(true)
                   }}
                   style={{
-                    padding: '0.6rem 0.9rem',
+                    padding: '0.75rem 1rem',
+                    minWidth: '44px',
+                    minHeight: '44px',
                     borderRadius: '10px',
                     border: '1px solid rgba(239, 68, 68, 0.55)',
                     background: 'rgba(239, 68, 68, 0.12)',
                     color: '#fecaca',
                     fontWeight: 800,
                     cursor: 'pointer',
+                    touchAction: 'manipulation',
+                    transition: 'transform 0.1s ease'
+                  }}
+                  onTouchStart={(e) => {
+                    e.currentTarget.style.transform = 'scale(0.96)'
+                  }}
+                  onTouchEnd={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)'
                   }}
                 >
                   Delete Account
@@ -123,13 +143,23 @@ const Home = () => {
                   disabled={deleting}
                   onClick={() => setShowDeleteConfirm(false)}
                   style={{
-                    padding: '0.65rem 0.95rem',
+                    padding: '0.75rem 1rem',
+                    minWidth: '44px',
+                    minHeight: '44px',
                     borderRadius: '12px',
                     border: '1px solid rgba(148, 163, 184, 0.35)',
                     background: 'transparent',
                     color: '#cbd5e1',
                     fontWeight: 800,
                     cursor: deleting ? 'not-allowed' : 'pointer',
+                    touchAction: 'manipulation',
+                    transition: 'transform 0.1s ease'
+                  }}
+                  onTouchStart={(e) => {
+                    if (!deleting) e.currentTarget.style.transform = 'scale(0.96)'
+                  }}
+                  onTouchEnd={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)'
                   }}
                 >
                   Cancel
@@ -151,13 +181,23 @@ const Home = () => {
                     }
                   }}
                   style={{
-                    padding: '0.65rem 0.95rem',
+                    padding: '0.75rem 1rem',
+                    minWidth: '44px',
+                    minHeight: '44px',
                     borderRadius: '12px',
                     border: '1px solid rgba(239, 68, 68, 0.65)',
                     background: deleting ? 'rgba(239, 68, 68, 0.18)' : 'rgba(239, 68, 68, 0.22)',
                     color: '#fecaca',
                     fontWeight: 900,
                     cursor: deleting ? 'not-allowed' : 'pointer',
+                    touchAction: 'manipulation',
+                    transition: 'transform 0.1s ease'
+                  }}
+                  onTouchStart={(e) => {
+                    if (!deleting) e.currentTarget.style.transform = 'scale(0.96)'
+                  }}
+                  onTouchEnd={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)'
                   }}
                 >
                   {deleting ? 'Deleting…' : 'Delete'}
@@ -180,7 +220,17 @@ const Home = () => {
               borderRadius: '12px',
               cursor: 'pointer',
               textAlign: 'center',
-              transition: 'all 0.2s ease'
+              transition: 'transform 0.1s ease, box-shadow 0.15s ease',
+              minHeight: '44px',
+              touchAction: 'manipulation'
+            }}
+            onTouchStart={(e) => {
+              e.currentTarget.style.transform = 'scale(0.98)'
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(167, 139, 250, 0.2)'
+            }}
+            onTouchEnd={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+              e.currentTarget.style.boxShadow = 'none'
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -206,7 +256,17 @@ const Home = () => {
               borderRadius: '12px',
               cursor: 'pointer',
               textAlign: 'center',
-              transition: 'all 0.2s ease'
+              transition: 'transform 0.1s ease, box-shadow 0.15s ease',
+              minHeight: '44px',
+              touchAction: 'manipulation'
+            }}
+            onTouchStart={(e) => {
+              e.currentTarget.style.transform = 'scale(0.98)'
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.2)'
+            }}
+            onTouchEnd={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+              e.currentTarget.style.boxShadow = 'none'
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {

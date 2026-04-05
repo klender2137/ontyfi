@@ -3,8 +3,16 @@
 
   const CACHE_KEY = 'my_insights_files';
   const CACHE_EXPIRY = 24 * 60 * 60 * 1000;
+  const FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder';
+  const MAX_FOLDER_DEPTH = 5;
+
+  const isFolder = (item) => item?.mimeType === FOLDER_MIME_TYPE;
 
   const getFileTypeInfo = (file) => {
+    if (isFolder(file)) {
+      return { label: 'Folder', color: '#f59e0b', icon: '📁', type: 'folder' };
+    }
+
     const mimeType = file.mimeType || '';
     const name = file.name || '';
     const ext = name.split('.').pop().toLowerCase();
@@ -31,6 +39,11 @@
   };
 
   const DocumentViewer = ({ file, onClose }) => {
+    if (isFolder(file)) {
+      console.error('[DocumentViewer] Attempted to open a folder as a document:', file);
+      return null;
+    }
+
     const [content, setContent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -156,6 +169,9 @@
     const [selectedFile, setSelectedFile] = useState(null);
     const [tickers, setTickers] = useState([]);
     const [shaderError, setShaderError] = useState(null);
+    const [currentFolderId, setCurrentFolderId] = useState(null);
+    const [folderStack, setFolderStack] = useState([]);
+    const [currentFolderName, setCurrentFolderName] = useState('Finance Resources');
     const canvasRef = useRef(null);
     const animationFrameRef = useRef(null);
 
@@ -173,12 +189,14 @@
       return () => clearInterval(interval);
     }, [fetchTickers]);
 
-    const fetchFiles = useCallback(async (forceRefresh = false) => {
+    const fetchFiles = useCallback(async (forceRefresh = false, folderId = null) => {
       setLoading(true);
       setError(null);
       try {
+        const cacheKey = folderId ? `${CACHE_KEY}_${folderId}` : CACHE_KEY;
+        
         if (!forceRefresh) {
-          const cached = localStorage.getItem(CACHE_KEY);
+          const cached = localStorage.getItem(cacheKey);
           if (cached) {
             const { data, timestamp } = JSON.parse(cached);
             if (Date.now() - timestamp < CACHE_EXPIRY) {
@@ -188,20 +206,34 @@
             }
           }
         }
-        const response = await fetch('/api/insights/finance-resources');
+        
+        const url = folderId 
+          ? `/api/insights/finance-resources?folderId=${encodeURIComponent(folderId)}`
+          : '/api/insights/finance-resources';
+          
+        const response = await fetch(url);
         const result = await response.json();
+        
         if (result.ok) {
-          setFiles(result.files || []);
-          localStorage.setItem(CACHE_KEY, JSON.stringify({ data: result.files, timestamp: Date.now() }));
-        } else { throw new Error(result.error || 'Failed to fetch files'); }
+          const items = result.files || [];
+          setFiles(items);
+          localStorage.setItem(cacheKey, JSON.stringify({ data: items, timestamp: Date.now() }));
+        } else { 
+          throw new Error(result.error || 'Failed to fetch files'); 
+        }
       } catch (err) {
         setError(err.message);
-        const cached = localStorage.getItem(CACHE_KEY);
+        const cacheKey = folderId ? `${CACHE_KEY}_${folderId}` : CACHE_KEY;
+        const cached = localStorage.getItem(cacheKey);
         if (cached) setFiles(JSON.parse(cached).data);
-      } finally { setLoading(false); }
-    }, []);
+      } finally { 
+        setLoading(false); 
+      }
+    }, [setFiles, setLoading, setError]);
 
-    useEffect(() => { fetchFiles(); }, [fetchFiles]);
+    useEffect(() => { 
+      fetchFiles(false, currentFolderId); 
+    }, [fetchFiles, currentFolderId]);
 
     const initShader = useCallback(() => {
       const canvas = canvasRef.current;
@@ -274,6 +306,67 @@
 
     useEffect(() => { if (!shaderError) initShader(); return () => cancelAnimationFrame(animationFrameRef.current); }, [initShader, shaderError]);
 
+    const openFolder = useCallback((folder) => {
+      if (!isFolder(folder)) {
+        console.error('[openFolder] Attempted to open non-folder:', folder);
+        return;
+      }
+      
+      // Clear files immediately to prevent showing stale data from previous folder
+      setFiles([]);
+      setError(null);
+      setSelectedFile(null);
+      
+      setFolderStack(prev => {
+        if (prev.length >= MAX_FOLDER_DEPTH - 1) {
+          setError(`Cannot navigate deeper than ${MAX_FOLDER_DEPTH} levels. Please use the back button.`);
+          return prev;
+        }
+        return [...prev, { id: currentFolderId, name: currentFolderName }];
+      });
+      
+      setCurrentFolderId(folder.id);
+      setCurrentFolderName(folder.name);
+    }, [currentFolderId, currentFolderName]);
+
+    const goBack = useCallback(() => {
+      setFolderStack(prevStack => {
+        if (prevStack.length === 0) return prevStack;
+        
+        // Clear files immediately to prevent showing stale data
+        setFiles([]);
+        setError(null);
+        setSelectedFile(null);
+        
+        const prev = prevStack[prevStack.length - 1];
+        setCurrentFolderId(prev.id);
+        setCurrentFolderName(prev.name);
+        
+        return prevStack.slice(0, -1);
+      });
+    }, []);
+
+    const goToRoot = useCallback(() => {
+      setFiles([]);
+      setFolderStack([]);
+      setCurrentFolderId(null);
+      setCurrentFolderName('Finance Resources');
+      setSelectedFile(null);
+      setError(null);
+    }, []);
+
+    const handleItemClick = useCallback((item) => {
+      if (isFolder(item)) {
+        openFolder(item);
+      } else {
+        setSelectedFile(item);
+      }
+    }, [openFolder]);
+
+    const folders = files.filter(isFolder);
+    const regularFiles = files.filter(f => !isFolder(f));
+    const isEmpty = files.length === 0;
+
     if (loading) {
       return React.createElement('div', { className: 'screen', style: { textAlign: 'center', padding: '2rem' } },
         React.createElement('h2', null, 'Loading MyInsights...'),
@@ -290,24 +383,83 @@
         }, `${ticker.symbol}: $${ticker.price.toFixed(2)} (${ticker.change >= 0 ? '+' : ''}${ticker.change.toFixed(2)}%)`))
       ),
       React.createElement('div', { style: { padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' } },
-        React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' } },
+        React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' } },
           React.createElement('div', null,
             React.createElement('h1', { style: { margin: 0 } }, 'MyInsights'),
             React.createElement('p', { style: { color: '#94a3b8', margin: '8px 0 0 0' } }, 'S&P 500 Market Research & Analysis')
           ),
           React.createElement('div', { style: { display: 'flex', gap: '12px' } },
-            React.createElement('button', { onClick: () => fetchFiles(true), style: { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '10px 20px', borderRadius: '12px', cursor: 'pointer' } }, 'Refresh'),
+            React.createElement('button', { onClick: () => fetchFiles(true, currentFolderId), style: { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '10px 20px', borderRadius: '12px', cursor: 'pointer' } }, 'Refresh'),
             React.createElement('button', { onClick: onGoHome, style: { background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '10px 20px', borderRadius: '12px', cursor: 'pointer' } }, 'Back Home')
           )
         ),
+        
+        React.createElement('div', { style: { marginBottom: '24px' } },
+          folderStack.length > 0 && React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' } },
+            React.createElement('button', {
+              onClick: goToRoot,
+              style: { background: 'transparent', border: 'none', color: '#60a5fa', cursor: 'pointer', fontSize: '0.9rem', padding: '4px 8px' }
+            }, 'Finance Resources'),
+            folderStack.map((folder, idx) => 
+              React.createElement('span', { key: idx, style: { color: '#94a3b8' } }, '/')
+            ),
+            React.createElement('span', { style: { color: '#f7f9ff', fontWeight: 500 } }, currentFolderName),
+            folderStack.length > 0 && React.createElement('button', {
+              onClick: goBack,
+              style: { marginLeft: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', padding: '4px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }
+            }, '← Back')
+          ),
+          React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '12px', color: '#94a3b8', fontSize: '0.9rem' } },
+            React.createElement('span', null, `${folders.length} folder${folders.length !== 1 ? 's' : ''}`),
+            React.createElement('span', null, '•'),
+            React.createElement('span', null, `${regularFiles.length} file${regularFiles.length !== 1 ? 's' : ''}`)
+          )
+        ),
+        
         error && React.createElement('div', { style: { padding: '20px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '12px', marginBottom: '20px', color: '#fecaca' } }, error),
-        React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' } },
-          files.map(file => {
+        
+        isEmpty && !loading && !error && React.createElement('div', { style: { padding: '60px 20px', textAlign: 'center', background: 'rgba(255,255,255,0.03)', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' } },
+          React.createElement('div', { style: { fontSize: '4rem', marginBottom: '20px' } }, '📂'),
+          React.createElement('h3', { style: { margin: '0 0 12px 0', color: '#f7f9ff' } }, 'This folder is empty'),
+          React.createElement('p', { style: { color: '#94a3b8', margin: 0 } }, 'No files or folders found in this location.'),
+          folderStack.length > 0 && React.createElement('button', {
+            onClick: goBack,
+            style: { marginTop: '20px', background: 'rgba(96,165,250,0.2)', border: '1px solid rgba(96,165,250,0.3)', color: '#60a5fa', padding: '10px 24px', borderRadius: '12px', cursor: 'pointer' }
+          }, 'Go Back')
+        ),
+        
+        !isEmpty && React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' } },
+          folders.map(folder => 
+            React.createElement('div', {
+              key: `folder-${folder.id}`,
+              onClick: () => handleItemClick(folder),
+              style: { 
+                background: 'rgba(245, 158, 11, 0.08)', 
+                backdropFilter: 'blur(12px)', 
+                padding: '24px', 
+                borderRadius: '20px', 
+                border: '2px solid rgba(245, 158, 11, 0.3)', 
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              },
+              onMouseEnter: (e) => { e.currentTarget.style.background = 'rgba(245, 158, 11, 0.15)'; e.currentTarget.style.transform = 'translateY(-2px)'; },
+              onMouseLeave: (e) => { e.currentTarget.style.background = 'rgba(245, 158, 11, 0.08)'; e.currentTarget.style.transform = 'translateY(0)'; }
+            },
+              React.createElement('div', { style: { fontSize: '2.5rem', marginBottom: '12px' } }, '📁'),
+              React.createElement('h3', { style: { margin: '0 0 8px 0', fontSize: '1.1rem', color: '#f59e0b' } }, folder.name),
+              React.createElement('div', { style: { color: '#f59e0b', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '6px' } }, 
+                'Open Folder →'
+              )
+            )
+          ),
+          regularFiles.map(file => {
             const info = getFileTypeInfo(file);
             return React.createElement('div', {
-              key: file.id,
-              onClick: () => setSelectedFile(file),
-              style: { background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(12px)', padding: '24px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer' }
+              key: `file-${file.id}`,
+              onClick: () => handleItemClick(file),
+              style: { background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(12px)', padding: '24px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', transition: 'all 0.2s ease' },
+              onMouseEnter: (e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'translateY(-2px)'; },
+              onMouseLeave: (e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.transform = 'translateY(0)'; }
             },
               React.createElement('div', { style: { fontSize: '2rem', marginBottom: '12px' } }, info.icon),
               React.createElement('h3', { style: { margin: '0 0 8px 0', fontSize: '1.1rem' } }, file.name),
@@ -316,7 +468,7 @@
           })
         )
       ),
-      selectedFile && React.createElement(DocumentViewer, { file: selectedFile, onClose: () => setSelectedFile(null) }),
+      selectedFile && !isFolder(selectedFile) && React.createElement(DocumentViewer, { file: selectedFile, onClose: () => setSelectedFile(null) }),
       React.createElement('style', null, `
         @keyframes commute { from { transform: translateX(-100%); } to { transform: translateX(calc(100vw + 400px)); } }
       `)

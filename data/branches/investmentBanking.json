@@ -1,7 +1,7 @@
 {
   "id": "ma-investment-banking",
   "name": "M&A / Investment Banking",
-  "description": "Global financial sector focused on mergers, acquisitions, capital raising, and strategic advisory.",
+  "descriptionRef": "descriptions/IBbrCore.md",
   "tags": ["investment-banking", "M&A", "capital-raising"],
   "institutions": [
     {
@@ -444,6 +444,5 @@
       ],
       "descriptionRef": "descriptions/investmentBanking_regional-full-service-banks.md"
     }
-  ],
-  "descriptionRef": "descriptions/investmentBanking_ma-investment-banking.md"
+  ]
 }

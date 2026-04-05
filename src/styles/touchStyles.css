@@ -1,0 +1,384 @@
+/**
+ * touchStyles.css - Global touch interaction styles for Android compatibility
+ * 
+ * This module provides:
+ * - Touch action properties for gesture control
+ * - Touch target sizes (44x44dp minimum)
+ * - Active/focus-visible states for touch feedback
+ * - Removal of hover-dependent styles
+ * - Passive event listener hints
+ */
+
+/* ============================================
+   VIEWPORT AND TOUCH-ACTION SETTINGS
+   ============================================ */
+
+/* Root touch settings */
+html {
+  /* Prevent callout menus on long-press (iOS) */
+  -webkit-touch-callout: none;
+  /* Improve text rendering */
+  -webkit-tap-highlight-color: transparent;
+  /* Prevent text selection during gestures */
+  user-select: none;
+  /* Allow text selection in inputs */
+  input, textarea {
+    user-select: text;
+  }
+}
+
+/* Global touch action defaults */
+* {
+  /* Allow browser to handle scrolling by default */
+  touch-action: pan-x pan-y;
+}
+
+/* Disable touch actions for custom gesture areas */
+.no-touch-action {
+  touch-action: none;
+}
+
+/* Allow only horizontal scrolling */
+.touch-action-pan-x {
+  touch-action: pan-x;
+}
+
+/* Allow only vertical scrolling */
+.touch-action-pan-y {
+  touch-action: pan-y;
+}
+
+/* Pinch-zoom enabled areas */
+.touch-action-pinch {
+  touch-action: pan-x pan-y pinch-zoom;
+}
+
+/* ============================================
+   TOUCH TARGET SIZES (44x44dp minimum)
+   ============================================ */
+
+/* Minimum touch target size */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  /* Ensure proper padding for visual targets */
+  padding: 8px 12px;
+  /* Center content */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Small touch target (compact buttons) */
+.touch-target-sm {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 6px 10px;
+}
+
+/* Large touch target (primary actions) */
+.touch-target-lg {
+  min-width: 56px;
+  min-height: 56px;
+  padding: 12px 16px;
+}
+
+/* Full-width touch target (mobile lists) */
+.touch-target-full {
+  min-height: 44px;
+  width: 100%;
+  padding: 12px 16px;
+}
+
+/* ============================================
+   ACTIVE STATES FOR TOUCH FEEDBACK
+   ============================================ */
+
+/* Base active state - visual feedback on press */
+.touch-active {
+  transition: transform 0.1s ease, background-color 0.15s ease;
+}
+
+.touch-active:active {
+  transform: scale(0.97);
+}
+
+/* Active state with background change */
+.touch-active-bg:active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Active state for buttons */
+.touch-btn {
+  transition: transform 0.1s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.touch-btn:active {
+  transform: scale(0.96);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Active state for cards/tiles */
+.touch-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.touch-card:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Focus-visible for keyboard navigation */
+.touch-focus:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline (use focus-visible instead) */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ============================================
+   LONG-PRESS VISUAL FEEDBACK
+   ============================================ */
+
+/* Long-press indicator animation */
+@keyframes long-press-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.long-press-hint {
+  position: relative;
+}
+
+.long-press-hint::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  border-radius: inherit;
+  pointer-events: none;
+  animation: long-press-pulse 0.5s ease-out;
+}
+
+/* ============================================
+   HOVER FALLBACK FOR TOUCH DEVICES
+   ============================================ */
+
+/* Hide hover-only content on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .hover-only {
+    display: none !important;
+  }
+  
+  /* Show touch-only content */
+  .touch-only {
+    display: block !important;
+  }
+  
+  /* Remove hover effects on touch */
+  *:hover {
+    background-color: inherit !important;
+    color: inherit !important;
+  }
+}
+
+/* Hide touch-only content on mouse devices */
+@media (hover: hover) and (pointer: fine) {
+  .touch-only {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   GESTURE HINTS AND INDICATORS
+   ============================================ */
+
+/* Swipe hint animation */
+@keyframes swipe-hint {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+.swipe-hint {
+  animation: swipe-hint 1.5s ease-in-out infinite;
+}
+
+/* Scroll indicator */
+@keyframes scroll-hint {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(4px);
+  }
+}
+
+.scroll-hint {
+  animation: scroll-hint 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   EDGE SWIPE DETECTION AREAS
+   ============================================ */
+
+/* Edge swipe area for navigation */
+.edge-swipe-left {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  z-index: 9999;
+  touch-action: pan-y;
+}
+
+.edge-swipe-right {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  z-index: 9999;
+  touch-action: pan-y;
+}
+
+/* ============================================
+   MOMENTUM SCROLLING
+   ============================================ */
+
+/* Smooth scrolling for iOS */
+.scroll-smooth {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Momentum scrolling container */
+.scroll-momentum {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* ============================================
+   PREVENT UNWANTED BEHAVIORS
+   ============================================ */
+
+/* Prevent double-tap zoom on buttons */
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
+/* Prevent pull-to-refresh on specific containers */
+.no-overscroll {
+  overscroll-behavior: none;
+}
+
+/* ============================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================ */
+
+/* Ensure minimum contrast for touch targets */
+.touch-contrast {
+  position: relative;
+}
+
+.touch-contrast::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 4px;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   COMPONENT-SPECIFIC STYLES
+   ============================================ */
+
+/* TreeMap canvas touch settings */
+.treemap-canvas {
+  touch-action: none;
+  cursor: grab;
+}
+
+.treemap-canvas:active {
+  cursor: grabbing;
+}
+
+/* Pinch zoom container */
+.pinch-container {
+  touch-action: none;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* Tile touch feedback */
+.tile-touch {
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tile-touch:active {
+  transform: scale(0.98);
+}
+
+/* ============================================
+   ANDROID SPECIFIC FIXES
+   ============================================ */
+
+/* Fix for Android Chrome address bar behavior */
+.android-viewport-fix {
+  /* Ensure content is not hidden under address bar */
+  min-height: calc(100vh - 56px);
+  min-height: calc(100dvh - 56px);
+}
+
+/* Respect safe areas on notched devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}

@@ -2,7 +2,7 @@
   "id": "private-equity-sector",
   "name": "Private Equity",
   "type": "core-root",
-  "description": "Investment sector focused on acquiring, improving, and exiting companies through private ownership structures.",
+  "descriptionRef": "descriptions/PEbranchcore.md",
   "tags": ["private-equity", "leveraged-buyout", "LBO"],
   "institutions": [
     {
@@ -451,5 +451,5 @@
       "descriptionRef": "descriptions/PEbranch_venture-debt.md"
     }
   ],
-  "descriptionRef": "descriptions/PEbranch_private-equity-sector.md"
+  "descriptionRef": "descriptions/PEbranchcore.md"
 }

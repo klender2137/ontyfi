@@ -1,7 +1,7 @@
 {
   "id": "venture-capital-sector",
   "name": "Venture Capital",
-  "description": "The venture capital ecosystem responsible for financing high-growth startups and innovation-driven companies.",
+  "descriptionRef": "descriptions/VCbranchCore.md",
   "tags": ["venture-capital", "startups", "fund-management"],
   "institutions": [
     {
@@ -445,5 +445,5 @@
       "descriptionRef": "descriptions/VCbranch_accelerators.md"
     }
   ],
-  "descriptionRef": "descriptions/VCbranch_venture-capital-sector.md"
+  "descriptionRef": "descriptions/VCbranchCore.md"
 }

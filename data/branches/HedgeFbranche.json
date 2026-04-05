@@ -1,36 +1,31 @@
 {
   "id": "hedge-funds-root",
   "name": "Hedge Funds",
-  "description": "Investment firms pursuing absolute return through leverage, derivatives, and market inefficiencies.",
+  "descriptionRef": "descriptions/HedgeFcore.md",
   "tags": ["hedge-funds", "absolute-return", "leverage"],
   "institutions": [
     {
       "id": "global-macro-funds",
       "name": "Global Macro Funds",
-      "description": "Funds trading macroeconomic shifts across currencies, interest rates, and commodities.",
       "functions": [
         {
           "id": "macro-economic-analysis",
           "name": "Macroeconomic Analysis",
-          "description": "Studying global economic indicators to identify macro trade opportunities.",
           "descriptionRef": "descriptions/HedgeFbranche_macro-economic-analysis.md"
         },
         {
           "id": "interest-rate-trading",
           "name": "Interest Rate Strategy",
-          "description": "Trading bonds and swaps based on central bank policy expectations.",
           "descriptionRef": "descriptions/HedgeFbranche_interest-rate-trading.md"
         },
         {
           "id": "currency-speculation",
           "name": "Currency Trading",
-          "description": "Speculating on movements of FX pairs across global markets.",
           "descriptionRef": "descriptions/HedgeFbranche_currency-speculation.md"
         },
         {
           "id": "commodity-macro-trades",
           "name": "Commodity Macro Trading",
-          "description": "Trading oil, metals, and agriculture using macroeconomic signals.",
           "descriptionRef": "descriptions/HedgeFbranche_commodity-macro-trades.md"
         }
       ],
@@ -90,30 +85,25 @@
     {
       "id": "long-short-equity",
       "name": "Long / Short Equity Funds",
-      "description": "Funds buying undervalued stocks and shorting overvalued companies.",
       "functions": [
         {
           "id": "equity-fundamental-research",
           "name": "Fundamental Equity Research",
-          "description": "Analyzing company financials to detect valuation discrepancies.",
           "descriptionRef": "descriptions/HedgeFbranche_equity-fundamental-research.md"
         },
         {
           "id": "short-selling-strategies",
           "name": "Short Selling Strategy",
-          "description": "Identifying companies expected to decline in price.",
           "descriptionRef": "descriptions/HedgeFbranche_short-selling-strategies.md"
         },
         {
           "id": "sector-rotation",
           "name": "Sector Rotation",
-          "description": "Moving capital between industries based on macro trends.",
           "descriptionRef": "descriptions/HedgeFbranche_sector-rotation.md"
         },
         {
           "id": "earnings-modeling",
           "name": "Earnings Modeling",
-          "description": "Forecasting revenue and profit scenarios for companies.",
           "descriptionRef": "descriptions/HedgeFbranche_earnings-modeling.md"
         }
       ],
@@ -173,12 +163,10 @@
     {
       "id": "quantitative-funds",
       "name": "Quantitative (Quant) Hedge Funds",
-      "description": "Firms using algorithms, mathematical models, and machine learning to trade.",
       "functions": [
         {
           "id": "algorithmic-trading",
           "name": "Algorithmic Trading Development",
-          "description": "Designing automated trading systems.",
           "descriptionRef": "descriptions/HedgeFbranche_algorithmic-trading.md"
         },
         {
@@ -420,5 +408,5 @@
       "descriptionRef": "descriptions/HedgeFbranche_multi-strategy-platforms.md"
     }
   ],
-  "descriptionRef": "descriptions/HedgeFbranche_hedge-funds-root.md"
+  "descriptionRef": "descriptions/HedgeFcore.md"
 }

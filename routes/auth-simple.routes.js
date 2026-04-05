@@ -228,6 +228,14 @@ router.post('/role-sync', async (req, res) => {
       role,
     });
 
+    // Fetch existing user data to include preferences and activities
+    const existingDoc = await admin.firestore()
+      .collection('users')
+      .doc(uid)
+      .get();
+    
+    const existingData = existingDoc.exists ? existingDoc.data() : {};
+    
     const userPatch = {
       uid,
       email,
@@ -235,6 +243,9 @@ router.post('/role-sync', async (req, res) => {
       display_name: displayName,
       role,
       last_active: new Date(),
+      // Preserve existing preferences and activities
+      preferences: existingData.preferences || {},
+      activities: existingData.activities || {},
     };
 
     await admin

@@ -21,6 +21,7 @@ import embedRoutes from './routes/embed.routes.js';
 import insightsRoutes from './routes/insights.routes.js';
 import financeRoutes from './routes/finance.routes.js';
 import notificationsRoutes from './routes/notifications.routes.js';
+import roleRoutes from './routes/role.routes.js';
 app.use('/api/tree', treeRoutes);
 app.use('/api/auth-simple', authSimpleRoutes);
 app.use('/api/solana-auth', solanaAuthRoutes);
@@ -30,6 +31,7 @@ app.use('/api/embed', embedRoutes);
 app.use('/api/insights', insightsRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/notifications', notificationsRoutes);
+app.use('/api/role', roleRoutes);
 
 // Start notification scheduler (FCM jobs)
 import './services/notification-scheduler.js';

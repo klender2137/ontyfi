@@ -72,6 +72,47 @@ function loadBranch(branchFile) {
 }
 
 /**
+ * Strips markdown syntax from text to create plain text previews
+ * @param {string} text - The markdown text to clean
+ * @returns {string} - Plain text without markdown syntax
+ */
+function stripMarkdown(text) {
+  if (!text || typeof text !== 'string') return '';
+
+  return text
+    // Remove headers (# ## ###)
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remove bold/italic markers
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/_([^_]+)_/g, '$1')
+    // Remove inline code
+    .replace(/`([^`]+)`/g, '$1')
+    // Remove code blocks
+    .replace(/```[\s\S]*?```/g, '')
+    // Remove blockquotes
+    .replace(/^\s*>\s*/gm, '')
+    // Remove list markers
+    .replace(/^\s*[-*+]\s+/gm, '')
+    .replace(/^\s*\d+\.\s+/gm, '')
+    // Remove links but keep text [text](url) -> text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    // Remove bare URLs
+    .replace(/https?:\/\/[^\s]+/g, '')
+    // Remove images ![alt](url)
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
+    // Remove horizontal rules
+    .replace(/^\s*---+\s*$/gm, '')
+    // Remove HTML tags
+    .replace(/<[^>]+>/g, '')
+    // Normalize whitespace
+    .replace(/\n\s*\n/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
  * Load description from markdown file
  */
 function loadDescription(descRef) {
@@ -145,6 +186,21 @@ function loadDescription(descRef) {
     }
 
     let description = stripMetadataAndTags(content);
+    
+    // Extract only first 2-3 sentences for short description preview
+    function extractFirstSentences(text, maxSentences = 3) {
+      // Split by sentence endings (., !, ?) followed by space or end of line
+      const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+      const result = sentences.slice(0, maxSentences).join(' ').trim();
+      return result || text.substring(0, 200); // fallback to first 200 chars
+    }
+    
+    // Limit to first 2-3 sentences for tile preview
+    description = extractFirstSentences(description, 3);
+    
+    // Strip markdown formatting for clean tile preview
+    description = stripMarkdown(description);
+    
     // fallback to earlier heuristics if extraction produced nothing
     if (!description) {
       const lines = content.split('\n');
@@ -171,7 +227,7 @@ function loadDescription(descRef) {
       const fallbackDesc = descriptionLines.join(' ').trim();
       if (fallbackDesc) {
         console.log(`Using fallback description for ${descRef}`);
-        description = fallbackDesc;
+        description = stripMarkdown(fallbackDesc);
       }
     }
     
@@ -207,7 +263,7 @@ function loadDescription(descRef) {
       const fallbackDesc = descriptionLines.join(' ').trim();
       if (fallbackDesc) {
         console.log(`Using fallback description for ${descRef}`);
-        description = fallbackDesc;
+        description = stripMarkdown(fallbackDesc);
       }
     }
     
