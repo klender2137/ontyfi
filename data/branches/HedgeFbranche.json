@@ -3,409 +3,193 @@
   "name": "Hedge Funds",
   "descriptionRef": "descriptions/HedgeFcore.md",
   "tags": ["hedge-funds", "absolute-return", "leverage"],
-  "institutions": [
+  "tiles": [
     {
-      "id": "global-macro-funds",
-      "name": "Global Macro Funds",
-      "functions": [
+      "id": "hedge-niches",
+      "name": "Niches",
+      "type": "niches-tile",
+      "description": "Hedge Fund institution types and market niches",
+      "institutions": [
         {
-          "id": "macro-economic-analysis",
-          "name": "Macroeconomic Analysis",
-          "descriptionRef": "descriptions/HedgeFbranche_macro-economic-analysis.md"
-        },
-        {
-          "id": "interest-rate-trading",
-          "name": "Interest Rate Strategy",
-          "descriptionRef": "descriptions/HedgeFbranche_interest-rate-trading.md"
-        },
-        {
-          "id": "currency-speculation",
-          "name": "Currency Trading",
-          "descriptionRef": "descriptions/HedgeFbranche_currency-speculation.md"
-        },
-        {
-          "id": "commodity-macro-trades",
-          "name": "Commodity Macro Trading",
-          "descriptionRef": "descriptions/HedgeFbranche_commodity-macro-trades.md"
-        }
-      ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
+          "id": "global-macro-funds",
+          "name": "Global Macro Funds",
+          "functions": [
             {
-              "id": "macro-analyst",
-              "name": "Global Macro Analyst",
-              "descriptionRef": "descriptions/HedgeFbranche_macro-analyst.md"
+              "id": "macro-economic-analysis",
+              "name": "Macroeconomic Analysis",
+              "descriptionRef": "descriptions/HedgeFbranche_macro-economic-analysis.md"
             },
             {
-              "id": "fx-strategist",
-              "name": "FX Strategist",
-              "descriptionRef": "descriptions/HedgeFbranche_fx-strategist.md"
+              "id": "interest-rate-trading",
+              "name": "Interest Rate Strategy",
+              "descriptionRef": "descriptions/HedgeFbranche_interest-rate-trading.md"
             },
             {
-              "id": "macro-trader",
-              "name": "Macro Trader",
-              "descriptionRef": "descriptions/HedgeFbranche_macro-trader.md"
+              "id": "currency-speculation",
+              "name": "Currency Trading",
+              "descriptionRef": "descriptions/HedgeFbranche_currency-speculation.md"
             },
             {
-              "id": "macro-portfolio-manager",
-              "name": "Macro Portfolio Manager",
-              "descriptionRef": "descriptions/HedgeFbranche_macro-portfolio-manager.md"
+              "id": "commodity-macro-trades",
+              "name": "Commodity Macro Trading",
+              "descriptionRef": "descriptions/HedgeFbranche_commodity-macro-trades.md"
             }
           ],
-          "descriptionRef": "descriptions/HedgeFbranche_jobs.md"
+          "descriptionRef": "descriptions/HedgeFbranche_global-macro-funds.md"
         },
         {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
+          "id": "long-short-equity",
+          "name": "Long / Short Equity Funds",
+          "functions": [
             {
-              "id": "central-bank-monitoring",
-              "name": "Monitoring Central Bank Policy Announcements",
-              "descriptionRef": "descriptions/HedgeFbranche_central-bank-monitoring.md"
+              "id": "equity-fundamental-research",
+              "name": "Fundamental Equity Research",
+              "descriptionRef": "descriptions/HedgeFbranche_equity-fundamental-research.md"
             },
             {
-              "id": "yield-curve-analysis",
-              "name": "Analyzing Yield Curve Shifts",
-              "descriptionRef": "descriptions/HedgeFbranche_yield-curve-analysis.md"
+              "id": "short-selling-strategies",
+              "name": "Short Selling Strategy",
+              "descriptionRef": "descriptions/HedgeFbranche_short-selling-strategies.md"
             },
             {
-              "id": "currency-volatility-trading",
-              "name": "Trading FX Volatility Opportunities",
-              "descriptionRef": "descriptions/HedgeFbranche_currency-volatility-trading.md"
+              "id": "sector-rotation",
+              "name": "Sector Rotation",
+              "descriptionRef": "descriptions/HedgeFbranche_sector-rotation.md"
+            },
+            {
+              "id": "earnings-modeling",
+              "name": "Earnings Modeling",
+              "descriptionRef": "descriptions/HedgeFbranche_earnings-modeling.md"
             }
           ],
-          "descriptionRef": "descriptions/HedgeFbranche_tasks.md"
+          "descriptionRef": "descriptions/HedgeFbranche_long-short-equity.md"
+        },
+        {
+          "id": "quantitative-funds",
+          "name": "Quantitative (Quant) Hedge Funds",
+          "functions": [
+            {
+              "id": "algorithmic-trading",
+              "name": "Algorithmic Trading Development",
+              "descriptionRef": "descriptions/HedgeFbranche_algorithmic-trading.md"
+            },
+            {
+              "id": "statistical-arbitrage",
+              "name": "Statistical Arbitrage",
+              "description": "Identifying statistical price deviations across securities.",
+              "descriptionRef": "descriptions/HedgeFbranche_statistical-arbitrage.md"
+            },
+            {
+              "id": "high-frequency-trading",
+              "name": "High Frequency Trading",
+              "description": "Executing ultra-fast trading strategies based on microstructure signals.",
+              "descriptionRef": "descriptions/HedgeFbranche_high-frequency-trading.md"
+            },
+            {
+              "id": "alternative-data-analysis",
+              "name": "Alternative Data Analysis",
+              "description": "Using unconventional datasets for predictive signals.",
+              "descriptionRef": "descriptions/HedgeFbranche_alternative-data-analysis.md"
+            }
+          ],
+          "descriptionRef": "descriptions/HedgeFbranche_quantitative-funds.md"
+        },
+        {
+          "id": "event-driven-funds",
+          "name": "Event Driven / Merger Arbitrage Funds",
+          "description": "Funds trading corporate events such as mergers, restructurings, and bankruptcies.",
+          "functions": [
+            {
+              "id": "merger-arbitrage",
+              "name": "Merger Arbitrage Trading",
+              "description": "Profiting from price spreads between acquiring and target companies.",
+              "descriptionRef": "descriptions/HedgeFbranche_merger-arbitrage.md"
+            },
+            {
+              "id": "distressed-investing",
+              "name": "Distressed Debt Investing",
+              "description": "Buying debt of companies undergoing financial distress.",
+              "descriptionRef": "descriptions/HedgeFbranche_distressed-investing.md"
+            },
+            {
+              "id": "special-situations",
+              "name": "Special Situations Trading",
+              "description": "Trading corporate spin-offs and restructurings.",
+              "descriptionRef": "descriptions/HedgeFbranche_special-situations.md"
+            },
+            {
+              "id": "deal-structure-analysis",
+              "name": "Deal Structure Analysis",
+              "description": "Evaluating legal and financial structures of corporate deals.",
+              "descriptionRef": "descriptions/HedgeFbranche_deal-structure-analysis.md"
+            }
+          ],
+          "descriptionRef": "descriptions/HedgeFbranche_event-driven-funds.md"
+        },
+        {
+          "id": "multi-strategy-platforms",
+          "name": "Multi Strategy Hedge Fund Platforms",
+          "description": "Large hedge funds hosting independent trading pods running different strategies.",
+          "functions": [
+            {
+              "id": "capital-allocation",
+              "name": "Capital Allocation",
+              "description": "Allocating capital across internal trading teams.",
+              "descriptionRef": "descriptions/HedgeFbranche_capital-allocation.md"
+            },
+            {
+              "id": "risk-budgeting",
+              "name": "Risk Budget Management",
+              "description": "Setting leverage and drawdown limits for trading pods.",
+              "descriptionRef": "descriptions/HedgeFbranche_risk-budgeting.md"
+            },
+            {
+              "id": "pod-performance-monitoring",
+              "name": "Pod Performance Monitoring",
+              "description": "Tracking profitability of individual portfolio managers.",
+              "descriptionRef": "descriptions/HedgeFbranche_pod-performance-monitoring.md"
+            },
+            {
+              "id": "multi-strategy-diversification",
+              "name": "Strategy Diversification",
+              "description": "Balancing multiple trading approaches across markets.",
+              "descriptionRef": "descriptions/HedgeFbranche_multi-strategy-diversification.md"
+            }
+          ],
+          "descriptionRef": "descriptions/HedgeFbranche_multi-strategy-platforms.md"
         }
       ],
-      "descriptionRef": "descriptions/HedgeFbranche_global-macro-funds.md"
+      "descriptionRef": "descriptions/HedgeFbranche_niches.md"
     },
     {
-      "id": "long-short-equity",
-      "name": "Long / Short Equity Funds",
-      "functions": [
-        {
-          "id": "equity-fundamental-research",
-          "name": "Fundamental Equity Research",
-          "descriptionRef": "descriptions/HedgeFbranche_equity-fundamental-research.md"
-        },
-        {
-          "id": "short-selling-strategies",
-          "name": "Short Selling Strategy",
-          "descriptionRef": "descriptions/HedgeFbranche_short-selling-strategies.md"
-        },
-        {
-          "id": "sector-rotation",
-          "name": "Sector Rotation",
-          "descriptionRef": "descriptions/HedgeFbranche_sector-rotation.md"
-        },
-        {
-          "id": "earnings-modeling",
-          "name": "Earnings Modeling",
-          "descriptionRef": "descriptions/HedgeFbranche_earnings-modeling.md"
-        }
+      "id": "hedge-jobs",
+      "name": "Jobs",
+      "type": "jobs-tile",
+      "description": "Career roles and positions in Hedge Funds",
+      "items": [
+        { "id": "macro-analyst", "name": "Global Macro Analyst", "descriptionRef": "descriptions/HedgeFbranche_macro-analyst.md" },
+        { "id": "equity-analyst", "name": "Equity Research Analyst", "descriptionRef": "descriptions/HedgeFbranche_equity-analyst.md" },
+        { "id": "quant-researcher", "name": "Quantitative Researcher", "descriptionRef": "descriptions/HedgeFbranche_quant-researcher.md" },
+        { "id": "event-analyst", "name": "Event Driven Analyst", "descriptionRef": "descriptions/HedgeFbranche_event-analyst.md" },
+        { "id": "portfolio-manager", "name": "Portfolio Manager", "descriptionRef": "descriptions/HedgeFbranche_macro-portfolio-manager.md" },
+        { "id": "risk-manager", "name": "Portfolio Risk Manager", "descriptionRef": "descriptions/HedgeFbranche_risk-manager.md" }
       ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "equity-analyst",
-              "name": "Equity Research Analyst",
-              "descriptionRef": "descriptions/HedgeFbranche_equity-analyst.md"
-            },
-            {
-              "id": "short-seller",
-              "name": "Short Seller Specialist",
-              "descriptionRef": "descriptions/HedgeFbranche_short-seller.md"
-            },
-            {
-              "id": "equity-trader",
-              "name": "Equity Execution Trader",
-              "descriptionRef": "descriptions/HedgeFbranche_equity-trader.md"
-            },
-            {
-              "id": "equity-pm",
-              "name": "Equity Portfolio Manager",
-              "descriptionRef": "descriptions/HedgeFbranche_equity-pm.md"
-            }
-          ],
-          "descriptionRef": "descriptions/HedgeFbranche_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "long-short-pair-trade",
-              "name": "Long/Short Pair Trading Strategy",
-              "descriptionRef": "descriptions/HedgeFbranche_long-short-pair-trade.md"
-            },
-            {
-              "id": "earnings-surprise-analysis",
-              "name": "Earnings Surprise Analysis",
-              "descriptionRef": "descriptions/HedgeFbranche_earnings-surprise-analysis.md"
-            },
-            {
-              "id": "valuation-comparison",
-              "name": "Peer Valuation Benchmarking",
-              "descriptionRef": "descriptions/HedgeFbranche_valuation-comparison.md"
-            }
-          ],
-          "descriptionRef": "descriptions/HedgeFbranche_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/HedgeFbranche_long-short-equity.md"
+      "descriptionRef": "descriptions/HedgeFbranche_jobs.md"
     },
     {
-      "id": "quantitative-funds",
-      "name": "Quantitative (Quant) Hedge Funds",
-      "functions": [
-        {
-          "id": "algorithmic-trading",
-          "name": "Algorithmic Trading Development",
-          "descriptionRef": "descriptions/HedgeFbranche_algorithmic-trading.md"
-        },
-        {
-          "id": "statistical-arbitrage",
-          "name": "Statistical Arbitrage",
-          "description": "Identifying statistical price deviations across securities.",
-          "descriptionRef": "descriptions/HedgeFbranche_statistical-arbitrage.md"
-        },
-        {
-          "id": "high-frequency-trading",
-          "name": "High Frequency Trading",
-          "description": "Executing ultra-fast trading strategies based on microstructure signals.",
-          "descriptionRef": "descriptions/HedgeFbranche_high-frequency-trading.md"
-        },
-        {
-          "id": "alternative-data-analysis",
-          "name": "Alternative Data Analysis",
-          "description": "Using unconventional datasets for predictive signals.",
-          "descriptionRef": "descriptions/HedgeFbranche_alternative-data-analysis.md"
-        }
+      "id": "hedge-tasks",
+      "name": "Tasks",
+      "type": "tasks-tile",
+      "description": "Key activities and responsibilities in Hedge Funds",
+      "items": [
+        { "id": "central-bank-monitoring", "name": "Monitoring Central Bank Policy Announcements", "descriptionRef": "descriptions/HedgeFbranche_central-bank-monitoring.md" },
+        { "id": "yield-curve-analysis", "name": "Analyzing Yield Curve Shifts", "descriptionRef": "descriptions/HedgeFbranche_yield-curve-analysis.md" },
+        { "id": "long-short-pair-trade", "name": "Long/Short Pair Trading Strategy", "descriptionRef": "descriptions/HedgeFbranche_long-short-pair-trade.md" },
+        { "id": "strategy-backtesting", "name": "Backtesting Trading Algorithms", "descriptionRef": "descriptions/HedgeFbranche_strategy-backtesting.md" },
+        { "id": "deal-probability-analysis", "name": "Analyzing Deal Completion Probability", "descriptionRef": "descriptions/HedgeFbranche_deal-probability-analysis.md" },
+        { "id": "pnl-attribution", "name": "Daily P&L Attribution Analysis", "descriptionRef": "descriptions/HedgeFbranche_pnl-attribution.md" }
       ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "quant-researcher",
-              "name": "Quantitative Researcher",
-              "descriptionRef": "descriptions/HedgeFbranche_quant-researcher.md"
-            },
-            {
-              "id": "quant-developer",
-              "name": "Quant Developer",
-              "descriptionRef": "descriptions/HedgeFbranche_quant-developer.md"
-            },
-            {
-              "id": "data-scientist",
-              "name": "Financial Data Scientist",
-              "descriptionRef": "descriptions/HedgeFbranche_data-scientist.md"
-            },
-            {
-              "id": "quant-pm",
-              "name": "Quant Portfolio Manager",
-              "descriptionRef": "descriptions/HedgeFbranche_quant-pm.md"
-            }
-          ],
-          "descriptionRef": "descriptions/HedgeFbranche_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "strategy-backtesting",
-              "name": "Backtesting Trading Algorithms",
-              "descriptionRef": "descriptions/HedgeFbranche_strategy-backtesting.md"
-            },
-            {
-              "id": "dataset-cleaning",
-              "name": "Cleaning Alternative Datasets",
-              "descriptionRef": "descriptions/HedgeFbranche_dataset-cleaning.md"
-            },
-            {
-              "id": "model-performance-testing",
-              "name": "Testing Predictive Models",
-              "descriptionRef": "descriptions/HedgeFbranche_model-performance-testing.md"
-            }
-          ],
-          "descriptionRef": "descriptions/HedgeFbranche_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/HedgeFbranche_quantitative-funds.md"
-    },
-    {
-      "id": "event-driven-funds",
-      "name": "Event Driven / Merger Arbitrage Funds",
-      "description": "Funds trading corporate events such as mergers, restructurings, and bankruptcies.",
-      "functions": [
-        {
-          "id": "merger-arbitrage",
-          "name": "Merger Arbitrage Trading",
-          "description": "Profiting from price spreads between acquiring and target companies.",
-          "descriptionRef": "descriptions/HedgeFbranche_merger-arbitrage.md"
-        },
-        {
-          "id": "distressed-investing",
-          "name": "Distressed Debt Investing",
-          "description": "Buying debt of companies undergoing financial distress.",
-          "descriptionRef": "descriptions/HedgeFbranche_distressed-investing.md"
-        },
-        {
-          "id": "special-situations",
-          "name": "Special Situations Trading",
-          "description": "Trading corporate spin-offs and restructurings.",
-          "descriptionRef": "descriptions/HedgeFbranche_special-situations.md"
-        },
-        {
-          "id": "deal-structure-analysis",
-          "name": "Deal Structure Analysis",
-          "description": "Evaluating legal and financial structures of corporate deals.",
-          "descriptionRef": "descriptions/HedgeFbranche_deal-structure-analysis.md"
-        }
-      ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "event-analyst",
-              "name": "Event Driven Analyst",
-              "descriptionRef": "descriptions/HedgeFbranche_event-analyst.md"
-            },
-            {
-              "id": "distressed-analyst",
-              "name": "Distressed Debt Analyst",
-              "descriptionRef": "descriptions/HedgeFbranche_distressed-analyst.md"
-            },
-            {
-              "id": "arb-trader",
-              "name": "Merger Arbitrage Trader",
-              "descriptionRef": "descriptions/HedgeFbranche_arb-trader.md"
-            },
-            {
-              "id": "event-pm",
-              "name": "Event Driven Portfolio Manager",
-              "descriptionRef": "descriptions/HedgeFbranche_event-pm.md"
-            }
-          ],
-          "descriptionRef": "descriptions/HedgeFbranche_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "deal-probability-analysis",
-              "name": "Analyzing Deal Completion Probability",
-              "descriptionRef": "descriptions/HedgeFbranche_deal-probability-analysis.md"
-            },
-            {
-              "id": "mna-spread-calculation",
-              "name": "Calculating Merger Spread Opportunities",
-              "descriptionRef": "descriptions/HedgeFbranche_mna-spread-calculation.md"
-            },
-            {
-              "id": "bankruptcy-recovery-modeling",
-              "name": "Modeling Bankruptcy Recovery Values",
-              "descriptionRef": "descriptions/HedgeFbranche_bankruptcy-recovery-modeling.md"
-            }
-          ],
-          "descriptionRef": "descriptions/HedgeFbranche_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/HedgeFbranche_event-driven-funds.md"
-    },
-    {
-      "id": "multi-strategy-platforms",
-      "name": "Multi Strategy Hedge Fund Platforms",
-      "description": "Large hedge funds hosting independent trading pods running different strategies.",
-      "functions": [
-        {
-          "id": "capital-allocation",
-          "name": "Capital Allocation",
-          "description": "Allocating capital across internal trading teams.",
-          "descriptionRef": "descriptions/HedgeFbranche_capital-allocation.md"
-        },
-        {
-          "id": "risk-budgeting",
-          "name": "Risk Budget Management",
-          "description": "Setting leverage and drawdown limits for trading pods.",
-          "descriptionRef": "descriptions/HedgeFbranche_risk-budgeting.md"
-        },
-        {
-          "id": "pod-performance-monitoring",
-          "name": "Pod Performance Monitoring",
-          "description": "Tracking profitability of individual portfolio managers.",
-          "descriptionRef": "descriptions/HedgeFbranche_pod-performance-monitoring.md"
-        },
-        {
-          "id": "multi-strategy-diversification",
-          "name": "Strategy Diversification",
-          "description": "Balancing multiple trading approaches across markets.",
-          "descriptionRef": "descriptions/HedgeFbranche_multi-strategy-diversification.md"
-        }
-      ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "pod-analyst",
-              "name": "Pod Investment Analyst",
-              "descriptionRef": "descriptions/HedgeFbranche_pod-analyst.md"
-            },
-            {
-              "id": "execution-trader",
-              "name": "Execution Trader",
-              "descriptionRef": "descriptions/HedgeFbranche_execution-trader.md"
-            },
-            {
-              "id": "risk-manager",
-              "name": "Portfolio Risk Manager",
-              "descriptionRef": "descriptions/HedgeFbranche_risk-manager.md"
-            },
-            {
-              "id": "platform-pm",
-              "name": "Platform Portfolio Manager",
-              "descriptionRef": "descriptions/HedgeFbranche_platform-pm.md"
-            }
-          ],
-          "descriptionRef": "descriptions/HedgeFbranche_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "pnl-attribution",
-              "name": "Daily P&L Attribution Analysis",
-              "descriptionRef": "descriptions/HedgeFbranche_pnl-attribution.md"
-            },
-            {
-              "id": "risk-limit-monitoring",
-              "name": "Monitoring Risk Limits Across Pods",
-              "descriptionRef": "descriptions/HedgeFbranche_risk-limit-monitoring.md"
-            },
-            {
-              "id": "capital-reallocation",
-              "name": "Reallocating Capital to Top Performing Teams",
-              "descriptionRef": "descriptions/HedgeFbranche_capital-reallocation.md"
-            }
-          ],
-          "descriptionRef": "descriptions/HedgeFbranche_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/HedgeFbranche_multi-strategy-platforms.md"
+      "descriptionRef": "descriptions/HedgeFbranche_tasks.md"
     }
   ],
   "descriptionRef": "descriptions/HedgeFcore.md"

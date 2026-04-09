@@ -6,6 +6,10 @@ import { promisify } from 'util';
 const router = express.Router();
 const execAsync = promisify(exec);
 
+// Simple in-memory cache for ticker data
+const tickerCache = new Map();
+const CACHE_TTL = 30000; // 30 seconds for real-time feel
+
 // S&P 500 tickers list
 const sp500Tickers = [
   'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'BRK-B', 'JPM', 'V',
@@ -22,7 +26,7 @@ function getRandomTickers(count = 30) {
   return shuffled.slice(0, count);
 }
 
-// Helper function to generate mock data
+// Helper function to generate mock data (fallback only)
 function generateMockData(tickers) {
   return tickers.map(symbol => ({
     symbol,
@@ -32,13 +36,37 @@ function generateMockData(tickers) {
   }));
 }
 
+// Helper to get cached or fresh data
+function getCachedData(key) {
+  const cached = tickerCache.get(key);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
+  }
+  return null;
+}
+
+function setCachedData(key, data) {
+  tickerCache.set(key, { data, timestamp: Date.now() });
+}
+
 router.get('/tickers', async (req, res) => {
   try {
-    console.log('[Finance API] Fetching 30 random S&P 500 tickers using yfinance');
+    const count = Math.min(Math.max(parseInt(req.query.count) || 30, 5), 50);
+    const cacheKey = `tickers_${count}`;
     
-    // Try to use Python yfinance library
+    console.log(`[Finance API] Fetching ${count} random S&P 500 tickers using yfinance`);
+    
+    // Check cache first for real-time performance
+    const cached = getCachedData(cacheKey);
+    if (cached) {
+      console.log(`[Finance API] Returning cached data for ${count} tickers`);
+      res.json({ ok: true, data: cached, cached: true });
+      return;
+    }
+    
+    // Try to use Python yfinance library with count parameter
     try {
-      const { stdout, stderr } = await execAsync('python scripts/fetch-yfinance.py');
+      const { stdout, stderr } = await execAsync(`python scripts/fetch-yfinance.py ${count}`);
       
       if (stderr) {
         console.warn('[Finance API] Python stderr:', stderr);
@@ -47,7 +75,10 @@ router.get('/tickers', async (req, res) => {
       const tickerData = JSON.parse(stdout);
       console.log(`[Finance API] Successfully fetched ${tickerData.length} tickers via yfinance`);
       
-      res.json({ ok: true, data: tickerData });
+      // Cache the results
+      setCachedData(cacheKey, tickerData);
+      
+      res.json({ ok: true, data: tickerData, source: 'yfinance' });
       return;
       
     } catch (pythonError) {
@@ -55,20 +86,22 @@ router.get('/tickers', async (req, res) => {
     }
     
     // Fallback to mock data
-    const randomTickers = getRandomTickers(30);
+    const randomTickers = getRandomTickers(count);
     const mockData = generateMockData(randomTickers);
     
-    console.log('[Finance API] Using mock data for 30 random S&P 500 tickers');
-    res.json({ ok: true, data: mockData });
+    console.log(`[Finance API] Using mock data for ${count} random S&P 500 tickers`);
+    setCachedData(cacheKey, mockData);
+    res.json({ ok: true, data: mockData, source: 'mock' });
     
   } catch (error) {
     console.error('[Finance API] Critical error in ticker endpoint:', error);
     
     // Ultimate fallback - always return data
-    const emergencyTickers = getRandomTickers(30);
+    const count = parseInt(req.query.count) || 30;
+    const emergencyTickers = getRandomTickers(count);
     const emergencyData = generateMockData(emergencyTickers);
     
-    res.json({ ok: true, data: emergencyData });
+    res.json({ ok: true, data: emergencyData, source: 'emergency' });
   }
 });
 

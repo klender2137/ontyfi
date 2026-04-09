@@ -61,7 +61,11 @@ def fetch_random_tickers(count=30):
 
 if __name__ == "__main__":
     try:
-        ticker_data = fetch_random_tickers(30)
+        # Get count from command line argument, default to 30
+        count = int(sys.argv[1]) if len(sys.argv) > 1 else 30
+        count = max(5, min(count, 50))  # Clamp between 5 and 50
+        
+        ticker_data = fetch_random_tickers(count)
         print(json.dumps(ticker_data))
     except Exception as e:
         print(f"Script error: {e}", file=sys.stderr)

@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="components/SearchBar.css" />
+    <!-- Google OAuth Client ID Configuration - MUST be set for Google Drive access -->
+<script>
+  window.GOOGLE_CLIENT_ID = '970851515463-rr503e4g3959u6a4ikgpnqv4c2i8l4o6.apps.googleusercontent.com';
+</script>
     <!-- React via CDN -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
@@ -49,16 +53,16 @@
     </div>
 
     <!-- Load dependencies in order with error handling -->
-    <script src="descriptions-loader.js" onerror="console.error('Failed to load descriptions-loader.js')"></script>
-    <script src="tree-loader-centralized.js" onerror="console.error('Failed to load tree-loader-centralized.js')"></script>
-    <script src="tree-modules/tree-utils.js" onerror="console.error('Failed to load tree-utils.js')"></script>
-    <script src="tree-modules/tree-hooks.js" onerror="console.error('Failed to load tree-hooks.js')"></script>
-    <script src="tree-modules/tree-components.js" onerror="console.error('Failed to load tree-components.js')"></script>
-    <script src="tree-modules/tree-layout.js" onerror="console.error('Failed to load tree-layout.js')"></script>
-    <script src="tree-modules/tree-smart-layout.js" onerror="console.error('Failed to load tree-smart-layout.js')"></script>
-    <script src="tree-modules/tree-navigation.js" onerror="console.error('Failed to load tree-navigation.js')"></script>
-    <script src="user.account.js" onerror="console.error('Failed to load user.account.js')" onload="console.log('user.account.js loaded')"></script>
-    <script src="tree.openspace.js" onerror="console.error('Failed to load tree.openspace.js')"></script>
+    <script src="descriptions-loader.js" defer onerror="console.error('Failed to load descriptions-loader.js')"></script>
+    <script src="tree-loader-centralized.js" defer onerror="console.error('Failed to load tree-loader-centralized.js')"></script>
+    <script src="tree-modules/tree-utils.js" defer onerror="console.error('Failed to load tree-utils.js')"></script>
+    <script src="tree-modules/tree-hooks.js" defer onerror="console.error('Failed to load tree-hooks.js')"></script>
+    <script src="tree-modules/tree-components.js" defer onerror="console.error('Failed to load tree-components.js')"></script>
+    <script src="tree-modules/tree-layout.js" defer onerror="console.error('Failed to load tree-layout.js')"></script>
+    <script src="tree-modules/tree-smart-layout.js" defer onerror="console.error('Failed to load tree-smart-layout.js')"></script>
+    <script src="tree-modules/tree-navigation.js" defer onerror="console.error('Failed to load tree-navigation.js')"></script>
+    <script src="user.account.js" defer onerror="console.error('Failed to load user.account.js')" onload="console.log('user.account.js loaded')"></script>
+    <script src="tree.openspace.js" defer onerror="console.error('Failed to load tree.openspace.js')"></script>
     <script src="components/SearchBar.js" onerror="console.error('Failed to load SearchBar.js')" onload="console.log('SearchBar.js loaded')"></script>
     <script src="TreeScreen.js" onerror="console.error('Failed to load TreeScreen.js')" onload="console.log('TreeScreen.js loaded')"></script>
     <script src="quizes/QuizCode/QuizEngine.js" onerror="console.error('Failed to load QuizEngine.js')" onload="console.log('QuizEngine.js loaded')"></script>
@@ -142,20 +146,23 @@
         })));
       }
     </script>
-    <script src="NotesModule.js" onerror="console.error('Failed to load NotesModule.js')"></script>
-    <!-- Gamification Engine -->
-    <script src="gamification.js" onerror="console.error('Failed to load gamification.js')" onload="console.log('gamification.js loaded')"></script>
-    <script type="text/babel" src="LevelUp.jsx" onerror="console.error('Failed to load LevelUp.jsx')" onload="console.log('LevelUp.js loaded')"></script>
-    <script src="components/CrystalMesh/CrystalGrid.js" onerror="console.error('Failed to load CrystalGrid.js')" onload="console.log('CrystalGrid.js loaded')"></script>
-        <script src="FavoritesScreen.js" onerror="console.error('Failed to load FavoritesScreen.js')" onload="console.log('FavoritesScreen.js loaded')"></script>
-    <script src="ExploreScreen.js" onerror="console.error('Failed to load ExploreScreen.js')"></script>
-    <script src="MyInsightsScreen.js" onerror="console.error('Failed to load MyInsightsScreen.js')" onload="console.log('MyInsightsScreen.js loaded')"></script>
+    <script src="NotesModule.js" defer onerror="console.error('Failed to load NotesModule.js')"></script>
+    <!-- Gamification Engine - deferred -->
+    <script src="gamification.js" defer onerror="console.error('Failed to load gamification.js')" onload="console.log('gamification.js loaded')"></script>
+    <script type="text/babel" src="LevelUp.jsx" defer onerror="console.error('Failed to load LevelUp.jsx')" onload="console.log('LevelUp.js loaded')"></script>
+    <script src="components/CrystalMesh/CrystalGrid.js" defer onerror="console.error('Failed to load CrystalGrid.js')" onload="console.log('CrystalGrid.js loaded')"></script>
+    <script src="FavoritesScreen.js" defer onerror="console.error('Failed to load FavoritesScreen.js')" onload="console.log('FavoritesScreen.js loaded')"></script>
+    <script src="ExploreScreen.js" defer onerror="console.error('Failed to load ExploreScreen.js')"></script>
+    <script src="document-engine.js" defer onerror="console.error('Failed to load document-engine.js')" onload="console.log('document-engine.js loaded')"></script>
+    <script src="google-drive-service.js" defer onerror="console.error('Failed to load google-drive-service.js')" onload="console.log('google-drive-service.js loaded')"></script>
+    <script src="document-viewer.js" defer onerror="console.error('Failed to load document-viewer.js')" onload="console.log('document-viewer.js loaded')"></script>
+    <script src="MyInsightsScreen.js" defer onerror="console.error('Failed to load MyInsightsScreen.js')" onload="console.log('MyInsightsScreen.js loaded')"></script>
     <script src="tree-test.js" onerror="console.error('Failed to load tree-test.js')"></script>
     <script src="tree-verification.js" onerror="console.error('Failed to load tree-verification.js')" onload="console.log('tree-verification.js loaded')"></script>
     <!-- User Activity Tracker -->
     <script src="UserActivityTracker.js" onerror="console.error('Failed to load UserActivityTracker.js')" onload="console.log('UserActivityTracker.js loaded')"></script>
     <!-- Auto Unfold Mechanics -->
-    <script src="auto-unfold.js" onerror="console.error('Failed to load auto-unfold.js')" onload="console.log('auto-unfold.js loaded')"></script>
+    <script src="auto-unfold.js" defer onerror="console.error('Failed to load auto-unfold.js')" onload="console.log('auto-unfold.js loaded')"></script>
     <!-- Firebase initialization -->
     <script>
       // Check if Firebase is already initialized before initializing
@@ -170,7 +177,20 @@
           appId: "1:970851515463:web:3b3d9c44b4367a373cc562"
         };
         firebase.initializeApp(firebaseConfig);
-        console.log('Firebase initialized globally');
+        // Initialize Firestore with persistence enabled
+    const db = firebase.firestore();
+    db.enablePersistence({
+      synchronizeTabs: true
+    }).then(() => {
+      console.log('Firestore persistence enabled');
+    }).catch((err) => {
+      if (err.code == 'failed-precondition') {
+        console.warn('Firestore persistence failed: Multiple tabs open');
+      } else if (err.code == 'unimplemented') {
+        console.warn('Firestore persistence not supported in this browser');
+      }
+    });
+    console.log('Firebase initialized globally');
       } else {
         console.log('Firebase already initialized, using existing instance');
       }

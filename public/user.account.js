@@ -210,6 +210,20 @@ const UserAccount = (function() {
 
     const user = loadUser();
 
+    // Sync display name from Firebase (Google account)
+    if (profile.displayName && typeof profile.displayName === 'string') {
+      user.displayName = profile.displayName;
+      // Also update username if it's not set or is default
+      if (!user.username || user.username === 'crypto.explorer' || user.username === 'Guest') {
+        user.username = profile.displayName;
+      }
+    }
+
+    // Sync email from Firebase
+    if (profile.email && typeof profile.email === 'string') {
+      user.email = profile.email;
+    }
+
     if (profile.username && typeof profile.username === 'string') {
       user.username = profile.username;
     }

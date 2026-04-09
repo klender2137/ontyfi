@@ -3,838 +3,181 @@
   "name": "Public Finance Sector",
   "descriptionRef": "descriptions/PubFinCore.md",
   "tags": ["public-finance", "fiscal-policy", "sovereign-debt"],
-  "categories": [
+  "tiles": [
     {
-      "id": "ministry-finance",
-      "name": "Ministry of Finance / Treasury",
-      "description": "Central authority responsible for fiscal policy, national budgeting, and sovereign debt issuance.",
-      "tags": [
-        "fiscal-policy",
-        "budget",
-        "sovereign-debt"
-      ],
-      "subcategories": [
+      "id": "pubfin-niches",
+      "name": "Niches",
+      "type": "niches-tile",
+      "description": "Public Finance institution types and market niches",
+      "institutions": [
         {
-          "id": "treasury-jobs",
-          "name": "Jobs",
-          "description": "Professional roles operating inside national treasury institutions.",
-          "nodes": [
+          "id": "ministry-finance",
+          "name": "Ministry of Finance / Treasury",
+          "description": "Central authority responsible for fiscal policy, national budgeting, and sovereign debt issuance.",
+          "tags": ["fiscal-policy", "budget", "sovereign-debt"],
+          "functions": [
             {
-              "id": "public-debt-manager",
-              "name": "Public Debt Manager",
-              "description": "Manages sovereign bond issuance and debt portfolio risk.",
-              "subnodes": [
-                {
-                  "id": "bond-auction-design",
-                  "name": "Bond Auction Design",
-                  "description": "Structuring maturity, coupon, and issuance size.",
-                  "descriptionRef": "descriptions/pubfinBranch_bond-auction-design.md"
-                },
-                {
-                  "id": "debt-maturity-optimization",
-                  "name": "Debt Maturity Optimization",
-                  "description": "Managing refinancing risk.",
-                  "descriptionRef": "descriptions/pubfinBranch_debt-maturity-optimization.md"
-                },
-                {
-                  "id": "primary-dealer-coordination",
-                  "name": "Primary Dealer Coordination",
-                  "description": "Managing government bond market dealers.",
-                  "descriptionRef": "descriptions/pubfinBranch_primary-dealer-coordination.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_public-debt-manager.md"
-            },
-            {
-              "id": "macro-fiscal-analyst",
-              "name": "Macro-Fiscal Analyst",
-              "description": "Models the macroeconomic impact of fiscal policy.",
-              "subnodes": [
-                {
-                  "id": "fiscal-multiplier-modeling",
-                  "name": "Fiscal Multiplier Modeling",
-                  "description": "Estimating GDP impact of spending.",
-                  "descriptionRef": "descriptions/pubfinBranch_fiscal-multiplier-modeling.md"
-                },
-                {
-                  "id": "tax-policy-simulation",
-                  "name": "Tax Policy Simulation",
-                  "description": "Forecasting revenue changes.",
-                  "descriptionRef": "descriptions/pubfinBranch_tax-policy-simulation.md"
-                },
-                {
-                  "id": "budget-forecasting",
-                  "name": "Budget Forecasting",
-                  "description": "Projecting revenues and expenditures.",
-                  "descriptionRef": "descriptions/pubfinBranch_budget-forecasting.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_macro-fiscal-analyst.md"
-            },
-            {
-              "id": "treasury-cash-manager",
-              "name": "Treasury Cash Manager",
-              "description": "Optimizes government liquidity in the Treasury Single Account.",
-              "subnodes": [
-                {
-                  "id": "daily-liquidity-monitoring",
-                  "name": "Daily Liquidity Monitoring",
-                  "description": "Tracking government bank balances.",
-                  "descriptionRef": "descriptions/pubfinBranch_daily-liquidity-monitoring.md"
-                },
-                {
-                  "id": "short-term-borrowing",
-                  "name": "Short-Term Borrowing",
-                  "description": "Issuing treasury bills.",
-                  "descriptionRef": "descriptions/pubfinBranch_short-term-borrowing.md"
-                },
-                {
-                  "id": "cash-flow-reconciliation",
-                  "name": "Cash Flow Reconciliation",
-                  "description": "Balancing inflows and outflows.",
-                  "descriptionRef": "descriptions/pubfinBranch_cash-flow-reconciliation.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_treasury-cash-manager.md"
-            },
-            {
-              "id": "budget-controller",
-              "name": "Budget Controller",
-              "description": "Ensures spending agencies follow legal budget allocations.",
-              "subnodes": [
-                {
-                  "id": "spending-limit-monitoring",
-                  "name": "Spending Limit Monitoring",
-                  "description": "Checking ministry expenditures.",
-                  "descriptionRef": "descriptions/pubfinBranch_spending-limit-monitoring.md"
-                },
-                {
-                  "id": "appropriation-compliance",
-                  "name": "Appropriation Compliance",
-                  "description": "Ensuring spending legality.",
-                  "descriptionRef": "descriptions/pubfinBranch_appropriation-compliance.md"
-                },
-                {
-                  "id": "budget-reporting",
-                  "name": "Budget Reporting",
-                  "description": "Preparing monthly expenditure reports.",
-                  "descriptionRef": "descriptions/pubfinBranch_budget-reporting.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_budget-controller.md"
-            }
-          ],
-          "descriptionRef": "descriptions/pubfinBranch_treasury-jobs.md"
-        },
-        {
-          "id": "treasury-tasks",
-          "name": "Tasks",
-          "description": "Operational missions carried out by treasury departments.",
-          "nodes": [
-            {
-              "id": "sovereign-debt-issuance",
-              "name": "Sovereign Debt Issuance",
-              "description": "Raising capital for government financing.",
-              "subnodes": [
-                {
-                  "id": "bond-auction-management",
-                  "name": "Treasury Bond Auction Management",
-                  "description": "Managing primary bond auctions.",
-                  "descriptionRef": "descriptions/pubfinBranch_bond-auction-management.md"
-                },
-                {
-                  "id": "yield-curve-management",
-                  "name": "Yield Curve Management",
-                  "description": "Balancing maturities across debt instruments.",
-                  "descriptionRef": "descriptions/pubfinBranch_yield-curve-management.md"
-                },
-                {
-                  "id": "investor-relations",
-                  "name": "Sovereign Investor Relations",
-                  "description": "Communicating with institutional bond investors.",
-                  "descriptionRef": "descriptions/pubfinBranch_investor-relations.md"
-                }
-              ],
+              "id": "sovereign-debt-management",
+              "name": "Sovereign Debt Management",
+              "description": "Managing sovereign bond issuance, debt portfolio risk, and primary dealer coordination.",
               "descriptionRef": "descriptions/pubfinBranch_sovereign-debt-issuance.md"
             },
             {
               "id": "fiscal-budget-planning",
               "name": "Fiscal Budget Planning",
-              "description": "Designing annual national budgets.",
-              "subnodes": [
-                {
-                  "id": "medium-term-framework",
-                  "name": "MTEF Modeling",
-                  "description": "3-5 year expenditure planning.",
-                  "descriptionRef": "descriptions/pubfinBranch_medium-term-framework.md"
-                },
-                {
-                  "id": "ministerial-budget-negotiations",
-                  "name": "Ministerial Budget Negotiations",
-                  "description": "Negotiating spending allocations.",
-                  "descriptionRef": "descriptions/pubfinBranch_ministerial-budget-negotiations.md"
-                },
-                {
-                  "id": "fiscal-rule-compliance",
-                  "name": "Fiscal Rule Compliance",
-                  "description": "Maintaining deficit limits.",
-                  "descriptionRef": "descriptions/pubfinBranch_fiscal-rule-compliance.md"
-                }
-              ],
+              "description": "Designing annual national budgets, medium-term expenditure frameworks, and fiscal rule compliance.",
               "descriptionRef": "descriptions/pubfinBranch_fiscal-budget-planning.md"
             },
             {
               "id": "public-expenditure-management",
               "name": "Public Expenditure Management",
-              "description": "Monitoring government spending efficiency.",
-              "subnodes": [
-                {
-                  "id": "program-performance-evaluation",
-                  "name": "Program Performance Evaluation",
-                  "description": "Assessing effectiveness of government programs.",
-                  "descriptionRef": "descriptions/pubfinBranch_program-performance-evaluation.md"
-                },
-                {
-                  "id": "cost-benefit-analysis",
-                  "name": "Cost Benefit Analysis",
-                  "description": "Evaluating public investment returns.",
-                  "descriptionRef": "descriptions/pubfinBranch_cost-benefit-analysis.md"
-                },
-                {
-                  "id": "procurement-oversight",
-                  "name": "Public Procurement Oversight",
-                  "description": "Monitoring contract allocation.",
-                  "descriptionRef": "descriptions/pubfinBranch_procurement-oversight.md"
-                }
-              ],
+              "description": "Monitoring government spending efficiency, program evaluation, and cost-benefit analysis.",
               "descriptionRef": "descriptions/pubfinBranch_public-expenditure-management.md"
+            },
+            {
+              "id": "treasury-cash-management",
+              "name": "Treasury Cash Management",
+              "description": "Optimizing government liquidity, daily cash monitoring, and short-term borrowing.",
+              "descriptionRef": "descriptions/pubfinBranch_treasury-cash-manager.md"
             }
           ],
-          "descriptionRef": "descriptions/pubfinBranch_treasury-tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/pubfinBranch_ministry-finance.md"
-    },
-    {
-      "id": "central-bank",
-      "name": "Central Bank",
-      "description": "Monetary authority responsible for price stability and financial system supervision.",
-      "tags": [
-        "monetary-policy",
-        "inflation-control"
-      ],
-      "subcategories": [
-        {
-          "id": "central-bank-jobs",
-          "name": "Jobs",
-          "description": "Professional roles within monetary authorities.",
-          "nodes": [
-            {
-              "id": "monetary-policy-economist",
-              "name": "Monetary Policy Economist",
-              "description": "Designs interest rate policies to control inflation.",
-              "subnodes": [
-                {
-                  "id": "inflation-forecasting",
-                  "name": "Inflation Forecasting",
-                  "description": "Modeling inflation trends.",
-                  "descriptionRef": "descriptions/pubfinBranch_inflation-forecasting.md"
-                },
-                {
-                  "id": "policy-rate-analysis",
-                  "name": "Policy Rate Analysis",
-                  "description": "Determining optimal interest rate adjustments.",
-                  "descriptionRef": "descriptions/pubfinBranch_policy-rate-analysis.md"
-                },
-                {
-                  "id": "economic-scenario-modeling",
-                  "name": "Economic Scenario Modeling",
-                  "description": "Simulating macroeconomic outcomes.",
-                  "descriptionRef": "descriptions/pubfinBranch_economic-scenario-modeling.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_monetary-policy-economist.md"
-            },
-            {
-              "id": "financial-stability-analyst",
-              "name": "Financial Stability Analyst",
-              "description": "Monitors systemic banking risks.",
-              "subnodes": [
-                {
-                  "id": "bank-stress-testing",
-                  "name": "Bank Stress Testing",
-                  "description": "Simulating crisis scenarios.",
-                  "descriptionRef": "descriptions/pubfinBranch_bank-stress-testing.md"
-                },
-                {
-                  "id": "macroprudential-policy-design",
-                  "name": "Macroprudential Policy Design",
-                  "description": "Developing systemic safeguards.",
-                  "descriptionRef": "descriptions/pubfinBranch_macroprudential-policy-design.md"
-                },
-                {
-                  "id": "liquidity-risk-monitoring",
-                  "name": "Liquidity Risk Monitoring",
-                  "description": "Monitoring bank liquidity buffers.",
-                  "descriptionRef": "descriptions/pubfinBranch_liquidity-risk-monitoring.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_financial-stability-analyst.md"
-            },
-            {
-              "id": "currency-operations-manager",
-              "name": "Currency Operations Manager",
-              "description": "Oversees currency issuance and circulation.",
-              "subnodes": [
-                {
-                  "id": "banknote-production",
-                  "name": "Banknote Production",
-                  "description": "Managing currency printing.",
-                  "descriptionRef": "descriptions/pubfinBranch_banknote-production.md"
-                },
-                {
-                  "id": "cash-distribution",
-                  "name": "Cash Distribution",
-                  "description": "Supplying currency to banks.",
-                  "descriptionRef": "descriptions/pubfinBranch_cash-distribution.md"
-                },
-                {
-                  "id": "counterfeit-prevention",
-                  "name": "Counterfeit Prevention",
-                  "description": "Maintaining currency integrity.",
-                  "descriptionRef": "descriptions/pubfinBranch_counterfeit-prevention.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_currency-operations-manager.md"
-            },
-            {
-              "id": "reserve-manager",
-              "name": "Foreign Reserve Manager",
-              "description": "Manages national foreign currency reserves.",
-              "subnodes": [
-                {
-                  "id": "reserve-allocation",
-                  "name": "Reserve Allocation",
-                  "description": "Investing reserves across currencies.",
-                  "descriptionRef": "descriptions/pubfinBranch_reserve-allocation.md"
-                },
-                {
-                  "id": "gold-reserve-management",
-                  "name": "Gold Reserve Management",
-                  "description": "Managing sovereign gold holdings.",
-                  "descriptionRef": "descriptions/pubfinBranch_gold-reserve-management.md"
-                },
-                {
-                  "id": "fx-intervention",
-                  "name": "FX Market Intervention",
-                  "description": "Stabilizing currency volatility.",
-                  "descriptionRef": "descriptions/pubfinBranch_fx-intervention.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_reserve-manager.md"
-            }
-          ],
-          "descriptionRef": "descriptions/pubfinBranch_central-bank-jobs.md"
+          "descriptionRef": "descriptions/pubfinBranch_ministry-finance.md"
         },
         {
-          "id": "central-bank-tasks",
-          "name": "Tasks",
-          "description": "Core monetary policy missions.",
-          "nodes": [
+          "id": "central-bank",
+          "name": "Central Bank",
+          "description": "Monetary authority responsible for price stability and financial system supervision.",
+          "tags": ["monetary-policy", "inflation-control"],
+          "functions": [
             {
               "id": "monetary-policy-implementation",
               "name": "Monetary Policy Implementation",
-              "description": "Executing interest rate policy.",
-              "subnodes": [
-                {
-                  "id": "open-market-operations",
-                  "name": "Open Market Operations",
-                  "description": "Buying and selling government securities.",
-                  "descriptionRef": "descriptions/pubfinBranch_open-market-operations.md"
-                },
-                {
-                  "id": "interest-rate-setting",
-                  "name": "Interest Rate Setting",
-                  "description": "Adjusting benchmark policy rates.",
-                  "descriptionRef": "descriptions/pubfinBranch_interest-rate-setting.md"
-                },
-                {
-                  "id": "liquidity-provision",
-                  "name": "Liquidity Provision",
-                  "description": "Providing funds to banks.",
-                  "descriptionRef": "descriptions/pubfinBranch_liquidity-provision.md"
-                }
-              ],
+              "description": "Executing interest rate policy, open market operations, and liquidity provision.",
               "descriptionRef": "descriptions/pubfinBranch_monetary-policy-implementation.md"
             },
             {
-              "id": "macroprudential-supervision",
-              "name": "Macroprudential Supervision",
-              "description": "Preventing systemic financial crises.",
-              "subnodes": [
-                {
-                  "id": "systemic-risk-monitoring",
-                  "name": "Systemic Risk Monitoring",
-                  "description": "Monitoring financial system vulnerabilities.",
-                  "descriptionRef": "descriptions/pubfinBranch_systemic-risk-monitoring.md"
-                },
-                {
-                  "id": "countercyclical-capital-buffers",
-                  "name": "Capital Buffer Policies",
-                  "description": "Increasing bank capital requirements.",
-                  "descriptionRef": "descriptions/pubfinBranch_countercyclical-capital-buffers.md"
-                },
-                {
-                  "id": "financial-sector-surveillance",
-                  "name": "Financial Sector Surveillance",
-                  "description": "Tracking market stability indicators.",
-                  "descriptionRef": "descriptions/pubfinBranch_financial-sector-surveillance.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_macroprudential-supervision.md"
+              "id": "financial-stability-supervision",
+              "name": "Financial Stability Supervision",
+              "description": "Monitoring systemic banking risks, macroprudential policy design, and stress testing.",
+              "descriptionRef": "descriptions/pubfinBranch_financial-stability-analyst.md"
             },
             {
-              "id": "lender-last-resort",
-              "name": "Lender of Last Resort",
-              "description": "Emergency liquidity provider during financial crises.",
-              "subnodes": [
-                {
-                  "id": "bank-run-simulation",
-                  "name": "Bank Run Simulation",
-                  "description": "Modeling crisis liquidity needs.",
-                  "descriptionRef": "descriptions/pubfinBranch_bank-run-simulation.md"
-                },
-                {
-                  "id": "emergency-lending-facilities",
-                  "name": "Emergency Lending Facilities",
-                  "description": "Providing crisis loans.",
-                  "descriptionRef": "descriptions/pubfinBranch_emergency-lending-facilities.md"
-                },
-                {
-                  "id": "collateral-valuation",
-                  "name": "Collateral Valuation",
-                  "description": "Assessing assets pledged for loans.",
-                  "descriptionRef": "descriptions/pubfinBranch_collateral-valuation.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_lender-last-resort.md"
+              "id": "foreign-reserve-management",
+              "name": "Foreign Reserve Management",
+              "description": "Managing national foreign currency reserves, gold reserves, and FX market intervention.",
+              "descriptionRef": "descriptions/pubfinBranch_reserve-manager.md"
+            },
+            {
+              "id": "currency-operations",
+              "name": "Currency Operations",
+              "description": "Overseeing currency issuance, banknote production, cash distribution, and counterfeit prevention.",
+              "descriptionRef": "descriptions/pubfinBranch_currency-operations-manager.md"
             }
           ],
-          "descriptionRef": "descriptions/pubfinBranch_central-bank-tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/pubfinBranch_central-bank.md"
-    },
-    {
-      "id": "international-monetary-fund",
-      "name": "International Monetary Fund (IMF)",
-      "description": "Global institution providing financial support during sovereign debt crises.",
-      "tags": [
-        "sovereign-lending",
-        "global-stability"
-      ],
-      "subcategories": [
+          "descriptionRef": "descriptions/pubfinBranch_central-bank.md"
+        },
         {
-          "id": "imf-jobs",
-          "name": "Jobs",
-          "nodes": [
+          "id": "international-monetary-fund",
+          "name": "International Monetary Fund (IMF)",
+          "description": "Global institution providing financial support during sovereign debt crises.",
+          "tags": ["sovereign-lending", "global-stability"],
+          "functions": [
             {
-              "id": "imf-program-economist",
-              "name": "IMF Program Economist",
-              "description": "Designs macroeconomic adjustment programs.",
-              "subnodes": [
-                {
-                  "id": "structural-reform-analysis",
-                  "name": "Structural Reform Analysis",
-                  "description": "Assessing reform needs.",
-                  "descriptionRef": "descriptions/pubfinBranch_structural-reform-analysis.md"
-                },
-                {
-                  "id": "fiscal-adjustment-modeling",
-                  "name": "Fiscal Adjustment Modeling",
-                  "description": "Designing deficit reduction paths.",
-                  "descriptionRef": "descriptions/pubfinBranch_fiscal-adjustment-modeling.md"
-                },
-                {
-                  "id": "country-mission-reporting",
-                  "name": "Country Mission Reporting",
-                  "description": "Drafting IMF country reports.",
-                  "descriptionRef": "descriptions/pubfinBranch_country-mission-reporting.md"
-                }
-              ],
+              "id": "sovereign-lending-programs",
+              "name": "Sovereign Lending Programs",
+              "description": "Designing macroeconomic adjustment programs and managing financial assistance.",
               "descriptionRef": "descriptions/pubfinBranch_imf-program-economist.md"
             },
             {
-              "id": "debt-sustainability-analyst",
-              "name": "Debt Sustainability Analyst",
-              "description": "Evaluates whether sovereign debt is sustainable.",
-              "subnodes": [
-                {
-                  "id": "dsa-modeling",
-                  "name": "Debt Sustainability Analysis",
-                  "description": "Modeling debt-to-GDP trajectories.",
-                  "descriptionRef": "descriptions/pubfinBranch_dsa-modeling.md"
-                },
-                {
-                  "id": "risk-scenario-modeling",
-                  "name": "Risk Scenario Modeling",
-                  "description": "Testing fiscal shocks.",
-                  "descriptionRef": "descriptions/pubfinBranch_risk-scenario-modeling.md"
-                },
-                {
-                  "id": "sovereign-risk-assessment",
-                  "name": "Sovereign Risk Assessment",
-                  "description": "Evaluating default probability.",
-                  "descriptionRef": "descriptions/pubfinBranch_sovereign-risk-assessment.md"
-                }
-              ],
+              "id": "debt-sustainability-analysis",
+              "name": "Debt Sustainability Analysis",
+              "description": "Evaluating sovereign debt sustainability and risk scenario modeling.",
               "descriptionRef": "descriptions/pubfinBranch_debt-sustainability-analyst.md"
             },
             {
-              "id": "financial-sector-specialist",
-              "name": "Financial Sector Specialist",
-              "description": "Advises governments on banking sector reforms.",
-              "subnodes": [
-                {
-                  "id": "banking-regulation-review",
-                  "name": "Banking Regulation Review",
-                  "description": "Assessing supervisory frameworks.",
-                  "descriptionRef": "descriptions/pubfinBranch_banking-regulation-review.md"
-                },
-                {
-                  "id": "capital-adequacy-analysis",
-                  "name": "Capital Adequacy Analysis",
-                  "description": "Evaluating bank resilience.",
-                  "descriptionRef": "descriptions/pubfinBranch_capital-adequacy-analysis.md"
-                },
-                {
-                  "id": "financial-sector-diagnostics",
-                  "name": "Financial Sector Diagnostics",
-                  "description": "Reviewing banking system vulnerabilities.",
-                  "descriptionRef": "descriptions/pubfinBranch_financial-sector-diagnostics.md"
-                }
-              ],
+              "id": "financial-sector-advisory",
+              "name": "Financial Sector Advisory",
+              "description": "Advising governments on banking sector reforms and capital adequacy.",
               "descriptionRef": "descriptions/pubfinBranch_financial-sector-specialist.md"
             },
             {
-              "id": "imf-lending-officer",
-              "name": "IMF Lending Officer",
-              "description": "Manages financial assistance programs.",
-              "subnodes": [
-                {
-                  "id": "loan-conditionality-design",
-                  "name": "Loan Conditionality Design",
-                  "description": "Setting reform conditions.",
-                  "descriptionRef": "descriptions/pubfinBranch_loan-conditionality-design.md"
-                },
-                {
-                  "id": "program-monitoring",
-                  "name": "Program Monitoring",
-                  "description": "Tracking reform progress.",
-                  "descriptionRef": "descriptions/pubfinBranch_program-monitoring.md"
-                },
-                {
-                  "id": "loan-disbursement",
-                  "name": "Loan Disbursement",
-                  "description": "Managing tranche releases.",
-                  "descriptionRef": "descriptions/pubfinBranch_loan-disbursement.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_imf-lending-officer.md"
-            }
-          ],
-          "descriptionRef": "descriptions/pubfinBranch_imf-jobs.md"
-        },
-        {
-          "id": "imf-tasks",
-          "name": "Tasks",
-          "nodes": [
-            {
-              "id": "sovereign-bailout-programs",
-              "name": "Sovereign Bailout Programs",
-              "subnodes": [
-                {
-                  "id": "loan-program-negotiation",
-                  "name": "Loan Program Negotiation",
-                  "description": "Negotiating financial rescue packages.",
-                  "descriptionRef": "descriptions/pubfinBranch_loan-program-negotiation.md"
-                },
-                {
-                  "id": "policy-conditionality",
-                  "name": "Policy Conditionality",
-                  "description": "Requiring fiscal reforms.",
-                  "descriptionRef": "descriptions/pubfinBranch_policy-conditionality.md"
-                },
-                {
-                  "id": "economic-surveillance",
-                  "name": "Economic Surveillance",
-                  "description": "Monitoring member economies.",
-                  "descriptionRef": "descriptions/pubfinBranch_economic-surveillance.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_sovereign-bailout-programs.md"
-            },
-            {
-              "id": "debt-crisis-management",
-              "name": "Debt Crisis Management",
-              "subnodes": [
-                {
-                  "id": "sovereign-debt-restructuring",
-                  "name": "Sovereign Debt Restructuring",
-                  "description": "Negotiating debt relief.",
-                  "descriptionRef": "descriptions/pubfinBranch_sovereign-debt-restructuring.md"
-                },
-                {
-                  "id": "creditor-coordination",
-                  "name": "Creditor Coordination",
-                  "description": "Aligning international lenders.",
-                  "descriptionRef": "descriptions/pubfinBranch_creditor-coordination.md"
-                },
-                {
-                  "id": "fiscal-adjustment-programs",
-                  "name": "Fiscal Adjustment Programs",
-                  "description": "Stabilizing government budgets.",
-                  "descriptionRef": "descriptions/pubfinBranch_fiscal-adjustment-programs.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_debt-crisis-management.md"
-            },
-            {
-              "id": "global-financial-surveillance",
-              "name": "Global Financial Surveillance",
-              "subnodes": [
-                {
-                  "id": "world-economic-outlook",
-                  "name": "World Economic Outlook",
-                  "description": "Publishing global economic forecasts.",
-                  "descriptionRef": "descriptions/pubfinBranch_world-economic-outlook.md"
-                },
-                {
-                  "id": "financial-stability-reports",
-                  "name": "Financial Stability Reports",
-                  "description": "Monitoring global risk.",
-                  "descriptionRef": "descriptions/pubfinBranch_financial-stability-reports.md"
-                },
-                {
-                  "id": "macro-risk-monitoring",
-                  "name": "Macro Risk Monitoring",
-                  "description": "Tracking global vulnerabilities.",
-                  "descriptionRef": "descriptions/pubfinBranch_macro-risk-monitoring.md"
-                }
-              ],
+              "id": "global-economic-surveillance",
+              "name": "Global Economic Surveillance",
+              "description": "Publishing world economic outlook, financial stability reports, and macro risk monitoring.",
               "descriptionRef": "descriptions/pubfinBranch_global-financial-surveillance.md"
             }
           ],
-          "descriptionRef": "descriptions/pubfinBranch_imf-tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/pubfinBranch_international-monetary-fund.md"
-    },
-    {
-      "id": "tax-customs-administration",
-      "name": "Tax & Customs Administration",
-      "description": "Government agency responsible for collecting taxes and enforcing customs laws.",
-      "tags": [
-        "taxation",
-        "revenue"
-      ],
-      "subcategories": [
-        {
-          "id": "tax-jobs",
-          "name": "Jobs",
-          "nodes": [
-            {
-              "id": "tax-inspector",
-              "name": "Tax Inspector",
-              "description": "Audits taxpayer filings.",
-              "subnodes": [
-                {
-                  "id": "corporate-tax-audit",
-                  "name": "Corporate Tax Audit",
-                  "description": "Verifying corporate tax declarations.",
-                  "descriptionRef": "descriptions/pubfinBranch_corporate-tax-audit.md"
-                },
-                {
-                  "id": "personal-income-audit",
-                  "name": "Personal Income Audit",
-                  "description": "Auditing individual taxpayers.",
-                  "descriptionRef": "descriptions/pubfinBranch_personal-income-audit.md"
-                },
-                {
-                  "id": "tax-evasion-investigation",
-                  "name": "Tax Evasion Investigation",
-                  "description": "Investigating illegal avoidance.",
-                  "descriptionRef": "descriptions/pubfinBranch_tax-evasion-investigation.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_tax-inspector.md"
-            },
-            {
-              "id": "customs-officer",
-              "name": "Customs Officer",
-              "description": "Controls international trade at borders.",
-              "subnodes": [
-                {
-                  "id": "import-duty-assessment",
-                  "name": "Import Duty Assessment",
-                  "description": "Calculating customs duties.",
-                  "descriptionRef": "descriptions/pubfinBranch_import-duty-assessment.md"
-                },
-                {
-                  "id": "border-inspections",
-                  "name": "Border Inspections",
-                  "description": "Inspecting goods shipments.",
-                  "descriptionRef": "descriptions/pubfinBranch_border-inspections.md"
-                },
-                {
-                  "id": "anti-smuggling-operations",
-                  "name": "Anti Smuggling Operations",
-                  "description": "Preventing illicit trade.",
-                  "descriptionRef": "descriptions/pubfinBranch_anti-smuggling-operations.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_customs-officer.md"
-            },
-            {
-              "id": "tax-policy-analyst",
-              "name": "Tax Policy Analyst",
-              "description": "Designs tax reforms.",
-              "subnodes": [
-                {
-                  "id": "tax-gap-analysis",
-                  "name": "VAT Gap Analysis",
-                  "description": "Estimating missing tax revenues.",
-                  "descriptionRef": "descriptions/pubfinBranch_tax-gap-analysis.md"
-                },
-                {
-                  "id": "tax-base-modeling",
-                  "name": "Tax Base Modeling",
-                  "description": "Estimating taxable income base.",
-                  "descriptionRef": "descriptions/pubfinBranch_tax-base-modeling.md"
-                },
-                {
-                  "id": "revenue-forecasting",
-                  "name": "Revenue Forecasting",
-                  "description": "Predicting tax revenue flows.",
-                  "descriptionRef": "descriptions/pubfinBranch_revenue-forecasting.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_tax-policy-analyst.md"
-            },
-            {
-              "id": "revenue-data-analyst",
-              "name": "Revenue Data Analyst",
-              "description": "Analyzes tax collection data.",
-              "subnodes": [
-                {
-                  "id": "tax-data-mining",
-                  "name": "Tax Data Mining",
-                  "description": "Detecting anomalies.",
-                  "descriptionRef": "descriptions/pubfinBranch_tax-data-mining.md"
-                },
-                {
-                  "id": "fraud-detection-models",
-                  "name": "Fraud Detection Models",
-                  "description": "Identifying suspicious filings.",
-                  "descriptionRef": "descriptions/pubfinBranch_fraud-detection-models.md"
-                },
-                {
-                  "id": "collection-performance-analysis",
-                  "name": "Collection Performance Analysis",
-                  "description": "Tracking collection efficiency.",
-                  "descriptionRef": "descriptions/pubfinBranch_collection-performance-analysis.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_revenue-data-analyst.md"
-            }
-          ],
-          "descriptionRef": "descriptions/pubfinBranch_tax-jobs.md"
+          "descriptionRef": "descriptions/pubfinBranch_international-monetary-fund.md"
         },
         {
-          "id": "tax-tasks",
-          "name": "Tasks",
-          "nodes": [
+          "id": "tax-customs-administration",
+          "name": "Tax & Customs Administration",
+          "description": "Government agency responsible for collecting taxes and enforcing customs laws.",
+          "tags": ["taxation", "revenue"],
+          "functions": [
             {
               "id": "revenue-mobilization",
               "name": "Revenue Mobilization",
-              "subnodes": [
-                {
-                  "id": "tax-base-expansion",
-                  "name": "Tax Base Expansion",
-                  "description": "Increasing taxable population.",
-                  "descriptionRef": "descriptions/pubfinBranch_tax-base-expansion.md"
-                },
-                {
-                  "id": "tax-compliance-monitoring",
-                  "name": "Tax Compliance Monitoring",
-                  "description": "Improving compliance rates.",
-                  "descriptionRef": "descriptions/pubfinBranch_tax-compliance-monitoring.md"
-                },
-                {
-                  "id": "digital-tax-administration",
-                  "name": "Digital Tax Administration",
-                  "description": "Implementing e-filing systems.",
-                  "descriptionRef": "descriptions/pubfinBranch_digital-tax-administration.md"
-                }
-              ],
+              "description": "Tax base expansion, compliance monitoring, and digital tax administration.",
               "descriptionRef": "descriptions/pubfinBranch_revenue-mobilization.md"
+            },
+            {
+              "id": "tax-audit-enforcement",
+              "name": "Tax Audit & Enforcement",
+              "description": "Corporate and personal tax audits, evasion investigation, and international cooperation.",
+              "descriptionRef": "descriptions/pubfinBranch_tax-inspector.md"
             },
             {
               "id": "border-trade-enforcement",
               "name": "Border Trade Enforcement",
-              "subnodes": [
-                {
-                  "id": "customs-duty-collection",
-                  "name": "Customs Duty Collection",
-                  "description": "Collecting trade tariffs.",
-                  "descriptionRef": "descriptions/pubfinBranch_customs-duty-collection.md"
-                },
-                {
-                  "id": "trade-fraud-prevention",
-                  "name": "Trade Fraud Prevention",
-                  "description": "Preventing customs fraud.",
-                  "descriptionRef": "descriptions/pubfinBranch_trade-fraud-prevention.md"
-                },
-                {
-                  "id": "import-export-monitoring",
-                  "name": "Import Export Monitoring",
-                  "description": "Tracking goods flows.",
-                  "descriptionRef": "descriptions/pubfinBranch_import-export-monitoring.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_border-trade-enforcement.md"
+              "description": "Customs duty collection, border inspections, anti-smuggling operations, and trade fraud prevention.",
+              "descriptionRef": "descriptions/pubfinBranch_customs-officer.md"
             },
             {
-              "id": "tax-audit-programs",
-              "name": "Tax Audit Programs",
-              "subnodes": [
-                {
-                  "id": "corporate-audit-cycles",
-                  "name": "Corporate Audit Cycles",
-                  "description": "Routine company audits.",
-                  "descriptionRef": "descriptions/pubfinBranch_corporate-audit-cycles.md"
-                },
-                {
-                  "id": "high-risk-taxpayer-review",
-                  "name": "High Risk Taxpayer Review",
-                  "description": "Investigating suspicious returns.",
-                  "descriptionRef": "descriptions/pubfinBranch_high-risk-taxpayer-review.md"
-                },
-                {
-                  "id": "international-tax-cooperation",
-                  "name": "International Tax Cooperation",
-                  "description": "Sharing tax information globally.",
-                  "descriptionRef": "descriptions/pubfinBranch_international-tax-cooperation.md"
-                }
-              ],
-              "descriptionRef": "descriptions/pubfinBranch_tax-audit-programs.md"
+              "id": "tax-policy-reform",
+              "name": "Tax Policy Reform",
+              "description": "Designing tax reforms, VAT gap analysis, tax base modeling, and revenue forecasting.",
+              "descriptionRef": "descriptions/pubfinBranch_tax-policy-analyst.md"
             }
           ],
-          "descriptionRef": "descriptions/pubfinBranch_tax-tasks.md"
+          "descriptionRef": "descriptions/pubfinBranch_tax-customs-administration.md"
         }
       ],
-      "descriptionRef": "descriptions/pubfinBranch_tax-customs-administration.md"
+      "descriptionRef": "descriptions/pubfinBranch_niches.md"
+    },
+    {
+      "id": "pubfin-jobs",
+      "name": "Jobs",
+      "type": "jobs-tile",
+      "description": "Career roles and positions in Public Finance",
+      "items": [
+        { "id": "public-debt-manager", "name": "Public Debt Manager", "descriptionRef": "descriptions/pubfinBranch_public-debt-manager.md" },
+        { "id": "macro-fiscal-analyst", "name": "Macro-Fiscal Analyst", "descriptionRef": "descriptions/pubfinBranch_macro-fiscal-analyst.md" },
+        { "id": "monetary-policy-economist", "name": "Monetary Policy Economist", "descriptionRef": "descriptions/pubfinBranch_monetary-policy-economist.md" },
+        { "id": "financial-stability-analyst", "name": "Financial Stability Analyst", "descriptionRef": "descriptions/pubfinBranch_financial-stability-analyst.md" },
+        { "id": "imf-program-economist", "name": "IMF Program Economist", "descriptionRef": "descriptions/pubfinBranch_imf-program-economist.md" },
+        { "id": "tax-inspector", "name": "Tax Inspector", "descriptionRef": "descriptions/pubfinBranch_tax-inspector.md" },
+        { "id": "customs-officer", "name": "Customs Officer", "descriptionRef": "descriptions/pubfinBranch_customs-officer.md" },
+        { "id": "treasury-cash-manager", "name": "Treasury Cash Manager", "descriptionRef": "descriptions/pubfinBranch_treasury-cash-manager.md" }
+      ],
+      "descriptionRef": "descriptions/pubfinBranch-jobs.md"
+    },
+    {
+      "id": "pubfin-tasks",
+      "name": "Tasks",
+      "type": "tasks-tile",
+      "description": "Key activities and responsibilities in Public Finance",
+      "items": [
+        { "id": "sovereign-debt-issuance", "name": "Sovereign Debt Issuance", "descriptionRef": "descriptions/pubfinBranch_sovereign-debt-issuance.md" },
+        { "id": "budget-forecasting", "name": "Budget Forecasting", "descriptionRef": "descriptions/pubfinBranch_budget-forecasting.md" },
+        { "id": "inflation-forecasting", "name": "Inflation Forecasting", "descriptionRef": "descriptions/pubfinBranch_inflation-forecasting.md" },
+        { "id": "bank-stress-testing", "name": "Bank Stress Testing", "descriptionRef": "descriptions/pubfinBranch_bank-stress-testing.md" },
+        { "id": "debt-sustainability-analysis", "name": "Debt Sustainability Analysis", "descriptionRef": "descriptions/pubfinBranch_dsa-modeling.md" },
+        { "id": "revenue-mobilization", "name": "Revenue Mobilization", "descriptionRef": "descriptions/pubfinBranch_revenue-mobilization.md" },
+        { "id": "tax-audit-programs", "name": "Tax Audit Programs", "descriptionRef": "descriptions/pubfinBranch_tax-audit-programs.md" },
+        { "id": "border-trade-enforcement", "name": "Border Trade Enforcement", "descriptionRef": "descriptions/pubfinBranch_border-trade-enforcement.md" }
+      ],
+      "descriptionRef": "descriptions/pubfinBranch-tasks.md"
     }
-  ],
-  "descriptionRef": "descriptions/PubFinCore.md"
+  ]
 }

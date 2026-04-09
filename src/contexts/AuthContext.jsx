@@ -5,14 +5,12 @@ import {
   deleteUser,
   fetchSignInMethodsForEmail,
   linkWithCredential,
-  signInWithCustomToken,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut as firebaseSignOut,
   updateProfile,
 } from 'firebase/auth';
 import { arrayUnion, deleteDoc, doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { auth, db } from '../services/firebase';
 import { useAppStore } from '../store/useAppStore';
 
@@ -32,7 +30,7 @@ function validatePassword(password) {
   return true;
 }
 
-async function ensureUserDoc({ user, authType, walletAddress = null }) {
+async function ensureUserDoc({ user, authType, linkedinId = null, linkedinSub = null }) {
   if (!user?.uid) return;
 
   const identity = authType === 'email' ? 'password' : authType;
@@ -46,7 +44,8 @@ async function ensureUserDoc({ user, authType, walletAddress = null }) {
     await setDoc(ref, {
       uid: user.uid,
       email: user.email ?? null,
-      wallet_address: walletAddress,
+      linkedin_id: linkedinId,
+      linkedin_sub: linkedinSub,
       identities: identity ? [identity] : [],
       metadata: {
         created_at: serverTimestamp(),
@@ -54,7 +53,6 @@ async function ensureUserDoc({ user, authType, walletAddress = null }) {
         last_active: serverTimestamp(),
       },
       display_name: displayName,
-      // Backward compatible fields
       auth_type: authType,
       created_at: serverTimestamp(),
       preferences: {
@@ -73,7 +71,8 @@ async function ensureUserDoc({ user, authType, walletAddress = null }) {
 
   if (existing.auth_type !== authType && authType) patch.auth_type = authType;
   if ((existing.email ?? null) !== (user.email ?? null)) patch.email = user.email ?? null;
-  if ((existing.wallet_address ?? null) !== (walletAddress ?? null)) patch.wallet_address = walletAddress;
+  if (linkedinSub && (existing.linkedin_sub ?? null) !== (linkedinSub ?? null)) patch.linkedin_sub = linkedinSub;
+  if (linkedinId && (existing.linkedin_id ?? null) !== (linkedinId ?? null)) patch.linkedin_id = linkedinId;
   if (!existing.display_name && (user.displayName || user.email)) {
     patch.display_name = user.displayName || user.email.split('@')[0];
   }
@@ -97,7 +96,6 @@ export function AuthProvider({ children }) {
   const [error, setError] = useState(null);
   const [pendingGoogleLink, setPendingGoogleLink] = useState(null);
 
-  const wallet = useWallet();
   const { initializeBookmarksForUser } = useAppStore();
 
   useEffect(() => {
@@ -119,9 +117,8 @@ export function AuthProvider({ children }) {
           const providerIds = firebaseUser.providerData?.map((p) => p?.providerId).filter(Boolean) || [];
           const isGoogle = providerIds.includes('google.com');
           const isEmail = providerIds.includes('password');
-          const isPhantom = typeof firebaseUser.uid === 'string' && firebaseUser.uid.startsWith('solana:');
 
-          const authType = isPhantom ? 'phantom' : isGoogle ? 'google' : isEmail ? 'email' : 'email';
+          const authType = isGoogle ? 'google' : isEmail ? 'email' : 'email';
           await ensureUserDoc({ user: firebaseUser, authType });
         } catch (e) {
           setError(e?.message || 'Failed to sync user profile');
@@ -132,7 +129,7 @@ export function AuthProvider({ children }) {
     });
 
     return unsubscribe;
-  }, [wallet, initializeBookmarksForUser]);
+  }, [initializeBookmarksForUser]);
 
   const continueAsGuest = useCallback(() => {
     setIsGuest(true);
@@ -276,7 +273,6 @@ export function AuthProvider({ children }) {
       throw e;
     } finally {
       try {
-        localStorage.removeItem('walletSignature');
         // Clear user-specific bookmarks
         if (current?.uid) {
           const userBookmarkKey = `cryptoExplorer.bookmarks.${current.uid}`;
@@ -291,66 +287,27 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  // Phantom/Solana sign-in using wallet-adapter compatible provider (Phantom)
-  const signInWithPhantom = useCallback(async () => {
+  // LinkedIn OIDC sign-in
+  const signInWithLinkedIn = useCallback(async () => {
     setError(null);
 
-    if (!wallet) {
-      throw new Error('Solana wallet adapter not initialized');
+    try {
+      // Initiate LinkedIn OAuth flow
+      const response = await fetch('/api/auth/linkedin');
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body?.error || 'Failed to initiate LinkedIn authentication');
+      }
+
+      const { authUrl } = await response.json();
+      if (!authUrl) throw new Error('Missing authorization URL');
+
+      // Redirect to LinkedIn OAuth
+      window.location.href = authUrl;
+    } catch (err) {
+      setError(err?.message || 'LinkedIn authentication failed');
+      throw err;
     }
-
-    if (!wallet.connected) {
-      await wallet.connect();
-    }
-
-    if (!wallet.publicKey?.toBase58) {
-      throw new Error('Unable to read wallet publicKey');
-    }
-
-    const walletAddress = wallet.publicKey.toBase58();
-
-    // Request nonce
-    const nonceRes = await fetch(`/api/solana-auth/nonce?walletAddress=${encodeURIComponent(walletAddress)}`);
-    if (!nonceRes.ok) {
-      const body = await nonceRes.json().catch(() => ({}));
-      throw new Error(body?.error || 'Failed to request nonce');
-    }
-    const { message } = await nonceRes.json();
-    if (!message) throw new Error('Nonce message missing from server');
-
-    // Sign message
-    if (!wallet.signMessage) {
-      throw new Error('Wallet does not support message signing');
-    }
-
-    const encodedMessage = new TextEncoder().encode(message);
-    const signatureBytes = await wallet.signMessage(encodedMessage);
-    if (!signatureBytes) {
-      throw new Error('Signature missing');
-    }
-
-    const signatureBase64 = btoa(String.fromCharCode(...signatureBytes));
-
-    // Verify -> get Firebase custom token
-    const verifyRes = await fetch('/api/solana-auth/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ walletAddress, signatureBase64, message }),
-    });
-
-    if (!verifyRes.ok) {
-      const body = await verifyRes.json().catch(() => ({}));
-      throw new Error(body?.error || 'Failed to verify signature');
-    }
-
-    const { token } = await verifyRes.json();
-    if (!token) throw new Error('Custom token missing');
-
-    const credential = await signInWithCustomToken(auth, token);
-    await ensureUserDoc({ user: credential.user, authType: 'phantom', walletAddress });
-    setIsGuest(false);
-
-    return credential.user;
   }, []);
 
   const value = useMemo(() => {
@@ -367,11 +324,11 @@ export function AuthProvider({ children }) {
       signInWithGoogle,
       linkGoogleWithPassword,
       clearPendingGoogleLink,
-      signInWithPhantom,
+      signInWithLinkedIn,
       signOut,
       deleteAccount,
     };
-  }, [user, isGuest, initializing, error, pendingGoogleLink, continueAsGuest, signUpWithEmail, signInWithEmail, signInWithGoogle, linkGoogleWithPassword, clearPendingGoogleLink, signInWithPhantom, signOut, deleteAccount]);
+  }, [user, isGuest, initializing, error, pendingGoogleLink, continueAsGuest, signUpWithEmail, signInWithEmail, signInWithGoogle, linkGoogleWithPassword, clearPendingGoogleLink, signInWithLinkedIn, signOut, deleteAccount]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

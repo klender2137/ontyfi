@@ -46,25 +46,44 @@ const AdminUtils = (function() {
    */
   async function isAdmin() {
     try {
+      // First try UserAccount data
       const user = UserAccount.getUserData();
-      if (!user || !user.username) {
+      
+      // Also try to get Firebase auth user directly
+      let firebaseUser = null;
+      try {
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+          firebaseUser = firebase.auth().currentUser;
+        }
+      } catch (e) {
+        // Firebase not available
+      }
+      
+      // Use Firebase user data if available, fallback to UserAccount
+      const username = user?.username || firebaseUser?.displayName || null;
+      const email = user?.email || firebaseUser?.email || null;
+      
+      if (!username && !email) {
+        console.warn('[AdminUtils] No username or email available for admin check');
         return false;
       }
       
-      // Check cache first
+      // Check cache first (use email as cache key if available)
+      const cacheKey = email || username;
       const now = Date.now();
       if (adminStatusCache !== null && 
-          adminStatusUser === user.username && 
+          adminStatusUser === cacheKey && 
           (now - cacheTimestamp) < CACHE_TTL) {
         return adminStatusCache;
       }
       
       // Verify with server
-      const isAdminUser = await verifyAdminWithServer(user.username, user.email);
+      console.log('[AdminUtils] Verifying admin status for:', { username, email: email ? '***' : null });
+      const isAdminUser = await verifyAdminWithServer(username, email);
       
       // Update cache
       adminStatusCache = isAdminUser;
-      adminStatusUser = user.username;
+      adminStatusUser = cacheKey;
       cacheTimestamp = now;
       
       return isAdminUser;
@@ -80,13 +99,29 @@ const AdminUtils = (function() {
    */
   function isAdminSync() {
     try {
+      // First try UserAccount data
       const user = UserAccount.getUserData();
-      if (!user || !user.username) return false;
+      
+      // Also try to get Firebase auth user directly
+      let firebaseUser = null;
+      try {
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+          firebaseUser = firebase.auth().currentUser;
+        }
+      } catch (e) {
+        // Firebase not available
+      }
+      
+      const username = user?.username || firebaseUser?.displayName || null;
+      const email = user?.email || firebaseUser?.email || null;
+      
+      if (!username && !email) return false;
       
       // Return cached value if available and not expired
+      const cacheKey = email || username;
       const now = Date.now();
       if (adminStatusCache !== null && 
-          adminStatusUser === user.username && 
+          adminStatusUser === cacheKey && 
           (now - cacheTimestamp) < CACHE_TTL) {
         return adminStatusCache;
       }

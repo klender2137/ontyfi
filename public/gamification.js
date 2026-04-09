@@ -8,17 +8,18 @@
     }
 
     const QUEST_DEFS = {
-      wallet_link: {
-        id: 'wallet_link',
-        title: 'Attach Wallet',
-        description: 'Connect a wallet to your account',
+      linkedin_connect: {
+        id: 'linkedin_connect',
+        title: 'Connect LinkedIn',
+        description: 'Connect your LinkedIn account for professional profile',
         reward: 50
       },
       visit_all_screens: {
         id: 'visit_all_screens',
         title: 'Visit All Screens',
-        description: 'Open the Tree, Explore, and Level Up screens',
-        reward: 100
+        description: 'Visit all screens from the Menu (activate to start tracking)',
+        reward: 100,
+        target: 7
       },
       bubble_bounce: {
         id: 'bubble_bounce',
@@ -39,10 +40,10 @@
     const LEVELS_MAX = 15;
     const LEVEL_BASE_POINTS = 100;
 
-    function maskWallet(addr) {
-      if (!addr || typeof addr !== 'string') return 'Anonymous';
-      if (addr.length <= 10) return addr;
-      return addr.slice(0, 6) + '…' + addr.slice(-4);
+    function maskLinkedIn(id) {
+      if (!id || typeof id !== 'string') return 'Anonymous';
+      if (id.length <= 10) return id;
+      return 'LinkedIn:' + id.slice(0, 6) + '…';
     }
 
     function calculateLevel(totalPoints) {
@@ -88,7 +89,7 @@
 
       const patch = {
         nickname: user.displayName || null,
-        croin_balance: 0,
+        oreo_balance: 89, // Default starting balance: 89 Oreos
         lifetime_points: 0,
         level: 1,
         in_app_time_ms: 0,
@@ -98,7 +99,7 @@
           bubble_bounces: 0,
           screens_visited: []
         },
-        wallet_address: null
+        linkedin_sub: null
       };
 
       if (!snap.exists) {
@@ -115,7 +116,7 @@
       const data = snap.data() || {};
       const update = {};
 
-      if (typeof data.croin_balance !== 'number') update.croin_balance = 0;
+      if (typeof data.oreo_balance !== 'number') update.oreo_balance = 0;
       if (typeof data.lifetime_points !== 'number') update.lifetime_points = 0;
       if (typeof data.level !== 'number') update.level = 1;
       if (typeof data.in_app_time_ms !== 'number') update.in_app_time_ms = 0;
@@ -171,14 +172,30 @@
       await ensureQuestDoc(user.uid, questId);
       const ref = fb.firestore().collection('user_quests').doc(user.uid).collection('quests').doc(questId);
 
-      await fb.firestore().runTransaction(async (tx) => {
-        const snap = await tx.get(ref);
-        if (!snap.exists) return;
-        const data = snap.data() || {};
-        if (data.status === 'completed') return;
-        if (data.status === 'claimable') return;
-        tx.set(ref, { status: 'in_progress', started_at: fb.firestore.FieldValue.serverTimestamp() }, { merge: true });
-      });
+      try {
+        // Use get() outside transaction first to check current state
+        const preCheck = await ref.get();
+        if (!preCheck.exists) return;
+        const preData = preCheck.data() || {};
+        if (preData.status === 'completed' || preData.status === 'claimable' || preData.status === 'in_progress') return;
+
+        // Simple update instead of transaction to avoid failed-precondition errors
+        await ref.update({
+          status: 'in_progress',
+          started_at: fb.firestore.FieldValue.serverTimestamp()
+        });
+      } catch (e) {
+        console.warn('[Gamification] startQuest error:', e);
+        // Fallback: try to set with merge
+        try {
+          await ref.set({
+            status: 'in_progress',
+            started_at: fb.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        } catch (e2) {
+          console.error('[Gamification] startQuest fallback failed:', e2);
+        }
+      }
     }
 
     async function setQuestClaimableIfEligible(uid, questId, eligibilityFn) {
@@ -221,14 +238,14 @@
           if (q.status !== 'claimable') throw new Error('Quest not claimable');
 
           const u = userSnap.exists ? (userSnap.data() || {}) : {};
-          const currentBalance = Number(u.croin_balance) || 0;
+          const currentBalance = Number(u.oreo_balance) || 0;
           const currentLifetime = Number(u.lifetime_points) || 0;
           const newBalance = currentBalance + def.reward;
           const newLifetime = currentLifetime + def.reward;
           const newLevel = calculateLevel(newLifetime);
 
           tx.set(userRef, {
-            croin_balance: newBalance,
+            oreo_balance: newBalance,
             balance: newBalance, // Persistent balance value
             lifetime_points: newLifetime,
             level: newLevel,
@@ -248,27 +265,27 @@
       }
     }
 
-    async function syncAttachWalletQuest() {
+    async function syncLinkedInConnectQuest() {
       const fb = getFirebase();
       const user = getAuthedUser();
       if (!fb || !fb.firestore || !user?.uid) return;
 
-      await ensureQuestDoc(user.uid, 'wallet_link');
+      await ensureQuestDoc(user.uid, 'linkedin_connect');
 
       const userRef = fb.firestore().collection('users').doc(user.uid);
 
-      let walletAddress = null;
+      let linkedinSub = null;
       try {
         const snap = await userRef.get();
         const data = snap.exists ? (snap.data() || {}) : {};
-        walletAddress = data.wallet_address || null;
+        linkedinSub = data.linkedin_sub || null;
       } catch {
-        walletAddress = null;
+        linkedinSub = null;
       }
 
-      if (!walletAddress) return;
+      if (!linkedinSub) return;
 
-      const questRef = fb.firestore().collection('user_quests').doc(user.uid).collection('quests').doc('wallet_link');
+      const questRef = fb.firestore().collection('user_quests').doc(user.uid).collection('quests').doc('linkedin_connect');
       await fb.firestore().runTransaction(async (tx) => {
         const snap = await tx.get(questRef);
         if (!snap.exists) return;
@@ -292,7 +309,7 @@
       await ensureQuestDoc(user.uid, 'visit_all_screens');
       const questRef = fb.firestore().collection('user_quests').doc(user.uid).collection('quests').doc('visit_all_screens');
 
-      const required = ['tree', 'explore', 'my-hustle', 'level-up'];
+      const required = ['home', 'tree', 'explore', 'career', 'my-hustle', 'insights', 'level-up'];
 
       let visited = [];
       try {
@@ -396,7 +413,7 @@
       const fb = getFirebase();
       if (!fb || !fb.firestore) return { unsubscribe: () => {} };
 
-      const ref = fb.firestore().collection('users').orderBy('croin_balance', 'desc').limit(Math.max(1, Math.min(50, Number(limit) || 20)));
+      const ref = fb.firestore().collection('users').orderBy('oreo_balance', 'desc').limit(Math.max(1, Math.min(50, Number(limit) || 20)));
       const unsub = ref.onSnapshot((snap) => {
         const rows = [];
         snap.forEach((d) => rows.push({ id: d.id, ...(d.data() || {}) }));
@@ -415,7 +432,7 @@
       if (!user?.uid) return;
       await ensureUserDocFields(user);
       await bootstrapQuests(user.uid);
-      await syncAttachWalletQuest();
+      await syncLinkedInConnectQuest();
     }
 
     function init() {
@@ -460,16 +477,42 @@
       }
     }
 
+    // 9 core tiles from the TreeMap (finance career fields)
+    const CORE_TILE_IDS = [
+      'ma-investment-banking',
+      'PE',
+      'VC',
+      'Quant',
+      'PubFin',
+      'hedge-funds-root',
+      'risk-management-sector',
+      'asset-management-root',
+      'fpna-root'
+    ];
+
     async function trackTileOpen(nodeId) {
       const fb = getFirebase();
       const user = getAuthedUser();
       if (!fb || !fb.firestore || !user?.uid) return;
 
+      // Only track the 9 core tiles for the Curious Explorer quest
+      if (!CORE_TILE_IDS.includes(nodeId)) return;
+
       const userRef = fb.firestore().collection('users').doc(user.uid);
       const questRef = fb.firestore().collection('user_quests').doc(user.uid).collection('quests').doc('curious');
       
-      const snap = await userRef.get();
-      const data = snap.data() || {};
+      // Check if quest is active before tracking
+      const questSnap = await questRef.get();
+      if (!questSnap.exists) return;
+      const questData = questSnap.data() || {};
+      
+      // Only track if quest is in_progress (user clicked Activate)
+      if (questData.status !== 'in_progress' && questData.status !== 'claimable') return;
+      
+      if (questData.status === 'completed' || questData.status === 'claimable') return;
+
+      const userSnap = await userRef.get();
+      const data = userSnap.data() || {};
       const openedTiles = data.stats?.opened_core_tiles || [];
       
       if (!openedTiles.includes(nodeId)) {
@@ -480,18 +523,15 @@
         const nextCount = openedTiles.length + 1;
         const target = QUEST_DEFS.curious.target;
 
-        await fb.firestore().runTransaction(async (tx) => {
-          const qSnap = await tx.get(questRef);
-          if (!qSnap.exists) return;
-          const q = qSnap.data() || {};
-          if (q.status === 'completed' || q.status === 'claimable') return;
-
-          if (nextCount >= target) {
-            tx.set(questRef, { status: 'claimable', progress: target }, { merge: true });
-          } else {
-            tx.set(questRef, { status: 'in_progress', progress: nextCount }, { merge: true });
-          }
-        });
+        if (nextCount >= target) {
+          await questRef.update({ 
+            status: 'claimable', 
+            progress: target,
+            claimable_at: fb.firestore.FieldValue.serverTimestamp()
+          });
+        } else {
+          await questRef.update({ progress: nextCount });
+        }
       }
     }
 
@@ -499,14 +539,14 @@
       QUEST_DEFS,
       calculateLevel,
       pointsRequiredForLevel,
-      maskWallet,
+      maskLinkedIn,
       init,
       initForCurrentUser,
       ensureUserDocFields,
       bootstrapQuests,
       startQuest,
       claimQuest,
-      syncAttachWalletQuest,
+      syncLinkedInConnectQuest,
       trackScreenVisit,
       incrementInAppTime,
       trackBubbleBounce,

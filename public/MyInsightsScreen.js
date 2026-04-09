@@ -7,6 +7,56 @@
   const MAX_FOLDER_DEPTH = 5;
 
   const isFolder = (item) => item?.mimeType === FOLDER_MIME_TYPE;
+  
+  // TickerBackground component (or use window.TickerBackground if loaded separately)
+  const TickerBackgroundComponent = window.TickerBackground || (({ updateInterval, tickerCount, opacity }) => {
+    const [tickers, setTickers] = useState([]);
+    const [lastUpdate, setLastUpdate] = useState(Date.now());
+
+    const fetchTickers = useCallback(async () => {
+      try {
+        const response = await fetch(`/api/finance/tickers?count=${tickerCount || 30}`);
+        const result = await response.json();
+        if (result.ok) {
+          setTickers(result.data);
+          setLastUpdate(Date.now());
+        }
+      } catch (err) { console.warn('[TickerBackground] Fetch failed:', err); }
+    }, [tickerCount]);
+
+    useEffect(() => {
+      fetchTickers();
+      const interval = setInterval(fetchTickers, updateInterval || 30000);
+      return () => clearInterval(interval);
+    }, [fetchTickers, updateInterval]);
+
+    if (!tickers || tickers.length === 0) return null;
+
+    return React.createElement('div', {
+      style: {
+        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+        zIndex: -1, pointerEvents: 'none', opacity: opacity || 0.4, overflow: 'hidden'
+      }
+    }, [
+      ...tickers.map((ticker, idx) => {
+        const text = `${ticker.symbol}: $${ticker.price.toFixed(2)} (${ticker.change >= 0 ? '+' : ''}${ticker.change.toFixed(2)}%)`;
+        return React.createElement('div', {
+          key: `${ticker.symbol}-${lastUpdate}-${idx}`,
+          style: {
+            position: 'absolute', color: ticker.change >= 0 ? '#4ade80' : '#f87171',
+            fontFamily: 'monospace', fontSize: '0.9rem', whiteSpace: 'nowrap',
+            top: `${((idx * 7) % 100)}%`, left: '-200px', fontWeight: 'bold',
+            textShadow: '0 0 10px rgba(0,0,0,0.5)',
+            animation: `ticker-commute ${20 + (idx % 10) * 5}s linear infinite`,
+            animationDelay: `${(idx * 2) % 10}s`
+          }
+        }, text);
+      }),
+      React.createElement('style', { key: 'styles' }, `
+        @keyframes ticker-commute { from { transform: translateX(-100%); } to { transform: translateX(calc(100vw + 400px)); } }
+      `)
+    ]);
+  });
 
   const getFileTypeInfo = (file) => {
     if (isFolder(file)) {
@@ -38,156 +88,63 @@
     return { label: 'File', color: '#94a3b8', icon: '📎', type: 'other' };
   };
 
-  const DocumentViewer = ({ file, onClose }) => {
-    if (isFolder(file)) {
-      console.error('[DocumentViewer] Attempted to open a folder as a document:', file);
-      return null;
-    }
-
-    const [content, setContent] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [iframeLoaded, setIframeLoaded] = useState(false);
+  // DocumentViewer is now loaded from document-viewer.js (high-performance WASM-optimized engine)
+  // It replaces the old iframe-based preview with canvas-based rendering
+  const DocumentViewerComponent = window.DocumentViewer || (({ file, onClose }) => {
+    // Fallback if document-viewer.js fails to load
     const typeInfo = getFileTypeInfo(file);
-
-    useEffect(() => {
-      const loadContent = async () => {
-        setLoading(true);
-        setError(null);
-        setIframeLoaded(false);
-        try {
-          switch (typeInfo.type) {
-            case 'pdf':
-              setContent(`https://drive.google.com/file/d/${file.id}/preview`);
-              break;
-
-            case 'slides': {
-              const isNative = file.mimeType === 'application/vnd.google-apps.presentation';
-              setContent(isNative
-                ? `https://docs.google.com/presentation/d/${file.id}/embed?start=false&loop=false&delayms=3000` 
-                : `https://docs.google.com/viewerng/viewer?srcid=${file.id}&pid=explorer&efb=true&usb=true&a=v&chrome=false&embedded=true` 
-              );
-              break;
-            }
-
-            case 'excel': {
-              const isNative = file.mimeType === 'application/vnd.google-apps.spreadsheet';
-              setContent(isNative
-                ? `https://docs.google.com/spreadsheets/d/${file.id}/htmlview?embedded=true` 
-                : `https://docs.google.com/viewerng/viewer?srcid=${file.id}&pid=explorer&efb=true&usb=true&a=v&chrome=false&embedded=true` 
-              );
-              break;
-            }
-
-            case 'doc': {
-              const isNative = file.mimeType === 'application/vnd.google-apps.document';
-              setContent(isNative
-                ? `https://docs.google.com/document/d/${file.id}/preview` 
-                : `https://docs.google.com/viewerng/viewer?srcid=${file.id}&pid=explorer&efb=true&usb=true&a=v&chrome=false&embedded=true` 
-              );
-              break;
-            }
-
-            case 'txt': {
-              const response = await fetch(`/api/insights/file-content?id=${file.id}`);
-              if (!response.ok) throw new Error('Failed to load text file');
-              setContent(await response.text());
-              break;
-            }
-
-            case 'image':
-              setContent(`https://drive.google.com/thumbnail?id=${file.id}&sz=w1600`);
-              break;
-
-            default:
-              setContent(`https://docs.google.com/viewerng/viewer?srcid=${file.id}&pid=explorer&efb=true&usb=true&a=v&chrome=false&embedded=true`);
-          }
-        } catch (err) {
-          setError('Failed to load preview. Check file permissions or try refreshing.');
-        } finally {
-          setLoading(false);
-        }
-      };
-      loadContent();
-    }, [file.id, typeInfo.type]);
-
     return React.createElement('div', {
-      style: { position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 1000, background: 'rgba(15, 23, 42, 0.95)', backdropFilter: 'blur(10px)', display: 'flex', flexDirection: 'column', color: '#f7f9ff' }
+      style: {
+        position: 'fixed',
+        top: 0, left: 0, width: '100vw', height: '100vh',
+        zIndex: 1000,
+        background: 'rgba(15, 23, 42, 0.95)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#f7f9ff'
+      }
     },
-      React.createElement('div', {
-        style: { padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }
-      },
-        React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '1rem' } },
-          React.createElement('span', { style: { fontSize: '1.5rem' } }, typeInfo.icon),
-          React.createElement('h3', { style: { margin: 0 } }, file.name)
-        ),
-        React.createElement('button', {
-          onClick: onClose,
-          style: { background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#fca5a5', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer' }
-        }, 'Close')
-      ),
-      React.createElement('div', { style: { flex: 1, position: 'relative', overflow: 'hidden', padding: '2rem' } },
-        loading && React.createElement('div', { style: { position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' } }, '⏳ Loading Viewer...'),
-        error && React.createElement('div', { style: { color: '#fca5a5', textAlign: 'center', marginTop: '4rem' } },
-          React.createElement('p', null, error),
-          React.createElement('button', {
-            onClick: () => window.open(file.webViewLink, '_blank'),
-            style: { background: '#1e293b', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', marginTop: '10px' }
-          }, 'Open in Google Drive')
-        ),
-        !loading && !error && React.createElement('div', { style: { width: '100%', height: '100%', background: 'white', borderRadius: '12px', overflow: 'hidden', position: 'relative' } },
-          typeInfo.type === 'txt' ? React.createElement('pre', { style: { padding: '2rem', color: '#1e293b', whiteSpace: 'pre-wrap', fontFamily: 'monospace', height: '100%', overflow: 'auto', margin: 0 } }, content) :
-          typeInfo.type === 'image' ? React.createElement('div', { style: { width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' } }, 
-            React.createElement('img', { 
-              src: content, 
-              alt: file.name, 
-              style: { maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' },
-              onError: (e) => {
-                e.target.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1600`;
-              }
-            })
-          ) :
-          React.createElement('iframe', { 
-            src: content, 
-            style: { width: '100%', height: '100%', border: 'none', display: iframeLoaded ? 'block' : 'none' }, 
-            title: file.name,
-            sandbox: 'allow-scripts allow-same-origin allow-forms allow-popups',
-            allow: 'fullscreen',
-            onLoad: () => setIframeLoaded(true),
-            onError: () => setError('Preview unavailable — try opening directly in Drive.')
-          }),
-          !iframeLoaded && typeInfo.type !== 'txt' && typeInfo.type !== 'image' && React.createElement('div', { style: { position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#1e293b' } }, '⏳ Preparing viewer...')
-        )
-      )
+      React.createElement('p', null, 'Document viewer not loaded.'),
+      React.createElement('button', {
+        onClick: () => window.open(file.webViewLink, '_blank'),
+        style: {
+          background: '#3b82f6',
+          border: 'none',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          color: '#fff',
+          cursor: 'pointer',
+          marginTop: '12px'
+        }
+      }, 'Open in Google Drive'),
+      React.createElement('button', {
+        onClick: onClose,
+        style: {
+          background: 'transparent',
+          border: '1px solid rgba(255,255,255,0.2)',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          color: '#94a3b8',
+          cursor: 'pointer',
+          marginTop: '8px'
+        }
+      }, 'Close')
     );
-  };
+  });
 
   function MyInsightsScreen({ onGoHome }) {
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [tickers, setTickers] = useState([]);
     const [shaderError, setShaderError] = useState(null);
     const [currentFolderId, setCurrentFolderId] = useState(null);
     const [folderStack, setFolderStack] = useState([]);
     const [currentFolderName, setCurrentFolderName] = useState('Finance Resources');
     const canvasRef = useRef(null);
     const animationFrameRef = useRef(null);
-
-    const fetchTickers = useCallback(async () => {
-      try {
-        const response = await fetch('/api/finance/tickers');
-        const result = await response.json();
-        if (result.ok) setTickers(result.data);
-      } catch (err) { console.warn('Ticker fetch failed:', err); }
-    }, []);
-
-    useEffect(() => {
-      fetchTickers();
-      const interval = setInterval(fetchTickers, 30000);
-      return () => clearInterval(interval);
-    }, [fetchTickers]);
 
     const fetchFiles = useCallback(async (forceRefresh = false, folderId = null) => {
       setLoading(true);
@@ -376,12 +333,8 @@
 
     return React.createElement('div', { style: { minHeight: '100vh', position: 'relative', color: '#f7f9ff', overflowX: 'hidden', fontFamily: 'system-ui, sans-serif' } },
       React.createElement('canvas', { ref: canvasRef, style: { position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1, background: '#0f172a' } }),
-      React.createElement('div', { style: { position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1, pointerEvents: 'none', opacity: 0.4, overflow: 'hidden' } },
-        tickers.map((ticker, idx) => React.createElement('div', {
-          key: ticker.symbol,
-          style: { position: 'absolute', color: ticker.change >= 0 ? '#4ade80' : '#f87171', fontFamily: 'monospace', fontSize: '0.9rem', whiteSpace: 'nowrap', top: `${(idx * 10) % 100}%`, left: '-200px', fontWeight: 'bold', textShadow: '0 0 10px rgba(0,0,0,0.5)', animation: `commute ${20 + idx * 5}s linear infinite` }
-        }, `${ticker.symbol}: $${ticker.price.toFixed(2)} (${ticker.change >= 0 ? '+' : ''}${ticker.change.toFixed(2)}%)`))
-      ),
+      // Ticker Background - Real-time stock prices
+      React.createElement(TickerBackgroundComponent, { updateInterval: 30000, tickerCount: 30, opacity: 0.4 }),
       React.createElement('div', { style: { padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' } },
         React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' } },
           React.createElement('div', null,
@@ -468,10 +421,7 @@
           })
         )
       ),
-      selectedFile && !isFolder(selectedFile) && React.createElement(DocumentViewer, { file: selectedFile, onClose: () => setSelectedFile(null) }),
-      React.createElement('style', null, `
-        @keyframes commute { from { transform: translateX(-100%); } to { transform: translateX(calc(100vw + 400px)); } }
-      `)
+      selectedFile && !isFolder(selectedFile) && React.createElement(DocumentViewerComponent, { file: selectedFile, onClose: () => setSelectedFile(null) }),
     );
   }
 

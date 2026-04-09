@@ -72,13 +72,24 @@ function startApp() {
 
       await firebaseUser.getIdToken(true);
 
+      // Merge server profile with Firebase user profile
+      const serverProfile = body?.profile || {};
+      const firebaseProfile = {
+        displayName: firebaseUser.displayName,
+        email: firebaseUser.email,
+        photoURL: firebaseUser.photoURL,
+        ...serverProfile
+      };
+
       try {
         if (typeof UserAccount !== 'undefined' && UserAccount?.mergeFromFirebaseProfile) {
-          UserAccount.mergeFromFirebaseProfile(body?.profile || null);
+          UserAccount.mergeFromFirebaseProfile(firebaseProfile);
         }
-      } catch {}
+      } catch (e) {
+        console.warn('[Main] Failed to merge Firebase profile:', e);
+      }
 
-      return body?.profile || null;
+      return firebaseProfile;
     } catch (e) {
       console.warn('[Main] role/profile sync failed:', e?.message || e);
       return null;
@@ -326,17 +337,22 @@ function useFullDescription(descriptionRef, nodeTitle) {
         return `<hr style="border: none; height: 1px; background: rgba(148, 163, 184, 0.3); margin: 2rem 0;" />`;
       }
 
-      // Handle table rows (basic support)
+      // Skip table separator lines (|:---|:---|)
+      if (line.includes('|') && /:\s*[-]+\s*:/.test(line)) {
+        return null;
+      }
+
+      // Handle table rows
       if (line.includes('|') && !line.startsWith('#')) {
         const cells = line.split('|').map(cell => cell.trim()).filter(cell => cell !== '');
         if (cells.length > 1) {
-          const isHeader = line.includes('---'); // Simple header detection
-          const cellTag = isHeader ? 'th' : 'td';
-          const cellStyle = isHeader ?
-            'padding: 0.5rem; text-align: left; font-weight: 600; border-bottom: 1px solid rgba(148, 163, 184, 0.3);' :
-            'padding: 0.5rem; text-align: left; border-bottom: 1px solid rgba(148, 163, 184, 0.2);';
+          const isHeaderRow = !line.startsWith('|') || processedLines.filter(l => l && l.includes('<tr')).length === 0;
+          const cellTag = isHeaderRow ? 'th' : 'td';
+          const cellStyle = isHeaderRow ?
+            'padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid rgba(148, 163, 184, 0.4); color: #f7f9ff;' :
+            'padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(148, 163, 184, 0.2); color: #e2e8f0;';
 
-          return `<tr>${cells.map(cell => `<${cellTag} style="${cellStyle}">${escapeHtml(cell)}</${cellTag}>`).join('')}</tr>`;
+          return `<tr style="background: ${isHeaderRow ? 'rgba(30, 41, 59, 0.5)' : 'transparent'};">${cells.map(cell => `<${cellTag} style="${cellStyle}">${escapeHtml(cell)}</${cellTag}>`).join('')}</tr>`;
         }
       }
 
@@ -379,7 +395,35 @@ function useFullDescription(descriptionRef, nodeTitle) {
       return '';
     }).filter(line => line !== null); // Remove null lines (filtered headers)
 
-    return processedLines.join('\n');
+    // Wrap consecutive table rows in <table> tags
+    const result = [];
+    let inTable = false;
+    let tableRows = [];
+
+    for (const line of processedLines) {
+      if (line.includes('<tr')) {
+        if (!inTable) {
+          inTable = true;
+          tableRows = [];
+        }
+        tableRows.push(line);
+      } else {
+        if (inTable) {
+          // Close the table
+          result.push(`<table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: rgba(15, 23, 42, 0.3); border-radius: 8px; overflow: hidden;"><tbody>${tableRows.join('\n')}</tbody></table>`);
+          inTable = false;
+          tableRows = [];
+        }
+        result.push(line);
+      }
+    }
+
+    // Handle case where table is at the end
+    if (inTable && tableRows.length > 0) {
+      result.push(`<table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: rgba(15, 23, 42, 0.3); border-radius: 8px; overflow: hidden;"><tbody>${tableRows.join('\n')}</tbody></table>`);
+    }
+
+    return result.join('\n');
   }
 
   // Helper function to escape HTML special characters
@@ -493,6 +537,16 @@ function UserCard({ userAccount, onToggleAccount, isAccountOpen }) {
     finance5: '📑'
   };
   const emoji = pfpEmojis[user.pfp] || '👤';
+  
+  // Get display name - prioritize Google displayName, then username, then email prefix
+  const displayName = user.displayName || user.username || 
+    (user.email ? user.email.split('@')[0] : null) || 'Set your nickname';
+  
+  // Check if user needs to set up profile
+  const needsSetup = !user.username || user.username === 'crypto.explorer' || user.username === 'Guest';
+  
+  // Get role display with proper capitalization
+  const roleDisplay = user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'User';
 
   return (
     <div className={`user-card ${isAccountOpen ? 'user-card--active' : ''}`} onClick={onToggleAccount}>
@@ -500,11 +554,38 @@ function UserCard({ userAccount, onToggleAccount, isAccountOpen }) {
         {emoji}
       </div>
       <div className="user-meta">
-        <div className="user-name">{user.username}</div>
+        <div className="user-name">
+          {displayName}
+          {needsSetup && (
+            <span style={{ 
+              marginLeft: '8px', 
+              fontSize: '0.75rem', 
+              color: '#38bdf8',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}>
+              → Set nickname
+            </span>
+          )}
+        </div>
         <div className="user-settings-link">Portfolio & Financial Settings</div>
-        <div className="user-role">{user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'User'}</div>
-        <div className="user-capital">Capital: ${user.preferences?.investingCapital?.toLocaleString() || '0'}</div>
-        <div className="user-experience">Experience: {user.preferences?.yearsOfExperience || 'newcomer'}</div>
+        <div className="user-role">{roleDisplay}</div>
+        {user.preferences?.careerTrack && (
+          <div className="user-career" style={{ fontSize: '0.75rem', color: '#38bdf8' }}>
+            {user.preferences.careerTrack.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+          </div>
+        )}
+        {user.preferences?.netWorthGoalAt30 && (
+          <div className="user-goal" style={{ fontSize: '0.75rem', color: '#a78bfa' }}>
+            Goal by 30: ${(user.preferences.netWorthGoalAt30 / 1000000).toFixed(1)}M
+          </div>
+        )}
+        {user.preferences?.riskProfile && (
+          <div className="user-risk" style={{ fontSize: '0.75rem', color: '#fbbf24' }}>
+            Risk: {user.preferences.riskProfile.charAt(0).toUpperCase() + user.preferences.riskProfile.slice(1)}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -533,7 +614,47 @@ function NavExitButtons({ onGoHome, onGoToTree, currentScreen }) {
   );
 }
 
-function NavOverlay({ onClose, onNavigate, isAdmin, currentScreen }) {
+function NavOverlay({ onClose, onNavigate, currentScreen, isOpen }) {
+  const [adminItems, setAdminItems] = useState([]);
+  const [isCheckingAdmin, setIsCheckingAdmin] = useState(true);
+
+  useEffect(() => {
+    // Only check admin status when overlay is opened
+    if (!isOpen) {
+      setAdminItems([]);
+      return;
+    }
+    
+    const checkAdminStatus = async () => {
+      setIsCheckingAdmin(true);
+      try {
+        if (typeof AdminUtils !== 'undefined' && AdminUtils.isAdmin) {
+          const isAdminUser = await AdminUtils.isAdmin();
+          console.log('[NavOverlay] Admin check result:', isAdminUser);
+          if (isAdminUser) {
+            setAdminItems([
+              { id: 'admin-article', label: 'New Article', pill: 'Admin' },
+              { id: 'admin-suggestions', label: 'Suggestions', pill: 'Admin' },
+              { id: 'admin-users', label: 'View Users', pill: 'Admin' }
+            ]);
+          } else {
+            setAdminItems([]);
+          }
+        } else {
+          console.warn('[NavOverlay] AdminUtils not available');
+          setAdminItems([]);
+        }
+      } catch (error) {
+        console.error('[NavOverlay] Error checking admin status:', error);
+        setAdminItems([]);
+      } finally {
+        setIsCheckingAdmin(false);
+      }
+    };
+    
+    checkAdminStatus();
+  }, [isOpen]);
+
   const items = [
     { id: 'tree', label: 'Tree CryptoMap', pill: 'Map' },
     { id: 'my-insights', label: 'MyInsights', pill: 'Research' },
@@ -543,12 +664,6 @@ function NavOverlay({ onClose, onNavigate, isAdmin, currentScreen }) {
     { id: 'explore', label: 'Explore', pill: 'Tags' },
     { id: 'contribute', label: 'Contribute', pill: 'Help' }
   ];
-
-  const adminItems = isAdmin ? [
-    { id: 'admin-article', label: 'New Article', pill: 'Admin' },
-    { id: 'admin-suggestions', label: 'Suggestions', pill: 'Admin' },
-    { id: 'admin-users', label: 'View Users', pill: 'Admin' }
-  ] : [];
 
   return (
     <div className="nav-overlay" onClick={onClose}>
@@ -579,11 +694,13 @@ function NavOverlay({ onClose, onNavigate, isAdmin, currentScreen }) {
 }
 
 // Enhanced Home Screen with algorithms
-function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree, onOpenArticle }) {
+function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree, onOpenArticle, onNavigateToMyInsights, tree }) {
   const activities = userAccount.getActivitiesSummary();
   const bookmarks = bookmarksApi.bookmarks.slice(0, 3);
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminLoading, setAdminLoading] = useState(true);
+
+  const [dailyBranch, setDailyBranch] = useState(null);
 
   // Check admin status on mount (server-verified)
   useEffect(() => {
@@ -609,6 +726,47 @@ function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree
     checkAdmin();
   }, []);
 
+  // Select a random core branch every 24 hours
+  useEffect(() => {
+    const selectDailyBranch = () => {
+      if (!tree || !tree.fields || tree.fields.length === 0) return;
+      
+      // Get core branches (top-level fields)
+      const coreBranches = tree.fields.filter(f => f && f.id && f.name);
+      if (coreBranches.length === 0) return;
+      
+      // Check if we already have a stored branch for today
+      const storedData = localStorage.getItem('dailyBranchData');
+      const today = new Date().toDateString();
+      
+      if (storedData) {
+        const { date, branchId } = JSON.parse(storedData);
+        if (date === today) {
+          // Use the stored branch if it's from today
+          const storedBranch = coreBranches.find(b => b.id === branchId);
+          if (storedBranch) {
+            setDailyBranch(storedBranch);
+            return;
+          }
+        }
+      }
+      
+      // Select a new random branch
+      const randomIndex = Math.floor(Math.random() * coreBranches.length);
+      const newBranch = coreBranches[randomIndex];
+      
+      // Store for today
+      localStorage.setItem('dailyBranchData', JSON.stringify({
+        date: today,
+        branchId: newBranch.id
+      }));
+      
+      setDailyBranch(newBranch);
+    };
+    
+    selectDailyBranch();
+  }, [tree]);
+
   // Update streak on mount
   useEffect(() => {
     userAccount.updateStreak();
@@ -629,7 +787,7 @@ function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree
   }, []);
 
   const navigateToMyInsights = () => {
-    setScreen('my-insights');
+    onNavigateToMyInsights && onNavigateToMyInsights();
   };
 
   return (
@@ -663,6 +821,43 @@ function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree
           </p>
         </div>
       </div>
+
+      {/* Daily Core Branch Section */}
+      {dailyBranch && (
+        <div style={{ marginTop: '2rem' }}>
+          <div style={{ 
+            background: 'linear-gradient(145deg, rgba(56, 189, 248, 0.1), rgba(14, 165, 233, 0.05))',
+            border: '1px solid rgba(56, 189, 248, 0.3)',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+          onClick={() => onOpenArticle(dailyBranch)}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(56, 189, 248, 0.15)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'linear-gradient(145deg, rgba(56, 189, 248, 0.1), rgba(14, 165, 233, 0.05))';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+              <span style={{ fontSize: '1.5rem' }}>🌟</span>
+              <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#38bdf8' }}>
+                Today&apos;s Core Branch
+              </span>
+            </div>
+            <h3 style={{ marginBottom: '0.5rem', color: '#f7f9ff' }}>{dailyBranch.name}</h3>
+            <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.9rem' }}>
+              {dailyBranch.description ? 
+                (dailyBranch.description.length > 100 ? dailyBranch.description.substring(0, 100) + '...' : dailyBranch.description)
+                : 'Explore this core finance topic today'}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* MyInsights Section */}
       <div style={{ marginTop: '2rem' }}>
@@ -2719,7 +2914,16 @@ function AppRoot() {
               window.localStorage.setItem('cryptoExplorer.userId', user.uid);
             } catch {}
 
-            syncRoleAndProfile(user).then(() => {
+            syncRoleAndProfile(user).then((profile) => {
+              console.log('[AppRoot] Role sync completed, profile:', profile);
+              
+              // Update current user data to trigger re-renders
+              if (typeof UserAccount !== 'undefined' && UserAccount.getUserData) {
+                const freshUserData = UserAccount.getUserData();
+                console.log('[AppRoot] Updating currentUserData:', freshUserData);
+                setCurrentUserData(freshUserData);
+              }
+              
               try {
                 if (typeof UserAccount !== 'undefined' && UserAccount?.getRole && UserAccount.getRole() !== 'admin') {
                   const originalLog = console.log;
@@ -2734,6 +2938,10 @@ function AppRoot() {
                 }
               } catch {}
             });
+          } else {
+            // User logged out - clear user data
+            console.log('[AppRoot] User logged out, clearing user data');
+            setCurrentUserData({ username: 'Guest', pfp: null, role: 'user', preferences: {} });
           }
         }, (error) => {
           if (cancelled) return;
@@ -2848,10 +3056,22 @@ function AppRoot() {
     };
   })();
 
-  // Make userAccount globally available for components
-  useEffect(() => {
-    window.userAccount = userAccount;
-  }, []);
+  // Create enhanced userAccount wrapper that provides current user data
+  const userAccountWrapper = useMemo(() => {
+    return {
+      ...userAccount,
+      getUserData: () => currentUserData,
+      // Force refresh from storage when needed
+      refreshUserData: () => {
+        if (typeof UserAccount !== 'undefined' && UserAccount.getUserData) {
+          const fresh = UserAccount.getUserData();
+          setCurrentUserData(fresh);
+          return fresh;
+        }
+        return currentUserData;
+      }
+    };
+  }, [userAccount, currentUserData]);
 
   // FIXED: Always prioritize CryptoTree.json as the single source of truth
   useEffect(() => {
@@ -2934,7 +3154,53 @@ function AppRoot() {
     userAccount.recordArticleRead(node);
   }
 
-  const isAdmin = typeof UserAccount !== 'undefined' ? UserAccount.isAdmin() : false;
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdminLoading, setIsAdminLoading] = useState(true);
+  const [currentUserData, setCurrentUserData] = useState(() => {
+    // Initialize from UserAccount on first render
+    try {
+      if (typeof UserAccount !== 'undefined' && UserAccount.getUserData) {
+        return UserAccount.getUserData();
+      }
+    } catch (e) {
+      console.error('[AppRoot] Error loading initial user data:', e);
+    }
+    return { username: 'Guest', pfp: null, role: 'user', preferences: {} };
+  });
+
+  // Sync admin status whenever auth state changes
+  useEffect(() => {
+    if (!authenticated && !guestMode) {
+      setIsAdmin(false);
+      setIsAdminLoading(false);
+      return;
+    }
+
+    const checkAdminStatus = async () => {
+      setIsAdminLoading(true);
+      try {
+        if (typeof AdminUtils !== 'undefined' && AdminUtils.isAdmin) {
+          const adminStatus = await AdminUtils.isAdmin();
+          console.log('[AppRoot] Admin check result:', adminStatus);
+          setIsAdmin(adminStatus);
+        } else if (typeof UserAccount !== 'undefined' && UserAccount.isAdmin) {
+          const adminStatus = await UserAccount.isAdmin();
+          console.log('[AppRoot] Admin check via UserAccount:', adminStatus);
+          setIsAdmin(adminStatus);
+        } else {
+          console.warn('[AppRoot] No admin utils available');
+          setIsAdmin(false);
+        }
+      } catch (error) {
+        console.error('[AppRoot] Error checking admin status:', error);
+        setIsAdmin(false);
+      } finally {
+        setIsAdminLoading(false);
+      }
+    };
+
+    checkAdminStatus();
+  }, [authenticated, guestMode, currentUserData.username]);
 
   function handleNavSelect(id) {
     if (id === 'tree') setScreen('tree');
@@ -3215,15 +3481,17 @@ function AppRoot() {
     <div className="app-root">
       {screen === 'home' && !showAccount && (
         <HomeScreen
-          userAccount={userAccount}
+          userAccount={userAccountWrapper}
           bookmarksApi={bookmarksApi}
           onOpenAccount={handleAccountToggle}
           onNavigateToTree={() => setScreen('tree')}
           onOpenArticle={openArticle}
+          onNavigateToMyInsights={() => setScreen('my-insights')}
+          tree={tree}
         />
       )}
       {screen === 'home' && showAccount && (
-        <AccountScreen userAccount={userAccount} onClose={handleAccountToggle} />
+        <AccountScreen userAccount={userAccountWrapper} onClose={handleAccountToggle} />
       )}
       {screen === 'my-insights' && !showAccount && (
         React.createElement(getMyInsightsScreen(), { onGoHome: goHome })
@@ -3244,7 +3512,7 @@ function AppRoot() {
           node={articleNode}
           onBackToTree={goToTree}
           bookmarksApi={bookmarksApi}
-          userAccount={userAccount}
+          userAccount={userAccountWrapper}
           onGoHome={goHome}
           onOpenArticle={openArticle}
         />
@@ -3280,7 +3548,7 @@ function AppRoot() {
           onGoToTree={goToTree}
         />
       )}
-      {screen === 'admin-article' && !showAccount && isAdmin && (
+      {screen === 'admin-article' && !showAccount && isAdmin && !isAdminLoading && (
         <AdminNewArticleScreen
           tree={tree}
           onGoHome={goHome}
@@ -3303,7 +3571,7 @@ function AppRoot() {
           }}
         />
       )}
-      {screen === 'admin-suggestions' && !showAccount && isAdmin && (
+      {screen === 'admin-suggestions' && !showAccount && isAdmin && !isAdminLoading && (
         <AdminSuggestionsReview
           tree={tree}
           onGoHome={goHome}
@@ -3323,7 +3591,7 @@ function AppRoot() {
           }}
         />
       )}
-      {screen === 'admin-users' && !showAccount && isAdmin && (
+      {screen === 'admin-users' && !showAccount && isAdmin && !isAdminLoading && (
         <AdminViewUsersScreen onGoHome={goHome} />
       )}
 
@@ -3332,8 +3600,8 @@ function AppRoot() {
         <NavOverlay
           onClose={() => setShowNav(false)}
           onNavigate={handleNavSelect}
-          isAdmin={isAdmin}
           currentScreen={screen}
+          isOpen={showNav}
         />
       )}
     </div>

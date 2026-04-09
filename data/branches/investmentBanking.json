@@ -3,446 +3,214 @@
   "name": "M&A / Investment Banking",
   "descriptionRef": "descriptions/IBbrCore.md",
   "tags": ["investment-banking", "M&A", "capital-raising"],
-  "institutions": [
+  "tiles": [
     {
-      "id": "bulge-bracket-banks",
-      "name": "Bulge Bracket Banks",
-      "description": "Global investment banking institutions handling large cross-border deals and providing full financial services.",
-      "functions": [
+      "id": "ib-niches",
+      "name": "Niches",
+      "type": "niches-tile",
+      "description": "Investment Banking institution types and market niches",
+      "institutions": [
         {
-          "id": "global-ma-advisory",
-          "name": "Global M&A Advisory",
-          "description": "Advising corporations on large-scale mergers, acquisitions, and strategic transactions.",
-          "descriptionRef": "descriptions/investmentBanking_global-ma-advisory.md"
-        },
-        {
-          "id": "capital-markets-underwriting",
-          "name": "Capital Markets Underwriting",
-          "description": "Structuring and underwriting IPOs, bond issuances, and other securities offerings.",
-          "descriptionRef": "descriptions/investmentBanking_capital-markets-underwriting.md"
-        },
-        {
-          "id": "cross-border-deal-structuring",
-          "name": "Cross-Border Deal Structuring",
-          "description": "Designing complex transaction structures across jurisdictions.",
-          "descriptionRef": "descriptions/investmentBanking_cross-border-deal-structuring.md"
-        },
-        {
-          "id": "strategic-financial-advisory",
-          "name": "Strategic Financial Advisory",
-          "description": "Providing board-level guidance on corporate strategy and financing.",
-          "descriptionRef": "descriptions/investmentBanking_strategic-financial-advisory.md"
-        }
-      ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
+          "id": "bulge-bracket-banks",
+          "name": "Bulge Bracket Banks",
+          "description": "Global investment banking institutions handling large cross-border deals and providing full financial services.",
+          "functions": [
             {
-              "id": "bb-analyst",
-              "name": "Investment Banking Analyst",
-              "descriptionRef": "descriptions/investmentBanking_bb-analyst.md"
+              "id": "global-ma-advisory",
+              "name": "Global M&A Advisory",
+              "description": "Advising corporations on large-scale mergers, acquisitions, and strategic transactions.",
+              "descriptionRef": "descriptions/investmentBanking_global-ma-advisory.md"
             },
             {
-              "id": "bb-associate",
-              "name": "Investment Banking Associate",
-              "descriptionRef": "descriptions/investmentBanking_bb-associate.md"
+              "id": "capital-markets-underwriting",
+              "name": "Capital Markets Underwriting",
+              "description": "Structuring and underwriting IPOs, bond issuances, and other securities offerings.",
+              "descriptionRef": "descriptions/investmentBanking_capital-markets-underwriting.md"
             },
             {
-              "id": "bb-vp",
-              "name": "Vice President (M&A)",
-              "descriptionRef": "descriptions/investmentBanking_bb-vp.md"
+              "id": "cross-border-deal-structuring",
+              "name": "Cross-Border Deal Structuring",
+              "description": "Designing complex transaction structures across jurisdictions.",
+              "descriptionRef": "descriptions/investmentBanking_cross-border-deal-structuring.md"
             },
             {
-              "id": "bb-md",
-              "name": "Managing Director",
-              "descriptionRef": "descriptions/investmentBanking_bb-md.md"
+              "id": "strategic-financial-advisory",
+              "name": "Strategic Financial Advisory",
+              "description": "Providing board-level guidance on corporate strategy and financing.",
+              "descriptionRef": "descriptions/investmentBanking_strategic-financial-advisory.md"
             }
           ],
-          "descriptionRef": "descriptions/investmentBanking_jobs.md"
+          "descriptionRef": "descriptions/investmentBanking_bulge-bracket-banks.md"
         },
         {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
+          "id": "elite-boutiques",
+          "name": "Elite Boutique Advisory Firms",
+          "description": "High-prestige advisory-only investment banks focused exclusively on M&A and restructuring.",
+          "functions": [
             {
-              "id": "pitchbook-creation",
-              "name": "Pitch Book Preparation",
-              "descriptionRef": "descriptions/investmentBanking_pitchbook-creation.md"
+              "id": "pure-ma-advisory",
+              "name": "Pure M&A Advisory",
+              "description": "Providing independent advisory services without lending conflicts.",
+              "descriptionRef": "descriptions/investmentBanking_pure-ma-advisory.md"
             },
             {
-              "id": "valuation-modeling",
-              "name": "Financial Valuation Modeling",
-              "descriptionRef": "descriptions/investmentBanking_valuation-modeling.md"
+              "id": "strategic-board-advisory",
+              "name": "Board-Level Strategic Advisory",
+              "description": "Guiding boards of directors on strategic deals and corporate restructuring.",
+              "descriptionRef": "descriptions/investmentBanking_strategic-board-advisory.md"
             },
             {
-              "id": "deal-execution",
-              "name": "Coordinating Multi-Billion Deal Execution",
-              "descriptionRef": "descriptions/investmentBanking_deal-execution.md"
+              "id": "defense-advisory",
+              "name": "Shareholder Defense Advisory",
+              "description": "Advising companies against hostile takeovers.",
+              "descriptionRef": "descriptions/investmentBanking_defense-advisory.md"
             },
             {
-              "id": "client-strategy",
-              "name": "Advising CEOs on Strategic Transactions",
-              "descriptionRef": "descriptions/investmentBanking_client-strategy.md"
+              "id": "special-situations-advisory",
+              "name": "Special Situations Advisory",
+              "description": "Advising on restructurings and complex strategic transformations.",
+              "descriptionRef": "descriptions/investmentBanking_special-situations-advisory.md"
             }
           ],
-          "descriptionRef": "descriptions/investmentBanking_tasks.md"
+          "descriptionRef": "descriptions/investmentBanking_elite-boutiques.md"
+        },
+        {
+          "id": "middle-market-banks",
+          "name": "Middle-Market Investment Banks",
+          "description": "Banks specializing in advising mid-sized companies on mergers, acquisitions, and capital raising.",
+          "functions": [
+            {
+              "id": "mid-market-ma",
+              "name": "Mid-Market M&A Advisory",
+              "description": "Managing acquisitions and company sales in the mid-market segment.",
+              "descriptionRef": "descriptions/investmentBanking_mid-market-ma.md"
+            },
+            {
+              "id": "private-company-sales",
+              "name": "Private Company Sale Advisory",
+              "description": "Helping founders sell businesses to strategic buyers or private equity.",
+              "descriptionRef": "descriptions/investmentBanking_private-company-sales.md"
+            },
+            {
+              "id": "growth-capital-advisory",
+              "name": "Growth Capital Advisory",
+              "description": "Structuring financing rounds for expanding companies.",
+              "descriptionRef": "descriptions/investmentBanking_growth-capital-advisory.md"
+            },
+            {
+              "id": "financial-restructuring",
+              "name": "Financial Restructuring Advisory",
+              "description": "Helping distressed companies restructure finances.",
+              "descriptionRef": "descriptions/investmentBanking_financial-restructuring.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_middle-market-banks.md"
+        },
+        {
+          "id": "industry-boutiques",
+          "name": "Industry-Specific Boutique Banks",
+          "description": "Advisory firms specialized in specific sectors such as technology, healthcare, or energy.",
+          "functions": [
+            {
+              "id": "sector-ma-advisory",
+              "name": "Sector-Specific M&A Advisory",
+              "description": "Advising companies within a specialized industry niche.",
+              "descriptionRef": "descriptions/investmentBanking_sector-ma-advisory.md"
+            },
+            {
+              "id": "technology-deal-advisory",
+              "name": "Technology Deal Advisory",
+              "description": "Advising tech companies on acquisitions and strategic partnerships.",
+              "descriptionRef": "descriptions/investmentBanking_technology-deal-advisory.md"
+            },
+            {
+              "id": "healthcare-transactions",
+              "name": "Healthcare Transaction Advisory",
+              "description": "Managing deals for pharmaceutical and biotech firms.",
+              "descriptionRef": "descriptions/investmentBanking_healthcare-transactions.md"
+            },
+            {
+              "id": "industry-intelligence",
+              "name": "Industry Market Intelligence",
+              "description": "Providing specialized industry insights to support deal-making.",
+              "descriptionRef": "descriptions/investmentBanking_industry-intelligence.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_industry-boutiques.md"
+        },
+        {
+          "id": "regional-full-service-banks",
+          "name": "Regional Full-Service Investment Banks",
+          "description": "Regional financial institutions providing advisory services and corporate lending for local companies.",
+          "functions": [
+            {
+              "id": "regional-ma-advisory",
+              "name": "Regional M&A Advisory",
+              "description": "Advising regional champions on acquisitions and sales.",
+              "descriptionRef": "descriptions/investmentBanking_regional-ma-advisory.md"
+            },
+            {
+              "id": "corporate-lending",
+              "name": "Corporate Lending",
+              "description": "Providing loans and financing solutions to local companies.",
+              "descriptionRef": "descriptions/investmentBanking_corporate-lending.md"
+            },
+            {
+              "id": "regional-capital-markets",
+              "name": "Regional Capital Markets",
+              "description": "Facilitating bond and equity issuance for regional businesses.",
+              "descriptionRef": "descriptions/investmentBanking_regional-capital-markets.md"
+            },
+            {
+              "id": "relationship-banking",
+              "name": "Corporate Relationship Banking",
+              "description": "Maintaining long-term relationships with regional corporate clients.",
+              "descriptionRef": "descriptions/investmentBanking_relationship-banking.md"
+            }
+          ],
+          "descriptionRef": "descriptions/investmentBanking_regional-full-service-banks.md"
         }
       ],
-      "descriptionRef": "descriptions/investmentBanking_bulge-bracket-banks.md"
+      "descriptionRef": "descriptions/investmentBanking_niches.md"
     },
     {
-      "id": "elite-boutiques",
-      "name": "Elite Boutique Advisory Firms",
-      "description": "High-prestige advisory-only investment banks focused exclusively on M&A and restructuring.",
-      "functions": [
-        {
-          "id": "pure-ma-advisory",
-          "name": "Pure M&A Advisory",
-          "description": "Providing independent advisory services without lending conflicts.",
-          "descriptionRef": "descriptions/investmentBanking_pure-ma-advisory.md"
-        },
-        {
-          "id": "strategic-board-advisory",
-          "name": "Board-Level Strategic Advisory",
-          "description": "Guiding boards of directors on strategic deals and corporate restructuring.",
-          "descriptionRef": "descriptions/investmentBanking_strategic-board-advisory.md"
-        },
-        {
-          "id": "defense-advisory",
-          "name": "Shareholder Defense Advisory",
-          "description": "Advising companies against hostile takeovers.",
-          "descriptionRef": "descriptions/investmentBanking_defense-advisory.md"
-        },
-        {
-          "id": "special-situations-advisory",
-          "name": "Special Situations Advisory",
-          "description": "Advising on restructurings and complex strategic transformations.",
-          "descriptionRef": "descriptions/investmentBanking_special-situations-advisory.md"
-        }
+      "id": "ib-jobs",
+      "name": "Jobs",
+      "type": "jobs-tile",
+      "description": "Career roles and positions in Investment Banking",
+      "items": [
+        { "id": "ib-analyst", "name": "Investment Banking Analyst", "descriptionRef": "descriptions/investmentBanking_ib-analyst.md" },
+        { "id": "ib-associate", "name": "Investment Banking Associate", "descriptionRef": "descriptions/investmentBanking_ib-associate.md" },
+        { "id": "ib-vp", "name": "Vice President", "descriptionRef": "descriptions/investmentBanking_ib-vp.md" },
+        { "id": "ib-director", "name": "Director / Managing Director", "descriptionRef": "descriptions/investmentBanking_ib-director.md" }
       ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "eb-analyst",
-              "name": "M&A Analyst",
-              "descriptionRef": "descriptions/investmentBanking_eb-analyst.md"
-            },
-            {
-              "id": "eb-associate",
-              "name": "M&A Associate",
-              "descriptionRef": "descriptions/investmentBanking_eb-associate.md"
-            },
-            {
-              "id": "eb-vp",
-              "name": "Vice President Advisory",
-              "descriptionRef": "descriptions/investmentBanking_eb-vp.md"
-            },
-            {
-              "id": "eb-partner",
-              "name": "Senior Managing Director / Partner",
-              "descriptionRef": "descriptions/investmentBanking_eb-partner.md"
-            }
-          ],
-          "descriptionRef": "descriptions/investmentBanking_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "deal-valuation",
-              "name": "Preparing Valuation Analysis for Clients",
-              "descriptionRef": "descriptions/investmentBanking_deal-valuation.md"
-            },
-            {
-              "id": "deal-negotiation-support",
-              "name": "Supporting Transaction Negotiations",
-              "descriptionRef": "descriptions/investmentBanking_deal-negotiation-support.md"
-            },
-            {
-              "id": "board-presentations",
-              "name": "Preparing Board-Level Presentations",
-              "descriptionRef": "descriptions/investmentBanking_board-presentations.md"
-            },
-            {
-              "id": "strategic-options-analysis",
-              "name": "Evaluating Strategic Alternatives",
-              "descriptionRef": "descriptions/investmentBanking_strategic-options-analysis.md"
-            }
-          ],
-          "descriptionRef": "descriptions/investmentBanking_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/investmentBanking_elite-boutiques.md"
+      "descriptionRef": "descriptions/investmentBanking_jobs.md"
     },
     {
-      "id": "middle-market-banks",
-      "name": "Middle-Market Investment Banks",
-      "description": "Banks specializing in advising mid-sized companies on mergers, acquisitions, and capital raising.",
-      "functions": [
-        {
-          "id": "mid-market-ma",
-          "name": "Mid-Market M&A Advisory",
-          "description": "Managing acquisitions and company sales in the mid-market segment.",
-          "descriptionRef": "descriptions/investmentBanking_mid-market-ma.md"
-        },
-        {
-          "id": "private-company-sales",
-          "name": "Private Company Sale Advisory",
-          "description": "Helping founders sell businesses to strategic buyers or private equity.",
-          "descriptionRef": "descriptions/investmentBanking_private-company-sales.md"
-        },
-        {
-          "id": "growth-capital-advisory",
-          "name": "Growth Capital Advisory",
-          "description": "Structuring financing rounds for expanding companies.",
-          "descriptionRef": "descriptions/investmentBanking_growth-capital-advisory.md"
-        },
-        {
-          "id": "financial-restructuring",
-          "name": "Financial Restructuring Advisory",
-          "description": "Helping distressed companies restructure finances.",
-          "descriptionRef": "descriptions/investmentBanking_financial-restructuring.md"
-        }
+      "id": "ib-tasks",
+      "name": "Tasks",
+      "type": "tasks-tile",
+      "description": "Key activities and responsibilities in Investment Banking",
+      "items": [
+        { "id": "pitchbook-creation", "name": "Pitch Book Preparation", "descriptionRef": "descriptions/investmentBanking_pitchbook-creation.md" },
+        { "id": "valuation-modeling", "name": "Financial Valuation Modeling", "descriptionRef": "descriptions/investmentBanking_valuation-modeling.md" },
+        { "id": "deal-execution", "name": "Coordinating Multi-Billion Deal Execution", "descriptionRef": "descriptions/investmentBanking_deal-execution.md" },
+        { "id": "client-strategy", "name": "Advising CEOs on Strategic Transactions", "descriptionRef": "descriptions/investmentBanking_client-strategy.md" },
+        { "id": "deal-valuation", "name": "Preparing Valuation Analysis for Clients", "descriptionRef": "descriptions/investmentBanking_deal-valuation.md" },
+        { "id": "deal-negotiation-support", "name": "Supporting Transaction Negotiations", "descriptionRef": "descriptions/investmentBanking_deal-negotiation-support.md" },
+        { "id": "board-presentations", "name": "Preparing Board-Level Presentations", "descriptionRef": "descriptions/investmentBanking_board-presentations.md" },
+        { "id": "strategic-options-analysis", "name": "Evaluating Strategic Alternatives", "descriptionRef": "descriptions/investmentBanking_strategic-options-analysis.md" },
+        { "id": "company-valuation", "name": "Valuing Mid-Sized Companies", "descriptionRef": "descriptions/investmentBanking_company-valuation.md" },
+        { "id": "buyer-outreach", "name": "Contacting Strategic Buyers", "descriptionRef": "descriptions/investmentBanking_buyer-outreach.md" },
+        { "id": "deal-room-management", "name": "Managing Virtual Data Rooms", "descriptionRef": "descriptions/investmentBanking_deal-room-management.md" },
+        { "id": "investor-presentations", "name": "Preparing Investor Presentations", "descriptionRef": "descriptions/investmentBanking_investor-presentations.md" },
+        { "id": "sector-research", "name": "Industry Research & Trend Analysis", "descriptionRef": "descriptions/investmentBanking_sector-research.md" },
+        { "id": "deal-sourcing", "name": "Sourcing Sector-Specific Deals", "descriptionRef": "descriptions/investmentBanking_deal-sourcing.md" },
+        { "id": "loan-structuring", "name": "Structuring Corporate Loans", "descriptionRef": "descriptions/investmentBanking_loan-structuring.md" },
+        { "id": "credit-analysis", "name": "Performing Corporate Credit Analysis", "descriptionRef": "descriptions/investmentBanking_credit-analysis.md" }
       ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "mm-analyst",
-              "name": "Corporate Finance Analyst",
-              "descriptionRef": "descriptions/investmentBanking_mm-analyst.md"
-            },
-            {
-              "id": "mm-associate",
-              "name": "Corporate Finance Associate",
-              "descriptionRef": "descriptions/investmentBanking_mm-associate.md"
-            },
-            {
-              "id": "mm-vp",
-              "name": "Vice President Mid-Market Advisory",
-              "descriptionRef": "descriptions/investmentBanking_mm-vp.md"
-            },
-            {
-              "id": "mm-md",
-              "name": "Managing Director Corporate Finance",
-              "descriptionRef": "descriptions/investmentBanking_mm-md.md"
-            }
-          ],
-          "descriptionRef": "descriptions/investmentBanking_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "company-valuation",
-              "name": "Valuing Mid-Sized Companies",
-              "descriptionRef": "descriptions/investmentBanking_company-valuation.md"
-            },
-            {
-              "id": "buyer-outreach",
-              "name": "Contacting Strategic Buyers",
-              "descriptionRef": "descriptions/investmentBanking_buyer-outreach.md"
-            },
-            {
-              "id": "deal-room-management",
-              "name": "Managing Virtual Data Rooms",
-              "descriptionRef": "descriptions/investmentBanking_deal-room-management.md"
-            },
-            {
-              "id": "investor-presentations",
-              "name": "Preparing Investor Presentations",
-              "descriptionRef": "descriptions/investmentBanking_investor-presentations.md"
-            }
-          ],
-          "descriptionRef": "descriptions/investmentBanking_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/investmentBanking_middle-market-banks.md"
-    },
-    {
-      "id": "industry-boutiques",
-      "name": "Industry-Specific Boutique Banks",
-      "description": "Advisory firms specialized in specific sectors such as technology, healthcare, or energy.",
-      "functions": [
-        {
-          "id": "sector-ma-advisory",
-          "name": "Sector-Specific M&A Advisory",
-          "description": "Advising companies within a specialized industry niche.",
-          "descriptionRef": "descriptions/investmentBanking_sector-ma-advisory.md"
-        },
-        {
-          "id": "technology-deal-advisory",
-          "name": "Technology Deal Advisory",
-          "description": "Advising tech companies on acquisitions and strategic partnerships.",
-          "descriptionRef": "descriptions/investmentBanking_technology-deal-advisory.md"
-        },
-        {
-          "id": "healthcare-transactions",
-          "name": "Healthcare Transaction Advisory",
-          "description": "Managing deals for pharmaceutical and biotech firms.",
-          "descriptionRef": "descriptions/investmentBanking_healthcare-transactions.md"
-        },
-        {
-          "id": "industry-intelligence",
-          "name": "Industry Market Intelligence",
-          "description": "Providing specialized industry insights to support deal-making.",
-          "descriptionRef": "descriptions/investmentBanking_industry-intelligence.md"
-        }
-      ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "sector-analyst",
-              "name": "Sector Investment Banking Analyst",
-              "descriptionRef": "descriptions/investmentBanking_sector-analyst.md"
-            },
-            {
-              "id": "sector-associate",
-              "name": "Industry Coverage Associate",
-              "descriptionRef": "descriptions/investmentBanking_sector-associate.md"
-            },
-            {
-              "id": "sector-vp",
-              "name": "Sector Advisory Vice President",
-              "descriptionRef": "descriptions/investmentBanking_sector-vp.md"
-            },
-            {
-              "id": "sector-md",
-              "name": "Sector Managing Director",
-              "descriptionRef": "descriptions/investmentBanking_sector-md.md"
-            }
-          ],
-          "descriptionRef": "descriptions/investmentBanking_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "sector-research",
-              "name": "Industry Research & Trend Analysis",
-              "descriptionRef": "descriptions/investmentBanking_sector-research.md"
-            },
-            {
-              "id": "sector-comps",
-              "name": "Sector Trading Comparables Analysis",
-              "descriptionRef": "descriptions/investmentBanking_sector-comps.md"
-            },
-            {
-              "id": "deal-sourcing",
-              "name": "Sourcing Sector-Specific Deals",
-              "descriptionRef": "descriptions/investmentBanking_deal-sourcing.md"
-            },
-            {
-              "id": "buyer-identification",
-              "name": "Identifying Strategic Buyers in Sector",
-              "descriptionRef": "descriptions/investmentBanking_buyer-identification.md"
-            }
-          ],
-          "descriptionRef": "descriptions/investmentBanking_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/investmentBanking_industry-boutiques.md"
-    },
-    {
-      "id": "regional-full-service-banks",
-      "name": "Regional Full-Service Investment Banks",
-      "description": "Regional financial institutions providing advisory services and corporate lending for local companies.",
-      "functions": [
-        {
-          "id": "regional-ma-advisory",
-          "name": "Regional M&A Advisory",
-          "description": "Advising regional champions on acquisitions and sales.",
-          "descriptionRef": "descriptions/investmentBanking_regional-ma-advisory.md"
-        },
-        {
-          "id": "corporate-lending",
-          "name": "Corporate Lending",
-          "description": "Providing loans and financing solutions to local companies.",
-          "descriptionRef": "descriptions/investmentBanking_corporate-lending.md"
-        },
-        {
-          "id": "regional-capital-markets",
-          "name": "Regional Capital Markets",
-          "description": "Facilitating bond and equity issuance for regional businesses.",
-          "descriptionRef": "descriptions/investmentBanking_regional-capital-markets.md"
-        },
-        {
-          "id": "relationship-banking",
-          "name": "Corporate Relationship Banking",
-          "description": "Maintaining long-term relationships with regional corporate clients.",
-          "descriptionRef": "descriptions/investmentBanking_relationship-banking.md"
-        }
-      ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "regional-analyst",
-              "name": "Corporate Banking Analyst",
-              "descriptionRef": "descriptions/investmentBanking_regional-analyst.md"
-            },
-            {
-              "id": "regional-associate",
-              "name": "Corporate Finance Associate",
-              "descriptionRef": "descriptions/investmentBanking_regional-associate.md"
-            },
-            {
-              "id": "regional-vp",
-              "name": "Vice President Corporate Banking",
-              "descriptionRef": "descriptions/investmentBanking_regional-vp.md"
-            },
-            {
-              "id": "regional-director",
-              "name": "Regional Managing Director",
-              "descriptionRef": "descriptions/investmentBanking_regional-director.md"
-            }
-          ],
-          "descriptionRef": "descriptions/investmentBanking_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "loan-structuring",
-              "name": "Structuring Corporate Loans",
-              "descriptionRef": "descriptions/investmentBanking_loan-structuring.md"
-            },
-            {
-              "id": "regional-client-advisory",
-              "name": "Advising Regional Corporate Clients",
-              "descriptionRef": "descriptions/investmentBanking_regional-client-advisory.md"
-            },
-            {
-              "id": "deal-origination",
-              "name": "Originating Regional Transactions",
-              "descriptionRef": "descriptions/investmentBanking_deal-origination.md"
-            },
-            {
-              "id": "credit-analysis",
-              "name": "Performing Corporate Credit Analysis",
-              "descriptionRef": "descriptions/investmentBanking_credit-analysis.md"
-            }
-          ],
-          "descriptionRef": "descriptions/investmentBanking_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/investmentBanking_regional-full-service-banks.md"
+      "descriptionRef": "descriptions/investmentBanking_tasks.md"
     }
-  ]
+  ],
+  "descriptionRef": "descriptions/IBbrCore.md"
 }

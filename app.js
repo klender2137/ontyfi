@@ -14,24 +14,24 @@ app.use(express.json());
 // API routes
 import treeRoutes from './routes/tree.routes.js';
 import authSimpleRoutes from './routes/auth-simple.routes.js';
-import solanaAuthRoutes from './routes/solana-auth.routes.js';
-import ethereumAuthRoutes from './routes/ethereum-auth.routes.js';
+import linkedinAuthRoutes from './routes/linkedin-auth.routes.js';
 import activityAnalyticsRoutes from './routes/activity-analytics.routes.js';
 import embedRoutes from './routes/embed.routes.js';
 import insightsRoutes from './routes/insights.routes.js';
 import financeRoutes from './routes/finance.routes.js';
 import notificationsRoutes from './routes/notifications.routes.js';
 import roleRoutes from './routes/role.routes.js';
+import questionnaireRoutes from './routes/questionnaire.routes.js';
 app.use('/api/tree', treeRoutes);
 app.use('/api/auth-simple', authSimpleRoutes);
-app.use('/api/solana-auth', solanaAuthRoutes);
-app.use('/api/ethereum-auth', ethereumAuthRoutes);
+app.use('/api/auth/linkedin', linkedinAuthRoutes);
 app.use('/api/analytics', activityAnalyticsRoutes);
 app.use('/api/embed', embedRoutes);
 app.use('/api/insights', insightsRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/role', roleRoutes);
+app.use('/api/questionnaire', questionnaireRoutes);
 
 // Start notification scheduler (FCM jobs)
 import './services/notification-scheduler.js';

@@ -7,673 +7,183 @@
     "investment-management",
     "capital-allocation"
   ],
-  "categories": [
+  "tiles": [
     {
-      "id": "institutional-asset-managers",
-      "name": "Institutional Asset Managers",
-      "tags": [
-        "mutual-funds",
-        "etf",
-        "institutional-mandates"
-      ],
-      "subcategories": [
+      "id": "asset-niches",
+      "name": "Niches",
+      "type": "niches-tile",
+      "description": "Asset Management institution types and market niches",
+      "institutions": [
         {
-          "id": "portfolio-construction",
-          "name": "Portfolio Construction & Management",
-          "description": "Core front-office investment management activity.",
-          "nodes": [
+          "id": "institutional-asset-managers",
+          "name": "Institutional Asset Managers",
+          "description": "Traditional asset managers offering mutual funds, ETFs, and institutional mandates.",
+          "tags": [
+            "mutual-funds",
+            "etf",
+            "institutional-mandates"
+          ],
+          "functions": [
             {
-              "id": "alpha-generation",
-              "name": "Active Equity / Fixed Income Alpha Generation",
-              "description": "Selecting securities to outperform benchmarks.",
-              "subnodes": [
-                {
-                  "id": "equity-research",
-                  "name": "Fundamental Equity Research",
-                  "description": "Building financial models and evaluating company fundamentals.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_equity-research.md"
-                },
-                {
-                  "id": "credit-analysis",
-                  "name": "Corporate Credit Analysis",
-                  "description": "Assessing bond default risk and spreads.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_credit-analysis.md"
-                },
-                {
-                  "id": "earnings-forecasting",
-                  "name": "Earnings Forecasting",
-                  "description": "Modeling future company earnings growth.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_earnings-forecasting.md"
-                },
-                {
-                  "id": "valuation-modeling",
-                  "name": "Relative Valuation Modeling",
-                  "description": "Comparing valuation multiples across peer companies.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_valuation-modeling.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_alpha-generation.md"
+              "id": "portfolio-construction",
+              "name": "Portfolio Construction & Management",
+              "description": "Core front-office investment management activity including alpha generation, tactical allocation, and risk modeling.",
+              "descriptionRef": "descriptions/AssetMangementBranch_portfolio-construction.md"
             },
             {
-              "id": "tactical-asset-allocation",
-              "name": "Tactical Asset Allocation",
-              "description": "Adjusting portfolio weights based on macro conditions.",
-              "subnodes": [
-                {
-                  "id": "macro-cycle-analysis",
-                  "name": "Macro Cycle Analysis",
-                  "description": "Analyzing economic cycles.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_macro-cycle-analysis.md"
-                },
-                {
-                  "id": "sector-rotation",
-                  "name": "Sector Rotation Strategy",
-                  "description": "Reallocating capital across sectors.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_sector-rotation.md"
-                },
-                {
-                  "id": "currency-exposure-adjustment",
-                  "name": "Currency Exposure Adjustment",
-                  "description": "Managing FX risks in global portfolios.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_currency-exposure-adjustment.md"
-                },
-                {
-                  "id": "commodity-allocation",
-                  "name": "Commodity Allocation",
-                  "description": "Adding commodity exposure to hedge inflation.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_commodity-allocation.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_tactical-asset-allocation.md"
+              "id": "distribution-client-solutions",
+              "name": "Distribution & Client Solutions",
+              "description": "Capital raising and client portfolio design including consultant relations, retail marketing, and client reporting.",
+              "descriptionRef": "descriptions/AssetMangementBranch_distribution-client-solutions.md"
             },
             {
-              "id": "quant-risk-modeling",
-              "name": "Quantitative Risk Factor Modeling",
-              "description": "Analyzing risk factors affecting portfolios.",
-              "subnodes": [
-                {
-                  "id": "factor-decomposition",
-                  "name": "Factor Decomposition",
-                  "description": "Breaking portfolio exposure into risk factors.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_factor-decomposition.md"
-                },
-                {
-                  "id": "volatility-modeling",
-                  "name": "Volatility Modeling",
-                  "description": "Forecasting asset volatility.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_volatility-modeling.md"
-                },
-                {
-                  "id": "var-calculation",
-                  "name": "Value-at-Risk Calculation",
-                  "description": "Estimating potential losses.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_var-calculation.md"
-                },
-                {
-                  "id": "stress-testing",
-                  "name": "Portfolio Stress Testing",
-                  "description": "Simulating crisis scenarios.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_stress-testing.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_quant-risk-modeling.md"
+              "id": "operations",
+              "name": "Middle & Back Office Operations",
+              "description": "Operational infrastructure ensuring fund administration including trade execution, fund accounting, and regulatory compliance.",
+              "descriptionRef": "descriptions/AssetMangementBranch_operations.md"
             }
           ],
-          "descriptionRef": "descriptions/AssetMangementBranch_portfolio-construction.md"
+          "descriptionRef": "descriptions/AssetMangementBranch_institutional-asset-managers.md"
         },
         {
-          "id": "distribution-client-solutions",
-          "name": "Distribution & Client Solutions",
-          "description": "Capital raising and client portfolio design.",
-          "nodes": [
+          "id": "hedge-funds",
+          "name": "Hedge Funds",
+          "description": "Private investment partnerships pursuing absolute returns using advanced strategies.",
+          "tags": [
+            "hedge-fund",
+            "absolute-alpha"
+          ],
+          "functions": [
             {
-              "id": "institutional-consultant-relations",
-              "name": "Institutional Consultant Relations",
-              "description": "Maintaining relationships with pension consultants.",
-              "subnodes": [
-                {
-                  "id": "consultant-database-management",
-                  "name": "Consultant Database Management",
-                  "description": "Tracking institutional consultant relationships.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_consultant-database-management.md"
-                },
-                {
-                  "id": "mandate-pitch-preparation",
-                  "name": "Mandate Pitch Preparation",
-                  "description": "Preparing proposals for institutional mandates.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_mandate-pitch-preparation.md"
-                },
-                {
-                  "id": "performance-presentations",
-                  "name": "Performance Presentations",
-                  "description": "Presenting fund performance to consultants.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_performance-presentations.md"
-                },
-                {
-                  "id": "consultant-due-diligence",
-                  "name": "Consultant Due Diligence",
-                  "description": "Supporting consultant evaluation processes.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_consultant-due-diligence.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_institutional-consultant-relations.md"
-            },
-            {
-              "id": "retail-channel-marketing",
-              "name": "Retail Channel Marketing",
-              "description": "Marketing ETFs and mutual funds to retail investors.",
-              "subnodes": [
-                {
-                  "id": "fund-factsheet-design",
-                  "name": "Fund Factsheet Creation",
-                  "description": "Producing marketing materials.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_fund-factsheet-design.md"
-                },
-                {
-                  "id": "advisor-webinars",
-                  "name": "Financial Advisor Webinars",
-                  "description": "Educating advisors on fund strategies.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_advisor-webinars.md"
-                },
-                {
-                  "id": "digital-investor-campaigns",
-                  "name": "Digital Investor Campaigns",
-                  "description": "Online marketing campaigns.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_digital-investor-campaigns.md"
-                },
-                {
-                  "id": "fund-ranking-promotion",
-                  "name": "Fund Ranking Promotion",
-                  "description": "Highlighting performance rankings.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_fund-ranking-promotion.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_retail-channel-marketing.md"
-            },
-            {
-              "id": "client-reporting",
-              "name": "Client Reporting & ESG Integration",
-              "description": "Providing investment reporting to clients.",
-              "subnodes": [
-                {
-                  "id": "portfolio-reporting",
-                  "name": "Portfolio Performance Reporting",
-                  "description": "Generating client performance reports.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_portfolio-reporting.md"
-                },
-                {
-                  "id": "esg-reporting",
-                  "name": "ESG Impact Reporting",
-                  "description": "Reporting environmental and social metrics.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_esg-reporting.md"
-                },
-                {
-                  "id": "benchmark-comparison",
-                  "name": "Benchmark Comparison",
-                  "description": "Comparing performance against indices.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_benchmark-comparison.md"
-                },
-                {
-                  "id": "client-review-meetings",
-                  "name": "Client Review Meetings",
-                  "description": "Quarterly portfolio review meetings.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_client-review-meetings.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_client-reporting.md"
+              "id": "investment-strategies",
+              "name": "Investment Strategy Execution",
+              "description": "Deploying hedge fund strategies including long-short equity and global macro approaches.",
+              "descriptionRef": "descriptions/AssetMangementBranch_investment-strategies.md"
             }
           ],
-          "descriptionRef": "descriptions/AssetMangementBranch_distribution-client-solutions.md"
+          "descriptionRef": "descriptions/AssetMangementBranch_hedge-funds.md"
         },
         {
-          "id": "operations",
-          "name": "Middle & Back Office Operations",
-          "description": "Operational infrastructure ensuring fund administration.",
-          "nodes": [
+          "id": "sovereign-wealth-funds",
+          "name": "Sovereign Wealth Funds",
+          "description": "State-owned investment funds managing national reserves.",
+          "tags": [
+            "swf",
+            "sovereign-investment"
+          ],
+          "functions": [
             {
-              "id": "trade-execution",
-              "name": "Trade Execution & Best Execution Oversight",
-              "description": "Executing portfolio trades efficiently.",
-              "subnodes": [
-                {
-                  "id": "broker-selection",
-                  "name": "Broker Selection",
-                  "description": "Choosing brokers for trade execution.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_broker-selection.md"
-                },
-                {
-                  "id": "best-execution-analysis",
-                  "name": "Best Execution Analysis",
-                  "description": "Evaluating trading efficiency.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_best-execution-analysis.md"
-                },
-                {
-                  "id": "trade-reconciliation",
-                  "name": "Trade Reconciliation",
-                  "description": "Ensuring trades match settlement records.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_trade-reconciliation.md"
-                },
-                {
-                  "id": "transaction-cost-analysis",
-                  "name": "Transaction Cost Analysis",
-                  "description": "Monitoring trading costs.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_transaction-cost-analysis.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_trade-execution.md"
-            },
-            {
-              "id": "fund-accounting",
-              "name": "Fund Accounting & NAV Oversight",
-              "description": "Calculating fund values.",
-              "subnodes": [
-                {
-                  "id": "nav-calculation",
-                  "name": "NAV Calculation",
-                  "description": "Daily net asset value calculation.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_nav-calculation.md"
-                },
-                {
-                  "id": "portfolio-valuation",
-                  "name": "Portfolio Valuation",
-                  "description": "Marking assets to market.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_portfolio-valuation.md"
-                },
-                {
-                  "id": "pricing-verification",
-                  "name": "Pricing Verification",
-                  "description": "Validating market prices.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_pricing-verification.md"
-                },
-                {
-                  "id": "fund-audit-support",
-                  "name": "Fund Audit Support",
-                  "description": "Supporting annual audits.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_fund-audit-support.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_fund-accounting.md"
-            },
-            {
-              "id": "regulatory-compliance",
-              "name": "Regulatory Filing & Compliance",
-              "description": "Ensuring regulatory adherence.",
-              "subnodes": [
-                {
-                  "id": "sec-filings",
-                  "name": "SEC Regulatory Filings",
-                  "description": "Submitting required filings.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_sec-filings.md"
-                },
-                {
-                  "id": "compliance-monitoring",
-                  "name": "Compliance Monitoring",
-                  "description": "Monitoring portfolio restrictions.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_compliance-monitoring.md"
-                },
-                {
-                  "id": "trade-surveillance",
-                  "name": "Trade Surveillance",
-                  "description": "Monitoring suspicious trading.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_trade-surveillance.md"
-                },
-                {
-                  "id": "regulatory-reporting",
-                  "name": "Regulatory Reporting",
-                  "description": "Producing regulatory reports.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_regulatory-reporting.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_regulatory-compliance.md"
+              "id": "strategic-asset-allocation",
+              "name": "Strategic Asset Allocation",
+              "description": "Long-term national wealth allocation focusing on intergenerational capital preservation.",
+              "descriptionRef": "descriptions/AssetMangementBranch_strategic-asset-allocation.md"
             }
           ],
-          "descriptionRef": "descriptions/AssetMangementBranch_operations.md"
+          "descriptionRef": "descriptions/AssetMangementBranch_sovereign-wealth-funds.md"
+        },
+        {
+          "id": "pension-funds",
+          "name": "Pension Funds",
+          "description": "Institutions managing retirement assets with liability matching.",
+          "tags": [
+            "pension",
+            "ldi"
+          ],
+          "functions": [
+            {
+              "id": "liability-driven-investing",
+              "name": "Liability Driven Investing",
+              "description": "Matching assets with pension liabilities through duration matching strategies.",
+              "descriptionRef": "descriptions/AssetMangementBranch_liability-driven-investing.md"
+            }
+          ],
+          "descriptionRef": "descriptions/AssetMangementBranch_pension-funds.md"
+        },
+        {
+          "id": "family-offices",
+          "name": "Private Wealth Management / Family Offices",
+          "description": "Managing wealth for ultra-high-net-worth families.",
+          "tags": [
+            "uhnw",
+            "family-office"
+          ],
+          "functions": [
+            {
+              "id": "wealth-planning",
+              "name": "Comprehensive Wealth Planning",
+              "description": "Structuring generational wealth through estate planning, tax optimization, and philanthropy.",
+              "descriptionRef": "descriptions/AssetMangementBranch_wealth-planning.md"
+            }
+          ],
+          "descriptionRef": "descriptions/AssetMangementBranch_family-offices.md"
+        },
+        {
+          "id": "insurance-general-accounts",
+          "name": "Insurance Company General Accounts",
+          "description": "Investment arms managing insurance premiums.",
+          "tags": [
+            "insurance-investments"
+          ],
+          "functions": [
+            {
+              "id": "asset-liability-management",
+              "name": "Insurance Asset Liability Management",
+              "description": "Matching assets with insurance liabilities through fixed income portfolio construction.",
+              "descriptionRef": "descriptions/AssetMangementBranch_asset-liability-management.md"
+            }
+          ],
+          "descriptionRef": "descriptions/AssetMangementBranch_insurance-general-accounts.md"
+        },
+        {
+          "id": "endowments-foundations",
+          "name": "Endowments & Foundations",
+          "description": "Long-term capital pools supporting institutions and charities.",
+          "tags": [
+            "endowment",
+            "foundation"
+          ],
+          "functions": [
+            {
+              "id": "perpetual-investment",
+              "name": "Perpetual Investment Strategy",
+              "description": "Managing capital to fund perpetual spending through diversified alternative-heavy strategies.",
+              "descriptionRef": "descriptions/AssetMangementBranch_perpetual-investment.md"
+            }
+          ],
+          "descriptionRef": "descriptions/AssetMangementBranch_endowments-foundations.md"
         }
       ],
-      "descriptionRef": "descriptions/AssetMangementBranch_institutional-asset-managers.md"
+      "descriptionRef": "descriptions/AssetMangementBranch_niches.md"
     },
     {
-      "id": "hedge-funds",
-      "name": "Hedge Funds",
-      "description": "Private investment partnerships pursuing absolute returns using advanced strategies.",
-      "tags": [
-        "hedge-fund",
-        "absolute-alpha"
+      "id": "asset-jobs",
+      "name": "Jobs",
+      "type": "jobs-tile",
+      "description": "Career roles and positions in Asset Management",
+      "items": [
+        { "id": "portfolio-manager", "name": "Portfolio Manager", "descriptionRef": "descriptions/AssetMangementBranch_portfolio-manager.md" },
+        { "id": "research-analyst", "name": "Research Analyst", "descriptionRef": "descriptions/AssetMangementBranch_research-analyst.md" },
+        { "id": "trader", "name": "Trader", "descriptionRef": "descriptions/AssetMangementBranch_trader.md" },
+        { "id": "risk-analyst", "name": "Risk Analyst", "descriptionRef": "descriptions/AssetMangementBranch_risk-analyst.md" },
+        { "id": "fund-accountant", "name": "Fund Accountant", "descriptionRef": "descriptions/AssetMangementBranch_fund-accountant.md" },
+        { "id": "client-relationship-manager", "name": "Client Relationship Manager", "descriptionRef": "descriptions/AssetMangementBranch_client-relationship-manager.md" }
       ],
-      "subcategories": [
-        {
-          "id": "investment-strategies",
-          "name": "Investment Strategy Execution",
-          "description": "Deploying hedge fund strategies.",
-          "nodes": [
-            {
-              "id": "long-short-equity",
-              "name": "Long Short Equity Strategy",
-              "description": "Buying undervalued stocks and shorting overvalued ones.",
-              "subnodes": [
-                {
-                  "id": "long-book-construction",
-                  "name": "Long Book Construction",
-                  "description": "Selecting undervalued stocks.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_long-book-construction.md"
-                },
-                {
-                  "id": "short-idea-generation",
-                  "name": "Short Idea Generation",
-                  "description": "Identifying overvalued companies.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_short-idea-generation.md"
-                },
-                {
-                  "id": "pair-trading",
-                  "name": "Pair Trading",
-                  "description": "Long and short correlated securities.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_pair-trading.md"
-                },
-                {
-                  "id": "short-squeeze-risk",
-                  "name": "Short Squeeze Monitoring",
-                  "description": "Monitoring risks of short squeezes.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_short-squeeze-risk.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_long-short-equity.md"
-            },
-            {
-              "id": "global-macro",
-              "name": "Global Macro Strategy",
-              "description": "Trading based on macroeconomic trends.",
-              "subnodes": [
-                {
-                  "id": "interest-rate-trades",
-                  "name": "Interest Rate Trades",
-                  "description": "Trading government bonds.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_interest-rate-trades.md"
-                },
-                {
-                  "id": "fx-positioning",
-                  "name": "FX Positioning",
-                  "description": "Currency trading.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_fx-positioning.md"
-                },
-                {
-                  "id": "commodity-trading",
-                  "name": "Commodity Trading",
-                  "description": "Trading oil and metals.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_commodity-trading.md"
-                },
-                {
-                  "id": "macro-event-trades",
-                  "name": "Macro Event Trades",
-                  "description": "Trading around central bank decisions.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_macro-event-trades.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_global-macro.md"
-            }
-          ],
-          "descriptionRef": "descriptions/AssetMangementBranch_investment-strategies.md"
-        }
-      ],
-      "descriptionRef": "descriptions/AssetMangementBranch_hedge-funds.md"
+      "descriptionRef": "descriptions/AssetMangementBranch_jobs.md"
     },
     {
-      "id": "sovereign-wealth-funds",
-      "name": "Sovereign Wealth Funds",
-      "description": "State-owned investment funds managing national reserves.",
-      "tags": [
-        "swf",
-        "sovereign-investment"
+      "id": "asset-tasks",
+      "name": "Tasks",
+      "type": "tasks-tile",
+      "description": "Key activities and responsibilities in Asset Management",
+      "items": [
+        { "id": "equity-research", "name": "Fundamental Equity Research", "descriptionRef": "descriptions/AssetMangementBranch_equity-research.md" },
+        { "id": "portfolio-construction", "name": "Portfolio Construction", "descriptionRef": "descriptions/AssetMangementBranch_portfolio-construction.md" },
+        { "id": "risk-modeling", "name": "Quantitative Risk Modeling", "descriptionRef": "descriptions/AssetMangementBranch_quant-risk-modeling.md" },
+        { "id": "trade-execution", "name": "Trade Execution", "descriptionRef": "descriptions/AssetMangementBranch_trade-execution.md" },
+        { "id": "nav-calculation", "name": "NAV Calculation", "descriptionRef": "descriptions/AssetMangementBranch_nav-calculation.md" },
+        { "id": "client-reporting", "name": "Client Reporting", "descriptionRef": "descriptions/AssetMangementBranch_client-reporting.md" }
       ],
-      "subcategories": [
-        {
-          "id": "strategic-asset-allocation",
-          "name": "Strategic Asset Allocation",
-          "description": "Long-term national wealth allocation.",
-          "nodes": [
-            {
-              "id": "intergenerational-investing",
-              "name": "Intergenerational Capital Preservation",
-              "description": "Ensuring wealth sustainability across generations.",
-              "subnodes": [
-                {
-                  "id": "global-equity-allocation",
-                  "name": "Global Equity Allocation",
-                  "description": "Allocating capital to equities.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_global-equity-allocation.md"
-                },
-                {
-                  "id": "private-market-investing",
-                  "name": "Private Market Investing",
-                  "description": "Investing in private assets.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_private-market-investing.md"
-                },
-                {
-                  "id": "infrastructure-investing",
-                  "name": "Infrastructure Investments",
-                  "description": "Funding global infrastructure.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_infrastructure-investing.md"
-                },
-                {
-                  "id": "real-estate-allocation",
-                  "name": "Real Estate Allocation",
-                  "description": "Global property investments.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_real-estate-allocation.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_intergenerational-investing.md"
-            }
-          ],
-          "descriptionRef": "descriptions/AssetMangementBranch_strategic-asset-allocation.md"
-        }
-      ],
-      "descriptionRef": "descriptions/AssetMangementBranch_sovereign-wealth-funds.md"
-    },
-    {
-      "id": "pension-funds",
-      "name": "Pension Funds",
-      "description": "Institutions managing retirement assets with liability matching.",
-      "tags": [
-        "pension",
-        "ldi"
-      ],
-      "subcategories": [
-        {
-          "id": "liability-driven-investing",
-          "name": "Liability Driven Investing",
-          "description": "Matching assets with pension liabilities.",
-          "nodes": [
-            {
-              "id": "duration-matching",
-              "name": "Duration Matching",
-              "description": "Aligning asset duration with liabilities.",
-              "subnodes": [
-                {
-                  "id": "bond-laddering",
-                  "name": "Bond Laddering",
-                  "description": "Creating maturity ladders.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_bond-laddering.md"
-                },
-                {
-                  "id": "interest-rate-hedging",
-                  "name": "Interest Rate Hedging",
-                  "description": "Using swaps for rate protection.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_interest-rate-hedging.md"
-                },
-                {
-                  "id": "liability-projection",
-                  "name": "Liability Projection Modeling",
-                  "description": "Forecasting pension obligations.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_liability-projection.md"
-                },
-                {
-                  "id": "inflation-hedging",
-                  "name": "Inflation Hedging",
-                  "description": "Protecting purchasing power.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_inflation-hedging.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_duration-matching.md"
-            }
-          ],
-          "descriptionRef": "descriptions/AssetMangementBranch_liability-driven-investing.md"
-        }
-      ],
-      "descriptionRef": "descriptions/AssetMangementBranch_pension-funds.md"
-    },
-    {
-      "id": "family-offices",
-      "name": "Private Wealth Management / Family Offices",
-      "description": "Managing wealth for ultra-high-net-worth families.",
-      "tags": [
-        "uhnw",
-        "family-office"
-      ],
-      "subcategories": [
-        {
-          "id": "wealth-planning",
-          "name": "Comprehensive Wealth Planning",
-          "description": "Structuring generational wealth.",
-          "nodes": [
-            {
-              "id": "estate-planning",
-              "name": "Estate & Succession Planning",
-              "description": "Ensuring generational wealth transfer.",
-              "subnodes": [
-                {
-                  "id": "trust-structuring",
-                  "name": "Trust Structuring",
-                  "description": "Creating wealth preservation trusts.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_trust-structuring.md"
-                },
-                {
-                  "id": "tax-optimization",
-                  "name": "Tax Optimization",
-                  "description": "Minimizing inheritance taxes.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_tax-optimization.md"
-                },
-                {
-                  "id": "philanthropy-planning",
-                  "name": "Philanthropy Planning",
-                  "description": "Structuring charitable giving.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_philanthropy-planning.md"
-                },
-                {
-                  "id": "family-governance",
-                  "name": "Family Governance",
-                  "description": "Creating family constitutions.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_family-governance.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_estate-planning.md"
-            }
-          ],
-          "descriptionRef": "descriptions/AssetMangementBranch_wealth-planning.md"
-        }
-      ],
-      "descriptionRef": "descriptions/AssetMangementBranch_family-offices.md"
-    },
-    {
-      "id": "insurance-general-accounts",
-      "name": "Insurance Company General Accounts",
-      "description": "Investment arms managing insurance premiums.",
-      "tags": [
-        "insurance-investments"
-      ],
-      "subcategories": [
-        {
-          "id": "asset-liability-management",
-          "name": "Insurance Asset Liability Management",
-          "description": "Matching assets with insurance liabilities.",
-          "nodes": [
-            {
-              "id": "fixed-income-portfolio",
-              "name": "Fixed Income Portfolio Construction",
-              "description": "Investing insurance premiums in bonds.",
-              "subnodes": [
-                {
-                  "id": "corporate-bond-selection",
-                  "name": "Corporate Bond Selection",
-                  "description": "Selecting investment grade bonds.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_corporate-bond-selection.md"
-                },
-                {
-                  "id": "mortgage-backed-securities",
-                  "name": "Mortgage Backed Securities",
-                  "description": "Investing in MBS.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_mortgage-backed-securities.md"
-                },
-                {
-                  "id": "duration-management",
-                  "name": "Duration Management",
-                  "description": "Matching asset maturity.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_duration-management.md"
-                },
-                {
-                  "id": "credit-risk-monitoring",
-                  "name": "Credit Risk Monitoring",
-                  "description": "Tracking bond issuer health.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_credit-risk-monitoring.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_fixed-income-portfolio.md"
-            }
-          ],
-          "descriptionRef": "descriptions/AssetMangementBranch_asset-liability-management.md"
-        }
-      ],
-      "descriptionRef": "descriptions/AssetMangementBranch_insurance-general-accounts.md"
-    },
-    {
-      "id": "endowments-foundations",
-      "name": "Endowments & Foundations",
-      "description": "Long-term capital pools supporting institutions and charities.",
-      "tags": [
-        "endowment",
-        "foundation"
-      ],
-      "subcategories": [
-        {
-          "id": "perpetual-investment",
-          "name": "Perpetual Investment Strategy",
-          "description": "Managing capital to fund perpetual spending.",
-          "nodes": [
-            {
-              "id": "endowment-model",
-              "name": "Endowment Investment Model",
-              "description": "Diversified alternative-heavy strategy.",
-              "subnodes": [
-                {
-                  "id": "private-equity-allocation",
-                  "name": "Private Equity Allocation",
-                  "description": "Investing in PE funds.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_private-equity-allocation.md"
-                },
-                {
-                  "id": "hedge-fund-allocation",
-                  "name": "Hedge Fund Allocation",
-                  "description": "Allocating to hedge funds.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_hedge-fund-allocation.md"
-                },
-                {
-                  "id": "venture-capital-allocation",
-                  "name": "Venture Capital Allocation",
-                  "description": "Investing in startups.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_venture-capital-allocation.md"
-                },
-                {
-                  "id": "real-assets-allocation",
-                  "name": "Real Assets Allocation",
-                  "description": "Investing in commodities and infrastructure.",
-                  "descriptionRef": "descriptions/AssetMangementBranch_real-assets-allocation.md"
-                }
-              ],
-              "descriptionRef": "descriptions/AssetMangementBranch_endowment-model.md"
-            }
-          ],
-          "descriptionRef": "descriptions/AssetMangementBranch_perpetual-investment.md"
-        }
-      ],
-      "descriptionRef": "descriptions/AssetMangementBranch_endowments-foundations.md"
+      "descriptionRef": "descriptions/AssetManagement_tasks.md"
     }
   ],
   "descriptionRef": "descriptions/AssetManagementCore.md"

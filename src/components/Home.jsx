@@ -1,15 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../store/useAppStore'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { useWeb3Auth } from '../hooks/useWeb3Auth'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 
 const Home = () => {
   const navigate = useNavigate()
   const { bookmarks, user, syncBookmarksWithFirebase } = useAppStore()
-  const { isAuthenticated } = useWeb3Auth()
-  const { signOut, deleteAccount } = useAuth()
+  const { isAuthenticated, signOut, deleteAccount, signInWithLinkedIn } = useAuth()
   const [deleting, setDeleting] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteError, setDeleteError] = useState(null)
@@ -92,8 +89,39 @@ const Home = () => {
                   Delete Account
                 </button>
               </>
-            ) : null}
-            <ConnectButton />
+            ) : (
+              <button
+                type="button"
+                onClick={signInWithLinkedIn}
+                style={{
+                  padding: '0.75rem 1rem',
+                  minWidth: '44px',
+                  minHeight: '44px',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(10, 102, 194, 0.5)',
+                  background: 'rgba(10, 102, 194, 0.15)',
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  touchAction: 'manipulation',
+                  transition: 'transform 0.1s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+                onTouchStart={(e) => {
+                  e.currentTarget.style.transform = 'scale(0.96)'
+                }}
+                onTouchEnd={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)'
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                Sign in with LinkedIn
+              </button>
+            )}
           </div>
         </div>
 
@@ -287,6 +315,121 @@ const Home = () => {
             Streak: {user.activities.streakDays} days • Articles read: {user.activities.totalArticlesRead}
           </p>
         </div>
+
+        {/* Intricate Rhombus Button - Finance Archetype Diagnostic */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem 0' }}>
+          <div
+            onClick={() => navigate('/archetype-diagnostic')}
+            role="button"
+            tabIndex={0}
+            aria-label="Take the Finance Archetype Diagnostic"
+            style={{
+              width: '140px',
+              height: '140px',
+              position: 'relative',
+              cursor: 'pointer',
+              transform: 'rotate(45deg)',
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%)',
+              border: '2px solid rgba(59, 130, 246, 0.5)',
+              borderRadius: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 8px 32px rgba(59, 130, 246, 0.2)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'rotate(45deg) scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 12px 48px rgba(59, 130, 246, 0.4)';
+              e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.8)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'rotate(45deg) scale(1)';
+              e.currentTarget.style.boxShadow = '0 8px 32px rgba(59, 130, 246, 0.2)';
+              e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.5)';
+            }}
+            onTouchStart={(e) => {
+              e.currentTarget.style.transform = 'rotate(45deg) scale(0.95)';
+            }}
+            onTouchEnd={(e) => {
+              e.currentTarget.style.transform = 'rotate(45deg) scale(1)';
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate('/archetype-diagnostic');
+              }
+            }}
+          >
+            {/* Inner content - counter-rotated */}
+            <div style={{
+              transform: 'rotate(-45deg)',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '4px',
+            }}>
+              <span style={{ fontSize: '2rem' }}>◈</span>
+              <span style={{
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                color: '#f7f9ff',
+                letterSpacing: '0.05em',
+                maxWidth: '80px',
+                lineHeight: 1.2,
+              }}>
+                Discover Your Archetype
+              </span>
+            </div>
+
+            {/* Decorative corner accents */}
+            <div style={{
+              position: 'absolute',
+              top: '8px',
+              left: '8px',
+              width: '12px',
+              height: '12px',
+              borderTop: '2px solid rgba(167, 139, 250, 0.6)',
+              borderLeft: '2px solid rgba(167, 139, 250, 0.6)',
+              borderRadius: '2px',
+            }} />
+            <div style={{
+              position: 'absolute',
+              top: '8px',
+              right: '8px',
+              width: '12px',
+              height: '12px',
+              borderTop: '2px solid rgba(167, 139, 250, 0.6)',
+              borderRight: '2px solid rgba(167, 139, 250, 0.6)',
+              borderRadius: '2px',
+            }} />
+            <div style={{
+              position: 'absolute',
+              bottom: '8px',
+              left: '8px',
+              width: '12px',
+              height: '12px',
+              borderBottom: '2px solid rgba(167, 139, 250, 0.6)',
+              borderLeft: '2px solid rgba(167, 139, 250, 0.6)',
+              borderRadius: '2px',
+            }} />
+            <div style={{
+              position: 'absolute',
+              bottom: '8px',
+              right: '8px',
+              width: '12px',
+              height: '12px',
+              borderBottom: '2px solid rgba(167, 139, 250, 0.6)',
+              borderRight: '2px solid rgba(167, 139, 250, 0.6)',
+              borderRadius: '2px',
+            }} />
+          </div>
+        </div>
+
+        <p style={{ textAlign: 'center', color: '#64748b', fontSize: '0.875rem' }}>
+          Take our 7-question diagnostic to find your ideal finance career path
+        </p>
       </div>
     </div>
   )

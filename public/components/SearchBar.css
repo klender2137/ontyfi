@@ -204,7 +204,7 @@
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  background: rgba(0, 0, 0, 0.2);
+  background: transparent;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -363,7 +363,7 @@
 
 /* Focus mode enhancement */
 .enhanced-search-bar.focused {
-  z-index: 1000;
+  z-index: 1500;
 }
 
 /* Mobile responsive - adjust island for smaller screens */

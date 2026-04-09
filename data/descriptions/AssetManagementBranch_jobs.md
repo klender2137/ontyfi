@@ -1,5 +1,9 @@
-# Asset Management Careers: Roles, Fund Structures, and Interview Insights
+# Asset Management
 
+**ID:** asset-management-jobs  
+**Branch:** Global Asset Management Institution
+
+## Description
 Asset management firms collectively manage **over $120 trillion in global assets**. The largest players, such as BlackRock or Vanguard, each oversee **more than $7–10 trillion** individually. Institutional investors like pension funds and sovereign wealth funds allocate **hundreds of billions of dollars per mandate**, making this industry one of the most capital-intensive sectors in finance.
 
 Asset Management (AM) is the institutional activity of investing and managing capital on behalf of large investors such as pension funds, insurance companies, endowments, and sovereign wealth funds. Firms construct portfolios of equities, bonds, or alternative assets to generate returns while controlling risk. The work combines financial research, portfolio construction, risk monitoring, and client reporting.

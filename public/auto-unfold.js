@@ -47,10 +47,10 @@ if (typeof window !== 'undefined') {
           this.addVisualFeedback(nodeId);
         }
 
-        // Call completion callback
-        setTimeout(() => {
+        // Call completion callback using requestAnimationFrame instead of setTimeout
+        requestAnimationFrame(() => {
           onComplete?.(nodeId, true);
-        }, 500);
+        });
         
         return true;
       } catch (error) {
@@ -72,26 +72,44 @@ if (typeof window !== 'undefined') {
         element.style.zIndex = '1000';
         element.style.border = '2px solid rgba(16, 185, 129, 0.8)';
 
-        // Add pulse effect
+        // Add pulse effect using requestAnimationFrame instead of setInterval
         let pulseCount = 0;
-        const pulseInterval = setInterval(() => {
-          pulseCount++;
-          element.style.boxShadow = pulseCount % 2 === 0 
-            ? '0 12px 40px rgba(16, 185, 129, 0.6)'
-            : '0 16px 50px rgba(16, 185, 129, 0.8)';
+        let lastPulseTime = performance.now();
+        const pulseInterval = 250; // 250ms between pulses
+        
+        let rafId = null;
+        
+        function pulseAnimation(currentTime) {
+          const elapsed = currentTime - lastPulseTime;
           
-          if (pulseCount >= 4) {
-            clearInterval(pulseInterval);
-            setTimeout(() => {
+          if (elapsed >= pulseInterval) {
+            pulseCount++;
+            element.style.boxShadow = pulseCount % 2 === 0 
+              ? '0 12px 40px rgba(16, 185, 129, 0.6)'
+              : '0 16px 50px rgba(16, 185, 129, 0.8)';
+            lastPulseTime = currentTime;
+          }
+          
+          if (pulseCount < 4) {
+            rafId = requestAnimationFrame(pulseAnimation);
+          } else {
+            rafId = requestAnimationFrame(() => {
               if (element) {
                 element.style.transform = '';
                 element.style.boxShadow = '';
                 element.style.zIndex = '';
                 element.style.border = '';
               }
-            }, 800);
+            });
           }
-        }, 250);
+        }
+        
+        rafId = requestAnimationFrame(pulseAnimation);
+        
+        // Cleanup function for safety
+        return () => {
+          if (rafId) cancelAnimationFrame(rafId);
+        };
       }
     },
 

@@ -482,125 +482,32 @@ class AuthPipeline0_5 {
     }
   }
 
-  async signInWithPhantom() {
+  /**
+   * LinkedIn OIDC Sign In
+   */
+  async signInWithLinkedIn() {
     try {
-      console.log('[AuthPipeline0.5] Starting Phantom sign in...');
+      console.log('[AuthPipeline0.5] Starting LinkedIn sign in...');
 
-      if (!window.solana || !window.solana.isPhantom) {
-        throw new Error('Phantom wallet not detected');
-      }
-      if (!this.firebase) {
-        throw new Error('Firebase not available');
-      }
-      if (!window.solana.signMessage) {
-        throw new Error('Wallet does not support message signing');
+      // Initiate LinkedIn OAuth flow
+      const response = await fetch('/api/auth/linkedin');
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body?.error || 'Failed to initiate LinkedIn authentication');
       }
 
-      const connectRes = await window.solana.connect();
-      const publicKey = connectRes?.publicKey || window.solana.publicKey;
-      const walletAddress = publicKey?.toString?.() || publicKey?.toBase58?.();
-      if (!walletAddress) {
-        throw new Error('Unable to read wallet address');
-      }
+      const { authUrl } = await response.json();
+      if (!authUrl) throw new Error('Missing authorization URL');
 
-      const nonceRes = await fetch(`/api/solana-auth/nonce?walletAddress=${encodeURIComponent(walletAddress)}`);
-      if (!nonceRes.ok) {
-        const body = await nonceRes.json().catch(() => ({}));
-        throw new Error(body?.error || 'Failed to request nonce');
-      }
-      const { message } = await nonceRes.json();
-      if (!message) {
-        throw new Error('Nonce message missing');
-      }
-
-      const messageBytes = new TextEncoder().encode(message);
-      const signed = await window.solana.signMessage(messageBytes, 'utf8');
-      const signatureBytes = signed?.signature;
-      if (!signatureBytes) {
-        throw new Error('Signature missing');
-      }
-
-      const signatureBase64 = btoa(String.fromCharCode(...signatureBytes));
-      const verifyRes = await fetch('/api/solana-auth/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ walletAddress, signatureBase64, message }),
-      });
-      if (!verifyRes.ok) {
-        const body = await verifyRes.json().catch(() => ({}));
-        throw new Error(body?.error || 'Failed to verify signature');
-      }
-      const { token } = await verifyRes.json();
-      const user = await this._signInWithCustomToken(token);
-
-      console.log('[AuthPipeline0.5] Phantom sign in successful');
-      return { success: true, user };
+      // Redirect to LinkedIn OAuth
+      window.location.href = authUrl;
+      
+      // Note: The actual auth completion happens via callback
+      // This method initiates the flow, user returns via /auth/callback
+      return { success: true, pending: true };
     } catch (error) {
-      console.error('[AuthPipeline0.5] Phantom sign in failed:', error);
-      return { success: false, error: error?.message || 'Phantom authentication failed' };
-    }
-  }
-
-  async signInWithEthereum() {
-    try {
-      console.log('[AuthPipeline0.5] Starting Ethereum sign in...');
-
-      if (!window.ethereum) {
-        throw new Error('Ethereum wallet not detected');
-      }
-      if (!window.SiweMessage) {
-        throw new Error('SIWE library not loaded');
-      }
-      if (!window.ethers) {
-        throw new Error('ethers library not loaded');
-      }
-
-      const nonceRes = await fetch('/api/ethereum-auth/nonce');
-      if (!nonceRes.ok) {
-        const body = await nonceRes.json().catch(() => ({}));
-        throw new Error(body?.error || 'Failed to request nonce');
-      }
-      const { nonce } = await nonceRes.json();
-      if (!nonce) {
-        throw new Error('Nonce missing');
-      }
-
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const provider = new window.ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const address = await signer.getAddress();
-
-      const network = await provider.getNetwork();
-      const siweMessage = new window.SiweMessage({
-        domain: window.location.host,
-        address,
-        statement: 'Sign in to OntyFi',
-        uri: window.location.origin,
-        version: '1',
-        chainId: String(network?.chainId || 1),
-        nonce,
-      });
-
-      const message = siweMessage.prepareMessage();
-      const signature = await signer.signMessage(message);
-
-      const verifyRes = await fetch('/api/ethereum-auth/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, signature }),
-      });
-      if (!verifyRes.ok) {
-        const body = await verifyRes.json().catch(() => ({}));
-        throw new Error(body?.error || 'Failed to verify signature');
-      }
-      const { token } = await verifyRes.json();
-      const user = await this._signInWithCustomToken(token);
-
-      console.log('[AuthPipeline0.5] Ethereum sign in successful');
-      return { success: true, user };
-    } catch (error) {
-      console.error('[AuthPipeline0.5] Ethereum sign in failed:', error);
-      return { success: false, error: error?.message || 'Ethereum authentication failed' };
+      console.error('[AuthPipeline0.5] LinkedIn sign in failed:', error);
+      return { success: false, error: error?.message || 'LinkedIn authentication failed' };
     }
   }
 
@@ -723,6 +630,9 @@ try {
       signInWithGoogle: async () => { 
         throw new Error('Authentication service not available. Please check your internet connection and refresh the page.'); 
       },
+      signInWithLinkedIn: async () => {
+        throw new Error('Authentication service not available. Please check your internet connection and refresh the page.');
+      },
       signInAsGuest: async () => {
         const guestUser = {
           uid: 'guest-' + Date.now(),
@@ -770,6 +680,9 @@ try {
     },
     signInWithGoogle: async () => { 
       throw new Error(`AuthPipeline0.5 initialization failed: ${error.message}. Please refresh page.`); 
+    },
+    signInWithLinkedIn: async () => {
+      throw new Error(`AuthPipeline0.5 initialization failed: ${error.message}. Please refresh page.`);
     },
     signInAsGuest: async () => {
       const guestUser = {

@@ -1,21 +1,16 @@
 import { Suspense, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import '@rainbow-me/rainbowkit/styles.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider } from 'wagmi';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { config } from './wagmi.js';
 import './styles/touchStyles.css'
 import ErrorBoundary from './components/ErrorBoundary'
 import LoadingSkeleton from './components/LoadingSkeleton'
 import AuthScreen from './components/AuthScreen'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
-import SolanaWalletProvider from './components/SolanaWalletProvider'
 import Home from './components/Home'
 import TreeMap from './components/TreeMap'
 import MyInsightsScreen from './components/MyInsightsScreen'
-
-const queryClient = new QueryClient();
+import LinkedInCallback from './components/LinkedInCallback'
+import FinanceFitQuestionnaire from './components/FinanceFitQuestionnaire'
+import FinanceArchetypeScreen from './components/FinanceArchetypeScreen'
 
 // Android Back Button Handler
 function useAndroidBackHandler() {
@@ -120,6 +115,17 @@ function AppRoutes() {
             <MyInsightsScreen />
           </ErrorBoundary>
         } />
+        <Route path="/auth/callback" element={<LinkedInCallback />} />
+        <Route path="/finance-questionnaire" element={
+          <ErrorBoundary>
+            <FinanceFitQuestionnaire />
+          </ErrorBoundary>
+        } />
+        <Route path="/archetype-diagnostic" element={
+          <ErrorBoundary>
+            <FinanceArchetypeScreen />
+          </ErrorBoundary>
+        } />
       </Routes>
     </Suspense>
   );
@@ -127,34 +133,26 @@ function AppRoutes() {
 
 function App() {
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
-          <SolanaWalletProvider>
-            <AuthProvider>
-              <ErrorBoundary>
-                <Router>
-                  <div 
-                    className="safe-area-top safe-area-bottom"
-                    style={{ 
-                      background: '#0f172a', 
-                      color: '#f7f9ff',
-                      minHeight: '100vh',
-                      minHeight: '100dvh', // Dynamic viewport height for mobile
-                      fontFamily: 'system-ui, -apple-system, sans-serif',
-                      WebkitTapHighlightColor: 'transparent',
-                      touchAction: 'pan-y'
-                    }}
-                  >
-                    <AppRoutes />
-                  </div>
-                </Router>
-              </ErrorBoundary>
-            </AuthProvider>
-          </SolanaWalletProvider>
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <AuthProvider>
+      <ErrorBoundary>
+        <Router>
+          <div 
+            className="safe-area-top safe-area-bottom"
+            style={{ 
+              background: '#0f172a', 
+              color: '#f7f9ff',
+              minHeight: '100vh',
+              minHeight: '100dvh', // Dynamic viewport height for mobile
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'pan-y'
+            }}
+          >
+            <AppRoutes />
+          </div>
+        </Router>
+      </ErrorBoundary>
+    </AuthProvider>
   )
 }
 

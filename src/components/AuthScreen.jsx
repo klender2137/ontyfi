@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 function getFirebaseErrorMessage(error) {
   const code = error?.code;
@@ -21,7 +20,7 @@ export default function AuthScreen() {
     linkGoogleWithPassword,
     clearPendingGoogleLink,
     pendingGoogleLinkEmail,
-    signInWithPhantom,
+    signInWithLinkedIn,
     continueAsGuest,
     error: authError,
   } = useAuth();
@@ -80,12 +79,12 @@ export default function AuthScreen() {
     }
   }
 
-  async function handlePhantom() {
+  async function handleLinkedIn() {
     setLocalError(null);
     setSubmitting(true);
 
     try {
-      await signInWithPhantom();
+      await signInWithLinkedIn();
     } catch (err) {
       setLocalError(getFirebaseErrorMessage(err));
     } finally {
@@ -356,17 +355,17 @@ export default function AuthScreen() {
 
           <button
             type="button"
-            onClick={handlePhantom}
+            onClick={handleLinkedIn}
             disabled={submitting}
-            style={{ 
-              width: '100%', 
-              padding: '0.85rem', 
+            style={{
+              width: '100%',
+              padding: '0.85rem',
               minHeight: '44px',
-              borderRadius: 12, 
-              border: '1px solid rgba(148, 163, 184, 0.35)', 
-              background: 'rgba(15, 23, 42, 0.8)', 
-              color: 'white', 
-              fontWeight: 700, 
+              borderRadius: 12,
+              border: '1px solid rgba(10, 102, 194, 0.5)',
+              background: 'rgba(10, 102, 194, 0.15)',
+              color: '#ffffff',
+              fontWeight: 700,
               cursor: 'pointer',
               touchAction: 'manipulation',
               transition: 'transform 0.1s ease'
@@ -378,14 +377,37 @@ export default function AuthScreen() {
               e.currentTarget.style.transform = 'scale(1)'
             }}
           >
-            Continue with Phantom
+            Continue with LinkedIn
           </button>
 
           <div style={{ height: 12 }} />
 
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <ConnectButton />
-          </div>
+          <button
+            type="button"
+            onClick={continueAsGuest}
+            disabled={submitting}
+            style={{
+              width: '100%',
+              padding: '0.85rem',
+              minHeight: '44px',
+              borderRadius: 12,
+              border: '1px solid rgba(148, 163, 184, 0.25)',
+              background: 'transparent',
+              color: '#94a3b8',
+              fontWeight: 600,
+              cursor: 'pointer',
+              touchAction: 'manipulation',
+              transition: 'transform 0.1s ease'
+            }}
+            onTouchStart={(e) => {
+              if (!submitting) e.currentTarget.style.transform = 'scale(0.98)'
+            }}
+            onTouchEnd={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+            }}
+          >
+            Continue as Guest
+          </button>
         </form>
       </div>
     </div>

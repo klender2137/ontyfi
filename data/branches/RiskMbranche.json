@@ -6,425 +6,184 @@
   "tags": ["risk-management", "compliance", "market-risk"],
   "tiles": [
     {
-      "id": "gsibs",
-      "name": "Global Systemically Important Banks (G-SIBs)",
-      "description": "Large international banks with massive internal risk control departments managing systemic financial exposure.",
-      "descriptionRef": "descriptions/RiskMbranchGsibs.md",
-      "functions": [
+      "id": "risk-niches",
+      "name": "Niches",
+      "type": "niches-tile",
+      "description": "Risk Management institution types and market niches",
+      "institutions": [
         {
-          "id": "market-risk-monitoring",
-          "name": "Market Risk Monitoring",
-          "descriptionRef": "descriptions/RiskMbranche_market-risk-monitoring.md"
-        },
-        {
-          "id": "credit-risk-underwriting",
-          "name": "Credit Risk Underwriting",
-          "descriptionRef": "descriptions/RiskMbranche_credit-risk-underwriting.md"
-        },
-        {
-          "id": "liquidity-risk-management",
-          "name": "Liquidity Risk Management",
-          "descriptionRef": "descriptions/RiskMbranche_liquidity-risk-management.md"
-        },
-        {
-          "id": "derivatives-risk-hedging",
-          "name": "Derivatives Exposure Hedging",
-          "descriptionRef": "descriptions/RiskMbranche_derivatives-risk-hedging.md"
-        }
-      ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
+          "id": "gsibs",
+          "name": "Global Systemically Important Banks (G-SIBs)",
+          "description": "Large international banks with massive internal risk control departments managing systemic financial exposure.",
+          "descriptionRef": "descriptions/RiskMbranche_gsibs.md",
+          "functions": [
             {
-              "id": "risk-analyst",
-              "name": "Risk Analyst / Quant Modeler",
-              "descriptionRef": "descriptions/RiskMbranche_risk-analyst.md"
+              "id": "market-risk-monitoring",
+              "name": "Market Risk Monitoring",
+              "descriptionRef": "descriptions/RiskMbranche_market-risk-monitoring.md"
             },
             {
-              "id": "credit-manager",
-              "name": "Senior Credit Manager",
-              "descriptionRef": "descriptions/RiskMbranche_credit-manager.md"
+              "id": "credit-risk-underwriting",
+              "name": "Credit Risk Underwriting",
+              "descriptionRef": "descriptions/RiskMbranche_credit-risk-underwriting.md"
             },
             {
-              "id": "market-risk-manager",
-              "name": "Market Risk Manager",
-              "descriptionRef": "descriptions/RiskMbranche_market-risk-manager.md"
+              "id": "liquidity-risk-management",
+              "name": "Liquidity Risk Management",
+              "descriptionRef": "descriptions/RiskMbranche_liquidity-risk-management.md"
             },
             {
-              "id": "chief-risk-officer",
-              "name": "Chief Risk Officer (CRO)",
-              "descriptionRef": "descriptions/RiskMbranche_chief-risk-officer.md"
+              "id": "derivatives-risk-hedging",
+              "name": "Derivatives Exposure Hedging",
+              "descriptionRef": "descriptions/RiskMbranche_derivatives-risk-hedging.md"
             }
           ],
-          "descriptionRef": "descriptions/RiskMbranche_jobs.md"
+          "descriptionRef": "descriptions/RiskMbranche_gsibs.md"
         },
         {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
+          "id": "insurance-reinsurance",
+          "name": "Insurance & Reinsurance Companies",
+          "description": "Financial institutions specialized in pricing, pooling, and transferring risk across insurance markets.",
+          "functions": [
             {
-              "id": "var-calculation",
-              "name": "Value-at-Risk (VaR) Modeling",
-              "descriptionRef": "descriptions/RiskMbranche_var-calculation.md"
+              "id": "actuarial-risk-pricing",
+              "name": "Actuarial Risk Pricing",
+              "descriptionRef": "descriptions/RiskMbranche_actuarial-risk-pricing.md"
             },
             {
-              "id": "stress-tests",
-              "name": "Market Stress Testing & Scenario Analysis",
-              "descriptionRef": "descriptions/RiskMbranche_stress-tests.md"
+              "id": "catastrophe-modeling",
+              "name": "Catastrophe Risk Modeling",
+              "descriptionRef": "descriptions/RiskMbranche_catastrophe-modeling.md"
             },
             {
-              "id": "counterparty-review",
-              "name": "Counterparty Credit Limit Assessment",
-              "descriptionRef": "descriptions/RiskMbranche_counterparty-review.md"
+              "id": "claims-risk-assessment",
+              "name": "Claims Risk Assessment",
+              "descriptionRef": "descriptions/RiskMbranche_claims-risk-assessment.md"
             },
             {
-              "id": "risk-limit-monitoring",
-              "name": "Trading Desk Risk Limit Monitoring",
-              "descriptionRef": "descriptions/RiskMbranche_risk-limit-monitoring.md"
+              "id": "reinsurance-risk-transfer",
+              "name": "Reinsurance Risk Transfer Structuring",
+              "descriptionRef": "descriptions/RiskMbranche_reinsurance-risk-transfer.md"
             }
           ],
-          "descriptionRef": "descriptions/RiskMbranche_tasks.md"
+          "descriptionRef": "descriptions/RiskMbranche_insurance-reinsurance.md"
+        },
+        {
+          "id": "regulatory-bodies",
+          "name": "Regulatory & Supervisory Bodies",
+          "description": "Governmental and supranational authorities overseeing financial system stability and enforcing regulatory frameworks.",
+          "functions": [
+            {
+              "id": "prudential-regulation",
+              "name": "Prudential Regulation Enforcement",
+              "descriptionRef": "descriptions/RiskMbranche_prudential-regulation.md"
+            },
+            {
+              "id": "financial-supervision",
+              "name": "Financial Institution Supervision",
+              "descriptionRef": "descriptions/RiskMbranche_financial-supervision.md"
+            },
+            {
+              "id": "stress-test-design",
+              "name": "Systemic Stress Test Design",
+              "descriptionRef": "descriptions/RiskMbranche_stress-test-design.md"
+            },
+            {
+              "id": "capital-requirement-setting",
+              "name": "Capital Adequacy Requirement Setting",
+              "descriptionRef": "descriptions/RiskMbranche_capital-requirement-setting.md"
+            }
+          ],
+          "descriptionRef": "descriptions/RiskMbranche_regulatory-bodies.md"
+        },
+        {
+          "id": "credit-rating-agencies",
+          "name": "Credit Rating Agencies",
+          "description": "Independent institutions evaluating creditworthiness of corporations, governments, and financial instruments.",
+          "functions": [
+            {
+              "id": "creditworthiness-assessment",
+              "name": "Corporate Creditworthiness Assessment",
+              "descriptionRef": "descriptions/RiskMbranche_creditworthiness-assessment.md"
+            },
+            {
+              "id": "sovereign-rating-analysis",
+              "name": "Sovereign Debt Rating Analysis",
+              "descriptionRef": "descriptions/RiskMbranche_sovereign-rating-analysis.md"
+            },
+            {
+              "id": "structured-product-rating",
+              "name": "Structured Product Rating",
+              "descriptionRef": "descriptions/RiskMbranche_structured-product-rating.md"
+            },
+            {
+              "id": "default-probability-modeling",
+              "name": "Default Probability Modeling",
+              "descriptionRef": "descriptions/RiskMbranche_default-probability-modeling.md"
+            }
+          ],
+          "descriptionRef": "descriptions/RiskMbranche_credit-rating-agencies.md"
+        },
+        {
+          "id": "risk-consulting",
+          "name": "Risk Consulting & Big 4 Firms",
+          "description": "Advisory firms helping financial institutions design and implement risk management frameworks.",
+          "functions": [
+            {
+              "id": "risk-framework-design",
+              "name": "Enterprise Risk Framework Design",
+              "descriptionRef": "descriptions/RiskMbranche_risk-framework-design.md"
+            },
+            {
+              "id": "regulatory-compliance-advisory",
+              "name": "Regulatory Compliance Advisory",
+              "descriptionRef": "descriptions/RiskMbranche_regulatory-compliance-advisory.md"
+            },
+            {
+              "id": "operational-risk-assessment",
+              "name": "Operational Risk Assessment",
+              "descriptionRef": "descriptions/RiskMbranche_operational-risk-assessment.md"
+            },
+            {
+              "id": "internal-control-auditing",
+              "name": "Internal Control Auditing",
+              "descriptionRef": "descriptions/RiskMbranche_internal-control-auditing.md"
+            }
+          ],
+          "descriptionRef": "descriptions/RiskMbranche_risk-consulting.md"
         }
       ],
-      "descriptionRef": "descriptions/RiskMbranche_gsibs.md"
+      "descriptionRef": "descriptions/RiskMbranche_niches.md"
     },
     {
-      "id": "insurance-reinsurance",
-      "name": "Insurance & Reinsurance Companies",
-      "description": "Financial institutions specialized in pricing, pooling, and transferring risk across insurance markets.",
-      "functions": [
-        {
-          "id": "actuarial-risk-pricing",
-          "name": "Actuarial Risk Pricing",
-          "descriptionRef": "descriptions/RiskMbranche_actuarial-risk-pricing.md"
-        },
-        {
-          "id": "catastrophe-modeling",
-          "name": "Catastrophe Risk Modeling",
-          "descriptionRef": "descriptions/RiskMbranche_catastrophe-modeling.md"
-        },
-        {
-          "id": "claims-risk-assessment",
-          "name": "Claims Risk Assessment",
-          "descriptionRef": "descriptions/RiskMbranche_claims-risk-assessment.md"
-        },
-        {
-          "id": "reinsurance-risk-transfer",
-          "name": "Reinsurance Risk Transfer Structuring",
-          "descriptionRef": "descriptions/RiskMbranche_reinsurance-risk-transfer.md"
-        }
+      "id": "risk-jobs",
+      "name": "Jobs",
+      "type": "jobs-tile",
+      "description": "Career roles and positions in Risk Management",
+      "items": [
+        { "id": "risk-analyst", "name": "Risk Analyst", "descriptionRef": "descriptions/RiskMbranche_risk-analyst.md" },
+        { "id": "credit-manager", "name": "Credit Manager", "descriptionRef": "descriptions/RiskMbranche_credit-manager.md" },
+        { "id": "actuary", "name": "Actuary", "descriptionRef": "descriptions/RiskMbranche_actuary.md" },
+        { "id": "regulatory-analyst", "name": "Regulatory Analyst", "descriptionRef": "descriptions/RiskMbranche_regulatory-analyst.md" },
+        { "id": "credit-rating-analyst", "name": "Credit Rating Analyst", "descriptionRef": "descriptions/RiskMbranche_credit-rating-analyst.md" },
+        { "id": "risk-consultant", "name": "Risk Consultant", "descriptionRef": "descriptions/RiskMbranche_risk-consultant.md" }
       ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "actuary",
-              "name": "Actuary / Risk Modeler",
-              "descriptionRef": "descriptions/RiskMbranche_actuary.md"
-            },
-            {
-              "id": "insurance-risk-analyst",
-              "name": "Insurance Risk Analyst",
-              "descriptionRef": "descriptions/RiskMbranche_insurance-risk-analyst.md"
-            },
-            {
-              "id": "claims-risk-manager",
-              "name": "Claims Risk Manager",
-              "descriptionRef": "descriptions/RiskMbranche_claims-risk-manager.md"
-            },
-            {
-              "id": "insurance-cro",
-              "name": "Chief Risk Officer (Insurance)",
-              "descriptionRef": "descriptions/RiskMbranche_insurance-cro.md"
-            }
-          ],
-          "descriptionRef": "descriptions/RiskMbranche_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "cat-risk-analysis",
-              "name": "Catastrophe Risk Scenario Modeling",
-              "descriptionRef": "descriptions/RiskMbranche_cat-risk-analysis.md"
-            },
-            {
-              "id": "policy-risk-evaluation",
-              "name": "Policy Portfolio Risk Evaluation",
-              "descriptionRef": "descriptions/RiskMbranche_policy-risk-evaluation.md"
-            },
-            {
-              "id": "solvency-stress-test",
-              "name": "Solvency II Stress Testing",
-              "descriptionRef": "descriptions/RiskMbranche_solvency-stress-test.md"
-            },
-            {
-              "id": "claims-loss-forecasting",
-              "name": "Claims Loss Forecasting",
-              "descriptionRef": "descriptions/RiskMbranche_claims-loss-forecasting.md"
-            }
-          ],
-          "descriptionRef": "descriptions/RiskMbranche_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/RiskMbranche_insurance-reinsurance.md"
+      "descriptionRef": "descriptions/RiskMbranche_jobs.md"
     },
     {
-      "id": "regulatory-bodies",
-      "name": "Regulatory & Supervisory Bodies",
-      "description": "Governmental and supranational authorities overseeing financial system stability and enforcing regulatory frameworks.",
-      "functions": [
-        {
-          "id": "prudential-regulation",
-          "name": "Prudential Regulation Enforcement",
-          "descriptionRef": "descriptions/RiskMbranche_prudential-regulation.md"
-        },
-        {
-          "id": "financial-supervision",
-          "name": "Financial Institution Supervision",
-          "descriptionRef": "descriptions/RiskMbranche_financial-supervision.md"
-        },
-        {
-          "id": "stress-test-design",
-          "name": "Systemic Stress Test Design",
-          "descriptionRef": "descriptions/RiskMbranche_stress-test-design.md"
-        },
-        {
-          "id": "capital-requirement-setting",
-          "name": "Capital Adequacy Requirement Setting",
-          "descriptionRef": "descriptions/RiskMbranche_capital-requirement-setting.md"
-        }
+      "id": "risk-tasks",
+      "name": "Tasks",
+      "type": "tasks-tile",
+      "description": "Key activities and responsibilities in Risk Management",
+      "items": [
+        { "id": "var-calculation", "name": "Value-at-Risk (VaR) Modeling", "descriptionRef": "descriptions/RiskMbranche_var-calculation.md" },
+        { "id": "stress-tests", "name": "Market Stress Testing", "descriptionRef": "descriptions/RiskMbranche_stress-tests.md" },
+        { "id": "cat-risk-analysis", "name": "Catastrophe Risk Scenario Modeling", "descriptionRef": "descriptions/RiskMbranche_cat-risk-analysis.md" },
+        { "id": "bank-stress-testing", "name": "Systemic Bank Stress Testing", "descriptionRef": "descriptions/RiskMbranche_bank-stress-testing.md" },
+        { "id": "rating-assignment", "name": "Credit Rating Assignment", "descriptionRef": "descriptions/RiskMbranche_rating-assignment.md" },
+        { "id": "risk-framework-implementation", "name": "Risk Framework Implementation", "descriptionRef": "descriptions/RiskMbranche_risk-framework-implementation.md" }
       ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "regulatory-analyst",
-              "name": "Regulatory Risk Analyst",
-              "descriptionRef": "descriptions/RiskMbranche_regulatory-analyst.md"
-            },
-            {
-              "id": "supervisory-inspector",
-              "name": "Financial Supervisory Inspector",
-              "descriptionRef": "descriptions/RiskMbranche_supervisory-inspector.md"
-            },
-            {
-              "id": "policy-economist",
-              "name": "Regulatory Policy Economist",
-              "descriptionRef": "descriptions/RiskMbranche_policy-economist.md"
-            },
-            {
-              "id": "regulatory-director",
-              "name": "Director of Financial Supervision",
-              "descriptionRef": "descriptions/RiskMbranche_regulatory-director.md"
-            }
-          ],
-          "descriptionRef": "descriptions/RiskMbranche_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "bank-stress-testing",
-              "name": "Systemic Bank Stress Testing",
-              "descriptionRef": "descriptions/RiskMbranche_bank-stress-testing.md"
-            },
-            {
-              "id": "capital-ratio-evaluation",
-              "name": "Capital Adequacy Ratio Evaluation",
-              "descriptionRef": "descriptions/RiskMbranche_capital-ratio-evaluation.md"
-            },
-            {
-              "id": "regulatory-audits",
-              "name": "Regulatory Compliance Audits",
-              "descriptionRef": "descriptions/RiskMbranche_regulatory-audits.md"
-            },
-            {
-              "id": "systemic-risk-monitoring",
-              "name": "Systemic Financial Risk Monitoring",
-              "descriptionRef": "descriptions/RiskMbranche_systemic-risk-monitoring.md"
-            }
-          ],
-          "descriptionRef": "descriptions/RiskMbranche_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/RiskMbranche_regulatory-bodies.md"
-    },
-    {
-      "id": "credit-rating-agencies",
-      "name": "Credit Rating Agencies",
-      "description": "Independent institutions evaluating creditworthiness of corporations, governments, and financial instruments.",
-      "functions": [
-        {
-          "id": "creditworthiness-assessment",
-          "name": "Corporate Creditworthiness Assessment",
-          "descriptionRef": "descriptions/RiskMbranche_creditworthiness-assessment.md"
-        },
-        {
-          "id": "sovereign-rating-analysis",
-          "name": "Sovereign Debt Rating Analysis",
-          "descriptionRef": "descriptions/RiskMbranche_sovereign-rating-analysis.md"
-        },
-        {
-          "id": "structured-product-rating",
-          "name": "Structured Product Rating",
-          "descriptionRef": "descriptions/RiskMbranche_structured-product-rating.md"
-        },
-        {
-          "id": "default-probability-modeling",
-          "name": "Default Probability Modeling",
-          "descriptionRef": "descriptions/RiskMbranche_default-probability-modeling.md"
-        }
-      ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "credit-rating-analyst",
-              "name": "Credit Rating Analyst",
-              "descriptionRef": "descriptions/RiskMbranche_credit-rating-analyst.md"
-            },
-            {
-              "id": "structured-finance-analyst",
-              "name": "Structured Finance Analyst",
-              "descriptionRef": "descriptions/RiskMbranche_structured-finance-analyst.md"
-            },
-            {
-              "id": "sovereign-risk-analyst",
-              "name": "Sovereign Risk Analyst",
-              "descriptionRef": "descriptions/RiskMbranche_sovereign-risk-analyst.md"
-            },
-            {
-              "id": "rating-committee-director",
-              "name": "Rating Committee Director",
-              "descriptionRef": "descriptions/RiskMbranche_rating-committee-director.md"
-            }
-          ],
-          "descriptionRef": "descriptions/RiskMbranche_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "financial-statement-review",
-              "name": "Corporate Financial Statement Analysis",
-              "descriptionRef": "descriptions/RiskMbranche_financial-statement-review.md"
-            },
-            {
-              "id": "rating-assignment",
-              "name": "Assigning Credit Ratings (AAA–CCC)",
-              "descriptionRef": "descriptions/RiskMbranche_rating-assignment.md"
-            },
-            {
-              "id": "default-risk-estimation",
-              "name": "Default Probability Estimation",
-              "descriptionRef": "descriptions/RiskMbranche_default-risk-estimation.md"
-            },
-            {
-              "id": "rating-surveillance",
-              "name": "Ongoing Rating Surveillance",
-              "descriptionRef": "descriptions/RiskMbranche_rating-surveillance.md"
-            }
-          ],
-          "descriptionRef": "descriptions/RiskMbranche_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/RiskMbranche_credit-rating-agencies.md"
-    },
-    {
-      "id": "risk-consulting",
-      "name": "Risk Consulting & Big 4 Firms",
-      "description": "Advisory firms helping financial institutions design and implement risk management frameworks.",
-      "functions": [
-        {
-          "id": "risk-framework-design",
-          "name": "Enterprise Risk Framework Design",
-          "descriptionRef": "descriptions/RiskMbranche_risk-framework-design.md"
-        },
-        {
-          "id": "regulatory-compliance-advisory",
-          "name": "Regulatory Compliance Advisory",
-          "descriptionRef": "descriptions/RiskMbranche_regulatory-compliance-advisory.md"
-        },
-        {
-          "id": "operational-risk-assessment",
-          "name": "Operational Risk Assessment",
-          "descriptionRef": "descriptions/RiskMbranche_operational-risk-assessment.md"
-        },
-        {
-          "id": "internal-control-auditing",
-          "name": "Internal Control Auditing",
-          "descriptionRef": "descriptions/RiskMbranche_internal-control-auditing.md"
-        }
-      ],
-      "categories": [
-        {
-          "id": "jobs",
-          "name": "Jobs",
-          "roles": [
-            {
-              "id": "risk-consultant",
-              "name": "Risk Management Consultant",
-              "descriptionRef": "descriptions/RiskMbranche_risk-consultant.md"
-            },
-            {
-              "id": "internal-auditor",
-              "name": "Internal Audit Specialist",
-              "descriptionRef": "descriptions/RiskMbranche_internal-auditor.md"
-            },
-            {
-              "id": "regulatory-advisor",
-              "name": "Regulatory Compliance Advisor",
-              "descriptionRef": "descriptions/RiskMbranche_regulatory-advisor.md"
-            },
-            {
-              "id": "risk-partner",
-              "name": "Risk Advisory Partner",
-              "descriptionRef": "descriptions/RiskMbranche_risk-partner.md"
-            }
-          ],
-          "descriptionRef": "descriptions/RiskMbranche_jobs.md"
-        },
-        {
-          "id": "tasks",
-          "name": "Tasks",
-          "activities": [
-            {
-              "id": "risk-framework-implementation",
-              "name": "Enterprise Risk Framework Implementation",
-              "descriptionRef": "descriptions/RiskMbranche_risk-framework-implementation.md"
-            },
-            {
-              "id": "basel-compliance-review",
-              "name": "Basel III Compliance Assessment",
-              "descriptionRef": "descriptions/RiskMbranche_basel-compliance-review.md"
-            },
-            {
-              "id": "operational-risk-diagnostics",
-              "name": "Operational Risk Diagnostics",
-              "descriptionRef": "descriptions/RiskMbranche_operational-risk-diagnostics.md"
-            },
-            {
-              "id": "internal-control-testing",
-              "name": "Internal Control Testing & Reporting",
-              "descriptionRef": "descriptions/RiskMbranche_internal-control-testing.md"
-            }
-          ],
-          "descriptionRef": "descriptions/RiskMbranche_tasks.md"
-        }
-      ],
-      "descriptionRef": "descriptions/RiskMbranche_risk-consulting.md"
+      "descriptionRef": "descriptions/RiskMbranche_tasks.md"
     }
   ],
   "descriptionRef": "descriptions/RiskMbranchCore.md"

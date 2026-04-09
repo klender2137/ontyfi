@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { TextLayoutEngine } from '../utils/TextLayoutEngine';
+import TickerBackground from './TickerBackground';
 
 const CACHE_KEY = 'my_insights_files';
 const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
@@ -251,41 +252,9 @@ const MyInsightsScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [tickers, setTickers] = useState([]);
   const [shaderError, setShaderError] = useState(null);
   const canvasRef = useRef(null);
   const animationFrameRef = useRef(null);
-
-  const fetchTickers = useCallback(async () => {
-    try {
-      const response = await fetch('/api/finance/tickers');
-      const result = await response.json();
-      if (result.ok) {
-        console.log('[MyInsights] Tickers loaded successfully:', result.data.length, 'symbols');
-        setTickers(result.data);
-      } else {
-        console.warn('[MyInsights] Ticker API returned error:', result.error);
-        // Set empty array to prevent undefined errors
-        setTickers([]);
-      }
-    } catch (err) {
-      console.warn('[MyInsights] Ticker fetch failed:', err);
-      // Set empty array to prevent undefined errors
-      setTickers([]);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchTickers();
-    const interval = setInterval(fetchTickers, 30000);
-    return () => {
-      clearInterval(interval);
-      // Clean up animation frame on unmount
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
-  }, [fetchTickers]);
 
   const fetchFiles = useCallback(async (forceRefresh = false) => {
     setLoading(true);
@@ -361,24 +330,6 @@ const MyInsightsScreen = () => {
   }, []);
 
   useEffect(() => { fetchFiles(); }, [fetchFiles]);
-
-  const tickerItems = useMemo(() => {
-    if (!tickers || tickers.length === 0) return [];
-    return tickers.map((ticker, idx) => {
-      const text = `${ticker.symbol}: $${ticker.price.toFixed(2)} (${ticker.change >= 0 ? '+' : ''}${ticker.change.toFixed(2)}%)`;
-      return { ticker, idx, text };
-    });
-  }, [tickers]);
-
-  const tickerNaturalWidths = useMemo(() => {
-    if (tickerItems.length === 0) return {};
-    const font = 'bold 14px monospace';
-    const widths = {};
-    for (const item of tickerItems) {
-      widths[item.ticker.symbol] = TextLayoutEngine.measureNaturalWidth(item.text, font);
-    }
-    return widths;
-  }, [tickerItems]);
 
   const fileCards = useMemo(() => {
     return files.map(file => {
@@ -586,29 +537,8 @@ const MyInsightsScreen = () => {
       <div style={{ minHeight: '100vh', position: 'relative', color: '#f7f9ff', overflowX: 'hidden', fontFamily: 'system-ui, sans-serif' }}>
         <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1, background: '#0f172a' }} />
         
-        {/* Commuting Tickers Overlay */}
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1, pointerEvents: 'none', opacity: 0.4, overflow: 'hidden' }}>
-          {tickerItems.length > 0 ? tickerItems.map(({ ticker, idx, text }) => {
-            const measuredWidth = tickerNaturalWidths[ticker.symbol];
-            const startLeft = typeof measuredWidth === 'number' ? `${-(measuredWidth + 24)}px` : '-200px';
-            return (
-              <div key={ticker.symbol} style={{ 
-                position: 'absolute', 
-                color: ticker.change >= 0 ? '#4ade80' : '#f87171', 
-                fontFamily: 'monospace', 
-                fontSize: '0.9rem', 
-                whiteSpace: 'nowrap', 
-                top: `${(idx * 10) % 100}%`, 
-                left: startLeft, 
-                fontWeight: 'bold',
-                textShadow: '0 0 10px rgba(0,0,0,0.5)',
-                animation: `commute ${20 + idx * 5}s linear infinite` 
-              }}>
-                {text}
-              </div>
-            );
-          }) : null}
-        </div>
+        {/* Ticker Background - Real-time stock prices */}
+        <TickerBackground updateInterval={30000} tickerCount={30} opacity={0.4} />
 
         <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
@@ -631,9 +561,6 @@ const MyInsightsScreen = () => {
 
         {selectedFile && <DocumentViewer file={selectedFile} onClose={() => setSelectedFile(null)} />}
 
-        <style dangerouslySetInnerHTML={{ __html: `
-          @keyframes commute { from { transform: translateX(-100%); } to { transform: translateX(calc(100vw + 400px)); } }
-        ` }} />
       </div>
     </MyInsightsErrorBoundary>
   );

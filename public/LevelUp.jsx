@@ -31,7 +31,7 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
   const nextLevelStartPoints = g?.pointsRequiredForLevel ? g.pointsRequiredForLevel(Math.min(15, level + 1)) : levelStartPoints;
   const progressToNext = Math.max(0, Math.min(1, (points - levelStartPoints) / Math.max(1, (nextLevelStartPoints - levelStartPoints))));
 
-  const croins = Number(profile?.croin_balance) || 0;
+  const oreos = Number(profile?.oreo_balance) || 0;
 
   useEffect(() => {
     if (!g) return;
@@ -96,10 +96,22 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
 
   const activeQuestRows = useMemo(() => {
     const byId = new Map((Array.isArray(quests) ? quests : []).map((q) => [q?.quest_id || q?.id, q]));
-    return Object.keys(questDefs).map((id) => {
-      const q = byId.get(id) || { quest_id: id, status: 'locked', progress: 0, target: questDefs[id]?.target ?? null };
-      return { ...q, ...questDefs[id] };
-    });
+    return Object.keys(questDefs)
+      .map((id) => {
+        const q = byId.get(id) || { quest_id: id, status: 'locked', progress: 0, target: questDefs[id]?.target ?? null };
+        return { ...q, ...questDefs[id], id };
+      })
+      .filter((q) => q.status !== 'completed');
+  }, [quests, questDefs]);
+
+  const completedQuestRows = useMemo(() => {
+    const byId = new Map((Array.isArray(quests) ? quests : []).map((q) => [q?.quest_id || q?.id, q]));
+    return Object.keys(questDefs)
+      .map((id) => {
+        const q = byId.get(id) || { quest_id: id, status: 'locked', progress: 0, target: questDefs[id]?.target ?? null };
+        return { ...q, ...questDefs[id], id };
+      })
+      .filter((q) => q.status === 'completed');
   }, [quests, questDefs]);
 
   function CoinIcon() {
@@ -117,14 +129,14 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
         fontWeight: 900,
         marginRight: 8
       }
-    }, 'C');
+    }, 'O');
   }
 
   async function handleStartQuest(id) {
     try {
       await g?.startQuest?.(id);
-      if (id === 'wallet_link') {
-        await g?.syncAttachWalletQuest?.();
+      if (id === 'linkedin_connect') {
+        await g?.syncLinkedInConnectQuest?.();
       }
     } catch (e) {
       console.warn('[LevelUp] start quest failed', e);
@@ -157,7 +169,7 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
       }}>
         <div>
           <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#f7f9ff', letterSpacing: '-0.02em' }}>LevelUp</div>
-          <div style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Quests, CRoins, and Global Ranking</div>
+          <div style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Quests, Oreos, and Global Ranking</div>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button className="secondary-button" onClick={onGoHome}>← Home</button>
@@ -217,13 +229,28 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
               <div>{levelStartPoints.toLocaleString()}</div>
               <div>{nextLevelStartPoints.toLocaleString()}</div>
             </div>
-            <div style={{ width: '100%', height: 10, background: 'rgba(148, 163, 184, 0.25)', borderRadius: 999, overflow: 'hidden' }}>
+            <div style={{ 
+              width: '100%', 
+              height: 12, 
+              background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9))',
+              borderRadius: 999, 
+              overflow: 'hidden',
+              border: '1px solid rgba(148, 163, 184, 0.2)',
+              boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.3)'
+            }}>
               <div style={{
                 width: `${Math.round(progressToNext * 100)}%`,
                 height: '100%',
-                background: 'linear-gradient(90deg, #38bdf8, #0ea5e9)',
-                transition: 'width 0.35s ease'
+                background: 'linear-gradient(90deg, #38bdf8 0%, #0ea5e9 50%, #22d3ee 100%)',
+                transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: '0 0 10px rgba(56, 189, 248, 0.5), 0 0 20px rgba(56, 189, 248, 0.3)',
+                borderRadius: 999
               }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 4 }}>
+              <div style={{ color: '#38bdf8', fontSize: '0.75rem', fontWeight: 600 }}>
+                {Math.round(progressToNext * 100)}% to Level {Math.min(15, level + 1)}
+              </div>
             </div>
           </div>
 
@@ -231,8 +258,8 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {React.createElement(CoinIcon)}
               <div>
-                <div style={{ color: '#94a3b8', fontSize: '0.85rem' }}>CRoins Balance</div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fde68a' }}>{croins.toLocaleString()}</div>
+                <div style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Oreos Balance</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fde68a' }}>{oreos.toLocaleString()}</div>
               </div>
             </div>
             <div style={{ textAlign: 'right', color: '#94a3b8', fontSize: '0.85rem' }}>
@@ -249,7 +276,7 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
         }}>
           <div style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Profile</div>
           <div style={{ marginTop: 6, fontSize: '1.05rem', color: '#f7f9ff', fontWeight: 800 }}>
-            {profile?.nickname || profile?.display_name || g?.maskWallet?.(profile?.wallet_address) || 'Anonymous'}
+            {profile?.nickname || profile?.display_name || g?.maskLinkedIn?.(profile?.linkedin_sub) || 'Anonymous'}
           </div>
           <div style={{ marginTop: 10, color: '#94a3b8', fontSize: '0.85rem' }}>
             Preferred field: {profile?.preferred_crypto_field || 'Not set'}
@@ -301,8 +328,31 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
                             <div>{progress} / {target}</div>
                             <div>{Math.round(pct * 100)}%</div>
                           </div>
-                          <div style={{ width: '100%', height: 8, background: 'rgba(148, 163, 184, 0.25)', borderRadius: 999, overflow: 'hidden' }}>
-                            <div style={{ width: `${Math.round(pct * 100)}%`, height: '100%', background: 'linear-gradient(90deg, #a78bfa, #60a5fa)', transition: 'width 0.35s ease' }} />
+                          <div style={{ 
+                            width: '100%', 
+                            height: 8, 
+                            background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9))',
+                            borderRadius: 999, 
+                            overflow: 'hidden',
+                            border: '1px solid rgba(148, 163, 184, 0.15)',
+                            boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.2)'
+                          }}>
+                            <div style={{ 
+                              width: `${Math.round(pct * 100)}%`, 
+                              height: '100%', 
+                              background: isDone 
+                                ? 'linear-gradient(90deg, #10b981, #34d399)' 
+                                : canClaim 
+                                  ? 'linear-gradient(90deg, #fbbf24, #f59e0b)' 
+                                  : 'linear-gradient(90deg, #a78bfa, #60a5fa)',
+                              transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                              boxShadow: isDone 
+                                ? '0 0 8px rgba(16, 185, 129, 0.4)' 
+                                : canClaim 
+                                  ? '0 0 8px rgba(251, 191, 36, 0.4)' 
+                                  : '0 0 8px rgba(167, 139, 250, 0.4)',
+                              borderRadius: 999
+                            }} />
                           </div>
                         </div>
                       )}
@@ -312,7 +362,7 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
                       <div style={{ color: '#94a3b8', fontSize: '0.8rem' }}>Reward</div>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, color: '#fde68a', fontWeight: 900 }}>
                         {React.createElement(CoinIcon)}
-                        +{Number(q.reward || 0).toLocaleString()}
+                        +{Number(q.reward || 0).toLocaleString()} Oreos
                       </div>
 
                       <div style={{ marginTop: 10, display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
@@ -354,6 +404,50 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
               );
             })}
           </div>
+          
+          {/* Completed Quests Section */}
+          {completedQuestRows.length > 0 && (
+            <div style={{ marginTop: '1.5rem' }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                gap: '1rem', 
+                marginBottom: 10,
+                paddingTop: '1rem',
+                borderTop: '1px solid rgba(148, 163, 184, 0.2)'
+              }}>
+                <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#10b981' }}>
+                  ✓ Completed Quests ({completedQuestRows.length})
+                </div>
+              </div>
+              <div style={{ maxHeight: 200, overflow: 'auto', paddingRight: 6 }}>
+                {completedQuestRows.map((q) => (
+                  <div key={q.id} style={{
+                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                    borderRadius: 12,
+                    padding: '0.75rem',
+                    marginBottom: '0.5rem',
+                    background: 'rgba(16, 185, 129, 0.08)',
+                    opacity: 0.85
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <div style={{ fontWeight: 700, color: '#a7f3d0', fontSize: '0.95rem' }}>{q.title}</div>
+                        <div style={{ color: '#6ee7b7', fontSize: '0.75rem', marginTop: 2 }}>
+                          Completed ✓
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fde68a', fontWeight: 900 }}>
+                        {React.createElement(CoinIcon)}
+                        +{Number(q.reward || 0).toLocaleString()} Oreos
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div style={{
@@ -375,19 +469,19 @@ function LevelUpScreen({ onGoHome, onGoToTree }) {
                   <th style={{ padding: '0.5rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.2)' }}>User</th>
                   <th style={{ padding: '0.5rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.2)' }}>Field</th>
                   <th style={{ padding: '0.5rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.2)' }}>Time</th>
-                  <th style={{ padding: '0.5rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.2)', textAlign: 'right' }}>CRoins</th>
+                  <th style={{ padding: '0.5rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.2)', textAlign: 'right' }}>Oreos</th>
                 </tr>
               </thead>
               <tbody>
                 {leaderboard.map((u, idx) => {
-                  const name = u.nickname || u.display_name || g?.maskWallet?.(u.wallet_address) || 'Anonymous';
+                  const name = u.nickname || u.display_name || g?.maskLinkedIn?.(u.linkedin_sub) || 'Anonymous';
                   return (
                     <tr key={u.uid || u.id || idx} style={{ color: '#e5e7eb' }}>
                       <td style={{ padding: '0.6rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.12)', color: '#94a3b8' }}>{idx + 1}</td>
                       <td style={{ padding: '0.6rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.12)', fontWeight: 800 }}>{name}</td>
                       <td style={{ padding: '0.6rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.12)', color: '#94a3b8' }}>{u.preferred_crypto_field || '—'}</td>
                       <td style={{ padding: '0.6rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.12)', color: '#94a3b8' }}>{formatTime(u.in_app_time_ms)}</td>
-                      <td style={{ padding: '0.6rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.12)', textAlign: 'right', fontWeight: 900, color: '#fde68a' }}>{Number(u.croin_balance || 0).toLocaleString()}</td>
+                      <td style={{ padding: '0.6rem 0.25rem', borderBottom: '1px solid rgba(148, 163, 184, 0.12)', textAlign: 'right', fontWeight: 900, color: '#fde68a' }}>{Number(u.oreo_balance || 0).toLocaleString()}</td>
                     </tr>
                   );
                 })}

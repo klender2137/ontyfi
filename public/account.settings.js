@@ -31,9 +31,15 @@ const AccountSettings = {
       uid: u.uid,
       email: u.email || null,
       display_name: local.username || u.displayName || (u.email ? u.email.split('@')[0] : 'user'),
-      username:     local.username || u.displayName || (u.email ? u.email.split('@')[0] : 'user'),
-      pfp:  local.pfp ?? null,
-      role: local.role || 'user',
+      username: local.username,
+      linkedin_sub: local.linkedin_sub,
+      linkedin_id: local.linkedin_id,
+      linkedin_verified: true,
+      last_active: new Date(),
+      hustle_count: local.hustleHistory?.length || 0,
+      total_points: local.totalPoints || 0,
+      rank: local.rank || 'Beginner',
+      last_login: new Date(),
       preferences: {
         defaultScreen:      local.preferences?.defaultScreen      || 'home',
         language:           local.preferences?.language           || 'en',
@@ -57,7 +63,6 @@ const AccountSettings = {
         todaysFocus:       local.activities?.todaysFocus       || null,
       },
       personalInfo: { joinDate: local.personalInfo?.joinDate || new Date().toISOString() },
-      last_active:  new Date(),
       updated_at:   new Date(),
     };
 
@@ -167,6 +172,27 @@ const AccountSettings = {
     const pmt = remainingNeeded > 0 ? (remainingNeeded * r) / (Math.pow(1 + r, n) - 1) : 0;
     if (pmt < 1) return `Your existing ${this._formatWealth(currentNW)} should compound to your goal at 8% p.a.`;
     return `~${this._formatWealth(Math.round(pmt / 100) * 100)}/mo needed at 8% p.a. over ${yearsLeft} yrs`;
+  },
+
+  // ── WALLET HELPERS ─────────────────────────────────────────────────────────
+  _handleConnectLinkedIn() {
+    // Dispatch event for LinkedIn connection flow
+    window.dispatchEvent(new CustomEvent('RequestLinkedInConnect', {
+      detail: { source: 'settings' }
+    }));
+  },
+
+  _handleUnlinkLinkedIn() {
+    if (!confirm('Unlink your LinkedIn account? You will need to reconnect to complete LinkedIn-related quests.')) return;
+    
+    this.userAccount.updateProfile({
+      linkedin_sub: null,
+      linkedin_verified: false
+    }).then(() => {
+      this.render();
+    }).catch((e) => {
+      alert('Failed to unlink LinkedIn: ' + (e?.message || 'Unknown error'));
+    });
   },
 
   // ── RENDER ────────────────────────────────────────────────────────────────
@@ -674,6 +700,32 @@ const AccountSettings = {
           </div>
         </div>
 
+        <!-- 6 · LinkedIn Connection -->
+        <div class="fp-section">
+          <div class="fp-section-title">Professional Profile</div>
+          
+          <div class="fp-row">
+            <div class="fp-label">LinkedIn Account</div>
+            <div class="fp-sublabel" id="linkedin-status">
+              ${user.linkedin_sub ? 'LinkedIn connected' : 'Connect your LinkedIn to unlock quests'}
+            </div>
+            <div style="margin-top: 10px;">
+              ${user.linkedin_sub ? 
+                `<button class="fp-btn fp-btn-secondary" id="unlink-linkedin-btn" style="font-size: 12px; padding: 6px 12px;">Unlink LinkedIn</button>` :
+                `<button class="fp-btn fp-btn-primary" id="connect-linkedin-btn" style="font-size: 12px; padding: 6px 12px;">🔗 Connect LinkedIn</button>`
+              }
+            </div>
+          </div>
+          
+          ${user.linkedin_sub ? `
+          <div class="fp-row" style="margin-top: 0.5rem;">
+            <div style="font-size: 11px; color: var(--success); word-break: break-all;">
+              ✓ Professional profile connected
+            </div>
+          </div>
+          ` : ''}
+        </div>
+
         <!-- ── Action bar ─────────────────────────────────────────────────── -->
         <div class="fp-actions">
           <button class="fp-btn fp-btn-primary"   id="save-settings-btn">Save Settings</button>
@@ -816,6 +868,18 @@ const AccountSettings = {
     this.addEventHandler(defaultScreenSelect, 'change', () => {
       this.userAccount.updatePreferences({ defaultScreen: defaultScreenSelect.value });
     });
+
+    // LinkedIn connection
+    const connectLinkedInBtn = this.container.querySelector('#connect-linkedin-btn');
+    if (connectLinkedInBtn) {
+      this.addEventHandler(connectLinkedInBtn, 'click', () => this._handleConnectLinkedIn());
+    }
+
+    // LinkedIn unlink
+    const unlinkLinkedInBtn = this.container.querySelector('#unlink-linkedin-btn');
+    if (unlinkLinkedInBtn) {
+      this.addEventHandler(unlinkLinkedInBtn, 'click', () => this._handleUnlinkLinkedIn());
+    }
 
     // ── Save ─────────────────────────────────────────────────────────────────
     const saveBtn = this.container.querySelector('#save-settings-btn');

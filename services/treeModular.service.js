@@ -368,8 +368,8 @@ function resolveDescriptions(node) {
     // This preserves the descriptionRef so the client can load full content
   }
   
-  // Process all child arrays
-  const childArrays = ['categories', 'subcategories', 'nodes', 'subnodes', 'leafnodes', 'children'];
+  // Process all child arrays (including tiles for jobs/tasks/core descriptions)
+  const childArrays = ['categories', 'subcategories', 'nodes', 'subnodes', 'leafnodes', 'children', 'tiles', 'institutions', 'functions', 'items'];
   for (const key of childArrays) {
     if (node[key] && Array.isArray(node[key])) {
       for (const child of node[key]) {

@@ -380,9 +380,15 @@ if (typeof window !== 'undefined' && window.React) {
     const [tileEchelons, setTileEchelons] = useState([]);
     const [currentEchelonView, setCurrentEchelonView] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
+    const [isDragMode, setIsDragMode] = useState(false); // Track if in drag mode (from double-click)
     const bubbleRef = useRef(null);
     const dragStartRef = useRef({ x: 0, y: 0, bubbleX: 0, bubbleY: 0, grabOffsetX: 0, grabOffsetY: 0 });
     const animationFrameRef = useRef(null);
+    const clickTimerRef = useRef(null);
+    const clickCountRef = useRef(0);
+    const lastClickTimeRef = useRef(0);
+    const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
+    const DOUBLE_CLICK_DELAY = 300; // ms to wait for double-click
 
     useEffect(() => {
       if (isExploded && explosionProgress < 1) {
@@ -424,26 +430,76 @@ if (typeof window !== 'undefined' && window.React) {
       }
     }, [isExploded, position.x, position.y, bubble.allNodes.length]);
 
-    const handlePointerDown = useCallback((e) => {
+    // Handle click/tap with single/double detection
+    const handleClickStart = useCallback((e) => {
       if (isExploded) return;
+      
+      const now = Date.now();
+      const timeSinceLastClick = now - lastClickTimeRef.current;
+      
+      // If in drag mode from double-click, start dragging immediately
+      if (isDragMode) {
+        e.preventDefault();
+        e.stopPropagation();
+        startDragging(e);
+        return;
+      }
+      
+      clickCountRef.current++;
+      lastClickTimeRef.current = now;
+      
+      if (clickCountRef.current === 1) {
+        // Wait to see if this is a double-click
+        clickTimerRef.current = setTimeout(() => {
+          // Single click - burst the bubble
+          if (clickCountRef.current === 1 && !isExploded && !isDragMode) {
+            // Track bubble burst for quests
+            try {
+              if (typeof window !== 'undefined' && window.Gamification && typeof window.Gamification.trackBubbleBounce === 'function') {
+                window.Gamification.trackBubbleBounce().catch(() => {});
+              }
+            } catch (e) {
+              console.warn('Bubble bounce tracking failed:', e);
+            }
+            onExplode(bubble.id);
+          }
+          clickCountRef.current = 0;
+        }, DOUBLE_CLICK_DELAY);
+      } else if (clickCountRef.current === 2 && timeSinceLastClick < DOUBLE_CLICK_DELAY) {
+        // Double click - enable drag mode
+        clearTimeout(clickTimerRef.current);
+        clickCountRef.current = 0;
+        setIsDragMode(true);
+        // Start dragging immediately on double-click
+        startDragging(e);
+      }
+    }, [isExploded, isDragMode, bubble.id, onExplode]);
+
+    const startDragging = useCallback((e) => {
+      if (isExploded) return;
+      
+      // Get client coordinates from mouse or touch event
+      const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+      
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(true);
 
       try {
-        if (bubbleRef.current && typeof bubbleRef.current.setPointerCapture === 'function') {
+        if (bubbleRef.current && typeof bubbleRef.current.setPointerCapture === 'function' && e.pointerId) {
           bubbleRef.current.setPointerCapture(e.pointerId);
         }
       } catch {}
 
-      const cursorWorldX = e.clientX - viewportOffset.x;
-      const cursorWorldY = e.clientY - viewportOffset.y;
+      const cursorWorldX = clientX - viewportOffset.x;
+      const cursorWorldY = clientY - viewportOffset.y;
       const grabOffsetX = cursorWorldX - position.x;
       const grabOffsetY = cursorWorldY - position.y;
 
       dragStartRef.current = {
-        x: e.clientX,
-        y: e.clientY,
+        x: clientX,
+        y: clientY,
         bubbleX: position.x,
         bubbleY: position.y,
         grabOffsetX,
@@ -455,8 +511,11 @@ if (typeof window !== 'undefined' && window.React) {
       if (!isDragging) return;
       e.preventDefault();
 
-      const cursorWorldX = e.clientX - viewportOffset.x;
-      const cursorWorldY = e.clientY - viewportOffset.y;
+      const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+
+      const cursorWorldX = clientX - viewportOffset.x;
+      const cursorWorldY = clientY - viewportOffset.y;
       const newX = cursorWorldX - dragStartRef.current.grabOffsetX;
       const newY = cursorWorldY - dragStartRef.current.grabOffsetY;
       onPositionChange(bubble.id, newX, newY, true);
@@ -466,27 +525,43 @@ if (typeof window !== 'undefined' && window.React) {
       if (!isDragging) return;
       e.preventDefault();
       setIsDragging(false);
+      setIsDragMode(false); // Exit drag mode after drag ends
       try {
-        if (bubbleRef.current && typeof bubbleRef.current.releasePointerCapture === 'function') {
+        if (bubbleRef.current && typeof bubbleRef.current.releasePointerCapture === 'function' && e.pointerId) {
           bubbleRef.current.releasePointerCapture(e.pointerId);
         }
       } catch {}
       onPositionChange(bubble.id, position.x, position.y, false);
     }, [isDragging, bubble.id, onPositionChange, position.x, position.y]);
 
-    const handleDoubleClick = useCallback(() => {
-      if (!isExploded && !isDragging) {
-        // Track bubble bounce for quests
-        try {
-          if (typeof window !== 'undefined' && window.Gamification && typeof window.Gamification.trackBubbleBounce === 'function') {
-            window.Gamification.trackBubbleBounce().catch(() => {});
-          }
-        } catch (e) {
-          console.warn('Bubble bounce tracking failed:', e);
-        }
-        onExplode(bubble.id);
+    // Touch event handlers for mobile
+    const handleTouchStart = useCallback((e) => {
+      if (isExploded) return;
+      const touch = e.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY, time: Date.now() };
+      handleClickStart(e);
+    }, [isExploded, handleClickStart]);
+
+    const handleTouchMove = useCallback((e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      handlePointerMove(e);
+    }, [isDragging, handlePointerMove]);
+
+    const handleTouchEnd = useCallback((e) => {
+      if (isDragging) {
+        handlePointerUpOrCancel(e);
       }
-    }, [isExploded, isDragging, bubble.id, onExplode]);
+    }, [isDragging, handlePointerUpOrCancel]);
+
+    // Cleanup on unmount
+    useEffect(() => {
+      return () => {
+        if (clickTimerRef.current) {
+          clearTimeout(clickTimerRef.current);
+        }
+      };
+    }, []);
 
     const totalEchelons = tileEchelons.length;
     const visibleEchelons = totalEchelons <= 3 
@@ -498,6 +573,11 @@ if (typeof window !== 'undefined' && window.React) {
     const screenX = position.x + viewportOffset.x;
     const screenY = position.y + viewportOffset.y;
     const bubbleTransform = `translate(${screenX - bubble.bubbleSize / 2}px, ${screenY - bubble.bubbleSize / 2}px) scale(${bubbleScale * (isExploded ? 1 + explosionProgress * 0.3 : 1)})`;
+
+    // Updated hint text based on new gesture behavior
+    const hintText = isDragMode 
+      ? 'Dragging mode - move bubble' 
+      : 'Single-tap to burst · Double-tap to drag';
 
     return React.createElement(React.Fragment, null, [
       !isExploded && React.createElement('div', {
@@ -513,26 +593,34 @@ if (typeof window !== 'undefined' && window.React) {
           color: bubble.color.text,
           transform: bubbleTransform,
           opacity: bubbleOpacity,
-          cursor: isDragging ? 'grabbing' : 'grab',
+          cursor: isDragMode ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: isHovered || isDragging
-            ? `0 20px 60px ${bubble.color.glow}, inset 0 -10px 40px rgba(0,0,0,0.2)`
-            : `0 10px 40px ${bubble.color.glow}, inset 0 -5px 30px rgba(0,0,0,0.2)`,
+          boxShadow: isDragMode 
+            ? `0 0 30px ${bubble.color.glow}, inset 0 -10px 40px rgba(0,0,0,0.2)`
+            : (isHovered || isDragging
+              ? `0 20px 60px ${bubble.color.glow}, inset 0 -10px 40px rgba(0,0,0,0.2)`
+              : `0 10px 40px ${bubble.color.glow}, inset 0 -5px 30px rgba(0,0,0,0.2)`),
           transition: isDragging ? 'none' : 'transform 0.3s ease, box-shadow 0.3s ease',
-          zIndex: isDragging || isHovered ? 100 : 1,
+          zIndex: isDragging || isDragMode ? 100 : (isHovered ? 50 : 1),
           userSelect: 'none',
           touchAction: 'none'
         },
         onMouseEnter: () => setIsHovered(true),
         onMouseLeave: () => setIsHovered(false),
-        onPointerDown: handlePointerDown,
+        onPointerDown: handleClickStart,
         onPointerMove: handlePointerMove,
         onPointerUp: handlePointerUpOrCancel,
         onPointerCancel: handlePointerUpOrCancel,
-        onDoubleClick: handleDoubleClick
+        onTouchStart: handleTouchStart,
+        onTouchMove: handleTouchMove,
+        onTouchEnd: handleTouchEnd,
+        onClick: (e) => {
+          // Prevent default click behavior - handled by pointer events
+          e.stopPropagation();
+        }
       }, [
         React.createElement('div', {
           key: 'name',
@@ -560,7 +648,7 @@ if (typeof window !== 'undefined' && window.React) {
             marginTop: '6px',
             fontStyle: 'italic'
           }
-        }, 'Drag to move · Double-click to explore')
+        }, hintText)
       ]),
 
       isExploded && explosionProgress > 0.3 && React.createElement('div', {
@@ -856,12 +944,17 @@ if (typeof window !== 'undefined' && window.React) {
     const flatNodes = useMemo(() => {
       const flatten = (nodes, path = []) => nodes.reduce((acc, n) => {
         const currentPath = [...path, {id: n.id, name: n.name}];
+        // Include tiles and their nested structures (institutions, functions, items)
         const children = [
           ...(n.categories || []),
           ...(n.subcategories || []),
           ...(n.nodes || []),
           ...(n.subnodes || []),
-          ...(n.leafnodes || [])
+          ...(n.leafnodes || []),
+          ...(n.tiles || []),
+          ...(n.institutions || []),
+          ...(n.functions || []),
+          ...(n.items || [])
         ];
         return [...acc, { ...n, path: currentPath, children }, ...flatten(children, currentPath)];
       }, []);
@@ -1171,7 +1264,7 @@ if (typeof window !== 'undefined' && window.React) {
               color: '#94a3b8',
               fontSize: '14px'
             }
-          }, 'Drag bubbles · Double-click to explore · Drag void to pan · Pinch to zoom')
+          }, 'Single-click to burst · Double-click to drag · Drag void to pan · Pinch to zoom')
         ]),
         React.createElement('div', {
           key: 'nav-buttons',

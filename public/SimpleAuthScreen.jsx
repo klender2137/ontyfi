@@ -11,7 +11,7 @@ function SimpleAuthScreen({ onAuthSuccess }) {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
   const [resetSent, setResetSent] = React.useState(false);
-  const [authMethod, setAuthMethod] = React.useState('email'); // 'email', 'google', 'guest', 'phantom', 'ethereum'
+  const [authMethod, setAuthMethod] = React.useState('email'); // 'email', 'google', 'guest', 'linkedin'
 
   const passwordInfo = React.useMemo(() => {
     const pwd = String(formData.password || '');
@@ -117,7 +117,7 @@ function SimpleAuthScreen({ onAuthSuccess }) {
     }
   };
 
-  const handlePhantomAuth = async () => {
+  const handleLinkedInAuth = async () => {
     setLoading(true);
     setError('');
 
@@ -126,54 +126,21 @@ function SimpleAuthScreen({ onAuthSuccess }) {
         throw new Error('Authentication system not loaded');
       }
 
-      if (typeof window.AuthPipeline0_5.signInWithPhantom !== 'function') {
-        throw new Error('Phantom authentication not available');
+      if (typeof window.AuthPipeline0_5.signInWithLinkedIn !== 'function') {
+        throw new Error('LinkedIn authentication not available');
       }
 
-      const result = await window.AuthPipeline0_5.signInWithPhantom();
+      const result = await window.AuthPipeline0_5.signInWithLinkedIn();
 
       if (result.success) {
-        console.log('[SimpleAuthScreen] Phantom authentication successful');
-        if (onAuthSuccess) {
-          onAuthSuccess(result.user);
-        }
+        console.log('[SimpleAuthScreen] LinkedIn authentication initiated');
+        // Note: Actual auth completion happens via callback redirect
       } else {
-        setError(result.error || 'Phantom authentication failed');
+        setError(result.error || 'LinkedIn authentication failed');
       }
     } catch (err) {
-      console.error('[SimpleAuthScreen] Phantom auth error:', err);
-      setError(err.message || 'Phantom authentication failed');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEthereumAuth = async () => {
-    setLoading(true);
-    setError('');
-
-    try {
-      if (!window.AuthPipeline0_5) {
-        throw new Error('Authentication system not loaded');
-      }
-
-      if (typeof window.AuthPipeline0_5.signInWithEthereum !== 'function') {
-        throw new Error('Ethereum authentication not available');
-      }
-
-      const result = await window.AuthPipeline0_5.signInWithEthereum();
-
-      if (result.success) {
-        console.log('[SimpleAuthScreen] Ethereum authentication successful');
-        if (onAuthSuccess) {
-          onAuthSuccess(result.user);
-        }
-      } else {
-        setError(result.error || 'Ethereum authentication failed');
-      }
-    } catch (err) {
-      console.error('[SimpleAuthScreen] Ethereum auth error:', err);
-      setError(err.message || 'Ethereum authentication failed');
+      console.error('[SimpleAuthScreen] LinkedIn auth error:', err);
+      setError(err.message || 'LinkedIn authentication failed');
     } finally {
       setLoading(false);
     }
@@ -251,8 +218,8 @@ function SimpleAuthScreen({ onAuthSuccess }) {
     setShowPassword(false);
   };
 
-  const phantomAvailable = !!(window.solana && window.solana.isPhantom);
-  const ethereumAvailable = !!window.ethereum;
+  // LinkedIn is always available (OAuth flow)
+  const linkedinAvailable = true;
 
   return (
     <div className="screen" style={{ 
@@ -326,6 +293,25 @@ function SimpleAuthScreen({ onAuthSuccess }) {
           </button>
           <button
             type="button"
+            onClick={() => switchAuthMethod('linkedin')}
+            style={{
+              flex: 1,
+              padding: '0.75rem',
+              background: authMethod === 'linkedin' ? '#0a66c2' : 'transparent',
+              border: 'none',
+              borderRadius: '6px',
+              color: authMethod === 'linkedin' ? 'white' : '#94a3b8',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            LinkedIn
+          </button>
+
+          <button
+            type="button"
             onClick={() => switchAuthMethod('guest')}
             style={{
               flex: 1,
@@ -341,48 +327,6 @@ function SimpleAuthScreen({ onAuthSuccess }) {
             }}
           >
             Guest
-          </button>
-
-          <button
-            type="button"
-            onClick={() => switchAuthMethod('phantom')}
-            disabled={!phantomAvailable}
-            style={{
-              flex: 1,
-              padding: '0.75rem',
-              background: authMethod === 'phantom' ? '#3b82f6' : 'transparent',
-              border: 'none',
-              borderRadius: '6px',
-              color: authMethod === 'phantom' ? 'white' : '#94a3b8',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              cursor: !phantomAvailable ? 'not-allowed' : 'pointer',
-              opacity: !phantomAvailable ? 0.5 : 1,
-              transition: 'all 0.2s ease'
-            }}
-          >
-            Phantom
-          </button>
-
-          <button
-            type="button"
-            onClick={() => switchAuthMethod('ethereum')}
-            disabled={!ethereumAvailable}
-            style={{
-              flex: 1,
-              padding: '0.75rem',
-              background: authMethod === 'ethereum' ? '#3b82f6' : 'transparent',
-              border: 'none',
-              borderRadius: '6px',
-              color: authMethod === 'ethereum' ? 'white' : '#94a3b8',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              cursor: !ethereumAvailable ? 'not-allowed' : 'pointer',
-              opacity: !ethereumAvailable ? 0.5 : 1,
-              transition: 'all 0.2s ease'
-            }}
-          >
-            Wallet
           </button>
         </div>
 
@@ -682,30 +626,30 @@ function SimpleAuthScreen({ onAuthSuccess }) {
           </div>
         )}
 
-        {/* Phantom Authentication */}
-        {authMethod === 'phantom' && (
+        {/* LinkedIn Authentication */}
+        {authMethod === 'linkedin' && (
           <div style={{ textAlign: 'center' }}>
             <p style={{
               color: '#94a3b8',
               marginBottom: '1.5rem',
               fontSize: '0.875rem'
             }}>
-              Sign in with Phantom (Solana) using a secure signature
+              Sign in with LinkedIn to access your professional profile and unlock exclusive content.
             </p>
             <button
               type="button"
-              onClick={handlePhantomAuth}
-              disabled={loading || !phantomAvailable}
+              onClick={handleLinkedInAuth}
+              disabled={loading}
               style={{
                 width: '100%',
                 padding: '0.875rem',
-                background: (loading || !phantomAvailable) ? 'rgba(148, 163, 184, 0.3)' : '#8b5cf6',
+                background: loading ? 'rgba(148, 163, 184, 0.3)' : '#0a66c2',
                 border: 'none',
                 borderRadius: '8px',
                 color: 'white',
                 fontSize: '0.875rem',
                 fontWeight: '600',
-                cursor: (loading || !phantomAvailable) ? 'not-allowed' : 'pointer',
+                cursor: loading ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
@@ -713,45 +657,10 @@ function SimpleAuthScreen({ onAuthSuccess }) {
                 gap: '0.5rem'
               }}
             >
-              <span style={{ fontSize: '1.2rem' }}>👻</span>
-              {loading ? 'Connecting...' : (phantomAvailable ? 'Sign in with Phantom' : 'Phantom not detected')}
-            </button>
-          </div>
-        )}
-
-        {/* Ethereum SIWE Authentication */}
-        {authMethod === 'ethereum' && (
-          <div style={{ textAlign: 'center' }}>
-            <p style={{
-              color: '#94a3b8',
-              marginBottom: '1.5rem',
-              fontSize: '0.875rem'
-            }}>
-              Sign in with an EVM wallet (SIWE). You will be asked to sign a message.
-            </p>
-            <button
-              type="button"
-              onClick={handleEthereumAuth}
-              disabled={loading || !ethereumAvailable}
-              style={{
-                width: '100%',
-                padding: '0.875rem',
-                background: (loading || !ethereumAvailable) ? 'rgba(148, 163, 184, 0.3)' : '#f59e0b',
-                border: 'none',
-                borderRadius: '8px',
-                color: 'white',
-                fontSize: '0.875rem',
-                fontWeight: '600',
-                cursor: (loading || !ethereumAvailable) ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem'
-              }}
-            >
-              <span style={{ fontSize: '1.2rem' }}>🦊</span>
-              {loading ? 'Connecting...' : (ethereumAvailable ? 'Sign in with Wallet' : 'Wallet not detected')}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              {loading ? 'Redirecting...' : 'Sign in with LinkedIn'}
             </button>
           </div>
         )}
@@ -838,7 +747,7 @@ function SimpleAuthScreen({ onAuthSuccess }) {
           fontSize: '0.75rem',
           color: '#6b7280'
         }}>
-          OntyFi v0.5 - Multi-Method Auth
+          OntyFi - LinkedIn Auth
         </div>
       </div>
     </div>
