@@ -12,6 +12,13 @@ const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
 const APP_URL = process.env.APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3001';
 const REDIRECT_URI = `${APP_URL}/api/auth/linkedin/callback`;
 
+// Debug logging for environment variables (remove in production)
+console.log('[LinkedIn Auth] Environment check:');
+console.log('[LinkedIn Auth] APP_URL:', APP_URL);
+console.log('[LinkedIn Auth] REDIRECT_URI:', REDIRECT_URI);
+console.log('[LinkedIn Auth] LINKEDIN_CLIENT_ID exists:', !!LINKEDIN_CLIENT_ID);
+console.log('[LinkedIn Auth] LINKEDIN_CLIENT_SECRET exists:', !!LINKEDIN_CLIENT_SECRET);
+
 const LINKEDIN_AUTH_URL = 'https://www.linkedin.com/oauth/v2/authorization';
 const LINKEDIN_TOKEN_URL = 'https://www.linkedin.com/oauth/v2/accessToken';
 const LINKEDIN_USERINFO_URL = 'https://api.linkedin.com/v2/userinfo';

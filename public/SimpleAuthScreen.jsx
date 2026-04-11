@@ -1,4 +1,17 @@
 // SimpleAuthScreen.js - Clean, simple authentication UI with multiple sign-in methods
+
+// Helper to wait for AuthPipeline with retry
+async function waitForAuthPipeline(maxRetries = 10, delay = 200) {
+  for (let i = 0; i < maxRetries; i++) {
+    if (window.AuthPipeline0_5) {
+      return window.AuthPipeline0_5;
+    }
+    console.log(`[SimpleAuthScreen] Waiting for AuthPipeline0_5... attempt ${i + 1}/${maxRetries}`);
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+  throw new Error('Authentication system not loaded after multiple attempts');
+}
+
 function SimpleAuthScreen({ onAuthSuccess }) {
   const [isSignUp, setIsSignUp] = React.useState(false);
   const [showForgotPassword, setShowForgotPassword] = React.useState(false);
@@ -102,13 +115,11 @@ function SimpleAuthScreen({ onAuthSuccess }) {
     setError('');
     setResetSent(false);
     try {
-      if (!window.AuthPipeline0_5) {
-        throw new Error('Authentication system not loaded');
-      }
-      if (typeof window.AuthPipeline0_5.sendPasswordReset !== 'function') {
+      const authPipeline = await waitForAuthPipeline();
+      if (typeof authPipeline.sendPasswordReset !== 'function') {
         throw new Error('Password reset not available');
       }
-      await window.AuthPipeline0_5.sendPasswordReset(formData.email);
+      await authPipeline.sendPasswordReset(formData.email);
       setResetSent(true);
     } catch (err) {
       setError(err.message || 'Failed to send password reset email');
@@ -122,15 +133,14 @@ function SimpleAuthScreen({ onAuthSuccess }) {
     setError('');
 
     try {
-      if (!window.AuthPipeline0_5) {
-        throw new Error('Authentication system not loaded');
-      }
+      // Wait for AuthPipeline to load with retry
+      const authPipeline = await waitForAuthPipeline();
 
-      if (typeof window.AuthPipeline0_5.signInWithLinkedIn !== 'function') {
+      if (typeof authPipeline.signInWithLinkedIn !== 'function') {
         throw new Error('LinkedIn authentication not available');
       }
 
-      const result = await window.AuthPipeline0_5.signInWithLinkedIn();
+      const result = await authPipeline.signInWithLinkedIn();
 
       if (result.success) {
         console.log('[SimpleAuthScreen] LinkedIn authentication initiated');
@@ -151,11 +161,8 @@ function SimpleAuthScreen({ onAuthSuccess }) {
     setError('');
 
     try {
-      if (!window.AuthPipeline0_5) {
-        throw new Error('Authentication system not loaded');
-      }
-
-      const result = await window.AuthPipeline0_5.signInWithGoogle();
+      const authPipeline = await waitForAuthPipeline();
+      const result = await authPipeline.signInWithGoogle();
 
       if (result.success) {
         console.log('[SimpleAuthScreen] Google authentication successful');
@@ -178,11 +185,8 @@ function SimpleAuthScreen({ onAuthSuccess }) {
     setError('');
 
     try {
-      if (!window.AuthPipeline0_5) {
-        throw new Error('Authentication system not loaded');
-      }
-
-      const result = await window.AuthPipeline0_5.signInAsGuest();
+      const authPipeline = await waitForAuthPipeline();
+      const result = await authPipeline.signInAsGuest();
 
       if (result.success) {
         console.log('[SimpleAuthScreen] Guest authentication successful');

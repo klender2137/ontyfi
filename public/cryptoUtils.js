@@ -1,5 +1,5 @@
 // cryptoUtils.js - Web Crypto API utilities for encryption
-// Generates deterministic encryption keys from wallet signatures
+// Generates deterministic encryption keys from OIDC session tokens
 // Provides AES-GCM encryption/decryption for user data
 
 class CryptoUtils {
@@ -57,20 +57,31 @@ class CryptoUtils {
     return new TextDecoder().decode(decompressed);
   }
 
-  // Generate a deterministic encryption key from a wallet signature
-  async generateKeyFromSignature(signature, salt = 'crypto-explorer-salt') {
+  // Generate a deterministic encryption key from OIDC session token
+  // Replaces wallet signature-based key generation for OIDC-only auth
+  async generateKeyFromSession(sessionToken, salt = 'crypto-explorer-salt') {
     try {
-      // Convert signature to Uint8Array
-      const signatureBytes = this.hexToBytes(signature.startsWith('0x') ? signature.slice(2) : signature);
-      
-      // Combine signature with salt
-      const combined = new Uint8Array(signatureBytes.length + salt.length);
-      combined.set(signatureBytes);
-      combined.set(new TextEncoder().encode(salt), signatureBytes.length);
-      
-      // Hash the combined data
-      const hash = await crypto.subtle.digest(this.hashAlgorithm, combined);
-      
+      // Use session token (Firebase ID token or similar) to derive key
+      const tokenString = String(sessionToken || '');
+      if (!tokenString) {
+        throw new Error('Session token required for key generation');
+      }
+
+      // Combine token with salt using HKDF-like approach
+      const tokenBytes = new TextEncoder().encode(tokenString);
+      const saltBytes = new TextEncoder().encode(salt);
+
+      // Use PBKDF2-like iteration for key derivation
+      let combined = new Uint8Array(tokenBytes.length + saltBytes.length);
+      combined.set(tokenBytes);
+      combined.set(saltBytes, tokenBytes.length);
+
+      // Multiple rounds of hashing for key stretching
+      let hash = await crypto.subtle.digest(this.hashAlgorithm, combined);
+      for (let i = 0; i < 1000; i++) {
+        hash = await crypto.subtle.digest(this.hashAlgorithm, hash);
+      }
+
       // Import as AES key
       const key = await crypto.subtle.importKey(
         'raw',
@@ -79,12 +90,18 @@ class CryptoUtils {
         false,
         ['encrypt', 'decrypt']
       );
-      
+
       return key;
     } catch (error) {
-      console.error('Error generating key from signature:', error);
+      console.error('Error generating key from session:', error);
       throw error;
     }
+  }
+
+  // Legacy alias for backwards compatibility (deprecated)
+  async generateKeyFromSignature(signature, salt = 'crypto-explorer-salt') {
+    console.warn('[cryptoUtils] generateKeyFromSignature is deprecated. Use generateKeyFromSession.');
+    return this.generateKeyFromSession(signature, salt);
   }
 
   // Encrypt data using AES-GCM
@@ -159,9 +176,16 @@ class CryptoUtils {
     return bytes;
   }
 
-  // Generate a signature for key derivation (one-time use)
+  // Generate a session key derivation message for OIDC authentication
+  // Replaces wallet signature messages for OIDC-only flow
+  async generateSessionKeyMessage(userId, timestamp = Date.now()) {
+    return `OntyFi OIDC Session\nUser: ${userId}\nTimestamp: ${timestamp}`;
+  }
+
+  // Legacy alias for backwards compatibility (deprecated)
   async generateSignatureMessage(address, timestamp = Date.now()) {
-    return `CryptoExplorer authentication\nAddress: ${address}\nTimestamp: ${timestamp}`;
+    console.warn('[cryptoUtils] generateSignatureMessage is deprecated. Use generateSessionKeyMessage.');
+    return this.generateSessionKeyMessage(address, timestamp);
   }
 }
 

@@ -114,20 +114,12 @@ function startApp() {
     });
   }
 
+  // OIDC-only: No Web3 libraries to load
+  // LinkedIn authentication is handled via Firebase Auth
   if (typeof window !== 'undefined' && !window.CryptoExplorerLibsReady) {
-    const siweReady = waitForGlobal(() => window.SiweMessage, { timeoutMs: 12000 });
-    const solanaReady = waitForGlobal(() => window.solanaWeb3 || window.solana, { timeoutMs: 12000 });
-
     window.CryptoExplorerLibsReady = {
-      siwe: siweReady,
-      solana: solanaReady,
-      all: Promise.allSettled([siweReady, solanaReady]).then((results) => {
-        const failures = results.filter((r) => r.status === 'rejected');
-        if (failures.length) {
-          throw failures[0].reason;
-        }
-        return true;
-      }),
+      oidc: Promise.resolve(true),
+      all: Promise.resolve(true),
     };
   }
 
@@ -693,8 +685,170 @@ function NavOverlay({ onClose, onNavigate, currentScreen, isOpen }) {
   );
 }
 
+// Fallback Archetype Diagnostic Screen (used if external file fails to load)
+function FallbackArchetypeDiagnosticScreen({ onGoHome }) {
+  const [retryCount, setRetryCount] = useState(0);
+  const [isRetrying, setIsRetrying] = useState(false);
+
+  const handleRetry = () => {
+    setIsRetrying(true);
+    setRetryCount(c => c + 1);
+    setTimeout(() => {
+      // Check if the external screen loaded
+      if (window.ArchetypeDiagnosticScreen && typeof window.ArchetypeDiagnosticScreen === 'function') {
+        setIsRetrying(false);
+        // Force re-render by updating state
+        window.location.reload();
+      } else {
+        setIsRetrying(false);
+      }
+    }, 1000);
+  };
+
+  return (
+    <div className="screen" style={{ padding: '2rem', textAlign: 'center' }}>
+      <h2>Finance Archetype Diagnostic</h2>
+      <div style={{ marginBottom: '2rem' }}>
+        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>◈</div>
+        <p style={{ color: '#94a3b8', marginBottom: '1rem' }}>
+          The diagnostic component is loading...
+        </p>
+        <p style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+          Retry attempts: {retryCount}
+        </p>
+      </div>
+      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <button 
+          className="primary-button" 
+          onClick={handleRetry}
+          disabled={isRetrying}
+        >
+          {isRetrying ? 'Retrying...' : 'Retry Loading'}
+        </button>
+        <button className="secondary-button" onClick={onGoHome}>
+          ← Home
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function getArchetypeDiagnosticScreen() {
+  try {
+    if (window.ArchetypeDiagnosticScreen && typeof window.ArchetypeDiagnosticScreen === 'function') {
+      console.log('[main] Using external ArchetypeDiagnosticScreen');
+      return window.ArchetypeDiagnosticScreen;
+    }
+  } catch (error) {
+    console.error('[main] Error accessing ArchetypeDiagnosticScreen:', error);
+  }
+  console.log('[main] Using fallback ArchetypeDiagnosticScreen');
+  return FallbackArchetypeDiagnosticScreen;
+}
+
+// Rhombus Button Component - Clean Q Design with Hover Tooltip
+function RhombusButton({ onNavigateToArchetype }) {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div style={{
+      position: 'fixed',
+      bottom: '20px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      zIndex: 100,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }}>
+      {/* Tooltip */}
+      {showTooltip && (
+        <div style={{
+          position: 'absolute',
+          bottom: '100%',
+          marginBottom: '12px',
+          padding: '10px 16px',
+          background: 'rgba(15, 23, 42, 0.95)',
+          border: '1px solid rgba(59, 130, 246, 0.5)',
+          borderRadius: '8px',
+          color: '#f7f9ff',
+          fontSize: '0.85rem',
+          whiteSpace: 'nowrap',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
+          animation: 'fadeIn 0.2s ease',
+          pointerEvents: 'none',
+        }}>
+          <div style={{ fontWeight: 600, marginBottom: '2px' }}>Finance Archetype Diagnostic</div>
+          <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>7 questions to discover your ideal finance career</div>
+          {/* Arrow */}
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 0,
+            height: 0,
+            borderLeft: '6px solid transparent',
+            borderRight: '6px solid transparent',
+            borderTop: '6px solid rgba(59, 130, 246, 0.5)',
+          }} />
+        </div>
+      )}
+
+      {/* Rhombus Button */}
+      <div
+        onClick={onNavigateToArchetype}
+        onMouseEnter={() => { setShowTooltip(true); setIsHovered(true); }}
+        onMouseLeave={() => { setShowTooltip(false); setIsHovered(false); }}
+        onTouchStart={() => setIsHovered(true)}
+        onTouchEnd={() => setIsHovered(false)}
+        role="button"
+        tabIndex={0}
+        aria-label="Take the Finance Archetype Diagnostic"
+        style={{
+          width: '64px',
+          height: '64px',
+          position: 'relative',
+          cursor: 'pointer',
+          transform: isHovered ? 'rotate(45deg) scale(1.08)' : 'rotate(45deg)',
+          background: isHovered 
+            ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(167, 139, 250, 0.35) 100%)'
+            : 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%)',
+          border: isHovered ? '2px solid rgba(59, 130, 246, 0.9)' : '2px solid rgba(59, 130, 246, 0.5)',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: isHovered 
+            ? '0 8px 32px rgba(59, 130, 246, 0.5), 0 0 0 4px rgba(59, 130, 246, 0.1)'
+            : '0 4px 16px rgba(59, 130, 246, 0.2)',
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onNavigateToArchetype();
+          }
+        }}
+      >
+        {/* Perfectly Centered Q */}
+        <span style={{
+          transform: 'rotate(-45deg)',
+          fontSize: '1.75rem',
+          fontWeight: 700,
+          color: isHovered ? '#60a5fa' : '#94a3b8',
+          lineHeight: 1,
+          transition: 'color 0.25s ease',
+          userSelect: 'none',
+        }}>Q</span>
+      </div>
+    </div>
+  );
+}
+
 // Enhanced Home Screen with algorithms
-function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree, onOpenArticle, onNavigateToMyInsights, tree }) {
+function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree, onOpenArticle, onNavigateToMyInsights, onNavigateToArchetype, tree }) {
   const activities = userAccount.getActivitiesSummary();
   const bookmarks = bookmarksApi.bookmarks.slice(0, 3);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -902,6 +1056,12 @@ function HomeScreen({ userAccount, bookmarksApi, onOpenAccount, onNavigateToTree
           </div>
         </div>
       )}
+
+      {/* Finance Archetype Diagnostic Rhombus - Clean Q Design with Tooltip */}
+      <RhombusButton onNavigateToArchetype={onNavigateToArchetype} />
+
+      {/* Spacer to prevent content from being hidden behind fixed Rhombus */}
+      <div style={{ height: '100px' }} />
     </div>
   );
 }
@@ -3487,6 +3647,7 @@ function AppRoot() {
           onNavigateToTree={() => setScreen('tree')}
           onOpenArticle={openArticle}
           onNavigateToMyInsights={() => setScreen('my-insights')}
+          onNavigateToArchetype={() => setScreen('archetype-diagnostic')}
           tree={tree}
         />
       )}
@@ -3593,6 +3754,9 @@ function AppRoot() {
       )}
       {screen === 'admin-users' && !showAccount && isAdmin && !isAdminLoading && (
         <AdminViewUsersScreen onGoHome={goHome} />
+      )}
+      {screen === 'archetype-diagnostic' && !showAccount && (
+        React.createElement(getArchetypeDiagnosticScreen(), { onGoHome: goHome, onGoToTree: goToTree })
       )}
 
       {!showAccount && <MenuWheel onToggle={() => setShowNav(true)} />}

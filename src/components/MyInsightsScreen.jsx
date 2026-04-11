@@ -335,15 +335,14 @@ const MyInsightsScreen = () => {
     return files.map(file => {
       const info = getFileTypeInfo(file);
       return (
-        <div 
-          key={file.id} 
-          onClick={() => setSelectedFile(file)} 
-          style={{ 
-            background: 'rgba(255,255,255,0.03)', 
-            backdropFilter: 'blur(12px)', 
-            padding: '24px', 
-            borderRadius: '20px', 
-            border: '1px solid rgba(255,255,255,0.1)', 
+        <div
+          key={file.id}
+          style={{
+            background: 'rgba(255,255,255,0.03)',
+            backdropFilter: 'blur(12px)',
+            padding: '24px',
+            borderRadius: '20px',
+            border: '1px solid rgba(255,255,255,0.1)',
             cursor: 'pointer',
             transition: 'transform 0.1s ease, box-shadow 0.15s ease',
             touchAction: 'manipulation'
@@ -357,9 +356,28 @@ const MyInsightsScreen = () => {
             e.currentTarget.style.boxShadow = 'none'
           }}
         >
-          <div style={{ fontSize: '2rem', marginBottom: '12px' }}>{info.icon}</div>
-          <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>{file.name}</h3>
-          <div style={{ color: info.color, fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase' }}>{info.label}</div>
+          <div onClick={() => window.open(file.webViewLink, '_blank')}>
+            <div style={{ fontSize: '2rem', marginBottom: '12px' }}>{info.icon}</div>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '1.1rem' }}>{file.name}</h3>
+            <div style={{ color: info.color, fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase' }}>{info.label}</div>
+          </div>
+          <button
+            onClick={() => setSelectedFile(file)}
+            style={{
+              background: 'rgba(59, 130, 246, 0.2)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              color: '#60a5fa',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              marginTop: '12px',
+              width: '100%'
+            }}
+          >
+            Preview
+          </button>
         </div>
       );
     });

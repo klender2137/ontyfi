@@ -73,13 +73,14 @@ export const useAppStore = create((set, get) => ({
     const userId = auth.currentUser.uid;
     console.log(`[Firebase Debug] Syncing bookmarks for user: ${userId}`);
 
-    const signature = localStorage.getItem('walletSignature');
-    if (!signature) {
-      console.log('[Firebase Debug] No wallet signature found, cannot derive key');
+    // Use OIDC session token (Firebase ID token) for encryption key derivation
+    const sessionToken = localStorage.getItem('oidcSessionToken') || localStorage.getItem('walletSignature');
+    if (!sessionToken) {
+      console.log('[Firebase Debug] No session token found, cannot derive key');
       return;
     }
 
-    const key = await deriveEncryptionKey(signature);
+    const key = await deriveEncryptionKey(sessionToken);
     const userDocRef = doc(db, 'users', userId);
     const currentBookmarks = get().bookmarks;
     console.log(`[Firebase Debug] Local favorites state: ${currentBookmarks.length} items`);

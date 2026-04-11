@@ -174,7 +174,7 @@ const AccountSettings = {
     return `~${this._formatWealth(Math.round(pmt / 100) * 100)}/mo needed at 8% p.a. over ${yearsLeft} yrs`;
   },
 
-  // ── WALLET HELPERS ─────────────────────────────────────────────────────────
+  // ── AUTH HELPERS ─────────────────────────────────────────────────────────
   _handleConnectLinkedIn() {
     // Dispatch event for LinkedIn connection flow
     window.dispatchEvent(new CustomEvent('RequestLinkedInConnect', {

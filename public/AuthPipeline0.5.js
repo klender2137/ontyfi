@@ -489,8 +489,26 @@ class AuthPipeline0_5 {
     try {
       console.log('[AuthPipeline0.5] Starting LinkedIn sign in...');
 
+      // Dynamic API URL - works with both local dev and Northflank production
+      // Auto-detect based on current location (works in plain browser JS)
+      let API_BASE;
+      
+      // Check for global VITE_API_URL (injected by build system or set manually)
+      if (typeof window !== 'undefined' && window.VITE_API_URL) {
+        API_BASE = window.VITE_API_URL;
+      } else {
+        // Auto-detect based on current location
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1';
+        API_BASE = isLocalhost 
+          ? 'http://localhost:3001'  // Local development backend
+          : `${window.location.protocol}//${window.location.host}`;  // Production (Northflank)
+      }
+
+      console.log('[AuthPipeline0.5] Using API base:', API_BASE);
+
       // Initiate LinkedIn OAuth flow
-      const response = await fetch('/api/auth/linkedin');
+      const response = await fetch(`${API_BASE}/api/auth/linkedin`);
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
         throw new Error(body?.error || 'Failed to initiate LinkedIn authentication');

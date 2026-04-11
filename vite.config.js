@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   root: 'public',
+  envDir: '..', // Load .env files from parent directory (project root)
   build: {
     outDir: '../dist',
     emptyOutDir: true,

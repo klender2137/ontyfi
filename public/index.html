@@ -25,19 +25,8 @@
         }
       });
     </script>
-    <!-- Web3 Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
-    <script type="module">
-      try {
-        const mod = await import('https://esm.sh/siwe@2.1.4');
-        if (mod?.SiweMessage) {
-          window.SiweMessage = mod.SiweMessage;
-        }
-      } catch (e) {
-        console.warn('[SIWE] Failed to load SIWE module:', e);
-      }
-    </script>
+    <!-- OIDC Authentication Only - No Web3 Libraries -->
+    <!-- LinkedIn OAuth is handled via Firebase Auth -->
     <!-- Firebase CDN v8 (global firebase object) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -70,81 +59,13 @@
     <script src="contribute.save.js" onerror="console.error('Failed to load contribute.save.js')"></script>
     <script src="cryptoUtils.js" onerror="console.error('Failed to load cryptoUtils.js')"></script>
     <!-- New Simple Auth System -->
-    <script src="/AuthPipeline0.5.js" onerror="console.error('Failed to load AuthPipeline0.5.js')" onload="console.log('AuthPipeline0.5.js loaded')"></script>
-    <script type="text/babel" src="/SimpleAuthScreen.jsx" onerror="console.error('Failed to load SimpleAuthScreen.jsx')" onload="console.log('SimpleAuthScreen.js loaded')"></script>
-    <!-- Test SIWE library loading -->
+    <script src="/AuthPipeline0.5.js" defer onerror="console.error('Failed to load AuthPipeline0.5.js')" onload="console.log('AuthPipeline0.5.js loaded')"></script>
+    <script type="text/babel" src="/SimpleAuthScreen.jsx" defer onerror="console.error('Failed to load SimpleAuthScreen.jsx')" onload="console.log('SimpleAuthScreen.js loaded')"></script>
+    <!-- OIDC Session Check - No Wallet Detection -->
     <script>
-      (function testSiweWhenReady() {
-        const startedAt = Date.now();
-        const timeoutMs = 3000;
-        const intervalMs = 200;
-
-        function check() {
-          if (typeof window.SiweMessage !== 'undefined') {
-            console.log('Testing SIWE library availability...');
-            console.log('window.SiweMessage:', typeof window.SiweMessage);
-            console.log('✅ SIWE library loaded successfully');
-            try {
-              const testMessage = new window.SiweMessage({
-                domain: 'test.com',
-                address: '0x1234567890123456789012345678901234567890',
-                statement: 'Test message',
-                uri: 'https://test.com',
-                version: '1',
-                chainId: 1,
-                nonce: '12345678'
-              });
-              console.log('✅ SIWE Message creation test passed');
-            } catch (e) {
-              console.error('❌ SIWE Message creation test failed:', e);
-            }
-            return;
-          }
-
-          if (Date.now() - startedAt >= timeoutMs) {
-            console.warn('⚠️ SIWE library not found (wallet SIWE auth will be unavailable until it loads)');
-            console.log('Continuing without SIWE support...');
-            return;
-          }
-
-          setTimeout(check, intervalMs);
-        }
-
-        check();
-      })();
-      
-      // Test wallet availability
-      console.log('=== WALLET DETECTION ===');
-      console.log('window.ethereum:', !!window.ethereum);
-      console.log('window.ethereum?.isMetaMask:', !!window.ethereum?.isMetaMask);
-      console.log('window.ethereum?.isTrust:', !!window.ethereum?.isTrust);
-      console.log('window.trustwallet:', !!window.trustwallet);
-      console.log('window.trustwallet?.isTrust:', !!window.trustwallet?.isTrust);
-      console.log('window.trustWallet:', !!window.trustWallet);
-      console.log('window.trustWallet?.isTrust:', !!window.trustWallet?.isTrust);
-      console.log('window.trust:', !!window.trust);
-      console.log('window.trust?.isTrust:', !!window.trust?.isTrust);
-      console.log('window.solana:', !!window.solana);
-      console.log('window.solana?.isPhantom:', !!window.solana?.isPhantom);
-      
-      // Log Trust Wallet provider details
-      if (window.trustwallet) {
-        console.log('window.trustwallet details:', {
-          isTrust: window.trustwallet.isTrust,
-          request: !!window.trustwallet.request,
-          enable: !!window.trustwallet.enable,
-          send: !!window.trustwallet.send,
-          constructor: window.trustwallet.constructor?.name
-        });
-      }
-      
-      if (window.ethereum && window.ethereum.providers) {
-        console.log('Available providers:', window.ethereum.providers.map(p => ({
-          isMetaMask: !!p.isMetaMask,
-          isTrust: !!p.isTrust,
-          name: p.constructor?.name || 'Unknown'
-        })));
-      }
+      // Check for LinkedIn/Firebase auth session only
+      console.log('=== OIDC AUTH CHECK ===');
+      console.log('Firebase available:', !!window.firebase);
     </script>
     <script src="NotesModule.js" defer onerror="console.error('Failed to load NotesModule.js')"></script>
     <!-- Gamification Engine - deferred -->
@@ -198,6 +119,9 @@
     </script>
     <!-- Notifications Client (FCM registration + article read hooks) -->
     <script src="notifications-client.js" onerror="console.error('Failed to load notifications-client.js')" onload="console.log('notifications-client.js loaded')"></script>
+    <!-- Archetype Diagnostic Screen (Finance Archetype Questionnaire) -->
+    <!-- Hybrid V1+V2: 70% V2 advanced questions + 30% V1 legacy, with conflict prevention -->
+    <script type="text/babel" src="ArchetypeDiagnosticMerged.jsx" onerror="console.error('Failed to load ArchetypeDiagnosticMerged.jsx')" onload="console.log('ArchetypeDiagnosticMerged.jsx loaded')"></script>
     <!-- Main app must load last - remove defer to avoid timing issues -->
     <script type="text/babel" src="main.jsx" onload="console.log('main.js loaded')"></script>
   </body>

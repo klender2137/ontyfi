@@ -64,6 +64,7 @@ CryptoExplorer0.5/
   - MyInsights card (purple theme) → `/my-insights`
   - CryptoMap Tree card (blue theme) → `/tree`
 - **Account Management:**
+User should simply click on the un obvious PFP in order to open setting where he will be able to fill out the account details and personalize preferences up to the net worth goal until 30yo.
   - Logout button
   - Delete Account button with confirmation modal
 - **Finance Archetype Diagnostic Entry:**
@@ -76,19 +77,23 @@ CryptoExplorer0.5/
 - Bookmark synchronization with Firebase on mount
 - Touch gesture handling (scale transforms on buttons)
 - Delete account confirmation modal with destructive styling
-- Web3 wallet integration via ConnectButton
+- LinkedIn OAuth integration via ConnectButton
 
 ---
+
+### Navigation
+User can navigate along the using the Navigation menu in the circle on the bottom right corner of the screen. Which features acess to the screens as : Tree Map, MyInsights, LevelUp, NewBranch(with the announces about new articles published), Favorite(with the bookmarks saved), Explore - a screen assembelling tags of the articles from the TreeMap nested tree in order to provide tag theme based aggregation of articles into the thematical bubbles. Which are not only useful, for research and exploration under another angle. But also is very entertaining(User double clicking on the bubble can drag the bubbles and they will rebounce from each other. One click opens the echeloned articles related to the bubble subject).
+Contreebute screen - lets user suggest the article he wants to publish and send the ready version of it to the review and approval - straight away wikipedia openess and community involvement.
 
 ### 3. MyInsights Screen (`/my-insights`, default route `/`)
 **File:** `src/components/MyInsightsScreen.jsx`
 
-**Purpose:** S&P 500 market research and document repository
+**Purpose:** IB and finance student ressource sharing online opensource no copyright restricted lib. Sector distinction in folder roots and genral templates and technical skills in finance honing templates tools
 
 **Content:**
-- **Background:** WebGL shader canvas (surreal crystal web animation)
+- **Background:** 
 - **Ticker Background:** Real-time stock price ticker (30s update interval)
-- **Header:** "MyInsights" title with S&P 500 subtitle
+- **Header:** "MyInsights"  
 - **Controls:** Refresh button, Back Home link
 - **File Grid:** Responsive grid of research documents
 - **File Cards:**
@@ -117,10 +122,13 @@ CryptoExplorer0.5/
 
 ---
 
+### LevelUp screen
+Allows user to get involved in to the gamified learning and competition by gaining Oreos currency and boost its elvel and earn the Oreas by completing the Quests. THen the players can see each other in the global ranking based on the in app time spent , fav field and Oreos amount
+
 ### 4. CryptoMap Tree (`/tree`)
 **File:** `src/components/TreeMap.jsx`
 
-**Purpose:** Interactive knowledge map of crypto/finance domains
+**Purpose:** Interactive knowledge map of crypto/finance domains article for each domain and in each branch 1 article about jobs in that sector and 1 article about key tasks and skills to master. User can ass notes to the tiles double clicking, changing theme, grabing and moving tiles. The description openable by clicking on title of the tile. There user can read ful article, bookmark it and even attept a quiz if one exists to test knowledge. On top of the TreeMap screen there is a scifi search bar allowing user to search for articles by key words also it accepts the link search to the specific tile. On each tile clicking on the link button user copies its link 
 
 **Content:**
 - **Archetype Result Banner (conditional):** Displayed when navigated from diagnostic
@@ -420,10 +428,7 @@ Google Drive API integration for research materials.
 
 Role-based access control hook.
 
-### useWeb3Auth
-**File:** `src/hooks/useWeb3Auth.js`
-
-Web3 wallet authentication integration.
+ 
 
 ---
 

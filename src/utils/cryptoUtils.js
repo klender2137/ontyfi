@@ -1,14 +1,24 @@
-// cryptoUtils.js - Web Crypto API utilities for encrypting user data with wallet-derived key
+// cryptoUtils.js - Web Crypto API utilities for encrypting user data with OIDC session-derived key
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-// Derive encryption key from wallet signature
-export async function deriveEncryptionKey(signature) {
-  // Hash the signature to get a 256-bit key
-  const signatureBytes = encoder.encode(signature);
-  const hash = await crypto.subtle.digest('SHA-256', signatureBytes);
+// Derive encryption key from OIDC session token (Firebase ID token)
+// Replaces wallet signature-based key derivation for OIDC-only auth
+export async function deriveEncryptionKey(sessionToken) {
+  if (!sessionToken) {
+    throw new Error('Session token required for key derivation');
+  }
+  // Hash the session token to get a 256-bit key
+  const tokenBytes = encoder.encode(sessionToken);
+  const hash = await crypto.subtle.digest('SHA-256', tokenBytes);
   return crypto.subtle.importKey('raw', hash, 'AES-GCM', true, ['encrypt', 'decrypt']);
+}
+
+// Legacy alias for backwards compatibility
+export async function deriveKeyFromSignature(signature) {
+  console.warn('[cryptoUtils] deriveKeyFromSignature is deprecated. Use deriveEncryptionKey with session token.');
+  return deriveEncryptionKey(signature);
 }
 
 // Encrypt data (expects string, returns base64 string)
